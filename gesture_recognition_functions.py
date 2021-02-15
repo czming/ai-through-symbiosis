@@ -2,7 +2,18 @@ import math
 import numpy as np
 import cv2
 
-def get_distance(point1, point2, image_shape):
+def get_distance(point1, point2, image_shape = None):
+    """
+    get pixel distance between two points
+    :param point1: (x, y) of first point, where x and y are ratios of the point's location to respective image param
+    :param point2: (x, y) of second point, where x and y are ratios of the point's location to respective image param
+    :param image_shape: shape of the image
+    :return: pixel distance between the two points
+    """
+
+    if image_shape == None:
+        #no image shape passed in, assume to scale
+        image_shape = (1,1)
     # get euclidean distance between point1 (x1, y1) and point2 (x2, y2)
     return math.sqrt(((point1[0]  - point2[0]) * image_shape[1]) ** 2 + ((point1[1] - point2[1]) * image_shape[0]) ** 2)
 
@@ -43,3 +54,25 @@ def improved_gesture_recognition(landmarks, handedness, image):
                 finger_open = False
         fingers_open[finger_index] = finger_open
     return fingers_open
+
+def hand_pos(landmarks, image):
+    """
+    outputs the average (x, y) coordinate of the landmarks to indicate the hand position
+    :param landmarks: (x,y) of each landmark in an array
+    :return: (x, y) coordinates of hand
+    """
+    if len(landmarks) < 21:
+        #need at least 21 for a hand
+        return (), image
+
+    #center of palm appears to be a better indicator for the location of the hand (more mass concentrated at that point)
+    fingers = [[np.array(landmarks[i]) for i in range(j * 4 + 1, j * 4 + 5)] for j in range(5)]
+    #base of the palm
+    total_x = landmarks[0][0] * image.shape[1]
+    total_y = landmarks[0][1] * image.shape[0]
+    for finger in fingers:
+        #look at base of the finger
+        curr = finger[0]
+        total_x += (curr[0] * image.shape[1])
+        total_y += (curr[1] * image.shape[0])
+    return (total_x / 6, total_y / 6), cv2.circle(image, (int(total_x / 6), int(total_y / 6)), 3, (255, 0, 255), 3)
