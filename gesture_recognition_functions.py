@@ -38,19 +38,19 @@ def improved_gesture_recognition(landmarks, handedness, image):
     #                   get_distance(fingers[0][-1], fingers[4][0], image.shape)
 
     # thumb detection, base of palm is closer to base of pinky than tip of thumb to base of pinky
-    fingers_open[0] = get_distance(landmarks[0], fingers[4][0], image.shape) < \
-                      get_distance(fingers[0][-1], fingers[4][0], image.shape)
+    fingers_open[0] = int(get_distance(landmarks[0], fingers[4][0], image.shape) < \
+                      get_distance(fingers[0][-1], fingers[4][0], image.shape))
 
     for finger_index in range(1, 5):
         finger = fingers[finger_index]
         # finger is open if the tip is further from the base of the palm than the base of the finger to the base of the
         # palm
-        finger_open = True
+        finger_open = 1
         for i in range(len(finger) - 1):
             # check all points in the finger, if the tip is closer to the base of the palm than any finger, it's closed
             if get_distance(finger[len(finger) - 1], landmarks[0], image.shape) < \
                     get_distance(finger[i], landmarks[0], image.shape):
-                finger_open = False
+                finger_open = 0
         fingers_open[finger_index] = finger_open
     return fingers_open
 
