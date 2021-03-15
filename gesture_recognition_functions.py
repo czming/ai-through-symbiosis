@@ -111,3 +111,25 @@ def hand_bounding_box(landmarks, image):
     top, bottom, left, right = int(top - 20), int(bottom + 20), int(left - 20), int(right + 20)
     # return points (top left and clockwise from there, (x, y) for points), size (height, width)
     return ((left, top), (right, top), (right, bottom), (left, bottom)), (bottom - top, right - left)
+
+def calculate_new_mean_variance(old_mean, old_variance, num_readings, new_reading):
+    # num readings is exclusive of the current new_reading being inputted
+    if num_readings == 0:
+        # new mean is the new reading and the variance is just 0 for now, num_readings is 1 after this
+        return new_reading, 0
+
+    # old variance = (1 / (num_readings - 1)) * sum(x ** 2) - (num_readings / (num_readings - 1)) * (old_mean ** 2))
+    # old_variance * (num_readings - 1) = sum(x ** 2) - num_readings * (old_mean ** 2)
+    # old_mean ** 2
+    old_squared_mean = old_mean ** 2
+    # sum(x ** 2)
+    sum_squared_x = old_variance * (num_readings - 1) + num_readings * old_squared_mean
+
+    #find new mean by finding sum of all readings then dividing by num_readings + 1
+    new_mean = (num_readings * old_mean + new_reading) / (num_readings + 1)
+
+    #use new_mean and add new_reading squared to sum_squared_x to get new variance
+    new_variance = (1 / num_readings) * (sum_squared_x + new_reading ** 2) - \
+                   ((num_readings + 1) / num_readings) * (new_mean ** 2)
+
+    return new_mean, new_variance
