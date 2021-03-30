@@ -32,15 +32,15 @@ def parse_picklist(file):
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
 
-#live video feed from camera 0
+# #live video feed from camera 0
 # hands = mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.6, max_num_hands=1)
 # cap = cv2.VideoCapture(0)
 # #flip video horizontally
 # TO_FLIP = True
 
 #seeing only hands from video
-hands = mp_hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.1, max_num_hands=1)
-cap = cv2.VideoCapture("C:/Users/chngz/Documents/AI through Symbiosis/AI through Symbiosis/Order Picking Red w_ constraints.mp4")
+hands = mp_hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.2, max_num_hands=1)
+cap = cv2.VideoCapture("C:/Users/chngz/Documents/AI through Symbiosis/AI through Symbiosis/Red 1 ArUco.mp4")
 #don't flip camera view unless you want selfie view
 TO_FLIP = False
 
@@ -55,7 +55,9 @@ hand_open = True
 curr_holding = False
 last_change = 0
 #give a buffer of time due to inaccuracy in detection
-TIME_CHANGE_BUFFER = 2
+TIME_CHANGE_BUFFER = 5
+
+MARKER_TIME_BUFFER = 0.5
 
 
 MOVEMENT_MOE = 5
@@ -76,10 +78,16 @@ closed_hand_var_x = 0
 closed_hand_var_y = 0
 closed_hand_frames = 0
 
-#-1 for left, 0 for center and 1 for right
-left_center_right = 0
+#-1 for uninitialized
+left_center_right = -1
+top_center_bottom = -1
+
+#max distance between hand and average so far during pick attempt
+max_hand_discrepancy = 0
 
 frames = 0
+
+aruco_ids = {}
 
 while cap.isOpened():
 	success, image = cap.read()
@@ -94,6 +102,38 @@ while cap.isOpened():
 		image = cv2.cvtColor(cv2.flip(image, 1), cv2.COLOR_BGR2RGB)
 	else:
 		image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+	##for aruco marker detection
+	arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_5X5_1000)
+	arucoParams = cv2.aruco.DetectorParameters_create()
+	(corners, ids, rejected) = cv2.aruco.detectMarkers(image, arucoDict,
+													   parameters=arucoParams)
+	for marker_index in range(len(corners)):
+		marker = corners[marker_index]
+		for points in marker:
+			cv2.rectangle(image, (int(points[0][0]), int(points[0][1])), (int(points[2][0]), int(points[2][1])),
+						  (0, 255, 0), 3)
+
+			marker_id = ids[marker_index][0]
+			#use the top left point as the marker's coordinates
+			marker_coords = points[0]
+
+			cv2.putText(image, f"id: {marker_id}", (int(marker_coords[0]), int(marker_coords[1] - 20)),
+						cv2.FONT_HERSHEY_SIMPLEX, fontScale = 1, color = (0,0, 255), thickness = 3)
+
+			#store [top_left_marker_pos, time detected]
+			aruco_ids[marker_id] = [(int(marker_coords[0]), int(marker_coords[1])), time.time()]
+
+	for marker_id in list(aruco_ids.keys()):
+		if time.time() - aruco_ids[marker_id][1] > MARKER_TIME_BUFFER:
+			#more than expired time, delete the marker from aruco_ids since have not seen for a while
+			del(aruco_ids[marker_id])
+
+	for marker_id in aruco_ids.keys():
+		marker = aruco_ids[marker_id][0]
+		cv2.circle(image, (int(marker[0]), int(marker[1])),2, (255, 0, 0), 3)
+
+
 
 
 	# image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -159,8 +199,10 @@ while cap.isOpened():
 			# 	left_center_right = 1
 			# elif closed_hand_mean_x < hand_mean_x - hand_sd_x:
 			# 	left_center_right = -1
-			print (f"\n{left_center_right}")
-			left_center_right = 0
+			print (f"\n{top_center_bottom}{left_center_right}")
+			left_center_right = -1
+			top_center_bottom = -1
+			max_hand_discrepancy = 0
 
 			# #reset closed hand variables
 			# closed_hand_mean_x = 0
@@ -178,8 +220,8 @@ while cap.isOpened():
 			hand_open = False
 			last_change = time.time()
 
-		if time.time() - last_change < TIME_CHANGE_BUFFER and left_center_right == 0 and sum(fingers_open) <= 2:
-			#during transition time and hand is closed
+		if time.time() - last_change < TIME_CHANGE_BUFFER and sum(fingers_open) <= 2:
+			#during transition time and hand is closed, find average location
 			# closed_hand_mean_x, closed_hand_var_x = calculate_new_mean_variance(closed_hand_mean_x,
 			# 																	closed_hand_var_x,
 			# 																	closed_hand_frames,
@@ -191,13 +233,31 @@ while cap.isOpened():
 			#
 			# frames += 1
 
-			if left_center_right == 0 and curr_hand_loc[0] > hand_mean_x + 2 * hand_sd_x:
-				# to the right
-				left_center_right = 1
-			elif left_center_right == 0 and curr_hand_loc[0] < hand_mean_x - 2 * hand_sd_x:
-				left_center_right = -1
 
-		# motion related stuff that is checked eveyr fixed period (otherwise different frame refresh rates lead to
+			if max_hand_discrepancy < get_distance(curr_hand_loc, (hand_mean_x, hand_mean_y)):
+				# hand is at greatest distance from mean detected so far, detect hand position relative to fiducials
+				#initialize closest_distance as an integer greater than size of image
+				closest_distance = 10000
+				max_hand_discrepancy = get_distance(curr_hand_loc, (hand_mean_x, hand_mean_y))
+				for marker_index in range(len(corners)):
+					#later replace corners with a persistent measure of fiducial location
+					marker = corners[marker_index][0]
+
+					# top left point of marker should be to the left and underneath the hand
+					if marker[0][0] < curr_hand_loc[0] and marker[0][1] > curr_hand_loc[1] \
+						and	get_distance(marker[0], curr_hand_loc) < closest_distance:
+
+					# #this version just finds nearest fiducial marker, problematic since picker might pick towards one
+					#side of the bin
+					# if get_distance(marker[0], curr_hand_loc) < closest_distance:
+
+						closest_distance = get_distance(marker[0], curr_hand_loc)
+						#get left center right based on marker index, ids of aruco stored as int
+						left_center_right = ids[marker_index] % 10
+						top_center_bottom = ids[marker_index] // 10
+
+
+		# motion related stuff that is checked every fixed period (otherwise different frame refresh rates lead to
 		# inconsistencies in measuring movement in pixels)
 		if (time_change > REFRESH_TIME):
 			# checks when the time_change is greater than the REFRESH TIME
