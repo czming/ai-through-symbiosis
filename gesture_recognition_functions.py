@@ -91,7 +91,7 @@ def hand_bounding_box(landmarks, image):
     right = -1
     top = image.shape[0]
     bottom = -1
-    for (x, y) in landmarks:
+    for (x, y, z) in landmarks:
         #adjust for pixel values
         x = x * image.shape[1]
         y = y * image.shape[0]

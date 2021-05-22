@@ -4,6 +4,40 @@ from gesture_recognition_functions import *
 from google.protobuf.json_format import MessageToDict
 import time
 
+class ArUco:
+
+    def __init__(self, intrinsic: np.ndarray, distortion: np.ndarray, aruco_dict, square_length=1.):
+        assert intrinsic.shape == (3,3)
+        self.intrinsic = intrinsic
+        self.distortion = distortion
+        self.aruco_dict = aruco_dict
+        self.square_length = square_length
+
+    def getCorners(self, image: np.ndarray):
+        corners, ids, rejected = cv2.aruco.detectMarkers(image, self.aruco_dict, cameraMatrix=self.intrinsic, distCoeff=self.distortion)
+        if corners:
+            rvecs, tvecs, markerPoints = cv2.aruco.estimatePoseSingleMarkers(corners, self.square_length, self.intrinsic, self.distortion)
+            ids = ids.flatten()
+            return [ArUcoMarker(corners[i][0], int(ids[i]), rvecs[i].reshape((3,1)), tvecs[i].reshape((3,1))) for i in range(len(corners))]
+        return []
+
+class ArUcoMarker(object):
+    def __init__(self, corners: np.ndarray, _id: int, rvec: np.ndarray, tvec: np.ndarray):
+        """
+        params:
+            - corners: pixel positions it was found in
+            - _id: ArUco marker number
+            - rvec: Rodriguez rotational 3d unit vector
+            - tvec: Rodriguez
+        """
+        assert rvec.shape == tvec.shape == (3,1)
+
+        self.corners = corners
+        self._id = _id
+        self.rvec = rvec
+        self.tvec = tvec
+
+
 def parse_picklist(file):
 	"""
 	Parses through pick list as a CSV file and returns an array of dictionaries representing each action in the pick
@@ -89,12 +123,31 @@ frames = 0
 
 aruco_ids = {}
 
+FRAME_WIDTH = 1280
+FRAME_HEIGHT = 720
+
+intrinsic = np.load("intrinsic.npy")
+distortion = np.load("distortion.npy")
+
+arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_5X5_1000)
+
+#get optimal camera matrix to undistort the image
+newcameramtx, roi = cv2.getOptimalNewCameraMatrix(intrinsic, distortion, (640, 360), 1,
+												  (640, 360))
+
+#create aruco detector
+aruco_detector = ArUco(intrinsic, distortion,arucoDict, square_length=0.05)
+
+# ##to write videos
+# out = cv2.VideoWriter('hand_detection_output.mp4', cv2.VideoWriter_fourcc(*"mp4v"), 10,
+# 					  (FRAME_WIDTH, FRAME_HEIGHT))
+
 while cap.isOpened():
 	success, image = cap.read()
 	if not success:
 		print("Ignoring empty camera frame.")
 		# If loading a video, use 'break' instead of 'continue'.
-		continue
+		break
 
 	if TO_FLIP:
 		# Flip the image horizontally for a later selfie-view display, and convert
@@ -103,8 +156,9 @@ while cap.isOpened():
 	else:
 		image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
+	image = cv2.undistort(image, intrinsic, distortion, None, newcameramtx)
+
 	##for aruco marker detection
-	arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_5X5_1000)
 	arucoParams = cv2.aruco.DetectorParameters_create()
 	(corners, ids, rejected) = cv2.aruco.detectMarkers(image, arucoDict,
 													   parameters=arucoParams)
@@ -131,9 +185,13 @@ while cap.isOpened():
 
 	for marker_id in aruco_ids.keys():
 		marker = aruco_ids[marker_id][0]
-		cv2.circle(image, (int(marker[0]), int(marker[1])),2, (255, 0, 0), 3)
+		cv2.circle(image, (int(marker[0]), int(marker[1])), 2, (255, 0, 0), 3)
 
+	aruco_vectors = aruco_detector.getCorners(image)
 
+	print ("number of markers: " + str(len(aruco_vectors)))
+	for i in aruco_vectors:
+		print (i.tvec)
 
 
 	# image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -152,12 +210,13 @@ while cap.isOpened():
 		for hand_landmarks in results.multi_hand_landmarks:
 			#look only at the first hand detected if there are multiple hands
 			for i in hand_landmarks.landmark[:21]:
-				first_hand_points.append([i.x, i.y])
+				first_hand_points.append([i.x, i.y, i.z])
 				#image = cv2.circle(image, (int(i.x * image.shape[1]), int(i.y * image.shape[0])), 2, (0, 0, 255), 3)
 				mp_drawing.draw_landmarks(
 				   image, hand_landmarks, mp_hands.HAND_CONNECTIONS)
 
 	if len(first_hand_points) >= 21:
+		print(first_hand_points[20][2])
 		curr_time = time.time()
 		time_change = curr_time - prev_time
 
@@ -284,10 +343,19 @@ while cap.isOpened():
 		frames += 1
 
 	#resize image to be a little smaller
-	image = cv2.resize(image, (int(image.shape[1] * 0.75), int(image.shape[0] * 0.75)))
+	#image = cv2.resize(image, (int(image.shape[1] * 0.75), int(image.shape[0] * 0.75)))
+
 	cv2.imshow('MediaPipe Hands', image)
 
-	if cv2.waitKey(5) & 0xFF == 27:
+	#out.write(image)
+
+	if cv2.waitKey(5) & 0xFF == ord('q'):
 		break
+
 hands.close()
 cap.release()
+
+#out.release()
+
+# Closes all the frames
+cv2.destroyAllWindows()
