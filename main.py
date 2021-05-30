@@ -3,6 +3,7 @@ import mediapipe as mp
 from gesture_recognition_functions import *
 from google.protobuf.json_format import MessageToDict
 import time
+import matplotlib.pyplot as plt
 
 class ArUco:
 
@@ -132,11 +133,27 @@ distortion = np.load("distortion.npy")
 arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_5X5_1000)
 
 #get optimal camera matrix to undistort the image
-newcameramtx, roi = cv2.getOptimalNewCameraMatrix(intrinsic, distortion, (640, 360), 1,
-												  (640, 360))
+newcameramtx, roi = cv2.getOptimalNewCameraMatrix(intrinsic, distortion, (1920, 1080), 1,
+												  (1920, 1080))
 
 #create aruco detector
 aruco_detector = ArUco(intrinsic, distortion,arucoDict, square_length=0.05)
+
+curr_figure = None
+
+#setting up plotting for the tvecs
+aruco_fig = plt.figure()
+
+aruco_tvec_ax = aruco_fig.add_axes(projection="3d")
+
+aruco_tvec_sp = aruco_fig.add_subplot(projection='3d')
+
+aruco_tvec_sp.set_xlim(-1,1)
+aruco_tvec_sp.set_ylim(-1,1)
+aruco_tvec_sp.set_zlim(0,10)
+
+plt.show(block=False)
+
 
 # ##to write videos
 # out = cv2.VideoWriter('hand_detection_output.mp4', cv2.VideoWriter_fourcc(*"mp4v"), 10,
@@ -156,17 +173,63 @@ while cap.isOpened():
 	else:
 		image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
+	image = cv2.resize(image, (1920, 1080))
+
+	aruco_vectors = aruco_detector.getCorners(image)
+
+	print ("number of markers: " + str(len(aruco_vectors)))
+
+	aruco_tvecs = []
+
+	for i in aruco_vectors:
+		#aruco has an extra dimension added so we're removing it here
+		aruco_tvecs.append([j[0] for j in i.tvec])
+		#print (i.tvec)
+
+	#want at least 4 points
+	if len(aruco_tvecs) >= 4:
+		aruco_tvecs_np = np.array(aruco_tvecs)
+		aruco_plot_plane = None
+		try:
+			aruco_plane = get_best_fit_plane(aruco_tvecs_np)
+			x = np.linspace(-1, 1, 10)
+			y = np.linspace(-1, 1, 10)
+			X, Y = np.meshgrid(x, y)
+			Z = aruco_plane[0] + aruco_plane[1] * X + aruco_plane[2] * Y
+
+			aruco_plot_plane = aruco_tvec_sp.plot_surface(X, Y, Z, alpha=0.5)
+
+		except np.linalg.LinAlgError:
+			#insufficient points, singular matrix
+			pass
+
+		#plot x, y, z
+		points = aruco_tvec_sp.scatter3D(aruco_tvecs_np[:,0], aruco_tvecs_np[:,1], aruco_tvecs_np[:,2])
+
+		aruco_fig.canvas.draw()
+
+		points.remove()
+		if aruco_plot_plane:
+			aruco_plot_plane.remove()
+
+	#removing distortion on image
 	image = cv2.undistort(image, intrinsic, distortion, None, newcameramtx)
 
 	##for aruco marker detection
 	arucoParams = cv2.aruco.DetectorParameters_create()
-	(corners, ids, rejected) = cv2.aruco.detectMarkers(image, arucoDict,
-													   parameters=arucoParams)
+	(corners, ids, rejected) = cv2.aruco.detectMarkers(image, arucoDict, parameters=arucoParams)
 	for marker_index in range(len(corners)):
 		marker = corners[marker_index]
 		for points in marker:
-			cv2.rectangle(image, (int(points[0][0]), int(points[0][1])), (int(points[2][0]), int(points[2][1])),
-						  (0, 255, 0), 3)
+
+			#plot the lines between the corners of the aruco markers
+			cv2.line(image, (int(points[0][0]), points[0][1]), (int(points[1][0]), points[1][1]), (0, 255, 0), 2)
+			cv2.line(image, (int(points[1][0]), points[1][1]), (int(points[2][0]), points[2][1]), (0, 255, 0), 2)
+			cv2.line(image, (int(points[2][0]), points[2][1]), (int(points[3][0]), points[3][1]), (0, 255, 0), 2)
+			cv2.line(image, (int(points[3][0]), points[3][1]), (int(points[0][0]), points[0][1]), (0, 255, 0), 2)
+
+			#cv2.rectangle(image, (int(points[0][0]), int(points[0][1])), (int(points[2][0]), int(points[2][1])),
+			#			  (0, 255, 0), 3)
 
 			marker_id = ids[marker_index][0]
 			#use the top left point as the marker's coordinates
@@ -187,11 +250,6 @@ while cap.isOpened():
 		marker = aruco_ids[marker_id][0]
 		cv2.circle(image, (int(marker[0]), int(marker[1])), 2, (255, 0, 0), 3)
 
-	aruco_vectors = aruco_detector.getCorners(image)
-
-	print ("number of markers: " + str(len(aruco_vectors)))
-	for i in aruco_vectors:
-		print (i.tvec)
 
 
 	# image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
