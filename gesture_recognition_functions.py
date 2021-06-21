@@ -91,7 +91,7 @@ def hand_bounding_box(landmarks, image):
     right = -1
     top = image.shape[0]
     bottom = -1
-    for (x, y) in landmarks:
+    for (x, y, z) in landmarks:
         #adjust for pixel values
         x = x * image.shape[1]
         y = y * image.shape[0]
@@ -113,6 +113,15 @@ def hand_bounding_box(landmarks, image):
     return ((left, top), (right, top), (right, bottom), (left, bottom)), (bottom - top, right - left)
 
 def calculate_new_mean_variance(old_mean, old_variance, num_readings, new_reading):
+    """
+    updating the mean and variance of a tracked value
+
+    :param old_mean: previous mean
+    :param old_variance: previous variance
+    :param num_readings: number of previous readings
+    :param new_reading: the value of the current reading
+    :return: (new mean, new variance)
+    """
     # num readings is exclusive of the current new_reading being inputted
     if num_readings == 0:
         # new mean is the new reading and the variance is just 0 for now, num_readings is 1 after this
@@ -133,3 +142,81 @@ def calculate_new_mean_variance(old_mean, old_variance, num_readings, new_readin
                    ((num_readings + 1) / num_readings) * (new_mean ** 2)
 
     return new_mean, new_variance
+
+
+def get_best_fit_plane(points):
+    """
+    Find the best fit plane for the points, in the form z = a + bx + cy, using OLS linear regression
+    :param points: Array of 3-D points, [x, y, z]
+    :return: numpy array of [a, b, c], where z = a + bx + cy
+    """
+    points = np.array(points)
+    num_points = len(points)
+    #A = [1 x y]
+    A = np.concatenate((np.ones((num_points, 1)), points[:, :2]), axis=1)
+    #x_pred = (A^T * A) ^ (-1) * A^T * b, OLS
+    best_fit_param = np.linalg.inv(A.T @ A) @ A.T @ points[:, 2]
+
+    return best_fit_param
+
+def test_best_fit_plane():
+    import matplotlib.pyplot as plt
+
+    x = np.linspace(0, 10, 10)
+    y = np.linspace(0, 10, 10)
+    X, Y = np.meshgrid(x, y)
+
+    x_val = [1, 4, 2, 3, 7, 5, 6, 7, 8, 10]
+    y_val = [3, 2, 6, 1, 8, 9, 10, 3, 2, 5]
+    z_val = [6, 4, 6, 2, 8, 10, 3, 4, 5, 2]
+    points = np.concatenate((np.expand_dims(np.array(x_val), axis=-1), np.expand_dims(np.array(y_val), axis=-1),
+                             np.expand_dims(np.array(z_val), axis=-1)), axis=1)
+
+    best_fit_plane = get_best_fit_plane(points)
+
+    Z = best_fit_plane[0] + best_fit_plane[1] * X + best_fit_plane[2] * Y
+
+    plt.figure()
+    ax = plt.axes(projection = "3d")
+    ax.plot_surface(X, Y, Z, alpha = 0.5)
+    ax.scatter3D(x_val, y_val, z_val)
+    plt.show()
+
+
+def get_best_fit_plane(points):
+    """
+    Find the best fit plane for the points, in the form z = a + bx + cy, using OLS linear regression
+    :param points: Array of 3-D points, [x, y, z]
+    :return: numpy array of [a, b, c], where z = a + bx + cy
+    """
+    points = np.array(points)
+    num_points = len(points)
+    #A = [1 x y]
+    A = np.concatenate((np.ones((num_points, 1)), points[:, :2]), axis=1)
+    #x_pred = (A^T * A) ^ (-1) * A^T * b, OLS
+    best_fit_param = np.linalg.inv(A.T @ A) @ A.T @ points[:, 2]
+
+    return best_fit_param
+
+# def test_best_fit_plane():
+#     import matplotlib.pyplot as plt
+#
+#     x = np.linspace(0, 10, 10)
+#     y = np.linspace(0, 10, 10)
+#     X, Y = np.meshgrid(x, y)
+#
+#     x_val = [1, 4, 2, 3, 7, 5, 6, 7, 8, 10]
+#     y_val = [3, 2, 6, 1, 8, 9, 10, 3, 2, 5]
+#     z_val = [6, 4, 6, 2, 8, 10, 3, 4, 5, 2]
+#     points = np.concatenate((np.expand_dims(np.array(x_val), axis=-1), np.expand_dims(np.array(y_val), axis=-1),
+#                              np.expand_dims(np.array(z_val), axis=-1)), axis=1)
+#
+#     best_fit_plane = get_best_fit_plane(points)
+#
+#     Z = best_fit_plane[0] + best_fit_plane[1] * X + best_fit_plane[2] * Y
+#
+#     plt.figure()
+#     ax = plt.axes(projection = "3d")
+#     ax.plot_surface(X, Y, Z, alpha = 0.5)
+#     ax.scatter3D(x_val, y_val, z_val)
+#     plt.show()
