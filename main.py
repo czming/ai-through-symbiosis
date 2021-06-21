@@ -7,39 +7,43 @@ from google.protobuf.json_format import MessageToDict
 import time
 import matplotlib.pyplot as plt
 
-class ArUco:
+class ArUcoDetector:
+  def __init__(self, intrinsic: np.ndarray, distortion: np.ndarray, aruco_dict, square_length=1.):
+    assert intrinsic.shape == (3,3)
+    self.intrinsic = intrinsic
+    self.distortion = distortion
+    self.aruco_dict = aruco_dict
+    self.square_length = square_length
 
-    def __init__(self, intrinsic: np.ndarray, distortion: np.ndarray, aruco_dict, square_length=1.):
-        assert intrinsic.shape == (3,3)
-        self.intrinsic = intrinsic
-        self.distortion = distortion
-        self.aruco_dict = aruco_dict
-        self.square_length = square_length
-
-    def getCorners(self, image: np.ndarray):
-        corners, ids, rejected = cv2.aruco.detectMarkers(image, self.aruco_dict, cameraMatrix=self.intrinsic, distCoeff=self.distortion)
-        if corners:
-            rvecs, tvecs, markerPoints = cv2.aruco.estimatePoseSingleMarkers(corners, self.square_length, self.intrinsic, self.distortion)
-            ids = ids.flatten()
-            return [ArUcoMarker(corners[i][0], int(ids[i]), rvecs[i].reshape((3,1)), tvecs[i].reshape((3,1))) for i in range(len(corners))]
-        return []
+  def getCorners(self, image: np.ndarray):
+    corners, ids, rejected = cv2.aruco.detectMarkers(image, self.aruco_dict, cameraMatrix=self.intrinsic, distCoeff=self.distortion)
+    if corners:
+      #try and find all 4 points
+      rvecs, tvecs, markerPoints = cv2.aruco.estimatePoseSingleMarkers(corners, self.square_length, self.intrinsic, self.distortion)
+      ids = ids.flatten()
+      return [ArUcoMarker(corners[i][0], int(ids[i]), rvecs[i].reshape((3,1)), tvecs[i].reshape((3,1))) for i in range(len(corners))]
+    return []
 
 class ArUcoMarker(object):
-    def __init__(self, corners: np.ndarray, _id: int, rvec: np.ndarray, tvec: np.ndarray):
-        """
-        params:
-            - corners: pixel positions it was found in
-            - _id: ArUco marker number
-            - rvec: Rodriguez rotational 3d unit vector
-            - tvec: Rodriguez
-        """
-        assert rvec.shape == tvec.shape == (3,1)
+  def __init__(self, corners: np.ndarray, _id: int, rvec: np.ndarray, tvec: np.ndarray):
+    """
+    params:
+        - corners: pixel positions it was found in
+        - _id: ArUco marker number
+        - rvec: Rodriguez rotational 3d unit vector
+        - tvec: Rodriguez
+    """
+    assert rvec.shape == tvec.shape == (3,1)
 
-        self.corners = corners
-        self._id = _id
-        self.rvec = rvec
-        self.tvec = tvec
+    self.corners = corners
+    self._id = _id
+    self.rvec = rvec
+    self.tvec = tvec
+        
+  def get_id(self):
+    return self._id
 
+      
 def get_hand_corners(hand_points:list) -> np.ndarray:
 	"""
 	Get pseudo ArUco landmarks for hand positions
@@ -56,30 +60,31 @@ def get_hand_corners(hand_points:list) -> np.ndarray:
 	bottom_left = top_left + (bottom_right - top_right)
 
 	return np.vstack([top_left, top_right, bottom_right, bottom_left])
+    
 
 def parse_picklist(file):
-	"""
-	Parses through pick list as a CSV file and returns an array of dictionaries representing each action in the pick
-	list
-	:param file: CSV file which contains pick list
-	:return: array of dictionaries which contain {"item_index", "horizontal_location", "vertical_location", "picked"}.
-	horizontal_location = -1 if left, 0 if center and 1 if right, vertical_location = -1 if bottom, 0 if middle, and 1
-	if top, picked is 1 if the current action is picking up the object and 0 is the current action is depositing the
-	object
-	"""
+    """
+    Parses through pick list as a CSV file and returns an array of dictionaries representing each action in the pick
+    list
+    :param file: CSV file which contains pick list
+    :return: array of dictionaries which contain {"item_index", "horizontal_location", "vertical_location", "picked"}.
+    horizontal_location = -1 if left, 0 if center and 1 if right, vertical_location = -1 if bottom, 0 if middle, and 1
+    if top, picked is 1 if the current action is picking up the object and 0 is the current action is depositing the
+    object
+    """
 
-	infile = open(file).readlines()
-	picklist = []
-	pick_indices = ["item_index", "horizontal_location", "vertical_location"]
-	#initially object not in hand, so we need to pick
-	picking = True
-	for line in infile:
-		line = [int(i) for i in line.strip().split(",")]
-		curr_pick = dict(zip(pick_indices, line))
-		curr_pick["picked"] = picking
-		picking = not picking
-		picklist.append(curr_pick)
-	return picklist
+    infile = open(file).readlines()
+    picklist = []
+    pick_indices = ["item_index", "horizontal_location", "vertical_location"]
+    #initially object not in hand, so we need to pick
+    picking = True
+    for line in infile:
+        line = [int(i) for i in line.strip().split(",")]
+        curr_pick = dict(zip(pick_indices, line))
+        curr_pick["picked"] = picking
+        picking = not picking
+        picklist.append(curr_pick)
+    return picklist
 
 
 if __name__ == "__main__":
@@ -157,6 +162,13 @@ if __name__ == "__main__":
 
 	intrinsic = np.load("intrinsic.npy")
 	distortion = np.load("distortion.npy")
+  
+  #all the markers that we know of so far
+  markers = set()
+
+  #the relative tvec locations between markers
+
+  frames = 0
 
 	arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_5X5_1000)
 
@@ -171,6 +183,13 @@ if __name__ == "__main__":
 
 	#setting up plotting for the tvecs
 	aruco_fig = plt.figure()
+  
+  #get optimal camera matrix to undistort the image
+  newcameramtx, roi = cv2.getOptimalNewCameraMatrix(intrinsic, distortion, (1920, 1080), 1,
+                                                    (1920, 1080))
+
+  #create aruco detector
+  aruco_detector = ArUcoDetector(intrinsic, distortion,arucoDict, square_length=0.05)
 
 	aruco_tvec_ax = aruco_fig.add_axes(projection="3d")
 
@@ -182,11 +201,12 @@ if __name__ == "__main__":
 
 	plt.show(block=False)
 
-
 	# ##to write videos
 	if args.outfile:
 		out = cv2.VideoWriter(args.outfile, cv2.VideoWriter_fourcc(*"mp4v"), 10,
 							  (FRAME_WIDTH, FRAME_HEIGHT))
+  plt.ion()
+  plt.show()
 
 	while cap.isOpened():
 		success, image = cap.read()
@@ -207,7 +227,17 @@ if __name__ == "__main__":
 		aruco_vectors = aruco_detector.getCorners(image)
 
 		print ("number of markers: " + str(len(aruco_vectors)))
+    
+    for marker in aruco_vectors:
+        curr_detected_markers.add(marker.get_id())
+        markers.add(marker.get_id())
 
+        #draw axis for the aruco markers
+        cv2.aruco.drawAxis(image, intrinsic, distortion, marker.rvec, marker.tvec, 0.05)
+
+    print (curr_detected_markers, end = " ")
+    print (markers, end = " ")
+        
 		aruco_tvecs = []
 
 		for i in aruco_vectors:
@@ -464,3 +494,4 @@ if __name__ == "__main__":
 
 	# Closes all the frames
 	cv2.destroyAllWindows()
+
