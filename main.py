@@ -90,8 +90,7 @@ def parse_picklist(file):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--video", "-v", type=str, default="G:/My Drive/Georgia Tech/AI Through Symbiosis/20210717_213150.mp4"
-                                                           "", help="Path to input video")
+    parser.add_argument("--video", "-v", type=str, default="G:/My Drive/Georgia Tech/AI Through Symbiosis/Red 1 ArUco.mp4", help="Path to input video")
     parser.add_argument("--pickpath", "-pp", type=str, default="C:/Users/chngz/Documents/AI through Symbiosis/AI through Symbiosis/picklist.csv", help="Path to picklist")
     parser.add_argument("--outfile", "-o", type=str, help="Path to video outfile to save to. If not provided, will not create video") # 'hand_detection_output.mp4'
     parser.add_argument("--check_pickpath", "-cp", action="store_false", help="Add this flag if you want to work with a picklist. Also be sure to pass a --pickpath argument")
@@ -123,11 +122,8 @@ if __name__ == "__main__":
     hand_open = True
     curr_holding = False
     last_change = 0
-    #give a buffer of time due to inaccuracy in detection
+
     TIME_CHANGE_BUFFER = 5
-
-    MARKER_TIME_BUFFER = 0.5
-
 
     MOVEMENT_MOE = 5
     REFRESH_TIME = 0.05
@@ -156,15 +152,11 @@ if __name__ == "__main__":
 
     frames = 0
 
-    aruco_ids = {}
-
     FRAME_WIDTH = 1280
     FRAME_HEIGHT = 720
 
-    intrinsic = np.load("intrinsic_3.npy")
-    distortion = np.load("distortion_3.npy")
-
-    print (intrinsic, distortion)
+    intrinsic = np.load("intrinsic.npy")
+    distortion = np.load("distortion.npy")
   
     #all the markers that we know of so far
     markers = set()
@@ -193,13 +185,13 @@ if __name__ == "__main__":
     aruco_tvec_sp = aruco_fig.add_subplot(projection='3d')
 
     #set limits for the scatter plot
-    aruco_tvec_sp.set_xlim(-1,1)
-    aruco_tvec_sp.set_ylim(-1,1)
-    aruco_tvec_sp.set_zlim(-1,1)
+    aruco_tvec_sp.set_xlim(-5,5)
+    aruco_tvec_sp.set_ylim(-5,5)
+    aruco_tvec_sp.set_zlim(-5,5)
 
     plt.show(block=False)
 
-    # ##to write videos
+    #to write videos
     if args.outfile:
         out = cv2.VideoWriter(args.outfile, cv2.VideoWriter_fourcc(*"mp4v"), 10,
                           (FRAME_WIDTH, FRAME_HEIGHT))
@@ -231,7 +223,7 @@ if __name__ == "__main__":
         aruco_plot_plane = None
         hand_sp_points = None
 
-        print ("number of markers: " + str(len(aruco_vectors)))
+        print ("\rnumber of markers: " + str(len(aruco_vectors)), end = " ")
     
         for marker in aruco_vectors:
             curr_detected_markers.add(marker.get_id())
@@ -260,7 +252,7 @@ if __name__ == "__main__":
 
 
         #want at least 4 points
-        if len(aruco_tvecs) >= 4:
+        if len(aruco_tvecs) >= 3:
             #aruco_tvecs numpy array
             aruco_tvecs_np = np.array(aruco_tvecs)
             aruco_plot_plane = None
@@ -285,12 +277,12 @@ if __name__ == "__main__":
         if aruco_hand_tvec is not None:
             if aruco_plane[0] + aruco_plane[1] * aruco_hand_tvec[0] + aruco_plane[2] * aruco_hand_tvec[1] > aruco_hand_tvec[2]:
                 aruco_hand_sp_points = aruco_tvec_sp.scatter3D(aruco_hand_tvec[0], aruco_hand_tvec[1],
-                                                               aruco_hand_tvec[2], c=(0,1,0))
+                                                               aruco_hand_tvec[2], color=(0,1,0))
             else:
                 aruco_hand_sp_points = aruco_tvec_sp.scatter3D(aruco_hand_tvec[0], aruco_hand_tvec[1], aruco_hand_tvec[2],
-                                                           c = (0,0,0))
+                                                           color = (0,0,0))
             print (aruco_hand_tvec, end = " ")
-            print (aruco_plane[0] + aruco_plane[1] * aruco_hand_tvec[0] + aruco_plane[2] * aruco_hand_tvec[1], aruco_hand_tvec[2])
+            print (aruco_plane[0] + aruco_plane[1] * aruco_hand_tvec[0] + aruco_plane[2] * aruco_hand_tvec[1], aruco_hand_tvec[2], end = " ")
 
         for marker_index in range(len(aruco_vectors)):
             points = aruco_vectors[marker_index].corners
@@ -300,28 +292,12 @@ if __name__ == "__main__":
             cv2.line(image, (int(points[2][0]), points[2][1]), (int(points[3][0]), points[3][1]), (0, 255, 0), 2)
             cv2.line(image, (int(points[3][0]), points[3][1]), (int(points[0][0]), points[0][1]), (0, 255, 0), 2)
 
-                #cv2.rectangle(image, (int(points[0][0]), int(points[0][1])), (int(points[2][0]), int(points[2][1])),
-                #			  (0, 255, 0), 3)
-
             marker_id = aruco_vectors[marker_index].get_id()
             #use the top left point as the marker's coordinates
             marker_coords = points[0]
 
             cv2.putText(image, f"id: {marker_id}", (int(marker_coords[0]), int(marker_coords[1] - 20)),
                         cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(0,0, 255), thickness=3)
-
-            #store [top_left_marker_pos, time detected]
-            aruco_ids[marker_id] = [(int(marker_coords[0]), int(marker_coords[1])), time.time()]
-
-        for marker_id in list(aruco_ids.keys()):
-            if time.time() - aruco_ids[marker_id][1] > MARKER_TIME_BUFFER:
-                #more than expired time, delete the marker from aruco_ids since have not seen for a while
-                del(aruco_ids[marker_id])
-
-        for marker_id in aruco_ids.keys():
-            marker = aruco_ids[marker_id][0]
-            cv2.circle(image, (int(marker[0]), int(marker[1])), 2, (255, 0, 0), 3)
-
 
 
         # image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -345,26 +321,6 @@ if __name__ == "__main__":
                     mp_drawing.draw_landmarks(image, hand_landmarks, mp_hands.HAND_CONNECTIONS)
 
         if len(first_hand_points) >= 21:
-            # get hand tvec
-            #modelling hand as an aruco marker
-            # # -------------
-            # pseudo_hand_corners = get_hand_corners(first_hand_points)
-            #
-            # pseudo_hand_corners[:,0] *= image.shape[1]
-            # pseudo_hand_corners[:,1] *= image.shape[0]
-            #
-            # hand_rvec, hand_tvec, markerPoint = cv2.aruco.estimatePoseSingleMarkers([pseudo_hand_corners], 0.0762, intrinsic, distortion)
-            #
-            # for point in pseudo_hand_corners:
-            #     cv2.circle(image, tuple(point.astype(np.int)), 3, (255, 128, 128), 3)
-            #
-            # cv2.aruco.drawAxis(image, intrinsic, distortion, hand_rvec, hand_tvec, 0.2)
-            #
-            # #plot hand points
-            # hand_sp_points = aruco_tvec_sp.scatter3D([hand_tvec[0][0][0]], [hand_tvec[0][0][1]], [hand_tvec[0][0][2]])
-            #
-            # # -------------
-
             curr_time = time.time()
             time_change = curr_time - prev_time
 
@@ -402,7 +358,7 @@ if __name__ == "__main__":
                 #pick the stuff after the whole thing has been processed
                 if pick_list:
                     picked.append(pick_list.pop(0))
-                print (f"\n{top_center_bottom}{left_center_right}")
+                print (f"\n{top_center_bottom}{left_center_right}", end = " ")
                 left_center_right = -1
                 top_center_bottom = -1
                 max_hand_discrepancy = 0
@@ -445,7 +401,7 @@ if __name__ == "__main__":
             if (time_change > REFRESH_TIME):
                 # checks when the time_change is greater than the REFRESH TIME
 
-                print ("\r", f"curr_holding: {curr_holding}", handedness, end = " ")
+                print (f"curr_holding: {curr_holding}", handedness, end = " ")
                 if prev_hand_loc != () and (curr_hand_loc[0] > prev_hand_loc[0] + MOVEMENT_MOE * time_change / REFRESH_TIME):
                     # curr_hand is more than MOVEMENT_MOE pixels to the right of prev_hand_loc
                     print("Moving right", end=" ")
@@ -483,7 +439,7 @@ if __name__ == "__main__":
             break
 
 
-        aruco_fig.canvas.draw()
+        #aruco_fig.canvas.draw()
 
 
         if aruco_sp_points:
