@@ -90,7 +90,8 @@ def parse_picklist(file):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--video", "-v", type=str, default="C:/Users/chngz/Documents/AI through Symbiosis/AI through Symbiosis/Red 1 ArUco.mp4", help="Path to input video")
+    parser.add_argument("--video", "-v", type=str, default="G:/My Drive/Georgia Tech/AI Through Symbiosis/20210717_213150.mp4"
+                                                           "", help="Path to input video")
     parser.add_argument("--pickpath", "-pp", type=str, default="C:/Users/chngz/Documents/AI through Symbiosis/AI through Symbiosis/picklist.csv", help="Path to picklist")
     parser.add_argument("--outfile", "-o", type=str, help="Path to video outfile to save to. If not provided, will not create video") # 'hand_detection_output.mp4'
     parser.add_argument("--check_pickpath", "-cp", action="store_false", help="Add this flag if you want to work with a picklist. Also be sure to pass a --pickpath argument")
@@ -160,8 +161,10 @@ if __name__ == "__main__":
     FRAME_WIDTH = 1280
     FRAME_HEIGHT = 720
 
-    intrinsic = np.load("intrinsic.npy")
-    distortion = np.load("distortion.npy")
+    intrinsic = np.load("intrinsic_3.npy")
+    distortion = np.load("distortion_3.npy")
+
+    print (intrinsic, distortion)
   
     #all the markers that we know of so far
     markers = set()
@@ -177,7 +180,7 @@ if __name__ == "__main__":
                                                     (1920, 1080))
 
     #create aruco detector
-    aruco_detector = ArUcoDetector(intrinsic, distortion,arucoDict, square_length=0.05)
+    aruco_detector = ArUcoDetector(intrinsic, distortion, arucoDict, square_length=0.05)
 
     curr_figure = None
 
@@ -192,7 +195,7 @@ if __name__ == "__main__":
     #set limits for the scatter plot
     aruco_tvec_sp.set_xlim(-1,1)
     aruco_tvec_sp.set_ylim(-1,1)
-    aruco_tvec_sp.set_zlim(0,10)
+    aruco_tvec_sp.set_zlim(-1,1)
 
     plt.show(block=False)
 
@@ -242,10 +245,19 @@ if __name__ == "__main__":
 
         aruco_tvecs = []
 
+        #aruco marker for hand
+        aruco_hand_tvec = None
+
         for i in aruco_vectors:
-            #aruco has an extra dimension added so we're removing it here
-            aruco_tvecs.append([j[0] for j in i.tvec])
-            #print (i.tvec)
+            if i.get_id() != 0:
+                #ignore the aruco marker with id 0 because that's supposed to be the aruco marker on the hand
+                #aruco has an extra dimension added so we're removing it here
+                aruco_tvecs.append([j[0] for j in i.tvec])
+                #print (i.tvec)
+            else:
+                #if hand found
+                aruco_hand_tvec = np.array([j[0] for j in i.tvec])
+
 
         #want at least 4 points
         if len(aruco_tvecs) >= 4:
@@ -259,43 +271,47 @@ if __name__ == "__main__":
                 X, Y = np.meshgrid(x, y)
                 Z = aruco_plane[0] + aruco_plane[1] * X + aruco_plane[2] * Y
 
-                aruco_plot_plane = aruco_tvec_sp.plot_surface(X, Y, Z, alpha=0.5)
+                aruco_plot_plane = aruco_tvec_sp.plot_surface(X, Y, Z, alpha=0.3, color = (0,0,1))
 
             except np.linalg.LinAlgError:
                 #insufficient points, singular matrix
                 pass
 
-            #plot x, y, z
-            aruco_sp_points = aruco_tvec_sp.scatter3D(aruco_tvecs_np[:,0], aruco_tvecs_np[:,1], aruco_tvecs_np[:,2])
+            #plot x, y, z for the aruco markers
+            aruco_sp_points = aruco_tvec_sp.scatter3D(aruco_tvecs_np[:,0], aruco_tvecs_np[:,1], aruco_tvecs_np[:,2],
+                                                      c=[(1,0,0) for i in aruco_tvecs_np])
+            #print (aruco_tvecs_np)
 
-        #removing distortion on image
-        image = cv2.undistort(image, intrinsic, distortion, None, newcameramtx)
+        if aruco_hand_tvec is not None:
+            if aruco_plane[0] + aruco_plane[1] * aruco_hand_tvec[0] + aruco_plane[2] * aruco_hand_tvec[1] > aruco_hand_tvec[2]:
+                aruco_hand_sp_points = aruco_tvec_sp.scatter3D(aruco_hand_tvec[0], aruco_hand_tvec[1],
+                                                               aruco_hand_tvec[2], c=(0,1,0))
+            else:
+                aruco_hand_sp_points = aruco_tvec_sp.scatter3D(aruco_hand_tvec[0], aruco_hand_tvec[1], aruco_hand_tvec[2],
+                                                           c = (0,0,0))
+            print (aruco_hand_tvec, end = " ")
+            print (aruco_plane[0] + aruco_plane[1] * aruco_hand_tvec[0] + aruco_plane[2] * aruco_hand_tvec[1], aruco_hand_tvec[2])
 
-        ##for aruco marker detection
-        arucoParams = cv2.aruco.DetectorParameters_create()
-        (corners, ids, rejected) = cv2.aruco.detectMarkers(image, arucoDict, parameters=arucoParams)
-        for marker_index in range(len(corners)):
-            marker = corners[marker_index]
-            for points in marker:
-
-                #plot the lines between the corners of the aruco markers
-                cv2.line(image, (int(points[0][0]), points[0][1]), (int(points[1][0]), points[1][1]), (0, 255, 0), 2)
-                cv2.line(image, (int(points[1][0]), points[1][1]), (int(points[2][0]), points[2][1]), (0, 255, 0), 2)
-                cv2.line(image, (int(points[2][0]), points[2][1]), (int(points[3][0]), points[3][1]), (0, 255, 0), 2)
-                cv2.line(image, (int(points[3][0]), points[3][1]), (int(points[0][0]), points[0][1]), (0, 255, 0), 2)
+        for marker_index in range(len(aruco_vectors)):
+            points = aruco_vectors[marker_index].corners
+            #plot the lines between the corners of the aruco markers
+            cv2.line(image, (int(points[0][0]), points[0][1]), (int(points[1][0]), points[1][1]), (0, 255, 0), 2)
+            cv2.line(image, (int(points[1][0]), points[1][1]), (int(points[2][0]), points[2][1]), (0, 255, 0), 2)
+            cv2.line(image, (int(points[2][0]), points[2][1]), (int(points[3][0]), points[3][1]), (0, 255, 0), 2)
+            cv2.line(image, (int(points[3][0]), points[3][1]), (int(points[0][0]), points[0][1]), (0, 255, 0), 2)
 
                 #cv2.rectangle(image, (int(points[0][0]), int(points[0][1])), (int(points[2][0]), int(points[2][1])),
                 #			  (0, 255, 0), 3)
 
-                marker_id = ids[marker_index][0]
-                #use the top left point as the marker's coordinates
-                marker_coords = points[0]
+            marker_id = aruco_vectors[marker_index].get_id()
+            #use the top left point as the marker's coordinates
+            marker_coords = points[0]
 
-                cv2.putText(image, f"id: {marker_id}", (int(marker_coords[0]), int(marker_coords[1] - 20)),
-                            cv2.FONT_HERSHEY_SIMPLEX, fontScale = 1, color = (0,0, 255), thickness = 3)
+            cv2.putText(image, f"id: {marker_id}", (int(marker_coords[0]), int(marker_coords[1] - 20)),
+                        cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(0,0, 255), thickness=3)
 
-                #store [top_left_marker_pos, time detected]
-                aruco_ids[marker_id] = [(int(marker_coords[0]), int(marker_coords[1])), time.time()]
+            #store [top_left_marker_pos, time detected]
+            aruco_ids[marker_id] = [(int(marker_coords[0]), int(marker_coords[1])), time.time()]
 
         for marker_id in list(aruco_ids.keys()):
             if time.time() - aruco_ids[marker_id][1] > MARKER_TIME_BUFFER:
@@ -326,30 +342,29 @@ if __name__ == "__main__":
                 for i in hand_landmarks.landmark[:21]:
                     first_hand_points.append([i.x, i.y, i.z])
                     #image = cv2.circle(image, (int(i.x * image.shape[1]), int(i.y * image.shape[0])), 2, (0, 0, 255), 3)
-                    mp_drawing.draw_landmarks(
-                    image, hand_landmarks, mp_hands.HAND_CONNECTIONS)
+                    mp_drawing.draw_landmarks(image, hand_landmarks, mp_hands.HAND_CONNECTIONS)
 
         if len(first_hand_points) >= 21:
             # get hand tvec
-            # -------------
-            pseudo_hand_corners = get_hand_corners(first_hand_points)
+            #modelling hand as an aruco marker
+            # # -------------
+            # pseudo_hand_corners = get_hand_corners(first_hand_points)
+            #
+            # pseudo_hand_corners[:,0] *= image.shape[1]
+            # pseudo_hand_corners[:,1] *= image.shape[0]
+            #
+            # hand_rvec, hand_tvec, markerPoint = cv2.aruco.estimatePoseSingleMarkers([pseudo_hand_corners], 0.0762, intrinsic, distortion)
+            #
+            # for point in pseudo_hand_corners:
+            #     cv2.circle(image, tuple(point.astype(np.int)), 3, (255, 128, 128), 3)
+            #
+            # cv2.aruco.drawAxis(image, intrinsic, distortion, hand_rvec, hand_tvec, 0.2)
+            #
+            # #plot hand points
+            # hand_sp_points = aruco_tvec_sp.scatter3D([hand_tvec[0][0][0]], [hand_tvec[0][0][1]], [hand_tvec[0][0][2]])
+            #
+            # # -------------
 
-            pseudo_hand_corners[:,0] *= image.shape[1]
-            pseudo_hand_corners[:,1] *= image.shape[0]
-
-            hand_rvec, hand_tvec, markerPoint = cv2.aruco.estimatePoseSingleMarkers([pseudo_hand_corners], 0.0762, intrinsic, distortion)
-
-            for point in pseudo_hand_corners:
-                cv2.circle(image, tuple(point.astype(np.int)), 3, (255, 128, 128), 3)
-
-            cv2.aruco.drawAxis(image, intrinsic, distortion, hand_rvec, hand_tvec, 0.2)
-
-            #plot hand points
-            hand_sp_points = aruco_tvec_sp.scatter3D([hand_tvec[0][0][0]], [hand_tvec[0][0][1]], [hand_tvec[0][0][2]])
-
-            # -------------
-
-            print(first_hand_points[20][2])
             curr_time = time.time()
             time_change = curr_time - prev_time
 
@@ -374,7 +389,7 @@ if __name__ == "__main__":
             for point_index in range(len(bounding_box)):
                 #use the %len(bounding_box) to wrap around back to the start
                 cv2.line(image, bounding_box[point_index], bounding_box[(point_index + 1) % len(bounding_box)],
-                                (0, 255, 0), 4)
+                                (0, 0, 255), 4)
 
             #write text
             fingers_open = improved_gesture_recognition(first_hand_points, handedness, image)
@@ -387,22 +402,10 @@ if __name__ == "__main__":
                 #pick the stuff after the whole thing has been processed
                 if pick_list:
                     picked.append(pick_list.pop(0))
-                # if closed_hand_mean_x > hand_mean_x + hand_sd_x:
-                # 	# to the right
-                # 	left_center_right = 1
-                # elif closed_hand_mean_x < hand_mean_x - hand_sd_x:
-                # 	left_center_right = -1
                 print (f"\n{top_center_bottom}{left_center_right}")
                 left_center_right = -1
                 top_center_bottom = -1
                 max_hand_discrepancy = 0
-
-                # #reset closed hand variables
-                # closed_hand_mean_x = 0
-                # closed_hand_mean_y = 0
-                # closed_hand_var_x = 0
-                # closed_hand_var_y = 0
-                # closed_hand_frames = 0
 
             elif time.time() - last_change >= TIME_CHANGE_BUFFER and sum(fingers_open) <= 2 and hand_open:
                 #closed palms seem harder to detect due to angle, so only need to see 3 closed fingers
@@ -414,27 +417,14 @@ if __name__ == "__main__":
                 last_change = time.time()
 
             if time.time() - last_change < TIME_CHANGE_BUFFER and sum(fingers_open) <= 2:
-                #during transition time and hand is closed, find average location
-                # closed_hand_mean_x, closed_hand_var_x = calculate_new_mean_variance(closed_hand_mean_x,
-                # 																	closed_hand_var_x,
-                # 																	closed_hand_frames,
-                # 																	curr_hand_loc[0])
-                # closed_hand_mean_y, closed_hand_var_y = calculate_new_mean_variance(closed_hand_mean_y,
-                # 																	closed_hand_var_y,
-                # 																	closed_hand_frames,
-                # 																	curr_hand_loc[1])
-                #
-                # frames += 1
-
-
                 if max_hand_discrepancy < get_distance(curr_hand_loc, (hand_mean_x, hand_mean_y)):
                     # hand is at greatest distance from mean detected so far, detect hand position relative to fiducials
                     #initialize closest_distance as an integer greater than size of image
                     closest_distance = 10000
                     max_hand_discrepancy = get_distance(curr_hand_loc, (hand_mean_x, hand_mean_y))
-                    for marker_index in range(len(corners)):
+                    for marker_index in range(len(aruco_vectors)):
                         #later replace corners with a persistent measure of fiducial location
-                        marker = corners[marker_index][0]
+                        marker = aruco_vectors[marker_index].corners
 
                         # top left point of marker should be to the left and underneath the hand
                         if marker[0][0] < curr_hand_loc[0] and marker[0][1] > curr_hand_loc[1] \
@@ -446,8 +436,8 @@ if __name__ == "__main__":
 
                             closest_distance = get_distance(marker[0], curr_hand_loc)
                             #get left center right based on marker index, ids of aruco stored as int
-                            left_center_right = ids[marker_index] % 10
-                            top_center_bottom = ids[marker_index] // 10
+                            left_center_right = aruco_vectors[marker_index].get_id() % 10
+                            top_center_bottom = aruco_vectors[marker_index].get_id() // 10
 
 
             # motion related stuff that is checked every fixed period (otherwise different frame refresh rates lead to
@@ -479,19 +469,27 @@ if __name__ == "__main__":
             #resize image to be a little smaller
             #image = cv2.resize(image, (int(image.shape[1] * 0.75), int(image.shape[0] * 0.75)))
 
-            cv2.imshow('MediaPipe Hands', image)
+        #removing distortion on image
+        image = cv2.undistort(image, intrinsic, distortion, None, newcameramtx)
+
+        image = cv2.resize(image, (1280,720))
+
+        cv2.imshow('MediaPipe Hands', image)
 
         if args.outfile:
             out.write(image)
 
-        if cv2.waitKey(5) & 0xFF == ord('q'):
+        if cv2.waitKey(1) & 0xFF == ord('q'):
             break
+
 
         aruco_fig.canvas.draw()
 
 
         if aruco_sp_points:
             aruco_sp_points.remove()
+        if aruco_hand_tvec is not None:
+            aruco_hand_sp_points.remove()
         if aruco_plot_plane:
             aruco_plot_plane.remove()
         if hand_sp_points:
