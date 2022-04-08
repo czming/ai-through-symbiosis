@@ -23,6 +23,7 @@ class ArUcoDetector:
         if corners:
             #try and find all 4 points
             rvecs, tvecs, markerPoints = cv2.aruco.estimatePoseSingleMarkers(corners, self.square_length, self.intrinsic, self.distortion)
+
             ids = ids.flatten()
 
             #ensure that the 3D points and the 2D points are aligned
@@ -98,7 +99,7 @@ def parse_picklist(file):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--video", "-v", type=str, default="G:/My Drive/Georgia Tech/AI Through Symbiosis/GoPro/GOPR3808.MP4", help="Path to input video")
+    parser.add_argument("--video", "-v", type=str, default="G:/My Drive/Georgia Tech/AI Through Symbiosis/GoPro/GOPR3809.MP4", help="Path to input video")
     parser.add_argument("--pickpath", "-pp", type=str, default="C:/Users/chngz/Documents/AI through Symbiosis/AI through Symbiosis/picklist.csv", help="Path to picklist")
     parser.add_argument("--outfile", "-o", type=str, default="./out.mp4", help="Path to video outfile to save to. If not provided, will not create video") # 'hand_detection_output.mp4'
     parser.add_argument("--check_pickpath", "-cp", action="store_false", help="Add this flag if you want to work with a picklist. Also be sure to pass a --pickpath argument")
@@ -166,11 +167,19 @@ if __name__ == "__main__":
     OUTPUT_FRAME_WIDTH = 1280
     OUTPUT_FRAME_HEIGHT = 720
 
-    VALID_SHELF_MARKERS = {1, 2, 3, 12, 13, 21, 22, 23, 31, 32, 33, 41, 42, 43}
+    VALID_BIN_MARKERS = {1, 2, 3, 11, 12, 13, 21, 22, 23, 31, 32, 33, 41, 42, 43}
 
-    intrinsic = np.load("intrinsic_gopro.npy")
-    distortion = np.load("distortion_gopro.npy")
-  
+    VALID_LOCALIZATION_MARKERS = {101, 102, 103, 111, 112, 113, 121, 122, 123, 131, 132, 133, 141, 142, 143}
+
+    VALID_SHELF_MARKERS = VALID_BIN_MARKERS | VALID_LOCALIZATION_MARKERS
+    #aruco camera matrices are after image is distorted
+    intrinsic = np.array([[900., 0, 960], [0, 900, 540], [0, 0, 1]])
+    distortion = np.array([[0., 0., 0., 0., 0.]])
+    #to undistort the image
+    initial_intrinsic = np.load("intrinsic_gopro.npy")
+    initial_distortion = np.load("distortion_gopro.npy")
+
+
     #all the markers that we know of so far
     markers = set()
 
@@ -188,6 +197,8 @@ if __name__ == "__main__":
     #get optimal camera matrix to undistort the image
     #newcameramtx, roi = cv2.getOptimalNewCameraMatrix(intrinsic, distortion, (1920, 1080), 1,
     #                                                (1920, 1080))
+
+    #intrisic c_x, c_y is off
 
     #create aruco detector
     aruco_detector = ArUcoDetector(intrinsic, distortion, arucoDict, square_length=0.0254)
@@ -218,12 +229,23 @@ if __name__ == "__main__":
     plt.ion()
     plt.show()
 
+    counter = 0
+
     while cap.isOpened():
+
         success, image = cap.read()
         if not success:
             print("Ignoring empty camera frame.")
             # If loading a video, use 'break' instead of 'continue'.
             break
+
+        if counter <= 100:
+            counter += 1
+            continue
+
+        print (f"Counter: {counter}")
+
+        counter += 1
 
         #image = cv2.undistort(image, newcameramtx, distortion, None)
 
@@ -235,6 +257,9 @@ if __name__ == "__main__":
             image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
         #image = cv2.resize(image, (1920, 1080))
+
+        #undistort image
+        image = cv2.undistort(image, initial_intrinsic, initial_distortion, None)
 
         aruco_vectors = aruco_detector.getCorners(image)
 
@@ -733,8 +758,8 @@ if __name__ == "__main__":
             #resize image to be a little smaller
             #image = cv2.resize(image, (int(image.shape[1] * 0.75), int(image.shape[0] * 0.75)))
 
-        #removing distortion on image
-        image = cv2.undistort(image, intrinsic, distortion, None)
+        # #removing distortion on image
+        # image = cv2.undistort(image, intrinsic, distortion, None)
 
         #horizontal margin to be removed from the video (one for left and one for right so total fraction removed is
         #double this proportion)
