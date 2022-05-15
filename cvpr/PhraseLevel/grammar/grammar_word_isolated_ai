@@ -1,0 +1,3 @@
+$word = begj | adgj | adij | adhj | cfij | cfgj | beij | behj;
+
+(sil $word sil)
