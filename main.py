@@ -8,6 +8,8 @@ from google.protobuf.json_format import MessageToDict
 import time
 import matplotlib.pyplot as plt
 
+import skimage.color
+
 class ArUcoDetector:
     def __init__(self, intrinsic: np.ndarray, distortion: np.ndarray, aruco_dict, square_length=1):
         assert intrinsic.shape == (3,3)
@@ -99,7 +101,7 @@ def parse_picklist(file):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--video", "-v", type=str, default="G:/My Drive/Georgia Tech/AI Through Symbiosis/GoPro/GOPR3809.MP4", help="Path to input video")
+    parser.add_argument("--video", "-v", type=str, default="G:/My Drive/Georgia Tech/AI Through Symbiosis/GoPro/pick_list_dataset/picklist_17.MP4", help="Path to input video")
     parser.add_argument("--pickpath", "-pp", type=str, default="C:/Users/chngz/Documents/AI through Symbiosis/AI through Symbiosis/picklist.csv", help="Path to picklist")
     parser.add_argument("--outfile", "-o", type=str, default="./out.mp4", help="Path to video outfile to save to. If not provided, will not create video") # 'hand_detection_output.mp4'
     parser.add_argument("--check_pickpath", "-cp", action="store_false", help="Add this flag if you want to work with a picklist. Also be sure to pass a --pickpath argument")
@@ -167,9 +169,9 @@ if __name__ == "__main__":
     OUTPUT_FRAME_WIDTH = 1280
     OUTPUT_FRAME_HEIGHT = 720
 
-    VALID_BIN_MARKERS = {1, 2, 3, 11, 12, 13, 21, 22, 23, 31, 32, 33, 41, 42, 43}
+    VALID_BIN_MARKERS = {110, 120, 130, 210, 220, 230, 310, 320, 330, 410, 420, 430, 510, 520, 530, 610, 620, 630}
 
-    VALID_LOCALIZATION_MARKERS = {101, 102, 103, 111, 112, 113, 121, 122, 123, 131, 132, 133, 141, 142, 143}
+    VALID_LOCALIZATION_MARKERS = {111, 121, 131, 211, 221, 231, 311, 321, 331, 411, 421, 431, 511, 521, 531, 611, 621, 631}
 
     VALID_SHELF_MARKERS = VALID_BIN_MARKERS | VALID_LOCALIZATION_MARKERS
     #aruco camera matrices are after image is distorted
@@ -653,6 +655,28 @@ if __name__ == "__main__":
                     #image = cv2.circle(image, (int(i.x * image.shape[1]), int(i.y * image.shape[0])), 2, (0, 0, 255), 3)
                     mp_drawing.draw_landmarks(image, hand_landmarks, mp_hands.HAND_CONNECTIONS)
 
+        #        8   12  16  20
+        #        |   |   |   |
+        #        7   11  15  19
+        #    4   |   |   |   |
+        #    |   6   10  14  18
+        #    3   |   |   |   |
+        #    |   5---9---13--17
+        #    2    \         /
+        #     \    \       /
+        #      1    \     /
+        #       \    \   /
+        #        ------0-
+        connections = [
+            (0, 1), (1, 2), (2, 3), (3, 4),
+            (5, 6), (6, 7), (7, 8),
+            (9, 10), (10, 11), (11, 12),
+            (13, 14), (14, 15), (15, 16),
+            (17, 18), (18, 19), (19, 20),
+            (0, 5), (5, 9), (9, 13), (13, 17), (0, 17)
+        ]
+
+
         if len(first_hand_points) >= 21:
             curr_time = time.time()
             time_change = curr_time - prev_time
@@ -758,6 +782,83 @@ if __name__ == "__main__":
             #resize image to be a little smaller
             #image = cv2.resize(image, (int(image.shape[1] * 0.75), int(image.shape[0] * 0.75)))
 
+
+            # ---------------------------------PROCESSING COLOR MODEL---------------------------------------------------
+            min_x = float('inf')
+            min_y = float('inf')
+            max_x = 0
+            max_y = 0
+            for point in [first_hand_points[i] for i in [0,1,5,9,13,17]]:
+                x, y, z = point
+                # mediapipe outputs as a ratio
+                x = int(x * ORIGINAL_FRAME_WIDTH)
+                y = int(y * ORIGINAL_FRAME_HEIGHT)
+                if x < min_x:
+                    min_x = x
+                if y < min_y:
+                    min_y = y
+                if x > max_x:
+                    max_x = x
+                if y > max_y:
+                    max_y = y
+            cropped_out_points = [(min_x, min_y), (min_x, max_y), (max_x, max_y), (min_x, max_y), (min_x, min_y)]
+            cv2.line(image, (int(max_x), int(max_y)), (int(max_x), int(min_y)), (255, 255, 0), 3)
+
+            cropped_hand_image = image[min_y:max_y, min_x:max_x]
+
+            # cv2.imshow('MediaPipe Hands', cropped_hand_image)
+            # cv2.waitKey(0)
+
+            number_of_pixels = cropped_hand_image.shape[0] * cropped_hand_image.shape[1]
+            hsv_image = skimage.color.rgb2hsv(cropped_hand_image)
+            dims = hsv_image.shape
+            hues = []
+            saturations = []
+            for i in range(0, dims[0]):
+                for j in range(0, dims[1]):
+                    # subsample
+                    if i % 1 == 0:
+                        # BGR
+                        hsv_value = np.array([[hsv_image[i, j, 0],
+                                               hsv_image[i, j, 1],
+                                               hsv_image[i, j, 2]]])
+                        # rgb_value = np.array([[color_image[i, j, 0],
+                        #                        color_image[i, j, 1],
+                        #                        color_image[i, j, 2]]]) / 255.0
+                        hues.append(hsv_value[0][0])
+                        saturations.append(hsv_value[0][1])
+
+            #visualizing color model
+
+            # f, axarr = plt.subplots(2, 2)
+            #
+            # # axarr[0, 0].imshow(cropped_hand_image)
+            # h = sum(hues) / len(hues)
+            # s = sum(saturations) / len(saturations)
+            # # print(max(set(hues), key=hues.count)) #mode
+            # # print(max(set(saturations), key=saturations.count)) #mode
+            # V = np.array([[h, s]])
+            # origin = np.array([[0, 0, 0], [0, 0, 0]])  # origin point
+            # # axarr[1].set_xlim([0, 10])
+            # # axarr[1].set_ylim([0, 10])
+            # axarr[0, 1].quiver(*origin, V[:, 0], V[:, 1], color=['r'], scale=10)
+            # circle1 = plt.Circle((0, 0), 1 / 21, fill=False)
+            # axarr[0, 1].add_patch(circle1)
+            # axarr[1, 0].set_xlim([0, 1])
+            # # axarr[1,0].set_title("Hue")
+
+            # print(hist_n, hist_bins)
+            # print(sat_n, sat_bins)
+
+            #calculate the histograms
+            hist_n, hist_bins = np.histogram(hues, bins=10, range=(0, 1))
+            sat_n, sat_bins = np.histogram(saturations, bins=10, range=(0, 1))
+
+            histsat = np.concatenate((hist_n, sat_n))
+            mystring = str(histsat).replace("[", "").replace("]", "").replace(".", "").replace("\n", "")
+            newstring = ' '.join(mystring.split())
+            print(f"color vector: {newstring}")
+
         # #removing distortion on image
         # image = cv2.undistort(image, intrinsic, distortion, None)
 
@@ -767,7 +868,7 @@ if __name__ == "__main__":
 
         image = image[:, int(image.shape[1] * horizontal_margin): int(image.shape[1] * (1 - horizontal_margin))]
 
-        image = cv2.resize(image, (1280,720))
+        image = cv2.resize(image, (OUTPUT_FRAME_WIDTH, OUTPUT_FRAME_HEIGHT))
 
         cv2.imshow('MediaPipe Hands', image)
 
