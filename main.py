@@ -4,6 +4,7 @@ import copy
 import cv2
 import mediapipe as mp
 from gesture_recognition_functions import *
+from optical_flow import *
 from google.protobuf.json_format import MessageToDict
 import time
 import matplotlib.pyplot as plt
@@ -223,6 +224,9 @@ if __name__ == "__main__":
     aruco_plane = None
 
     plt.show(block=False)
+
+    dist = 1
+    optical_flow_algo = FarnebackFlow(frame_distance=dist)
 
     #to write videos
     if args.outfile:
@@ -632,6 +636,14 @@ if __name__ == "__main__":
 
             cv2.putText(image, f"id: {marker_id}", (int(marker_coords[0]), int(marker_coords[1] - 20)),
                         cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(0, 0, 255), thickness=3)
+
+
+        #----------------------------------OPTICAL FLOW DETECTION--------------------------------------------------
+        mag, ang = optical_flow_algo.calc(image)
+
+        mag, ang = mag.mean(), ang.mean()
+
+        print (f"Optical flow: {mag} {ang}")
 
 
         # image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
