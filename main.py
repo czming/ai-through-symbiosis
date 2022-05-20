@@ -102,6 +102,8 @@ def parse_picklist(file):
 
 
 if __name__ == "__main__":
+    logging.getLogger().setLevel(logging.INFO)
+
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--video", "-v", type=str, default="G:/My Drive/Georgia Tech/AI Through Symbiosis/GoPro/pick_list_dataset/picklist_17.MP4", help="Path to input video")
@@ -182,13 +184,9 @@ if __name__ == "__main__":
 
     #offsets in the HTK output array
     ARUCO_MARKER_HTK_OFFSET = 0
-    COLOR_BIN_HTK_OFFSET = 36
-    OPTICAL_FLOW_HTK_OFFSET = 56
-    HAND_POS_HTK_OFFSET = 58
-
-
-
-    print (SORTED_VALID_SHELF_MARKERS_DICT)
+    COLOR_BIN_HTK_OFFSET = 72
+    OPTICAL_FLOW_HTK_OFFSET = 92
+    HAND_POS_HTK_OFFSET = 94
 
     #aruco camera matrices are after image is distorted
     intrinsic = np.array([[900., 0, 960], [0, 900, 540], [0, 0, 1]])
@@ -255,8 +253,8 @@ if __name__ == "__main__":
 
     while cap.isOpened():
 
-        #output vector for use with htk, [aruco_marker[:36], color_bins[36:56], optical_flow_avg[56:58], hand_loc[58:60]
-        htk_output_vector = [None for i in range(60)]
+        #output vector for use with htk, [aruco_marker[:72], color_bins[72:92], optical_flow_avg[92:94], hand_loc[94:96]
+        htk_output_vector = [None for i in range(96)]
 
         success, image = cap.read()
         if not success:
@@ -268,7 +266,7 @@ if __name__ == "__main__":
             counter += 1
             continue
 
-        logging.info(f"Counter: {counter}")
+        logging.debug(f"Counter: {counter}")
 
         counter += 1
 
@@ -294,7 +292,7 @@ if __name__ == "__main__":
         aruco_plot_plane = None
         hand_sp_points = None
 
-        logging.info("\rnumber of markers: " + str(len(aruco_vectors)), end = " ")
+        logging.debug("\rnumber of markers: " + str(len(aruco_vectors)))
     
         for marker in aruco_vectors:
             if marker.get_id() not in markers and marker.get_id() in VALID_SHELF_MARKERS:
@@ -314,7 +312,7 @@ if __name__ == "__main__":
         #aruco marker for hand
         aruco_hand_tvec = None
 
-        logging.info("Actual: ")
+        logging.debug("Actual: ")
 
         #stores indices of aruco markers in aruco_vectors to be removed if the backpropagation gives invalid values
         remove_aruco_vectors = []
@@ -324,7 +322,7 @@ if __name__ == "__main__":
             i = aruco_vectors[index]
             if i.get_id() in VALID_SHELF_MARKERS:
                 #make sure the aruco marker is valid shelf marker
-                logging.info(f"{i.get_id()}: {i.tvec[:,0]}")
+                logging.debug(f"{i.get_id()}: {i.tvec[:,0]}")
 
                 aruco_2d = cv2.projectPoints(np.array([0.0,0.0,0.0]), np.array([0.0,0.0,0.0]), i.tvec[:,0], intrinsic, distortion)[0][0][0]
                 #objectPoints might be the actual 3D points, tvecs and rvecs are the estimated ones from the camera coord system
@@ -333,7 +331,7 @@ if __name__ == "__main__":
                         0 <= int(aruco_2d[1]) and int(aruco_2d[1]) <= image.shape[0]:
                     cv2.circle(image, (int(aruco_2d[0]), int(aruco_2d[1])), 3, (255,255,0), 3)
 
-                logging.info(f"{i.get_id()}: {aruco_2d}")
+                logging.debug(f"{i.get_id()}: {aruco_2d}")
 
                 #check that the marker when backprojected is within the bounds of the image
                 if aruco_2d[0] < 0 or aruco_2d[0] > ORIGINAL_FRAME_WIDTH or aruco_2d[1] < 0 or aruco_2d[1] > ORIGINAL_FRAME_WIDTH:
@@ -344,6 +342,10 @@ if __name__ == "__main__":
                 aruco_tvecs_plot.append(i.tvec[:,0])
                 aruco_tvecs[i.get_id()] = i.tvec[:, 0]
 
+                #assign x, y
+                htk_output_vector[SORTED_VALID_SHELF_MARKERS_DICT[i.get_id()] * 2 + ARUCO_MARKER_HTK_OFFSET] = aruco_2d[0]
+                htk_output_vector[SORTED_VALID_SHELF_MARKERS_DICT[i.get_id()] * 2 + ARUCO_MARKER_HTK_OFFSET + 1] = aruco_2d[1]
+
             elif i.get_id() == 0:
                 #if hand found, hand aruco marker should have id 0
                 aruco_hand_tvec = np.array(i.tvec[:,0])
@@ -353,19 +355,21 @@ if __name__ == "__main__":
             del (aruco_vectors[remove_aruco_vectors[-1]])
             remove_aruco_vectors.pop()
 
-        logging.info("Double check: ")
+        # print (htk_output_vector)
 
-        #this for loop just to check if the markers are actually valid after back projection
-        for index in range(len(aruco_vectors)):
-            i = aruco_vectors[index]
-            if i.get_id() in VALID_SHELF_MARKERS:
-                #make sure the aruco marker is valid shelf marker
-                logging.info(f"{i.get_id()}: {i.tvec[:,0]}")
+        logging.debug("Double check: ")
 
-                aruco_2d = cv2.projectPoints(np.array([0.0,0.0,0.0]), np.array([0.0,0.0,0.0]), i.tvec[:,0], intrinsic, distortion)[0][0][0]
-
-
-                logging.info(f"{i.get_id()}: {aruco_2d}")
+        # #this for loop just to check if the markers are actually valid after back projection
+        # for index in range(len(aruco_vectors)):
+        #     i = aruco_vectors[index]
+        #     if i.get_id() in VALID_SHELF_MARKERS:
+        #         #make sure the aruco marker is valid shelf marker
+        #         logging.debug(f"{i.get_id()}: {i.tvec[:,0]}")
+        #
+        #         aruco_2d = cv2.projectPoints(np.array([0.0,0.0,0.0]), np.array([0.0,0.0,0.0]), i.tvec[:,0], intrinsic, distortion)[0][0][0]
+        #
+        #
+        #         logging.debug(f"{i.get_id()}: {aruco_2d}")
 
         #print(aruco_tvecs.keys(), end=" ")
         #print(markers, end=" ")
@@ -407,8 +411,8 @@ if __name__ == "__main__":
                     if i.get_id() in VALID_SHELF_MARKERS:
                         aruco_tvecs_plot_copy.append(i.tvec[:, 0])
 
-                logging.info(aruco_tvecs_copy)
-                logging.info(errors)
+                logging.debug(aruco_tvecs_copy)
+                logging.debug(errors)
 
                 aruco_tvecs_plot_np_copy = np.array(aruco_tvecs_plot_copy)
 
@@ -447,7 +451,7 @@ if __name__ == "__main__":
             predicted_aruco_tvecs = {}
             predicted_aruco_tvecs_plot = []
 
-            logging.info("Predicted: ")
+            logging.debug("Predicted: ")
 
             # predicting arcuo marker location based on other aruco markers
             for marker in markers:
@@ -515,7 +519,7 @@ if __name__ == "__main__":
                     predicted_aruco_tvecs[marker] = np.array([i / predicted_loc[3] for i in predicted_loc[:3]])
                     predicted_aruco_tvecs_plot.append(predicted_aruco_tvecs[marker])
 
-                    logging.info(f"{marker}: {predicted_aruco_tvecs[marker]}")
+                    logging.debug(f"{marker}: {predicted_aruco_tvecs[marker]}")
 
             if len(predicted_aruco_tvecs) > 0:
                 predicted_aruco_tvecs_plot_np = np.array(predicted_aruco_tvecs_plot)
@@ -537,10 +541,16 @@ if __name__ == "__main__":
                             0 <= int(aruco_2d[1]) and int(aruco_2d[1]) <= image.shape[0]:
                         cv2.circle(image, (int(aruco_2d[0]), int(aruco_2d[1])), 3, (0, 255, 0), 3)
 
-                        logging.info(f"{marker_id}: {aruco_2d}")
+                        logging.debug(f"{marker_id}: {aruco_2d}")
 
                         cv2.putText(image, f"id: {marker_id}", (int(aruco_2d[0]), int(aruco_2d[1] + 30)),
                                     cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(255, 0, 255), thickness=3)
+
+                    #if marker has not been detected (htk vector position would be 0
+                    if htk_output_vector[SORTED_VALID_SHELF_MARKERS_DICT[marker_id] * 2 + ARUCO_MARKER_HTK_OFFSET] is None:
+                        htk_output_vector[SORTED_VALID_SHELF_MARKERS_DICT[marker_id] * 2 + ARUCO_MARKER_HTK_OFFSET] = aruco_2d[0]
+                        htk_output_vector[SORTED_VALID_SHELF_MARKERS_DICT[marker_id] * 2 + ARUCO_MARKER_HTK_OFFSET + 1] = \
+                        aruco_2d[1]
 
             # plot x, y, z for the aruco markers
             aruco_sp_points = aruco_tvec_sp.scatter3D(aruco_tvecs_plot_np[:, 0], aruco_tvecs_plot_np[:, 1],
@@ -632,8 +642,8 @@ if __name__ == "__main__":
             else:
                 aruco_hand_sp_points = aruco_tvec_sp.scatter3D(aruco_hand_tvec[0], aruco_hand_tvec[1], aruco_hand_tvec[2],
                                                            color = (0,0,0))
-            logging.info(aruco_hand_tvec, end = " ")
-            logging.info(aruco_plane[0] + aruco_plane[1] * aruco_hand_tvec[0] + aruco_plane[2] * aruco_hand_tvec[1], aruco_hand_tvec[2], end = " ")
+            logging.debug(aruco_hand_tvec)
+            logging.debug(aruco_plane[0] + aruco_plane[1] * aruco_hand_tvec[0] + aruco_plane[2] * aruco_hand_tvec[1], aruco_hand_tvec[2])
 
         for marker_index in range(len(aruco_vectors)):
             points = aruco_vectors[marker_index].corners
@@ -662,7 +672,10 @@ if __name__ == "__main__":
 
         mag, ang = mag.mean(), ang.mean()
 
-        logging.info(f"Optical flow: {mag} {ang}")
+        logging.debug(f"Optical flow: {mag} {ang}")
+
+        htk_output_vector[OPTICAL_FLOW_HTK_OFFSET] = mag
+        htk_output_vector[OPTICAL_FLOW_HTK_OFFSET + 1] = ang
 
 
         # image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -714,6 +727,10 @@ if __name__ == "__main__":
 
             # find current location of hand, (x, y)
             curr_hand_loc = hand_pos(first_hand_points, image)
+
+            htk_output_vector[HAND_POS_HTK_OFFSET] = curr_hand_loc[0]
+            htk_output_vector[HAND_POS_HTK_OFFSET + 1] = curr_hand_loc[1]
+
             cv2.circle(image, (int(curr_hand_loc[0]), int(curr_hand_loc[1])), 3, (255, 0, 255), 3)
 
             # calculate hand pos distribution stats
@@ -746,7 +763,7 @@ if __name__ == "__main__":
                 #pick the stuff after the whole thing has been processed
                 if pick_list:
                     picked.append(pick_list.pop(0))
-                logging.info(f"\n{top_center_bottom}{left_center_right}", end = " ")
+                logging.debug(f"\n{top_center_bottom}{left_center_right}")
                 left_center_right = -1
                 top_center_bottom = -1
                 max_hand_discrepancy = 0
@@ -789,26 +806,24 @@ if __name__ == "__main__":
             if (time_change > REFRESH_TIME):
                 # checks when the time_change is greater than the REFRESH TIME
 
-                logging.info(f"curr_holding: {curr_holding}", handedness, end = " ")
+                logging.debug(f"curr_holding: {curr_holding}", handedness)
                 if prev_hand_loc != () and (curr_hand_loc[0] > prev_hand_loc[0] + MOVEMENT_MOE * time_change / REFRESH_TIME):
                     # curr_hand is more than MOVEMENT_MOE pixels to the right of prev_hand_loc
-                    logging.info("Moving right", end=" ")
+                    logging.debug("Moving right")
                 elif prev_hand_loc != () and (curr_hand_loc[0] < prev_hand_loc[0] - MOVEMENT_MOE * time_change / REFRESH_TIME):
-                    logging.info("Moving left", end=" ")
+                    logging.debug("Moving left")
 
                 if prev_hand_loc != () and (curr_hand_loc[1] > prev_hand_loc[1] + MOVEMENT_MOE * time_change / REFRESH_TIME):
                     # curr_hand is more than MOVEMENT_MOE pixels to the bottom of prev_hand_loc
-                    logging.info("Moving down", end=" ")
+                    logging.debug("Moving down")
                 elif prev_hand_loc != () and (curr_hand_loc[1] < prev_hand_loc[1] - MOVEMENT_MOE * time_change / REFRESH_TIME):
-                    logging.info("Moving up", end=" ")
+                    logging.debug("Moving up")
 
-                logging.info(len(picked), end = " ")
+                logging.debug(len(picked))
 
 
                 prev_hand_loc = curr_hand_loc
                 prev_time = curr_time
-
-            frames += 1
 
             #resize image to be a little smaller
             #image = cv2.resize(image, (int(image.shape[1] * 0.75), int(image.shape[0] * 0.75)))
@@ -888,7 +903,15 @@ if __name__ == "__main__":
             histsat = np.concatenate((hist_n, sat_n))
             mystring = str(histsat).replace("[", "").replace("]", "").replace(".", "").replace("\n", "")
             newstring = ' '.join(mystring.split())
-            logging.info(f"color vector: {newstring}")
+            logging.debug(f"color vector: {newstring}")
+
+            for i in range(len(histsat)):
+                htk_output_vector[COLOR_BIN_HTK_OFFSET + i] = histsat[i]
+
+
+        #--------------------------------WRITING OUT HTK VECTOR TO FILE-----------------------------------------
+        logging.info(frames)
+        logging.info(htk_output_vector)
 
         # #removing distortion on image
         # image = cv2.undistort(image, intrinsic, distortion, None)
@@ -921,6 +944,8 @@ if __name__ == "__main__":
             aruco_plot_plane.remove()
         if hand_sp_points:
             hand_sp_points.remove()
+
+        frames += 1
     hands.close()
     cap.release()
 
