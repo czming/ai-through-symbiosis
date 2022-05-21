@@ -253,8 +253,10 @@ if __name__ == "__main__":
 
     while cap.isOpened():
 
-        #output vector for use with htk, [aruco_marker[:72], color_bins[72:92], optical_flow_avg[92:94], hand_loc[94:96]
-        htk_output_vector = [None for i in range(96)]
+        # aruco_marker = [x, y]
+        # aruco_marker = [is_there, x, y]
+        #output vector for use with htk, [aruco_marker[:72], color_bins[72:92], optical_flow_avg[92:94], hand_loc[94:96]]
+        htk_output_vector = [0 for i in range(96)]
 
         success, image = cap.read()
         if not success:
@@ -912,6 +914,11 @@ if __name__ == "__main__":
         #--------------------------------WRITING OUT HTK VECTOR TO FILE-----------------------------------------
         logging.info(frames)
         logging.info(htk_output_vector)
+
+        htk_output_vector = [str(i) for i in htk_output_vector]
+
+        with open(os.path.basename(args.video.split(".")[0] + ".txt"), "a") as outfile:
+            outfile.write(" ".join(htk_output_vector) + "\n")
 
         # #removing distortion on image
         # image = cv2.undistort(image, intrinsic, distortion, None)
