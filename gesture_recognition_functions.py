@@ -118,7 +118,7 @@ def calculate_new_mean_variance(old_mean, old_variance, num_readings, new_readin
 
     :param old_mean: previous mean
     :param old_variance: previous variance
-    :param num_readings: number of previous readings
+    :param num_readings: number of previous readings (i.e. exclusive of current reading)
     :param new_reading: the value of the current reading
     :return: (new mean, new variance)
     """
@@ -197,6 +197,67 @@ def get_best_fit_plane(points):
     best_fit_param = np.linalg.inv(A.T @ A) @ A.T @ points[:, 2]
 
     return best_fit_param
+
+def best_fit_point(plane, point_coords):
+    """
+    finds coordinates of foot of perpendicular from point to plane
+    :param plane: [n1, n2, n3, d], a \dot n = d, n = [n1; n2; n3], n1 \dot x + n2 \dot y + n3 \dot z = d
+    :param point_coords: [x, y, z]
+    :return: [x, y, z] coords of the foot of perpendicular from point_coords to plane
+    """
+    #the actual point and foot of perpendicular lie on a line with unit vector n and passes through the point
+    #let foot of perpendicular be a, a \dot n = d, a = [x + \beta n1; y + \beta n2; z + \beta n3]
+    #(x + \beta n1) \dot n1 + ... for y and z = d, trying to find \beta
+    #LHS: \beta n1 \dot n1 + \beta n2 \dot n2 + \beta n3 \dot n3
+    LHS = plane[0] ** 2 + plane[1] ** 2 + plane[2] ** 2 #LHS in terms of beta
+    #RHS: d - x \dot n1 - y \dot n2 - z \dot n3
+    RHS = plane[3] - point_coords[0] * plane[0] - point_coords[1] * plane[1] - point_coords[2] * plane[2]
+
+    #get beta
+    B = RHS / LHS
+
+    #now just use line equation to return the best fit point
+    return [point_coords[0] + B * plane[0], point_coords[1] + B * plane[1], point_coords[2] + B * plane[2]]
+
+def get_unit_vector(input_vector):
+    """
+    returns the unit vector in direction of input_vector
+    :param input_vector: [x, y, z] vector, or np.array([x, y, z])
+    :return: vector of length 1 in direction of input_vector
+    """
+    input_vector = np.array(input_vector)
+
+    input_vector_length = (input_vector[0] ** 2 + input_vector[1] ** 2 + input_vector[2] ** 2) ** 0.5
+
+    #divide all the vector lengths in different dimensions by the length of the vector
+    return input_vector / input_vector_length
+
+def in_basis_vector(vector, *basis_vectors):
+    """
+    returns the linear combination of weights of basis vectors that sum to the vector (the vector in
+    coordinate system using basis_vectors as the basis vectors
+
+    (basis vectors and vector must be in the same coordinate system when passed into the function)
+
+    :param vector: vector in the basis vectors in the form [x, y, z, ...]
+    :param basis_vectors: array of basis vectors, must have same dimensionality as vector
+    :return: linear combination of weights of basis_vectors that sum to vector
+    """
+
+    vector = np.array(vector)
+    #take transpose so each column is a basis vector and each row is looking at the combination of weights
+    #in the original basis vectors (which the vectors are currently denoted in)
+    basis_vectors = np.array(basis_vectors).T
+
+    if len(basis_vectors.shape) == 1:
+        #only one vector, need to expand the dimensions to wrap in another layer of array
+        basis_vectors = np.expand_dims(basis_vectors, axis=0)
+
+    #make sure they have the same dimensionality
+    assert basis_vectors.shape[0] == vector.shape[0], "Vectors do not have the same dimensionality"
+
+    #shouldn't have singular matrix error because the two basis vectors should be perpendicular
+    return np.linalg.lstsq(basis_vectors, vector, rcond=None)[0]
 
 # def test_best_fit_plane():
 #     import matplotlib.pyplot as plt
