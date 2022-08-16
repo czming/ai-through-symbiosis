@@ -106,7 +106,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--video", "-v", type=str, default="G:/My Drive/Georgia Tech/AI Through Symbiosis/GoPro/pick_list_dataset/picklist_17.MP4", help="Path to input video")
+    parser.add_argument("--video", "-v", type=str, default="G:/My Drive/Georgia Tech/AI Through Symbiosis/GoPro/pick_list_dataset/picklist_40.MP4", help="Path to input video")
     parser.add_argument("--pickpath", "-pp", type=str, default="C:/Users/chngz/Documents/AI through Symbiosis/AI through Symbiosis/picklist.csv", help="Path to picklist")
     parser.add_argument("--outfile", "-o", type=str, default="./out.mp4", help="Path to video outfile to save to. If not provided, will not create video") # 'hand_detection_output.mp4'
     parser.add_argument("--check_pickpath", "-cp", action="store_false", help="Add this flag if you want to work with a picklist. Also be sure to pass a --pickpath argument")
@@ -168,6 +168,9 @@ if __name__ == "__main__":
 
     frames = 0
 
+    # show images of the processed points
+    DISPLAY_VISUAL = False
+
     ORIGINAL_FRAME_WIDTH = 1920
     ORIGINAL_FRAME_HEIGHT = 1080
 
@@ -181,6 +184,8 @@ if __name__ == "__main__":
     VALID_SHELF_MARKERS = VALID_BIN_MARKERS | VALID_LOCALIZATION_MARKERS
 
     SORTED_VALID_SHELF_MARKERS_DICT = dict(zip(sorted(list(VALID_SHELF_MARKERS)), list(range(len(VALID_SHELF_MARKERS)))))
+
+    print(SORTED_VALID_SHELF_MARKERS_DICT)
 
     #offsets in the HTK output array
     ARUCO_MARKER_HTK_OFFSET = 0
@@ -927,19 +932,21 @@ if __name__ == "__main__":
         #double this proportion)
         horizontal_margin = 0
 
-        image = image[:, int(image.shape[1] * horizontal_margin): int(image.shape[1] * (1 - horizontal_margin))]
+        if DISPLAY_VISUAL:
 
-        image = cv2.resize(image, (OUTPUT_FRAME_WIDTH, OUTPUT_FRAME_HEIGHT))
+            image = image[:, int(image.shape[1] * horizontal_margin): int(image.shape[1] * (1 - horizontal_margin))]
 
-        cv2.imshow('MediaPipe Hands', image)
+            image = cv2.resize(image, (OUTPUT_FRAME_WIDTH, OUTPUT_FRAME_HEIGHT))
 
-        if args.outfile:
-            out.write(image)
+            cv2.imshow('MediaPipe Hands', image)
 
-        aruco_fig.canvas.draw()
+            if args.outfile:
+                out.write(image)
 
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
+            aruco_fig.canvas.draw()
+
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
 
         if aruco_sp_points:
             aruco_sp_points.remove()
