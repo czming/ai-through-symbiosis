@@ -106,7 +106,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--video", "-v", type=str, default="G:/My Drive/Georgia Tech/AI Through Symbiosis/GoPro/pick_list_dataset/picklist_40.MP4", help="Path to input video")
+    parser.add_argument("--video", "-v", type=str, default="G:/My Drive/Georgia Tech/AI Through Symbiosis/GoPro/pick_list_dataset/Videos/picklist_39.MP4", help="Path to input video")
     parser.add_argument("--pickpath", "-pp", type=str, default="C:/Users/chngz/Documents/AI through Symbiosis/AI through Symbiosis/picklist.csv", help="Path to picklist")
     parser.add_argument("--outfile", "-o", type=str, default="./out.mp4", help="Path to video outfile to save to. If not provided, will not create video") # 'hand_detection_output.mp4'
     parser.add_argument("--check_pickpath", "-cp", action="store_false", help="Add this flag if you want to work with a picklist. Also be sure to pass a --pickpath argument")
@@ -169,7 +169,15 @@ if __name__ == "__main__":
     frames = 0
 
     # show images of the processed points
-    DISPLAY_VISUAL = False
+    DISPLAY_VISUAL = True
+
+    OUTPUT_FILE = os.path.basename(args.video.split(".")[0] + ".txt")
+
+    print (OUTPUT_FILE)
+
+    with open(OUTPUT_FILE, "w") as outfile:
+        # clear the output file
+        pass
 
     ORIGINAL_FRAME_WIDTH = 1920
     ORIGINAL_FRAME_HEIGHT = 1080
@@ -230,7 +238,7 @@ if __name__ == "__main__":
     #setting up plotting for the tvecs
     aruco_fig = plt.figure()
 
-    aruco_tvec_ax = aruco_fig.add_axes(projection="3d")
+    aruco_tvec_ax = aruco_fig.add_subplot(projection="3d")
 
     #scatter plot of aruco_tvecs
     aruco_tvec_sp = aruco_fig.add_subplot(projection='3d')
@@ -268,10 +276,6 @@ if __name__ == "__main__":
             print("Ignoring empty camera frame.")
             # If loading a video, use 'break' instead of 'continue'.
             break
-
-        if counter <= 100:
-            counter += 1
-            continue
 
         logging.debug(f"Counter: {counter}")
 
@@ -922,7 +926,7 @@ if __name__ == "__main__":
 
         htk_output_vector = [str(i) for i in htk_output_vector]
 
-        with open(os.path.basename(args.video.split(".")[0] + ".txt"), "a") as outfile:
+        with open(OUTPUT_FILE, "a") as outfile:
             outfile.write(" ".join(htk_output_vector) + "\n")
 
         # #removing distortion on image
