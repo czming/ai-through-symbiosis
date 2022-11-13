@@ -100,15 +100,79 @@ def parse_picklist(file):
         picklist.append(curr_pick)
     return picklist
 
+def get_hs_bins(cropped_hand_image):
+    """
+    returns the hue and saturation bins for cropped_hand_image (bins are proportion of pixels within the image)
+
+    :param cropped_hand_image: image to calculate the hue and saturation over
+    :return: [hue_bins[:10], saturation_bins[10:20]], [] if cropped_hand_image is empty
+    """
+    number_of_pixels = cropped_hand_image.shape[0] * cropped_hand_image.shape[1]
+
+    # hand might not be detected so number of pixels might be 0
+    if number_of_pixels == 0:
+        return []
+
+    hsv_image = skimage.color.rgb2hsv(cropped_hand_image)
+    dims = hsv_image.shape
+    hues = []
+    saturations = []
+    for i in range(0, dims[0]):
+        for j in range(0, dims[1]):
+            # subsample
+            if i % 1 == 0:
+                # BGR
+                hsv_value = np.array([[hsv_image[i, j, 0],
+                                       hsv_image[i, j, 1],
+                                       hsv_image[i, j, 2]]])
+                # rgb_value = np.array([[color_image[i, j, 0],
+                #                        color_image[i, j, 1],
+                #                        color_image[i, j, 2]]]) / 255.0
+                hues.append(hsv_value[0][0])
+                saturations.append(hsv_value[0][1])
+
+    #visualizing color model
+
+    # f, axarr = plt.subplots(2, 2)
+    #
+    # # axarr[0, 0].imshow(cropped_hand_image)
+    # h = sum(hues) / len(hues)
+    # s = sum(saturations) / len(saturations)
+    # # print(max(set(hues), key=hues.count)) #mode
+    # # print(max(set(saturations), key=saturations.count)) #mode
+    # V = np.array([[h, s]])
+    # origin = np.array([[0, 0, 0], [0, 0, 0]])  # origin point
+    # # axarr[1].set_xlim([0, 10])
+    # # axarr[1].set_ylim([0, 10])
+    # axarr[0, 1].quiver(*origin, V[:, 0], V[:, 1], color=['r'], scale=10)
+    # circle1 = plt.Circle((0, 0), 1 / 21, fill=False)
+    # axarr[0, 1].add_patch(circle1)
+    # axarr[1, 0].set_xlim([0, 1])
+    # # axarr[1,0].set_title("Hue")
+
+    # print(hist_n, hist_bins)
+    # print(sat_n, sat_bins)
+
+    #calculate the histograms
+    hist_n, hist_bins = np.histogram(hues, bins=10, range=(0, 1))
+    sat_n, sat_bins = np.histogram(saturations, bins=10, range=(0, 1))
+
+    histsat = np.concatenate((hist_n, sat_n)) / number_of_pixels
+    mystring = str(histsat).replace("[", "").replace("]", "").replace("\n", "")
+    newstring = ' '.join(mystring.split())
+    logging.debug(f"color vector: {str(newstring)}")
+
+    return histsat
 
 if __name__ == "__main__":
-    logging.getLogger().setLevel(logging.INFO)
+    # logging.getLogger().setLevel(logging.DEBUG)
 
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--video", "-v", type=str, default="G:/My Drive/Georgia Tech/AI Through Symbiosis/GoPro/pick_list_dataset/Videos/picklist_39.MP4", help="Path to input video")
+    parser.add_argument("--video", "-v", type=str, default="G:/My Drive/Georgia Tech/AI Through Symbiosis/pick_list_dataset/Videos/picklist_70.MP4", help="Path to input video")
     parser.add_argument("--pickpath", "-pp", type=str, default="C:/Users/chngz/Documents/AI through Symbiosis/AI through Symbiosis/picklist.csv", help="Path to picklist")
-    parser.add_argument("--outfile", "-o", type=str, default="./out.mp4", help="Path to video outfile to save to. If not provided, will not create video") # 'hand_detection_output.mp4'
+    # fill in for video output
+    parser.add_argument("--outfile", "-o", type=str, default="", help="Path to video outfile to save to. If not provided, will not create video") # 'hand_detection_output.mp4'
     parser.add_argument("--check_pickpath", "-cp", action="store_false", help="Add this flag if you want to work with a picklist. Also be sure to pass a --pickpath argument")
 
     args = parser.parse_args()
@@ -169,7 +233,7 @@ if __name__ == "__main__":
     frames = 0
 
     # show images of the processed points
-    DISPLAY_VISUAL = True
+    DISPLAY_VISUAL = False
 
     OUTPUT_FILE = os.path.basename(args.video.split(".")[0] + ".txt")
 
@@ -201,8 +265,9 @@ if __name__ == "__main__":
     OPTICAL_FLOW_HTK_OFFSET = 92
     HAND_POS_HTK_OFFSET = 94
 
-    #aruco camera matrices are after image is distorted
-    intrinsic = np.array([[900., 0, 960], [0, 900, 540], [0, 0, 1]])
+    #aruco camera matrices are after image is distorted, focal length shouldn't matter since everything is adjusted
+    #proportionally
+    intrinsic = np.array([[900., 0, 640], [0, 900, 360], [0, 0, 1]])
     distortion = np.array([[0., 0., 0., 0., 0.]])
 
     #to undistort the image
@@ -257,7 +322,7 @@ if __name__ == "__main__":
 
     #to write videos
     if args.outfile:
-        out = cv2.VideoWriter(args.outfile, cv2.VideoWriter_fourcc(*"mp4v"), 10,
+        out = cv2.VideoWriter(args.outfile, cv2.VideoWriter_fourcc(*"mp4v"), 60,
                           (OUTPUT_FRAME_WIDTH, OUTPUT_FRAME_HEIGHT))
     plt.ion()
     plt.show()
@@ -265,7 +330,6 @@ if __name__ == "__main__":
     counter = 0
 
     while cap.isOpened():
-
         # aruco_marker = [x, y]
         # aruco_marker = [is_there, x, y]
         #output vector for use with htk, [aruco_marker[:72], color_bins[72:92], optical_flow_avg[92:94], hand_loc[94:96]]
@@ -294,6 +358,12 @@ if __name__ == "__main__":
 
         #undistort image
         image = cv2.undistort(image, initial_intrinsic, initial_distortion, None)
+
+        image = cv2.resize(image, (OUTPUT_FRAME_WIDTH, OUTPUT_FRAME_HEIGHT))
+
+
+
+        output_image = np.copy(image)
 
         aruco_vectors = aruco_detector.getCorners(image)
 
@@ -338,13 +408,13 @@ if __name__ == "__main__":
                 aruco_2d = cv2.projectPoints(np.array([0.0,0.0,0.0]), np.array([0.0,0.0,0.0]), i.tvec[:,0], intrinsic, distortion)[0][0][0]
                 #objectPoints might be the actual 3D points, tvecs and rvecs are the estimated ones from the camera coord system
                 #print (str(i.get_id()) + " " + str(aruco_2d))
-                if 0 <= int(aruco_2d[0]) and int(aruco_2d[0]) <= image.shape[1] and \
-                        0 <= int(aruco_2d[1]) and int(aruco_2d[1]) <= image.shape[0]:
-                    cv2.circle(image, (int(aruco_2d[0]), int(aruco_2d[1])), 3, (255,255,0), 3)
+                if 0 <= int(aruco_2d[0]) and int(aruco_2d[0]) <= output_image.shape[1] and \
+                        0 <= int(aruco_2d[1]) and int(aruco_2d[1]) <= output_image.shape[0]:
+                    cv2.circle(output_image, (int(aruco_2d[0]), int(aruco_2d[1])), 3, (255,255,0), 3)
 
                 logging.debug(f"{i.get_id()}: {aruco_2d}")
 
-                #check that the marker when backprojected is within the bounds of the image
+                #check that the marker when backprojected is within the bounds of the output_image
                 if aruco_2d[0] < 0 or aruco_2d[0] > ORIGINAL_FRAME_WIDTH or aruco_2d[1] < 0 or aruco_2d[1] > ORIGINAL_FRAME_WIDTH:
                     #not a valid marker location, ignore
                     remove_aruco_vectors.append(index)
@@ -541,27 +611,27 @@ if __name__ == "__main__":
                                                                     c=[(0, 0, 0) for i in
                                                                        predicted_aruco_tvecs_plot_np])
                 for (marker_id, tvec) in predicted_aruco_tvecs.items():
-                    # draw the aruco points back on the image
+                    # draw the aruco points back on the output_image
                     #projectPoints returns points, Jacobian (first dimension), can do multiple points together to speedup
                     #aruco_2d = cv2.projectPoints(-tvec, np.array([0.0, 0.0, 0.0]), np.array([0.0, 0.0, 0.0]), intrinsic,
                     #                             distortion)[0][0][0]
                     aruco_2d = \
                     cv2.projectPoints(np.array([0.0, 0.0, 0.0]), np.array([0.0, 0.0, 0.0]), tvec, intrinsic,
                                       distortion)[0][0][0]
-                    if 0 <= int(aruco_2d[0]) and int(aruco_2d[0]) <= image.shape[1] and \
-                            0 <= int(aruco_2d[1]) and int(aruco_2d[1]) <= image.shape[0]:
-                        cv2.circle(image, (int(aruco_2d[0]), int(aruco_2d[1])), 3, (0, 255, 0), 3)
+                    if 0 <= int(aruco_2d[0]) and int(aruco_2d[0]) <= output_image.shape[1] and \
+                            0 <= int(aruco_2d[1]) and int(aruco_2d[1]) <= output_image.shape[0]:
+                        cv2.circle(output_image, (int(aruco_2d[0]), int(aruco_2d[1])), 3, (0, 255, 0), 3)
 
                         logging.debug(f"{marker_id}: {aruco_2d}")
 
-                        cv2.putText(image, f"id: {marker_id}", (int(aruco_2d[0]), int(aruco_2d[1] + 30)),
+                        cv2.putText(output_image, f"id: {marker_id}", (int(aruco_2d[0]), int(aruco_2d[1] + 30)),
                                     cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(255, 0, 255), thickness=3)
 
-                    #if marker has not been detected (htk vector position would be 0
-                    if htk_output_vector[SORTED_VALID_SHELF_MARKERS_DICT[marker_id] * 2 + ARUCO_MARKER_HTK_OFFSET] is None:
-                        htk_output_vector[SORTED_VALID_SHELF_MARKERS_DICT[marker_id] * 2 + ARUCO_MARKER_HTK_OFFSET] = aruco_2d[0]
-                        htk_output_vector[SORTED_VALID_SHELF_MARKERS_DICT[marker_id] * 2 + ARUCO_MARKER_HTK_OFFSET + 1] = \
-                        aruco_2d[1]
+                        #if marker has not been detected (htk vector position would be 0
+                        if htk_output_vector[SORTED_VALID_SHELF_MARKERS_DICT[marker_id] * 2 + ARUCO_MARKER_HTK_OFFSET] is None:
+                            htk_output_vector[SORTED_VALID_SHELF_MARKERS_DICT[marker_id] * 2 + ARUCO_MARKER_HTK_OFFSET] = aruco_2d[0]
+                            htk_output_vector[SORTED_VALID_SHELF_MARKERS_DICT[marker_id] * 2 + ARUCO_MARKER_HTK_OFFSET + 1] = \
+                            aruco_2d[1]
 
             # plot x, y, z for the aruco markers
             aruco_sp_points = aruco_tvec_sp.scatter3D(aruco_tvecs_plot_np[:, 0], aruco_tvecs_plot_np[:, 1],
@@ -661,25 +731,25 @@ if __name__ == "__main__":
             #plot the lines between the corners of the aruco markers
 
             #print (aruco_vectors[marker_index].get_id(), points[0])
-            cv2.line(image, (int(points[0][0]), int(points[0][1])), (int(points[1][0]), int(points[1][1])),
+            cv2.line(output_image, (int(points[0][0]), int(points[0][1])), (int(points[1][0]), int(points[1][1])),
                      (0,255,0), 2)
-            cv2.line(image, (int(points[1][0]), int(points[1][1])), (int(points[2][0]), int(points[2][1])),
+            cv2.line(output_image, (int(points[1][0]), int(points[1][1])), (int(points[2][0]), int(points[2][1])),
                      (0,255,0), 2)
-            cv2.line(image, (int(points[2][0]), int(points[2][1])), (int(points[3][0]), int(points[3][1])),
+            cv2.line(output_image, (int(points[2][0]), int(points[2][1])), (int(points[3][0]), int(points[3][1])),
                      (0,255,0), 2)
-            cv2.line(image, (int(points[3][0]), int(points[3][1])), (int(points[0][0]), int(points[0][1])),
+            cv2.line(output_image, (int(points[3][0]), int(points[3][1])), (int(points[0][0]), int(points[0][1])),
                      (0,255,0), 2)
 
             marker_id = aruco_vectors[marker_index].get_id()
             #use the top left point as the marker's coordinates
             marker_coords = points[0]
 
-            cv2.putText(image, f"id: {marker_id}", (int(marker_coords[0]), int(marker_coords[1] - 20)),
+            cv2.putText(output_image, f"id: {marker_id}", (int(marker_coords[0]), int(marker_coords[1] - 20)),
                         cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(0, 0, 255), thickness=3)
 
 
         #----------------------------------OPTICAL FLOW DETECTION--------------------------------------------------
-        mag, ang = optical_flow_algo.calc(image)
+        mag, ang = optical_flow_algo.calc(output_image)
 
         mag, ang = mag.mean(), ang.mean()
 
@@ -689,16 +759,17 @@ if __name__ == "__main__":
         htk_output_vector[OPTICAL_FLOW_HTK_OFFSET + 1] = ang
 
 
-        # image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        # To improve performance, optionally mark the image as not writeable to
+        # output_image = cv2.cvtColor(output_image, cv2.COLOR_BGR2RGB)
+        # To improve performance, optionally mark the output_image as not writeable to
         # pass by reference.
-        image.flags.writeable = False
-        results = hands.process(image)
+        output_image.flags.writeable = False
+        results = hands.process(output_image)
 
         #-----------------------------------------MEDIAPIPE HAND DETECTION-----------------------------------------
-        # Draw the hand annotations on the image.
-        image.flags.writeable = True
-        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+        # Draw the hand annotations on the output_image.
+        output_image.flags.writeable = True
+        # use bgr for processing
+        output_image = cv2.cvtColor(output_image, cv2.COLOR_RGB2BGR)
         first_hand_points = []
         if results.multi_hand_landmarks:
             #get which hand we're looking at (look at the first hand that is detected)
@@ -707,8 +778,8 @@ if __name__ == "__main__":
                 #look only at the first hand detected if there are multiple hands
                 for i in hand_landmarks.landmark[:21]:
                     first_hand_points.append([i.x, i.y, i.z])
-                    #image = cv2.circle(image, (int(i.x * image.shape[1]), int(i.y * image.shape[0])), 2, (0, 0, 255), 3)
-                    mp_drawing.draw_landmarks(image, hand_landmarks, mp_hands.HAND_CONNECTIONS)
+                    #output_image = cv2.circle(output_image, (int(i.x * output_image.shape[1]), int(i.y * output_image.shape[0])), 2, (0, 0, 255), 3)
+                    mp_drawing.draw_landmarks(output_image, hand_landmarks, mp_hands.HAND_CONNECTIONS)
 
         #        8   12  16  20
         #        |   |   |   |
@@ -737,12 +808,12 @@ if __name__ == "__main__":
             time_change = curr_time - prev_time
 
             # find current location of hand, (x, y)
-            curr_hand_loc = hand_pos(first_hand_points, image)
+            curr_hand_loc = hand_pos(first_hand_points, output_image)
 
             htk_output_vector[HAND_POS_HTK_OFFSET] = curr_hand_loc[0]
             htk_output_vector[HAND_POS_HTK_OFFSET + 1] = curr_hand_loc[1]
 
-            cv2.circle(image, (int(curr_hand_loc[0]), int(curr_hand_loc[1])), 3, (255, 0, 255), 3)
+            cv2.circle(output_image, (int(curr_hand_loc[0]), int(curr_hand_loc[1])), 3, (255, 0, 255), 3)
 
             # calculate hand pos distribution stats
             hand_mean_x, hand_var_x = calculate_new_mean_variance(hand_mean_x, hand_var_x, frames, curr_hand_loc[0])
@@ -752,20 +823,20 @@ if __name__ == "__main__":
             hand_sd_y = int(hand_var_y ** 0.5)
             #euclidean_sd = (hand_var_x + hand_var_y) ** (1/2)
 
-            cv2.circle(image, (int(hand_mean_x), int(hand_mean_y)), 3, (255, 255, 0), 3)
-            #cv2.circle(image, (int(hand_mean_x), int(hand_mean_y)), int(euclidean_sd), (255, 255, 0), 3)
-            cv2.ellipse(image, (int(hand_mean_x), int(hand_mean_y)), (2 * hand_sd_x, 2 * hand_sd_y), 0, 0, 360, (255, 255, 0), 3)
+            cv2.circle(output_image, (int(hand_mean_x), int(hand_mean_y)), 3, (255, 255, 0), 3)
+            #cv2.circle(output_image, (int(hand_mean_x), int(hand_mean_y)), int(euclidean_sd), (255, 255, 0), 3)
+            cv2.ellipse(output_image, (int(hand_mean_x), int(hand_mean_y)), (2 * hand_sd_x, 2 * hand_sd_y), 0, 0, 360, (255, 255, 0), 3)
 
             # find bounding box of hand
-            bounding_box, bounding_box_size = hand_bounding_box(first_hand_points, image)
+            bounding_box, bounding_box_size = hand_bounding_box(first_hand_points, output_image)
             for point_index in range(len(bounding_box)):
                 #use the %len(bounding_box) to wrap around back to the start
-                cv2.line(image, bounding_box[point_index], bounding_box[(point_index + 1) % len(bounding_box)],
+                cv2.line(output_image, bounding_box[point_index], bounding_box[(point_index + 1) % len(bounding_box)],
                                 (0, 0, 255), 4)
 
             #write text
-            fingers_open = improved_gesture_recognition(first_hand_points, handedness, image)
-            cv2.putText(image, f"{fingers_open}", (bounding_box[0][0], bounding_box[0][1] - 20) , cv2.FONT_HERSHEY_SIMPLEX,
+            fingers_open = improved_gesture_recognition(first_hand_points, handedness, output_image)
+            cv2.putText(output_image, f"{fingers_open}", (bounding_box[0][0], bounding_box[0][1] - 20) , cv2.FONT_HERSHEY_SIMPLEX,
                                                 fontScale = 1, color = (0,0, 255), thickness = 3)
 
             if time.time() - last_change >= TIME_CHANGE_BUFFER and sum(fingers_open) == 5 and not hand_open:
@@ -791,7 +862,7 @@ if __name__ == "__main__":
             if time.time() - last_change < TIME_CHANGE_BUFFER and sum(fingers_open) <= 2:
                 if max_hand_discrepancy < get_distance(curr_hand_loc, (hand_mean_x, hand_mean_y)):
                     # hand is at greatest distance from mean detected so far, detect hand position relative to fiducials
-                    #initialize closest_distance as an integer greater than size of image
+                    #initialize closest_distance as an integer greater than size of output_image
                     closest_distance = 10000
                     max_hand_discrepancy = get_distance(curr_hand_loc, (hand_mean_x, hand_mean_y))
                     for marker_index in range(len(aruco_vectors)):
@@ -836,8 +907,8 @@ if __name__ == "__main__":
                 prev_hand_loc = curr_hand_loc
                 prev_time = curr_time
 
-            #resize image to be a little smaller
-            #image = cv2.resize(image, (int(image.shape[1] * 0.75), int(image.shape[0] * 0.75)))
+            #resize output_image to be a little smaller
+            #output_image = cv2.resize(output_image, (int(output_image.shape[1] * 0.75), int(output_image.shape[0] * 0.75)))
 
 
             # ---------------------------------PROCESSING COLOR MODEL---------------------------------------------------
@@ -845,7 +916,7 @@ if __name__ == "__main__":
             min_y = float('inf')
             max_x = 0
             max_y = 0
-            for point in [first_hand_points[i] for i in [0,1,5,9,13,17]]:
+            for point in first_hand_points:
                 x, y, z = point
                 # mediapipe outputs as a ratio
                 x = int(x * ORIGINAL_FRAME_WIDTH)
@@ -858,70 +929,28 @@ if __name__ == "__main__":
                     max_x = x
                 if y > max_y:
                     max_y = y
-            cropped_out_points = [(min_x, min_y), (min_x, max_y), (max_x, max_y), (min_x, max_y), (min_x, min_y)]
-            cv2.line(image, (int(max_x), int(max_y)), (int(max_x), int(min_y)), (255, 255, 0), 3)
 
+            cropped_out_points = [(min_x, min_y), (min_x, max_y), (max_x, max_y), (min_x, max_y), (min_x, min_y)]
+            cv2.rectangle(output_image, (int(min_x), int(min_y)), (int(max_x), int(max_y)), (255, 255, 0), 3)
+
+            # use the original image to get the colors (original image is in RGB)
             cropped_hand_image = image[min_y:max_y, min_x:max_x]
 
             # cv2.imshow('MediaPipe Hands', cropped_hand_image)
             # cv2.waitKey(0)
 
-            number_of_pixels = cropped_hand_image.shape[0] * cropped_hand_image.shape[1]
-            hsv_image = skimage.color.rgb2hsv(cropped_hand_image)
-            dims = hsv_image.shape
-            hues = []
-            saturations = []
-            for i in range(0, dims[0]):
-                for j in range(0, dims[1]):
-                    # subsample
-                    if i % 1 == 0:
-                        # BGR
-                        hsv_value = np.array([[hsv_image[i, j, 0],
-                                               hsv_image[i, j, 1],
-                                               hsv_image[i, j, 2]]])
-                        # rgb_value = np.array([[color_image[i, j, 0],
-                        #                        color_image[i, j, 1],
-                        #                        color_image[i, j, 2]]]) / 255.0
-                        hues.append(hsv_value[0][0])
-                        saturations.append(hsv_value[0][1])
+            histsat = get_hs_bins(cropped_hand_image)
 
-            #visualizing color model
 
-            # f, axarr = plt.subplots(2, 2)
-            #
-            # # axarr[0, 0].imshow(cropped_hand_image)
-            # h = sum(hues) / len(hues)
-            # s = sum(saturations) / len(saturations)
-            # # print(max(set(hues), key=hues.count)) #mode
-            # # print(max(set(saturations), key=saturations.count)) #mode
-            # V = np.array([[h, s]])
-            # origin = np.array([[0, 0, 0], [0, 0, 0]])  # origin point
-            # # axarr[1].set_xlim([0, 10])
-            # # axarr[1].set_ylim([0, 10])
-            # axarr[0, 1].quiver(*origin, V[:, 0], V[:, 1], color=['r'], scale=10)
-            # circle1 = plt.Circle((0, 0), 1 / 21, fill=False)
-            # axarr[0, 1].add_patch(circle1)
-            # axarr[1, 0].set_xlim([0, 1])
-            # # axarr[1,0].set_title("Hue")
-
-            # print(hist_n, hist_bins)
-            # print(sat_n, sat_bins)
-
-            #calculate the histograms
-            hist_n, hist_bins = np.histogram(hues, bins=10, range=(0, 1))
-            sat_n, sat_bins = np.histogram(saturations, bins=10, range=(0, 1))
-
-            histsat = np.concatenate((hist_n, sat_n))
-            mystring = str(histsat).replace("[", "").replace("]", "").replace(".", "").replace("\n", "")
-            newstring = ' '.join(mystring.split())
-            logging.debug(f"color vector: {newstring}")
-
-            for i in range(len(histsat)):
-                htk_output_vector[COLOR_BIN_HTK_OFFSET + i] = histsat[i]
+            # hand might not be detected so number of pixels might be 0
+            if histsat != []:
+                for i in range(len(histsat)):
+                    # set the values in the htk_output_vector to the proportion of cropped points in each bin
+                    htk_output_vector[COLOR_BIN_HTK_OFFSET + i] = histsat[i]
 
 
         #--------------------------------WRITING OUT HTK VECTOR TO FILE-----------------------------------------
-        logging.info(frames)
+        logging.info(counter)
         logging.info(htk_output_vector)
 
         htk_output_vector = [str(i) for i in htk_output_vector]
@@ -929,23 +958,22 @@ if __name__ == "__main__":
         with open(OUTPUT_FILE, "a") as outfile:
             outfile.write(" ".join(htk_output_vector) + "\n")
 
-        # #removing distortion on image
-        # image = cv2.undistort(image, intrinsic, distortion, None)
+        # #removing distortion on output_image
+        # output_image = cv2.undistort(output_image, intrinsic, distortion, None)
 
         #horizontal margin to be removed from the video (one for left and one for right so total fraction removed is
         #double this proportion)
         horizontal_margin = 0
 
         if DISPLAY_VISUAL:
+            output_image = output_image[:, int(output_image.shape[1] * horizontal_margin): int(output_image.shape[1] * (1 - horizontal_margin))]
 
-            image = image[:, int(image.shape[1] * horizontal_margin): int(image.shape[1] * (1 - horizontal_margin))]
+            output_image = cv2.resize(output_image, (OUTPUT_FRAME_WIDTH, OUTPUT_FRAME_HEIGHT))
 
-            image = cv2.resize(image, (OUTPUT_FRAME_WIDTH, OUTPUT_FRAME_HEIGHT))
-
-            cv2.imshow('MediaPipe Hands', image)
+            cv2.imshow('MediaPipe Hands', output_image)
 
             if args.outfile:
-                out.write(image)
+                out.write(output_image)
 
             aruco_fig.canvas.draw()
 
