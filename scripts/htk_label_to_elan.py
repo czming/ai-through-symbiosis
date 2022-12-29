@@ -1,10 +1,5 @@
-import glob as glob
-import os
-import xml.etree.ElementTree as ET
-from collections import defaultdict
 import matplotlib.pyplot as plt
-import numpy as np
-from rms_error_utils import get_elan_boundaries, get_htk_boundaries
+from scripts.utils.rms_error_utils import get_elan_boundaries, get_htk_boundaries
 
 PICKLIST_NUM = '2'
 # Passing the path of the

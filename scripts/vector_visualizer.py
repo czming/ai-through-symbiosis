@@ -5,6 +5,7 @@ from importlib.metadata import distribution
 import numpy as np 
 import matplotlib.pyplot as plt
 import xml.etree.ElementTree as ET
+import os
 
 # read all files in folder
 def read_folder(folder):

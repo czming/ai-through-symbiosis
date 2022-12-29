@@ -1,4 +1,4 @@
-from rms_error_utils import *
+from scripts.utils.rms_error_utils import *
 import glob
 import os
 
