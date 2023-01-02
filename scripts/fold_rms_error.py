@@ -1,12 +1,17 @@
-from scripts.utils.rms_error_utils import *
 import glob
 import os
+from utils import *
+
+configs = load_yaml_config("configs/zm.yaml")
 
 PICKLISTS = list(range(1, 41))
 
-ROOT_FOLD_DIR = "../results/pca16dims"
+htk_output_folder = configs["file_paths"]["htk_output_file_path"]
+elan_annotated_folder = configs["file_paths"]["elan_annotated_file_path"]
 
-folds_dir = glob.glob(ROOT_FOLD_DIR + "/*/")
+root_fold_dir = f"{htk_output_folder}/pca4dims"
+
+folds_dir = glob.glob(root_fold_dir + "/*/")
 
 total_rms = 0
 
@@ -17,7 +22,7 @@ for fold_dir in folds_dir:
         # iterate through each of the picklists and see if results file is in there
         if os.path.exists(fold_dir + f"/results-{picklist_num}"):
             # such a file exists, look at the rms error            
-            elan_annotated_file = '../elan_annotated/picklist_'+str(picklist_num)+'.eaf'
+            elan_annotated_file = f'{elan_annotated_folder}/picklist_'+str(picklist_num)+'.eaf'
 
             elan_boundaries = get_elan_boundaries(elan_annotated_file)
 
