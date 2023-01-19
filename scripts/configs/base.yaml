@@ -4,3 +4,4 @@ file_paths:
   htk_input_file_path: # directory containing htk input vectors
   label_file_path: # directory containing pick labels (order of labels, i.e. r1b1...)
   htk_output_file_path: # directort containing results from HTK (i.e. HTK output folder)
+  elan_annotated_file_path: # directory containing ELAN annotated labels for videos
