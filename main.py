@@ -117,7 +117,7 @@ def get_hs_bins(cropped_hand_image):
 
     # cv2.imshow("", cropped_hand_image)
     # cv2.waitKey(0)
-
+    cropped_hand_image = cv2.cvtColor(cropped_hand_image, cv2.COLOR_BGR2RGB)
     hsv_image = skimage.color.rgb2hsv(cropped_hand_image)
     dims = hsv_image.shape
     hues = []
@@ -925,7 +925,6 @@ if __name__ == "__main__":
                 # mediapipe outputs as a ratio
                 x = int(x * ORIGINAL_FRAME_WIDTH)
                 y = int(y * ORIGINAL_FRAME_HEIGHT)
-                print (x, y)
                 if x < min_x:
                     min_x = x
                 if y < min_y:
@@ -940,10 +939,6 @@ if __name__ == "__main__":
 
             # use the original image to get the colors (original image is in RGB)
             cropped_hand_image = image[min_y:max_y, min_x:max_x, :]
-
-            print (cropped_hand_image.shape)
-
-            print (min_y, max_y, min_x, max_x)
 
             # cv2.imshow('MediaPipe Hands', cropped_hand_image)
             # cv2.waitKey(0)
