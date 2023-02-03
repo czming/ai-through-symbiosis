@@ -13,6 +13,8 @@ import matplotlib.pyplot as plt
 
 import skimage.color
 
+# requirements: opencv-python, opencv-contrib-python
+
 class ArUcoDetector:
     def __init__(self, intrinsic: np.ndarray, distortion: np.ndarray, aruco_dict, square_length=1):
         assert intrinsic.shape == (3,3)
@@ -113,6 +115,9 @@ def get_hs_bins(cropped_hand_image):
     if number_of_pixels == 0:
         return []
 
+    # cv2.imshow("", cropped_hand_image)
+    # cv2.waitKey(0)
+
     hsv_image = skimage.color.rgb2hsv(cropped_hand_image)
     dims = hsv_image.shape
     hues = []
@@ -169,7 +174,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--video", "-v", type=str, default="G:/My Drive/Georgia Tech/AI Through Symbiosis/pick_list_dataset/Videos/picklist_70.MP4", help="Path to input video")
+    parser.add_argument("--video", "-v", type=str, default="G:/My Drive/Georgia Tech/AI Through Symbiosis/pick_list_dataset/Videos/picklist_1.MP4", help="Path to input video")
     parser.add_argument("--pickpath", "-pp", type=str, default="C:/Users/chngz/Documents/AI through Symbiosis/AI through Symbiosis/picklist.csv", help="Path to picklist")
     # fill in for video output
     parser.add_argument("--outfile", "-o", type=str, default="", help="Path to video outfile to save to. If not provided, will not create video") # 'hand_detection_output.mp4'
@@ -233,7 +238,7 @@ if __name__ == "__main__":
     frames = 0
 
     # show images of the processed points
-    DISPLAY_VISUAL = False
+    DISPLAY_VISUAL = True
 
     OUTPUT_FILE = os.path.basename(args.video.split(".")[0] + ".txt")
 
@@ -359,8 +364,6 @@ if __name__ == "__main__":
         #undistort image
         image = cv2.undistort(image, initial_intrinsic, initial_distortion, None)
 
-        image = cv2.resize(image, (OUTPUT_FRAME_WIDTH, OUTPUT_FRAME_HEIGHT))
-
 
 
         output_image = np.copy(image)
@@ -395,7 +398,7 @@ if __name__ == "__main__":
 
         logging.debug("Actual: ")
 
-        #stores indices of aruco markers in aruco_vectors to be removed if the backpropagation gives invalid values
+        #stores indices of aruco markers in aruco_vectors to be removed if the backprojection gives invalid values
         remove_aruco_vectors = []
 
         #plot aruco markers in image and scatter plot
@@ -627,11 +630,12 @@ if __name__ == "__main__":
                         cv2.putText(output_image, f"id: {marker_id}", (int(aruco_2d[0]), int(aruco_2d[1] + 30)),
                                     cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(255, 0, 255), thickness=3)
 
-                        #if marker has not been detected (htk vector position would be 0
-                        if htk_output_vector[SORTED_VALID_SHELF_MARKERS_DICT[marker_id] * 2 + ARUCO_MARKER_HTK_OFFSET] is None:
-                            htk_output_vector[SORTED_VALID_SHELF_MARKERS_DICT[marker_id] * 2 + ARUCO_MARKER_HTK_OFFSET] = aruco_2d[0]
-                            htk_output_vector[SORTED_VALID_SHELF_MARKERS_DICT[marker_id] * 2 + ARUCO_MARKER_HTK_OFFSET + 1] = \
-                            aruco_2d[1]
+                    # add the aruco marker regardless of whether it is in the frame or not
+                    # if marker has not been detected, htk vector position would be 0
+                    if htk_output_vector[SORTED_VALID_SHELF_MARKERS_DICT[marker_id] * 2 + ARUCO_MARKER_HTK_OFFSET] is None:
+                        htk_output_vector[SORTED_VALID_SHELF_MARKERS_DICT[marker_id] * 2 + ARUCO_MARKER_HTK_OFFSET] = aruco_2d[0]
+                        htk_output_vector[SORTED_VALID_SHELF_MARKERS_DICT[marker_id] * 2 + ARUCO_MARKER_HTK_OFFSET + 1] = \
+                        aruco_2d[1]
 
             # plot x, y, z for the aruco markers
             aruco_sp_points = aruco_tvec_sp.scatter3D(aruco_tvecs_plot_np[:, 0], aruco_tvecs_plot_np[:, 1],
@@ -921,6 +925,7 @@ if __name__ == "__main__":
                 # mediapipe outputs as a ratio
                 x = int(x * ORIGINAL_FRAME_WIDTH)
                 y = int(y * ORIGINAL_FRAME_HEIGHT)
+                print (x, y)
                 if x < min_x:
                     min_x = x
                 if y < min_y:
@@ -931,10 +936,14 @@ if __name__ == "__main__":
                     max_y = y
 
             cropped_out_points = [(min_x, min_y), (min_x, max_y), (max_x, max_y), (min_x, max_y), (min_x, min_y)]
-            cv2.rectangle(output_image, (int(min_x), int(min_y)), (int(max_x), int(max_y)), (255, 255, 0), 3)
+            cv2.rectangle(output_image, (int(min_x), int(max_y)), (int(max_x), int(min_y)), (255, 255, 0), 3)
 
             # use the original image to get the colors (original image is in RGB)
-            cropped_hand_image = image[min_y:max_y, min_x:max_x]
+            cropped_hand_image = image[min_y:max_y, min_x:max_x, :]
+
+            print (cropped_hand_image.shape)
+
+            print (min_y, max_y, min_x, max_x)
 
             # cv2.imshow('MediaPipe Hands', cropped_hand_image)
             # cv2.waitKey(0)
