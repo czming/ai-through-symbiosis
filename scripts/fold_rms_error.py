@@ -4,12 +4,12 @@ from utils import *
 
 configs = load_yaml_config("configs/jon.yaml")
 
-PICKLISTS = list(range(1, 41))
+PICKLISTS = list(range(1, 90))
 
 htk_output_folder = configs["file_paths"]["htk_output_file_path"]
 elan_annotated_folder = configs["file_paths"]["elan_annotated_file_path"]
 
-root_fold_dir = f"{htk_output_folder}/pca4dims"
+root_fold_dir = f"{htk_output_folder}/results/"
 
 folds_dir = glob.glob(root_fold_dir + "/*/")
 
@@ -39,11 +39,13 @@ for fold_dir in folds_dir:
             except IndexError as e:
                 # skip for now
                 print (f"Index Error: {e}, file {htk_results_file}")
+                print()
                 continue
             rms_error = (squared_error / num_points) ** 0.5
 
-            print (f"{htk_results_file}: {rms_error}")
+            print (f"{os.path.basename(htk_results_file)}: {rms_error}")
 
             total_rms += rms_error
 
-print (f"Average rms error for fold: {total_rms / num_picklists}")
+print (f"Average rms error per picklist: {total_rms / num_picklists}")
+

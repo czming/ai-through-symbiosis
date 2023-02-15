@@ -13,10 +13,10 @@ def get_elan_boundaries(file_name):
         all_descendants = list(annotation.iter())
         for desc in all_descendants:
             if desc.tag == "ANNOTATION_VALUE":
-                # if 'empty' not in desc.text:
-                #     elan_annotations.append(desc.text[0:desc.text.index("_")])
-                # else:
-                elan_annotations.append(desc.text)
+                if 'empty' not in desc.text:
+                    elan_annotations.append(desc.text[0:desc.text.index("_")])
+                else:
+                    elan_annotations.append(desc.text)
     prev_time_value = int(root[1][1].attrib['TIME_VALUE'])/1000
     it = root[1][:]
     for index in range(0, len(it), 2):
@@ -71,8 +71,15 @@ def get_squared_error(elan_boundaries, htk_boundaries):
             # ignore the sil
             continue
         # get the elan values and compare them to the htk ones
+        
         htk_key = key_swap[elan_key]
+
+        if len(htk_boundaries[htk_key]) != len(elan_boundaries[elan_key]):
+            elan_boundaries[elan_key] = elan_boundaries[elan_key][2:]
+
+
         for i in range(0, len(elan_boundaries[elan_key]), 2):
+            
             # we only want to compare one of them since the end point is the start point for another letter (i.e. double counting)
             start_elan, end_elan = elan_boundaries[elan_key][i], elan_boundaries[elan_key][i + 1]
             start_htk, end_htk = htk_boundaries[htk_key][i], htk_boundaries[htk_key][i + 1]
