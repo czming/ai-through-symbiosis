@@ -1,0 +1,43 @@
+	
+	PLEASE READ THIS DOCUMENT CAREFULLY BEFORE UTILIZING THE PROGRAM
+
+BY UTILIZING THIS PROGRAM OR ACCESSING THE SOURCE CODE, YOU AGREE TO BECOME BOUND BY THE TERMS OF THIS LICENSE.  IF YOU DO NOT AGREE TO THE TERMS OF THIS LICENSE, DO NOT USE THIS PROGRAM OR ANY PORTION THEREOF IN ANY FORM OR MANNER.
+
+This Program is licensed, not sold to you by GEORGIA TECH RESEARCH CORPORATION ("GTRC"), owner of all code and accompanying documentation (Program) for use only under the terms of this License, and GTRC reserves any rights not expressly granted to you.  
+
+1.Grant of License.
+
+This License allows you to use the software internally and access the source code for the purpose of making derivative works, modifications, and/or to reverse engineer provide that any copy made for these purposes clearly displays any and all appropriate copyright notices and disclaimer of warranty as set forth in Article 4 and 5 of this License.  All notices that refer to this License and to the absence of any warranty must be kept intact at all times.  
+
+At no time shall the program or source code, in whole or in part, be sold for commercial gain either alone or incorporated with other program(s) without entering into a separate agreement with GTRC.
+ 
+
+2.  Export Law Assurance.
+
+You agree that the Software will not be shipped, transferred or exported, directly into any country prohibited by the United States Export Administration Act and the regulations thereunder nor will be used for any purpose prohibited by the Act.
+
+3.  Termination. 
+
+If at anytime you are unable to comply with any portion of this License you must immediately cease use of the Program and all distribution activities involving the Program or any portion thereof.  
+
+
+4.  Disclaimer of Warranties and Limitation on Liability.
+
+YOU ACCEPT THE  PROGRAM ON AN "AS IS" BASIS.  GTRC MAKES NO WARRANTY THAT ALL ERRORS CAN BE OR HAVE BEEN ELIMINATED FROM PROGRAM.  GTRC SHALL NOT BE RESPONSIBLE FOR LOSSES OF ANY KIND RESULTING FROM THE USE OF PROGRAM AND ITS ACCOMPANYING DOCUMENT(S), AND CAN IN NO WAY PROVIDE COMPENSATION FOR ANY LOSSES SUSTAINED, INCLUDING BUT NOT LIMITED TO ANY OBLIGATION, LIABILITY, RIGHT, CLAIM OR REMEDY FOR TORT, OR FOR ANY ACTUAL OR ALLEGED INFRINGEMENT OF PATENTS, COPYRIGHTS, TRADE SECRETS, OR SIMILAR RIGHTS OF THIRD PARTIES, NOR ANY BUSINESS EXPENSE, MACHINE DOWNTIME OR DAMAGES CAUSED TO YOU BY ANY DEFICIENCY, DEFECT OR ERROR IN PROGRAM OR MALFUNCTION THEREOF, NOR ANY INCIDENTAL OR CONSEQUENTIAL DAMAGES, HOWEVER CAUSED.  GTRC DISCLAIMS ALL WARRANTIES, BOTH EXPRESS AND IMPLIED RESPECTING THE USE AND OPERATION OF PROGRAM AND ITS ACCOMPANYING DOCUMENTATION, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR PARTICULAR PURPOSE AND ANY IMPLIED WARRANTY ARISING FROM COURSE OF PERFORMANCE, COURSE OF DEALING OR USAGE OF TRADE.  GTRC MAKES NO WARRANTY THAT PROGRAM IS ADEQUATELY OR COMPLETELY DESCRIBED IN, OR BEHAVES IN ACCORDANCE WITH ANY ACCOMPANYING DOCUMENTATION.  THE USER OF PROGRAM IS EXPECTED TO MAKE THE FINAL EVALUATION OF PROGRAM'S USEFULNESS IN USER'S OWN ENVIRONMENT.
+
+GTRC represents that, to the best of its knowledge, the software furnished hereunder does not infringe any copyright or patent.
+
+GTRC shall have no obligation for support or maintenance of Program.
+
+5.  Copyright Notice.
+
+THE SOFTWARE AND ACCOMPANYING DOCUMENTATION ARE COPYRIGHTED WITH ALL RIGHTS RESERVED BY GTRC.  UNDER UNITED STATES COPYRIGHT LAWS, THE SOFTWARE AND ITS ACCOMPANYING DOCUMENTATION MAY NOT BE COPIED ACCEPT AS GRANTED HEREIN. 
+
+You acknowledge that GTRC is the sole owner of Program, including all copyrights subsisting therein.  Any and all copies or partial copies of Program made by you shall bear the copyright notice set forth below and affixed to the original version or such other notice as GTRC shall designate.  Such notice shall also be affixed to all improvements or enhancements of Program made by you or portions thereof in such a manner and location as to give reasonable notice of GTRC's copyright as set forth in Article 1.
+
+Said copyright notice shall read as follows:
+
+Copyright 2003
+Georgia Tech Research Corporation
+Atlanta, Georgia 30332-0415
+All Rights Reserved

@@ -1,0 +1,57 @@
+Installing the Georgia Tech Gesture Toolkit
+
+First, you will need to get the Hidden Markov Model Toolkit (HTK) from its
+website at
+
+http://htk.eng.cam.ac.uk/
+
+You will need version 3.2.  If you like, you can configure and install it
+yourself, or you can allow our installer to try and install it for you.
+
+------------------------------------------
+Configuring the installer:
+
+After downloading HTK-3.2.tar.gz, configure the Makefile in the main
+gt2k directory:
+
+Makefile options:
+# install HTK (1) or don't (0)
+INSTALL_HTK=1
+
+Set this to 1 if you wish us to install HTK, 0 if you wish to do it yourself.
+
+# Location of the HTK source, needed only if you wish us to install HTK
+HTK_LOC=./HTK-3.2.tar.gz
+
+# where the HTK binaries will go, needed only if you wish us to install HTK
+HTK_DEST=/usr/local/bin 
+
+# where the gt2k scripts and examples will go
+GT2K_DEST=/usr/local/gt2k
+
+In the case of both the HTK_DEST and the GT2K_DEST, you must have write
+permissions for the directories in order for the install to succeed.
+
+If you need root permissions, then please run the install process as root.
+
+------------------------------------------
+Compiling GT2k (And HTK, if specified)
+
+If you are installing HTK with this installer, be sure you have write
+permissions for the HTK destination directory.
+
+Run the following:
+
+	make
+
+This will (if you specified) compile and install HTK, afterwards compiling
+the utilities in the gt2k/utils directory
+-------------------------------------------
+Installation:
+
+Make sure you have permissions for the GT2k destination directory, then run:
+
+	make install
+
+This will copy the contents of the utils, tools, tutorials, and examples
+directories to the destination specified in the Makefile.

@@ -1,0 +1,48 @@
+HResults -A -e ??? sil -T 1 -t -I /tmp/mlf/labels.mlf_letter -p /tmp/commands/commands_letter_isolated_ai_general /tmp/ext/result.mlf_letter0 
+Aligned transcription: /tmp/ext/data/picklist_87.lab vs /tmp/ext/data/picklist_87.rec
+ LAB:         a e i m a e i m a e i m 
+ REC: a e i m a e i m a e i m a e i m 
+Aligned transcription: /tmp/ext/data/picklist_77.lab vs /tmp/ext/data/picklist_77.rec
+ LAB:         a e i m a e i m a e i m a e i m 
+ REC: a e i m a e i m a e i m a e i m a e i m 
+Aligned transcription: /tmp/ext/data/picklist_79.lab vs /tmp/ext/data/picklist_79.rec
+ LAB:         a e i m a e i m a e i m a e i m 
+ REC: a e i m a e i m a e i m a e i m a e i m 
+Aligned transcription: /tmp/ext/data/picklist_78.lab vs /tmp/ext/data/picklist_78.rec
+ LAB:         a e i m a e i m a e i m a e i m 
+ REC: a e i m a e i m a e i m a e i m a e i m 
+Aligned transcription: /tmp/ext/data/picklist_76.lab vs /tmp/ext/data/picklist_76.rec
+ LAB:         a e i m a e i m a e i m 
+ REC: a e i m a e i m a e i m a e i m 
+Aligned transcription: /tmp/ext/data/picklist_51.lab vs /tmp/ext/data/picklist_51.rec
+ LAB:                                         
+ REC: a e i m a e i m a e i m a e i m a e i m 
+Aligned transcription: /tmp/ext/data/picklist_90.lab vs /tmp/ext/data/picklist_90.rec
+ LAB:         a e i m a e i m a e i m a e i m 
+ REC: a e i m a e i m a e i m a e i m a e i m 
+Aligned transcription: /tmp/ext/data/picklist_85.lab vs /tmp/ext/data/picklist_85.rec
+ LAB:         a e i m a e i m a e i m 
+ REC: a e i m a e i m a e i m a e i m 
+Aligned transcription: /tmp/ext/data/picklist_71.lab vs /tmp/ext/data/picklist_71.rec
+ LAB:         a e i m a e i m a e i m 
+ REC: a e i m a e i m a e i m a e i m 
+Aligned transcription: /tmp/ext/data/picklist_73.lab vs /tmp/ext/data/picklist_73.rec
+ LAB:         a e i m a e i m a e i m 
+ REC: a e i m a e i m a e i m a e i m 
+====================== HTK Results Analysis =======================
+  Date: Wed Feb 15 18:11:21 2023
+  Ref : /tmp/mlf/labels.mlf_letter
+  Rec : /tmp/ext/result.mlf_letter0
+------------------------ Overall Results --------------------------
+SENT: %Correct=80.00 [H=40, S=10, N=50]
+WORD: %Corr=100.00, Acc=92.22 [H=720, D=0, S=0, I=56, N=720]
+------------------------ Confusion Matrix -------------------------
+       a   e   i   m 
+                     
+                      Del [ %c / %e]
+   a  180  0   0   0    0
+   e   0  180  0   0    0
+   i   0   0  180  0    0
+   m   0   0   0  180   0
+Ins   14  14  14  14
+===================================================================

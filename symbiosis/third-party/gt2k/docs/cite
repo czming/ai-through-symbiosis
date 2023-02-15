@@ -1,0 +1,7 @@
+@INPROCEEDINGS{Westeyn03,
+    AUTHOR = "T. Westeyn and H. Brashear and A. Atrash and T. Starner",
+    TITLE = "Georgia Tech Gesture Toolkit: Supporting Experiments in Gesture Recognition",
+    BOOKTITLE = "Fifth International Conference on Multimodal Interfaces",
+    YEAR = "2003",
+    PAGES = "85-92"
+}
