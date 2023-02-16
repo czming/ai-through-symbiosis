@@ -1,4 +1,120 @@
 #!MLF!#
+"/tmp/ext/data/picklist_4.lab"
+0 11334000 silaeimaeimaeimaeimaeimaeim
+11334000 11787360 sil
+.
+"/tmp/ext/data/picklist_5.lab"
+0 15006000 silaeimaeimaeimaeimaeimaeimaeim
+15006000 15523448 sil
+.
+"/tmp/ext/data/picklist_6.lab"
+0 10374000 silaeimaeimaeimaeimaeim
+10374000 10868000 sil
+.
+"/tmp/ext/data/picklist_7.lab"
+0 13466000 silaeimaeimaeimaeimaeimaeimaeim
+13466000 13930344 sil
+.
+"/tmp/ext/data/picklist_8.lab"
+0 12414000 silaeimaeimaeimaeimaeimaeim
+12414000 12910560 sil
+.
+"/tmp/ext/data/picklist_9.lab"
+0 14238000 silaeimaeimaeimaeimaeimaeimaeim
+14238000 14728965 sil
+.
+"/tmp/ext/data/picklist_10.lab"
+0 17290000 silaeimaeimaeimaeimaeimaeimaeimaeimaeim
+17290000 17757297 sil
+.
+"/tmp/ext/data/picklist_11.lab"
+0 11510000 silaeimaeimaeimaeimaeimaeim
+11510000 11970400 sil
+.
+"/tmp/ext/data/picklist_12.lab"
+0 6266000 silaeimaeimaeim
+6266000 6748000 sil
+.
+"/tmp/ext/data/picklist_13.lab"
+0 13610000 silaeimaeimaeimaeimaeimaeimaeim
+13610000 14079310 sil
+.
+"/tmp/ext/data/picklist_15.lab"
+0 11854000 silaeimaeimaeimaeimaeimaeim
+11854000 12328160 sil
+.
+"/tmp/ext/data/picklist_16.lab"
+0 7066000 silaeimaeimaeim
+7066000 7609538 sil
+.
+"/tmp/ext/data/picklist_18.lab"
+0 6582000 silaeimaeimaeim
+6582000 7088307 sil
+.
+"/tmp/ext/data/picklist_19.lab"
+0 8006000 silaeimaeimaeimaeim
+8006000 8476941 sil
+.
+"/tmp/ext/data/picklist_20.lab"
+0 6582000 silaeimaeimaeim
+6582000 7088307 sil
+.
+"/tmp/ext/data/picklist_22.lab"
+0 6710000 silaeimaeimaeim
+6710000 7226153 sil
+.
+"/tmp/ext/data/picklist_23.lab"
+0 6714000 silaeimaeimaeim
+6714000 7230461 sil
+.
+"/tmp/ext/data/picklist_24.lab"
+0 8502000 silaeimaeimaeimaeim
+8502000 9002117 sil
+.
+"/tmp/ext/data/picklist_26.lab"
+0 8454000 silaeimaeimaeimaeim
+8454000 8951294 sil
+.
+"/tmp/ext/data/picklist_27.lab"
+0 7206000 silaeimaeimaeim
+7206000 7760307 sil
+.
+"/tmp/ext/data/picklist_30.lab"
+0 6530000 silaeimaeimaeim
+6530000 7032307 sil
+.
+"/tmp/ext/data/picklist_32.lab"
+0 6366000 silaeimaeimaeim
+6366000 6855692 sil
+.
+"/tmp/ext/data/picklist_33.lab"
+0 6202000 silaeimaeimaeim
+6202000 6679076 sil
+.
+"/tmp/ext/data/picklist_34.lab"
+0 6074000 silaeimaeimaeim
+6074000 6541230 sil
+.
+"/tmp/ext/data/picklist_35.lab"
+0 8486000 silaeimaeimaeimaeim
+8486000 8985176 sil
+.
+"/tmp/ext/data/picklist_36.lab"
+0 4934000 silaeimaeimaeim
+4934000 5313538 sil
+.
+"/tmp/ext/data/picklist_38.lab"
+0 8870000 silaeimaeimaeimaeimaeim
+8870000 9292380 sil
+.
+"/tmp/ext/data/picklist_39.lab"
+0 8198000 silaeimaeimaeimaeimaeim
+8198000 8588380 sil
+.
+"/tmp/ext/data/picklist_40.lab"
+0 8654000 silaeimaeimaeimaeimaeim
+8654000 9066095 sil
+.
 "/tmp/ext/data/picklist_41.lab"
 0 10658000 silaeimaeimaeimaeimaeim
 10658000 11165523 sil
@@ -11,25 +127,13 @@
 0 8466000 silaeimaeimaeimaeim
 8466000 8964000 sil
 .
-"/tmp/ext/data/picklist_44.lab"
-0 8370000 silaeimaeimaeimaeim
-8370000 8862352 sil
-.
 "/tmp/ext/data/picklist_45.lab"
 0 6222000 silaeimaeimaeim
 6222000 6700615 sil
 .
-"/tmp/ext/data/picklist_46.lab"
-0 4162000 silaeimaeimaeim
-4162000 4482153 sil
-.
 "/tmp/ext/data/picklist_47.lab"
 0 4498000 silaeimaeimaeimaeim
 4498000 4762588 sil
-.
-"/tmp/ext/data/picklist_48.lab"
-0 4978000 silaeimaeimaeimaeimaeim
-4978000 5215047 sil
 .
 "/tmp/ext/data/picklist_49.lab"
 0 5126000 silaeimaeimaeimaeimaeim
@@ -40,8 +144,9 @@
 4650000 4871428 sil
 .
 "/tmp/ext/data/picklist_51.lab"
-0 4170000 sil
-4170000 8340000 sil
+0 198571 sil
+198571 4170000 aeimaeimaeimaeimaeim
+4170000 4368571 sil
 .
 "/tmp/ext/data/picklist_52.lab"
 0 3290000 silaeimaeimaeim
@@ -50,10 +155,6 @@
 "/tmp/ext/data/picklist_53.lab"
 0 4282000 silaeimaeimaeimaeim
 4282000 4533882 sil
-.
-"/tmp/ext/data/picklist_54.lab"
-0 3854000 silaeimaeimaeimaeim
-3854000 4080705 sil
 .
 "/tmp/ext/data/picklist_55.lab"
 0 3038000 silaeimaeimaeim
@@ -112,10 +213,6 @@
 0 3330000 silaeimaeimaeimaeim
 3330000 3525882 sil
 .
-"/tmp/ext/data/picklist_69.lab"
-0 3974000 silaeimaeimaeimaeim
-3974000 4207764 sil
-.
 "/tmp/ext/data/picklist_70.lab"
 0 3586000 silaeimaeimaeimaeim
 3586000 3796941 sil
@@ -155,11 +252,6 @@
 468823 7970000 aeimaeimaeimaeim
 7970000 8438823 sil
 .
-"/tmp/ext/data/picklist_78.lab"
-0 425294 sil
-425294 7230000 aeimaeimaeimaeim
-7230000 7655294 sil
-.
 "/tmp/ext/data/picklist_79.lab"
 0 449058 sil
 449058 7634000 aeimaeimaeimaeim
@@ -169,11 +261,6 @@
 0 471411 sil
 471411 8014000 aeimaeimaeimaeim
 8014000 8485411 sil
-.
-"/tmp/ext/data/picklist_81.lab"
-0 459230 sil
-459230 5970000 aeimaeimaeim
-5970000 6429230 sil
 .
 "/tmp/ext/data/picklist_82.lab"
 0 431647 sil

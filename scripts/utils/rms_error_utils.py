@@ -74,6 +74,8 @@ def get_squared_error(elan_boundaries, htk_boundaries):
         
         htk_key = key_swap[elan_key]
 
+
+        
         if len(htk_boundaries[htk_key]) != len(elan_boundaries[elan_key]):
             elan_boundaries[elan_key] = elan_boundaries[elan_key][2:]
 

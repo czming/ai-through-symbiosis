@@ -18,6 +18,7 @@ total_rms = 0
 num_picklists = 0
 
 for fold_dir in folds_dir:
+    print(fold_dir[fold_dir.rindex("fold"):])
     for picklist_num in PICKLISTS:
         # iterate through each of the picklists and see if results file is in there
         if os.path.exists(fold_dir + f"/results-{picklist_num}"):
@@ -43,7 +44,7 @@ for fold_dir in folds_dir:
                 continue
             rms_error = (squared_error / num_points) ** 0.5
 
-            print (f"{os.path.basename(htk_results_file)}: {rms_error}")
+            print(f"{os.path.basename(htk_results_file)}: {rms_error}")
 
             total_rms += rms_error
 
