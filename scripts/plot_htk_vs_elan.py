@@ -38,7 +38,7 @@ def produce_plots(result_dir, plots_dir):
                 htk_boundaries[letter].append(letter_start)
                 htk_boundaries[letter].append(letter_end)
         # Getting Elan boundaries (ground truth)
-        tree = ET.parse('../elan_annotated/picklist_'+str(picklist_num)+'.eaf')
+        tree = ET.parse('./elan_annotated/picklist_'+str(picklist_num)+'.eaf')
         root = tree.getroot()
         elan_boundaries = defaultdict(list)
         elan_annotations = []
