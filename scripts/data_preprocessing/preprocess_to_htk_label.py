@@ -20,7 +20,6 @@ label_folder = configs["file_paths"]["label_file_path"]
 
 files = glob.glob(f"{label_folder}/*_raw.txt")
 
-
 for file in files:
     with open(file, "r") as infile:
         phrase = infile.read().strip()
@@ -31,25 +30,25 @@ for file in files:
             token = phrase[token_index: token_index + 2]
             if token[0] == "r":
                 #red object pick and carry
-                outfile.write("a\ne\n")
+                outfile.write("b\nf\n")
             elif token[0] == "b":
                 #blue object pick and carry
-                outfile.write("a\ne\n")
+                outfile.write("c\ng\n")
             elif token[0] == "g":
                 #green object pick and carry
-                outfile.write("a\ne\n")
+                outfile.write("d\nh\n")
             else:
                 raise Exception(f"No such letter found for token[0]: {token}")
 
             if token[1] == "1":
                 #place in object bin 1
-                outfile.write("i\n")
+                outfile.write("j\n")
             elif token[1] == "2":
                 #place in object bin 2
-                outfile.write("i\n")
+                outfile.write("k\n")
             elif token[1] == "3":
                 #place in object bin 3
-                outfile.write("i\n")
+                outfile.write("l\n")
             else:
                 raise Exception(f"No such integer found for token[1]: {token}")
 

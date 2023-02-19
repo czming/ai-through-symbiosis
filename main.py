@@ -323,6 +323,7 @@ if __name__ == "__main__":
     plt.show(block=False)
 
     dist = 1
+
     # optical_flow_algo = FarnebackFlow(frame_distance=dist)
 
     #to write videos
@@ -759,6 +760,7 @@ if __name__ == "__main__":
 
         mag, ang = 0, 0
 
+
         logging.debug(f"Optical flow: {mag} {ang}")
 
         htk_output_vector[OPTICAL_FLOW_HTK_OFFSET] = mag
@@ -998,6 +1000,8 @@ if __name__ == "__main__":
             hand_sp_points.remove()
 
         frames += 1
+
+
         print (frames)
     hands.close()
     cap.release()

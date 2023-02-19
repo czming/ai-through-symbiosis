@@ -1,0 +1,12 @@
+*/__pycache__/*
+symbiosis/models/
+symbiosis/mlf/
+symbiosis/ext/
+symbiosis/all-data
+symbiosis/all-labels
+symbiosis/testsets
+symbiosis/trainsets
+symbiosis/all-extfiles
+symbiosis/datafiles
+symbiosis/hresults.log_letter
+symbiosis/data

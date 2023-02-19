@@ -5,7 +5,8 @@ def get_avg_hsv_bin_frames(hsv_inputs, start_frame, end_frame):
     # get the average hsv bin in the period and return the number of frames where the hand was present (hand not present
     # would lead to hsv bins being 0)
 
-    hsv_bin_sum = np.array([0 for i in range(20)]).astype(float)
+    # look only at hue bins (first 10 bins out of hsv bin length 20 vector)
+    hsv_bin_sum = np.array([0 for i in range(10)]).astype(float)
     frame_count = 0
 
     for j in range(start_frame, end_frame):
@@ -17,13 +18,12 @@ def get_avg_hsv_bin_frames(hsv_inputs, start_frame, end_frame):
             hand_detected = hand_detected or float(hsv_inputs[j][k]) != 0
             hsv_bin_sum[k] += float(hsv_inputs[j][k])
         frame_count += hand_detected
-
     return hsv_bin_sum / frame_count, frame_count
 
 def avg_hsv_bins(hsv_inputs, elan_boundaries, action_label):
     # sums up the hsv bins in the frames that are demarcated by the action label in elan_boundaries
     frame_count = 0
-    hsv_bin_sum = np.array([0 for i in range(20)]).astype(float)
+    hsv_bin_sum = np.array([0 for i in range(10)]).astype(float)
     for i in range(0, len(elan_boundaries[action_label]), 2):
         # collect the red frames
         start_frame = math.ceil(float(elan_boundaries[action_label][i]) * 59.97)

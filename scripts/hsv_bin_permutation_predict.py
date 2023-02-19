@@ -12,6 +12,8 @@ import cv2
 import math
 import matplotlib.pyplot as plt
 from collections import Counter
+from sklearn import metrics
+
 
 def generate_permutations_from_dict(count_dict, all_permutations, curr_permutation=None):
     # generate permutations from d recursively by iterating through the keys and for non-zero keys, add that to the
@@ -120,14 +122,26 @@ htk_input_folder = configs["file_paths"]["htk_input_file_path"]
 video_folder = configs["file_paths"]["video_file_path"]
 pick_label_folder = configs["file_paths"]["label_file_path"]
 
-# picklists that we are looking at
-PICKLISTS = range(1, 60)
 
+htk_output_folder = configs["file_paths"]["htk_output_file_path"]
+
+# picklists that we are looking at
+PICKLISTS = range(1, 41)
+
+actual_picklists = []
+predicted_picklists = []
+
+total_incorrect = 0
 for picklist_no in PICKLISTS:
     print (f"Picklist number {picklist_no}")
     # load elan boundaries, so we can take average of each picks elan labels
-    elan_label_file = f"{elan_label_folder}/picklist_{picklist_no}.eaf"
-    elan_boundaries = get_elan_boundaries(elan_label_file)
+    # elan_label_file = f"{elan_label_folder}/picklist_{picklist_no}.eaf"
+    # elan_boundaries = get_elan_boundaries(elan_label_file)
+    # print(elan_boundaries)
+
+    htk_results_file = f"{htk_output_folder}/results-" + str(picklist_no)
+    htk_boundaries = get_htk_boundaries(htk_results_file)
+    # print(htk_boundaries)
 
     # get the htk_input to load the hsv bins from the relevant lines
     with open(f"{htk_input_folder}/picklist_{picklist_no}.txt") as infile:
@@ -138,8 +152,10 @@ for picklist_no in PICKLISTS:
 
     pick_labels = ["carry_red", "carry_blue", "carry_green"]
 
-    # [[start1, end1], ...]
     pick_frames = []
+
+    pick_labels = ["e"]
+    elan_boundaries = htk_boundaries
 
     for pick_label in pick_labels:
         # look through each color
@@ -192,4 +208,22 @@ for picklist_no in PICKLISTS:
         if curr_result < best_result[0]:
             best_result = (curr_result, permutation)
 
-    print (best_result[1], pick_labels)
+    print("Actual:    " + str(best_result[1]))
+    print("Predicted: " + str(pick_labels))
+
+    actual_picklists += pick_labels
+    predicted_picklists += best_result[1]
+
+
+confusions = defaultdict(int)
+label_counts = defaultdict(int)
+for pred, label in zip(predicted_picklists, actual_picklists):
+    if pred != label:
+        confusions[pred + label] += 1
+
+print(confusions)
+
+confusion_matrix = metrics.confusion_matrix(actual_picklists, predicted_picklists)
+cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = confusion_matrix, display_labels = ["blue", "green", "red"])
+cm_display.plot()
+plt.show()

@@ -1,0 +1,24 @@
+============================================================================
+
+README
+distro/tools/hmm_generator
+
+29 Nov 2002
+Maintained by: brashear@cc.gatech.edu, turtle@cc.gatech.edu
+
+============================================================================
+
+gen_hmmdef.pl : for generating HMM definitions
+
+============================================================================
+
+GEN_HMMDEF.PL
+
+Usage: ./gen_hmmdef.pl -n num_states -v vector_size -s skip [-d] [output file]
+  -n num_states   The number of states for the HMM to have
+  -v vector_size  The size of the feature vector
+  -s skip         The number of skip states in the HMM
+  -d              Use a diagonal covariance matrix instead of a full matrix
+
+Note: Be sure to add 2 to your desired number of states - one for NULL
+begin state and one for NULL end state.
