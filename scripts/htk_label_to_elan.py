@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from scripts.utils.rms_error_utils import get_elan_boundaries, get_htk_boundaries
+from scripts.utils.rms_error_utils import get_generic_elan_boundaries, get_htk_boundaries
 
 PICKLIST_NUM = '2'
 # Passing the path of the
@@ -7,7 +7,7 @@ PICKLIST_NUM = '2'
 # parsing process
 elan_file_name = '../elan_annotated/picklist_' + PICKLIST_NUM + '.eaf' 
 
-elan_boundaries = get_elan_boundaries(elan_file_name)
+elan_boundaries = get_generic_elan_boundaries(elan_file_name)
 
 
 # labels = glob.glob("./picklist-specific-results/*")

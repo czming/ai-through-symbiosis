@@ -12,7 +12,8 @@ import sys
 # setting path
 sys.path.append('..')
 
-from visualize_htk_inputs import plot_axs_columns 
+from visualize_htk_inputs import plot_axs_columns
+from utils import *
 
 def reflect_convolve(data, convolution_filter):
 
@@ -44,6 +45,11 @@ def gaussian_kernel1D(length, sigma):
 
 logging.getLogger().setLevel("INFO")
 
+# use path from the current working directory (not the one from the utils module)
+configs = load_yaml_config("../configs/zm.yaml")
+
+htk_input_folder = configs["file_paths"]["htk_input_file_path"]
+
 # choose odd number of elements so there's a center element, otherwise we'll use the left
 # element as the center element for the convolutions
 # CONVOLUTION_FILTER = [1, 6, 15, 20, 15, 6, 1]
@@ -58,9 +64,9 @@ VISUALIZED_COLUMNS = [0, -1, -2]
 # columns that we want to apply the filter to
 FILTER_COLUMNS = [0]
 
-for index in range(1,2):
+for index in range(1, 91):
 
-    file_name = f"""../../htk_inputs/picklist_{index}_forward_filled_30_aruco_211.txt"""
+    file_name = f"""{htk_input_folder}/picklist_{index}_forward_filled_30.txt"""
 
     data = np.genfromtxt(file_name, delimiter=" ")
 
@@ -74,6 +80,8 @@ for index in range(1,2):
 
     np.savetxt(file_name.replace(".txt", f"_gaussian_filter_{length}_{sigma}.txt"), convolved_data,
                delimiter=" ")
+
+    print (f"picklist {index}")
 
 # show visualization of data
 fig, axs = plt.subplots(len(VISUALIZED_COLUMNS), 2)

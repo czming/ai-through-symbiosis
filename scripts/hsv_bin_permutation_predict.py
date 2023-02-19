@@ -94,6 +94,7 @@ def beta_cv(clusters):
             inter_cluster_distance_sum += distance
             inter_cluster_edges_count += num_edges
 
+
     # both cases there's not much that we can do
     if inter_cluster_edges_count == 0:
         # there's only one color
@@ -121,7 +122,7 @@ video_folder = configs["file_paths"]["video_file_path"]
 pick_label_folder = configs["file_paths"]["label_file_path"]
 
 # picklists that we are looking at
-PICKLISTS = range(1, 60)
+PICKLISTS = range(56, 60)
 
 for picklist_no in PICKLISTS:
     print (f"Picklist number {picklist_no}")

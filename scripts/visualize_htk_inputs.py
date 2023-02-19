@@ -7,6 +7,7 @@ column values
 
 import numpy as np
 import matplotlib.pyplot as plt
+from utils import *
 
 def get_visualization_plot(data, columns):
     """
@@ -33,12 +34,15 @@ def plot_axs_columns(fig, axs, data, columns):
     
 
 if __name__ == "__main__":
+    configs = load_yaml_config("configs/zm.yaml")
 
     # choose the index of the columns that we want to visualize
     VISUALIZED_COLUMNS = [0] #list(range(21))
 
-    FILE_NAME = f"""../htk_inputs/picklist_44_forward_filled_30_gaussian_filter_9_3.txt"""
+    htk_input_folder = configs["file_paths"]["htk_input_file_path"]
+
+    FILE_NAME = f"""{htk_input_folder}/picklist_44_forward_filled_30_gaussian_filter_9_3.txt"""
 
     fig, axs = get_visualization_plot(np.genfromtxt(FILE_NAME, delimiter = " "), VISUALIZED_COLUMNS)
 
-    fig.show()
+    plt.show()

@@ -9,33 +9,6 @@ import cv2
 import math
 import matplotlib.pyplot as plt
 
-def avg_hsv_bins(hsv_inputs, elan_boundaries, action_label):
-    # sums up the hsv bins in the frames that are demarcated by the action label in elan_boundaries
-    frame_count = 0
-    hsv_bin_sum = [0 for i in range(20)]
-    for i in range(0, len(elan_boundaries[action_label]), 2):
-        # collect the red frames
-        start_frame = math.ceil(float(elan_boundaries[action_label][i]) * 59.97)
-        end_frame = math.ceil(float(elan_boundaries[action_label][i + 1]) * 59.97)
-        for j in range(start_frame, end_frame):
-            # see whether the hand was detected (if hand was not detected, all bins would be 0)
-            hand_detected = False
-            for k in range(len(hsv_bin_sum)):
-                # sum up the current values
-                hand_detected = hand_detected or float(hsv_inputs[j][k + 72]) != 0
-                hsv_bin_sum[k] += float(hsv_inputs[j][k + 72])
-            frame_count += hand_detected
-
-    if frame_count == 0:
-        # no detected frames
-        return hsv_bin_sum
-
-    for k in range(len(hsv_bin_sum)):
-        hsv_bin_sum[k] = hsv_bin_sum[k] / frame_count
-
-    return hsv_bin_sum
-
-
 
 
 configs = load_yaml_config("configs/zm.yaml")

@@ -2,6 +2,8 @@ import xml.etree.ElementTree as ET
 from collections import defaultdict
 
 def get_elan_boundaries(file_name):
+    # gets the generic elan boundaries (specifies the action but not the color nor the bin location that is being used)
+
     # Passing the path of the xml document to enable the parsing process
     tree = ET.parse(file_name)
 
@@ -13,10 +15,8 @@ def get_elan_boundaries(file_name):
         all_descendants = list(annotation.iter())
         for desc in all_descendants:
             if desc.tag == "ANNOTATION_VALUE":
-                if 'empty' not in desc.text:
-                    elan_annotations.append(desc.text[0:desc.text.index("_")])
-                else:
-                    elan_annotations.append(desc.text)
+                elan_annotations.append(desc.text)
+
     prev_time_value = int(root[1][1].attrib['TIME_VALUE'])/1000
     it = root[1][:]
     for index in range(0, len(it), 2):
@@ -31,6 +31,28 @@ def get_elan_boundaries(file_name):
     elan_boundaries["carry_empty"] = elan_boundaries["carry_empty"][2:] if elan_boundaries["carry_empty"][0] == 0 else elan_boundaries["carry_empty"]
 
     return elan_boundaries
+
+def get_generic_elan_boundaries(file_name):
+    # gets the labels for the actions of the elan boundaries (i.e. ignores the color and the place bin number and only
+    # takes the action of pick, carry, place, carry_empty into consideration)
+    elan_boundaries = get_elan_boundaries(file_name)
+
+    generic_elan_boundaries = {}
+
+    for action in ["pick", "carry", "place"]:
+        # get timestamps associated with action
+        # need to check for empty since carry_empty is a special case
+        timestamps = [i for key in elan_boundaries.keys() for i in elan_boundaries[key] if "empty" not in key and key.split("_")[0] == action]
+        # sort the timestamps
+        generic_elan_boundaries[action] = sorted(timestamps)
+
+    # handling carry_empty special case
+    timestamps = [i for key in elan_boundaries.keys() for i in elan_boundaries[key] if key == "carry_empty"]
+    # sort the timestamps
+    generic_elan_boundaries["carry_empty"] = sorted(timestamps)
+
+    return generic_elan_boundaries
+
 
 
 def get_htk_boundaries(file_name):
@@ -64,7 +86,6 @@ def get_squared_error(elan_boundaries, htk_boundaries):
                 'carry':'e',
                 'place':'i',
                 'carry_empty':'m'} 
-
 
     for elan_key in elan_boundaries.keys():
         if elan_key == "sil":

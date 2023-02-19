@@ -24,7 +24,7 @@ for fold_dir in folds_dir:
             # such a file exists, look at the rms error            
             elan_annotated_file = f'{elan_annotated_folder}/picklist_'+str(picklist_num)+'.eaf'
 
-            elan_boundaries = get_elan_boundaries(elan_annotated_file)
+            elan_boundaries = get_generic_elan_boundaries(elan_annotated_file)
 
             htk_results_file = fold_dir + f"/results-{picklist_num}"
 

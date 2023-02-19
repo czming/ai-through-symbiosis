@@ -5,6 +5,17 @@ detected with forward filling (if marker was detected in one frame, it will be a
 number of frames after that as well)
 
 """
+import sys
+
+# append the path of the parent directory
+sys.path.append("..")
+
+from utils import *
+
+# use path from the current working directory (not the one from the utils module)
+configs = load_yaml_config("../configs/zm.yaml")
+
+htk_input_folder = configs["file_paths"]["htk_input_file_path"]
 
 
 # from aruco binning script
@@ -16,9 +27,9 @@ place_bins = [i for i in range(24 * 2, 36 * 2)]
 # 0 indicates no persistence (i.e. only store for one frame and that's it
 PERSISTANCE = 30
 
-data_folder = "../../htk_inputs"
+data_folder = htk_input_folder
 
-for i in range(70,71):
+for i in range(1,91):
     with open(f"{data_folder}/picklist_{i}.txt") as infile:
 
         # overwrite output file first

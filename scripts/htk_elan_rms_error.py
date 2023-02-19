@@ -16,7 +16,7 @@ for picklist_num in PICKLISTS:
 
     elan_annotated_file = f'{elan_label_folder}/picklist_'+str(picklist_num)+'.eaf'
 
-    elan_boundaries = get_elan_boundaries(elan_annotated_file)
+    elan_boundaries = get_generic_elan_boundaries(elan_annotated_file)
 
     htk_results_file = f"{htk_output_folder}/forward_filled_30_gaussian_filter_9_3_aruco_hs_bins/results-" + str(picklist_num)
 

@@ -8,18 +8,26 @@ column values
 import numpy as np
 import matplotlib.pyplot as plt
 
+from utils import *
+
 import xml.etree.ElementTree as ET
+
+configs = load_yaml_config("configs/zm.yaml")
 
 PICKLIST_NO = 1
 
-ELAN_ANNOTATION_FILE = f'../elan_annotated/picklist_{PICKLIST_NO}.eaf'
+elan_label_folder = configs["file_paths"]["elan_annotated_file_path"]
+htk_input_folder = configs["file_paths"]["htk_input_file_path"]
+label_folder = configs["file_paths"]["label_file_path"]
 
-HTK_INPUT_FILE = f"""../htk_inputs/picklist_{PICKLIST_NO}_forward_filled_30_gaussian_filter_9_3.txt"""
+ELAN_ANNOTATION_FILE = f'{elan_label_folder}/picklist_{PICKLIST_NO}.eaf'
 
-PICK_LABEL_FILE = f"../Labels/picklist_{PICKLIST_NO}_raw.txt"
+HTK_INPUT_FILE = f"""{htk_input_folder}/picklist_{PICKLIST_NO}_forward_filled_30_gaussian_filter_9_3.txt"""
+
+PICK_LABEL_FILE = f"{label_folder}/picklist_{PICKLIST_NO}_raw.txt"
 
 # choose the index of the columns that we want to visualize
-VISUALIZED_COLUMNS = [0, -4,-3, -2, -1]
+VISUALIZED_COLUMNS = [0, -4, -3, -2, -1]
 
 
 # frames per second of the camera to correspond between the event timings and the frames

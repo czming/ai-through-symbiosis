@@ -1,5 +1,7 @@
 """
 
+(DEPRACATED, beyond here there be dragons)
+
 creates an indicator variable sequence indicating whether a particular action (pick red, carry blue)
 is taking place and the value for each of the inputs
 
