@@ -115,12 +115,14 @@ def beta_cv(clusters):
 # 0.5 / (2 / 4) = 1
 # print (beta_cv([[1, 2], [2, 2]]))
 
-configs = load_yaml_config("configs/jon.yaml")
+configs = load_yaml_config("configs/zm.yaml")
 
 elan_label_folder = configs["file_paths"]["elan_annotated_file_path"]
 htk_input_folder = configs["file_paths"]["htk_input_file_path"]
 video_folder = configs["file_paths"]["video_file_path"]
 pick_label_folder = configs["file_paths"]["label_file_path"]
+
+
 htk_output_folder = configs["file_paths"]["htk_output_file_path"]
 
 # picklists that we are looking at
@@ -153,8 +155,10 @@ for picklist_no in PICKLISTS:
     # that should give some idea about what the object is as well)
     
     pick_labels = ["carry_red", "carry_blue", "carry_green"]
+
     pick_frames = []
 
+    # htk label for pick
     pick_labels = ["e"]
     elan_boundaries = htk_boundaries
 
@@ -165,6 +169,7 @@ for picklist_no in PICKLISTS:
             start_frame = math.ceil(float(elan_boundaries[pick_label][i]) * 59.97)
             end_frame = math.ceil(float(elan_boundaries[pick_label][i + 1]) * 59.97)
             pick_frames.append([start_frame, end_frame])
+
     # sort based on start
     pick_frames = sorted(pick_frames, key=lambda x: x[0])
 
@@ -215,8 +220,8 @@ for picklist_no in PICKLISTS:
         if curr_result < best_result[0]:
             best_result = (curr_result, permutation)
 
-    print("Actual:    " + str(best_result[1]))
-    print("Predicted: " + str(pick_labels))
+    print("Actual:    " + str(pick_labels))
+    print("Predicted: " + str(best_result[1]))
 
     actual_picklists += pick_labels
     predicted_picklists += best_result[1]

@@ -5,10 +5,20 @@ processes raw label inputs into htk labels based on the color of pick and bin pl
 
 """
 import glob
-
 import json
+import sys
 
-files = glob.glob("../Labels/*_raw.txt")
+# append the path of the parent directory
+sys.path.append("..")
+
+from utils import *
+
+# use path from the current working directory (not the one from the utils module)
+configs = load_yaml_config("../configs/zm.yaml")
+
+label_folder = configs["file_paths"]["label_file_path"]
+
+files = glob.glob(f"{label_folder}/*_raw.txt")
 
 for file in files:
     with open(file, "r") as infile:
@@ -46,3 +56,5 @@ for file in files:
             outfile.write("m\n")
         #append sil to end the file
         outfile.write("sil")
+
+    print (file)

@@ -4,6 +4,7 @@ visualizes data with the x axis as the row and the y-axis as the selected
 column values
 
 """
+
 import argparse
 import numpy as np
 import matplotlib.pyplot as plt
@@ -22,6 +23,7 @@ def plot_axs_columns(fig, axs, data, columns):
 
     if len(columns) == 1:
         # axs will be a single element if only one column visualized
+
         curr_data = data[:, columns[0]]
         axs.plot(range(len(data)), curr_data)
     else:

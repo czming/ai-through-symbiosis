@@ -42,6 +42,7 @@ def gaussian_kernel1D(length, sigma):
     kernel = np.exp(-0.5 * np.square(ax) / np.square(sigma))
     return kernel
 
+
 def average_kernel1D(length):
     return [1/length] * length
 
@@ -52,19 +53,15 @@ logging.getLogger().setLevel("INFO")
 # choose odd number of elements so there's a center element, otherwise we'll use the left
 # element as the center element for the convolutions
 # CONVOLUTION_FILTER = [1, 6, 15, 20, 15, 6, 1]
-length = 101
+length = 9
 sigma = 3
 convolution_filter = gaussian_kernel1D(length, sigma)
-print(convolution_filter)
-convolution_filter = average_kernel1D(length)
-print(convolution_filter)
+
 # choose the index of the columns that we want to visualize
 VISUALIZED_COLUMNS = [0, -1, -2]
 
 # columns that we want to apply the filter to
 FILTER_COLUMNS = [0]
-
-for index in range(1,91):
 
     file_name = f"""../../../htk_inputs/picklist_{index}_forward_filled_30.txt"""
 

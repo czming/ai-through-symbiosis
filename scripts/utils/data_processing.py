@@ -5,6 +5,7 @@ def get_avg_hsv_bin_frames(hsv_inputs, start_frame, end_frame):
     # get the average hsv bin in the period and return the number of frames where the hand was present (hand not present
     # would lead to hsv bins being 0)
 
+    # look only at hue bins (first 10 bins out of hsv bin length 20 vector)
     hsv_bin_sum = np.array([0 for i in range(10)]).astype(float)
     frame_count = 0
 
@@ -17,8 +18,8 @@ def get_avg_hsv_bin_frames(hsv_inputs, start_frame, end_frame):
         for k in range(len(hsv_bin_sum)):
             # sum up the current values
             # k + 72 in both instances when looking at original
-            hand_detected = hand_detected or float(hsv_inputs[j][k]) != 0
-            hsv_bin_sum[k] += float(hsv_inputs[j][k])
+            hand_detected = hand_detected or float(hsv_inputs[j][k + 72]) != 0
+            hsv_bin_sum[k] += float(hsv_inputs[j][k + 72])
         frame_count += hand_detected
     return hsv_bin_sum / frame_count, frame_count
 

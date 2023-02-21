@@ -238,7 +238,7 @@ if __name__ == "__main__":
     frames = 0
 
     # show images of the processed points
-    DISPLAY_VISUAL = True
+    DISPLAY_VISUAL = False
 
     OUTPUT_FILE = os.path.basename(args.video.split(".")[0] + ".txt")
 
@@ -323,7 +323,8 @@ if __name__ == "__main__":
     plt.show(block=False)
 
     dist = 1
-    optical_flow_algo = FarnebackFlow(frame_distance=dist)
+
+    # optical_flow_algo = FarnebackFlow(frame_distance=dist)
 
     #to write videos
     if args.outfile:
@@ -753,9 +754,12 @@ if __name__ == "__main__":
 
 
         #----------------------------------OPTICAL FLOW DETECTION--------------------------------------------------
-        mag, ang = optical_flow_algo.calc(output_image)
+        # mag, ang = optical_flow_algo.calc(output_image)
+        #
+        # mag, ang = mag.mean(), ang.mean()
 
-        mag, ang = mag.mean(), ang.mean()
+        mag, ang = 0, 0
+
 
         logging.debug(f"Optical flow: {mag} {ang}")
 
@@ -996,6 +1000,9 @@ if __name__ == "__main__":
             hand_sp_points.remove()
 
         frames += 1
+
+
+        print (frames)
     hands.close()
     cap.release()
 

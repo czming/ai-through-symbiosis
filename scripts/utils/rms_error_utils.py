@@ -71,7 +71,7 @@ def get_squared_error(elan_boundaries, htk_boundaries):
             # ignore the sil
             continue
         # get the elan values and compare them to the htk ones
-        
+
         htk_key = key_swap[elan_key]
 
 
@@ -81,7 +81,7 @@ def get_squared_error(elan_boundaries, htk_boundaries):
 
 
         for i in range(0, len(elan_boundaries[elan_key]), 2):
-            
+
             # we only want to compare one of them since the end point is the start point for another letter (i.e. double counting)
             start_elan, end_elan = elan_boundaries[elan_key][i], elan_boundaries[elan_key][i + 1]
             start_htk, end_htk = htk_boundaries[htk_key][i], htk_boundaries[htk_key][i + 1]
