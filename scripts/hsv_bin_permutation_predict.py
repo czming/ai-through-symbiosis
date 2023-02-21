@@ -154,6 +154,7 @@ for picklist_no in PICKLISTS:
 
     pick_frames = []
 
+    # htk label for pick
     pick_labels = ["e"]
     elan_boundaries = htk_boundaries
 
@@ -208,8 +209,8 @@ for picklist_no in PICKLISTS:
         if curr_result < best_result[0]:
             best_result = (curr_result, permutation)
 
-    print("Actual:    " + str(best_result[1]))
-    print("Predicted: " + str(pick_labels))
+    print("Actual:    " + str(pick_labels))
+    print("Predicted: " + str(best_result[1]))
 
     actual_picklists += pick_labels
     predicted_picklists += best_result[1]
