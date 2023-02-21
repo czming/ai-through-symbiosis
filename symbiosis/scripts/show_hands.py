@@ -41,15 +41,15 @@ def get_hs_bins(cropped_hand_image):
     return histsat
 
 picklist = "picklist_2"
-picklist_nums = [11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40]
-# picklist_nums = list(range(4,41))
+# picklist_nums = [11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40]
+picklist_nums = list(range(81,91))
 for picklist_num in picklist_nums:
     print(picklist_num)
     mphands = mp.solutions.hands
     hands = mphands.Hands()
     mp_drawing = mp.solutions.drawing_utils
     picklist_filename = "picklist_" + str(picklist_num) + ".MP4"
-    video_path = os.path.join("/Users/jonathanwomack/projects/ai-through-symbiosis/github-repo/videos/", picklist_filename)
+    video_path = os.path.join("/Users/jonathanwomack/projects/ai-through-symbiosis/videos/", picklist_filename)
     cap = cv2.VideoCapture(video_path)
     _, frame = cap.read()
     h, w, c = frame.shape
@@ -86,11 +86,11 @@ for picklist_num in picklist_nums:
                 hs_vector = previous_output
             previous_output = hs_vector
         
-        #     with open("../experiments/show-hand-color/data/picklist_" + str(picklist_num) + ".txt-test", "a") as outfile:
-        #         outfile.write(" ".join(hs_vector) + "\n")
-        # else:
-        #     with open("../experiments/show-hand-color/data/picklist_" + str(picklist_num) + ".txt-test", "a") as outfile:
-        #         outfile.write(" ".join(previous_output) + "\n")
+            with open("../experiments/show-hand-color/data/picklist_" + str(picklist_num) + ".txt-test", "a") as outfile:
+                outfile.write(" ".join(hs_vector) + "\n")
+        else:
+            with open("../experiments/show-hand-color/data/picklist_" + str(picklist_num) + ".txt-test", "a") as outfile:
+                outfile.write(" ".join(previous_output) + "\n")
         
-        cv2.imshow("Frame", frame)
-        cv2.waitKey(1)
+        # cv2.imshow("Frame", frame)
+        # cv2.waitKey(1)

@@ -124,7 +124,7 @@ pick_label_folder = configs["file_paths"]["label_file_path"]
 htk_output_folder = configs["file_paths"]["htk_output_file_path"]
 
 # picklists that we are looking at
-PICKLISTS = range(1, 41)
+PICKLISTS = range(1, 91)
 
 actual_picklists = []
 predicted_picklists = []
@@ -138,16 +138,20 @@ for picklist_no in PICKLISTS:
     # print(elan_boundaries)
 
     htk_results_file = f"{htk_output_folder}/results-" + str(picklist_no)
-    htk_boundaries = get_htk_boundaries(htk_results_file)
+    try:
+        htk_boundaries = get_htk_boundaries(htk_results_file)
+    except:
+        continue
     # print(htk_boundaries)    
 
     # get the htk_input to load the hsv bins from the relevant lines
     with open(f"{htk_input_folder}/picklist_{picklist_no}.txt") as infile:
         htk_inputs = [i.split() for i in infile.readlines()]
+        print(np.asarray(htk_inputs).shape)
 
     # get the average hsv bins for each carry action sequence (might want to incorporate information from pick since
     # that should give some idea about what the object is as well)
-
+    
     pick_labels = ["carry_red", "carry_blue", "carry_green"]
     pick_frames = []
 
@@ -170,18 +174,25 @@ for picklist_no in PICKLISTS:
             raise Exception("pick timings are overlapping, check data")
 
     # avg hsv bins for each pick
-    avg_hsv_picks = [get_avg_hsv_bin_frames(htk_inputs, start_frame, end_frame)[0] for (start_frame, end_frame) \
+    try:
+        avg_hsv_picks = [get_avg_hsv_bin_frames(htk_inputs, start_frame, end_frame)[0] for (start_frame, end_frame) \
                         in pick_frames]
+    except:
+        continue
 
+    print(f"{pick_label_folder}/picklist_{picklist_no}_raw.txt")
     with open(f"{pick_label_folder}/picklist_{picklist_no}_raw.txt") as infile:
-        pick_labels = [i for i in infile.read()[::2]]
-
+        inyo = infile.read()
+        inyo = inyo.replace("\n","")
+        print(inyo[::2])
+        pick_labels = [i for i in inyo[::2]]
     all_permutations = []
 
     generate_permutations_from_dict(dict(Counter(pick_labels)), all_permutations)
-
-    for i in pick_labels:
+    print(pick_labels)
+    for i in pick_labels:    
         if i not in ['r', 'g', 'b']:
+            print(i)
             raise Exception("Unknown pick label: " + i)
 
     # map the colors to an index where the vectors will be appended
