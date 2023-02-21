@@ -1,0 +1,18 @@
+yellow (.7, .3)
+wood
+white 
+nothing (.75, .25)
+clear (.79, .21)
+candle
+battery
+
+aligator clip (.15, .9)
+
+red (.6, .4)
+orange 
+
+light green (.1, .7, .3)
+dark green (a little singal at column 2,3, .7, .3 )
+
+light blue (.05, .1, .55, .35)
+dark blue (.05, 0, .59, .4)

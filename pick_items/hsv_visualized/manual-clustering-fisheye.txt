@@ -1,0 +1,20 @@
+yellow  .5, .45
+wood .5, .45
+battery .5, .5
+
+orange .45, .55
+
+white .6, .4
+candle .6, .4
+
+nothing .39, .61 
+red .3, .7
+
+light green .4, .6 col 4
+dark green .4, .6 col 2,3,4
+
+light blue .3, .55, col 1,2
+dark blue .45, .5 + a little signal in col 1,7,8,9
+clear .45, .5 
+
+alligator clip (.025, .8, .2)
