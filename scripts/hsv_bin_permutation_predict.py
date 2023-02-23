@@ -126,13 +126,13 @@ pick_label_folder = configs["file_paths"]["label_file_path"]
 htk_output_folder = configs["file_paths"]["htk_output_file_path"]
 
 # picklists that we are looking at
-PICKLISTS = range(76, 77)
+PICKLISTS = range(1, 81)
 
-actual_picklists = []
-predicted_picklists = []
+actual_picklists = {}
+predicted_picklists = {}
 picklists_w_symmetric_counts = []
 
-avg_hsv_bins = []
+avg_hsv_bins_combined = {}
 
 # accumulates the hsv_bins for the different objects and stores the number of counts so we can get the average
 # hsv bin across the different picklists
@@ -185,13 +185,10 @@ for picklist_no in PICKLISTS:
             raise Exception("pick timings are overlapping, check data")
 
     # avg hsv bins for each pick
-    try:
-        avg_hsv_picks = [get_avg_hsv_bin_frames(htk_inputs, start_frame, end_frame)[0] for (start_frame, end_frame) \
+    avg_hsv_picks = [get_avg_hsv_bin_frames(htk_inputs, start_frame, end_frame)[0] for (start_frame, end_frame) \
                         in pick_frames]
-    except:
-        continue
 
-    avg_hsv_bins.append(avg_hsv_picks)
+    avg_hsv_bins_combined[picklist_no] = avg_hsv_picks
 
     with open(f"{pick_label_folder}/picklist_{picklist_no}_raw.txt") as infile:
         pick_labels = [i for i in infile.read().replace("\n", "")[::2]]
@@ -230,14 +227,12 @@ for picklist_no in PICKLISTS:
 
         curr_result = beta_cv(hsv_color_cluster)
 
+
         if curr_result < best_result[0]:
             best_result = (curr_result, permutation)
 
-    print("Actual:    " + str(pick_labels))
-    print("Predicted: " + str(best_result[1]))
-
-    actual_picklists.append(pick_labels)
-    predicted_picklists.append(best_result[1])
+    actual_picklists[picklist_no] = pick_labels
+    predicted_picklists[picklist_no] = best_result[1]
 
     if symmetric_count:
         # if there's symmetric count then don't add to accumulator
@@ -251,17 +246,21 @@ for picklist_no in PICKLISTS:
         objects_hsv_bin_accumulator[pred_label][0] += avg_hsv_picks[i]
         objects_hsv_bin_accumulator[pred_label][1] += 1
 
+    # predicted already, non-symmetric
+    print("Actual:    " + str(pick_labels))
+    print("Predicted: " + str(best_result[1]))
+
     # current assumption needs every color appears at least once in a picklist without symmetric count
+
+
 
 for picklist_no in picklists_w_symmetric_counts:
     # accumulate bins for the current hsv bin, likewise it's (hsv bin avg, count)
-    # decrement by 1 since using as an index
-    picklist_index = picklist_no - 1
 
     curr_picklist_hsv_bin_accumulator = defaultdict(lambda: [np.zeros(shape=(10,)), 0])
 
-    for index, object in enumerate(predicted_picklists[picklist_index]):
-        curr_picklist_hsv_bin_accumulator[object][0] += avg_hsv_bins[picklist_index][index]
+    for index, object in enumerate(predicted_picklists[picklist_no]):
+        curr_picklist_hsv_bin_accumulator[object][0] += avg_hsv_bins_combined[picklist_no][index]
         curr_picklist_hsv_bin_accumulator[object][1] += 1
 
     # get the avg hsv bins
@@ -277,7 +276,7 @@ for picklist_no in picklists_w_symmetric_counts:
     # 1 count for each object type in the picklist
     generate_permutations_from_dict({i: 1 for i in objects_in_picklist}, all_permutations)
 
-    print (picklist_no)
+
     # print (object_avg_hsv_bins)
     # print (all_permutations)
 
@@ -298,23 +297,23 @@ for picklist_no in picklists_w_symmetric_counts:
     # map from the previous label (in symmetric picklist, best result) to the corrected label (actual one from non-symmetric)
     object_mapping = {best_result[1][i]: objects_in_picklist[i] for i in range(len(objects_in_picklist))}
 
-    # print (object_mapping)
-    print("Actual:            " + str(actual_picklists[picklist_index]))
-    print("Prev Predicted:    " + str(predicted_picklists[picklist_index]))
+    print ("Picklist " + str(picklist_no))
+    print("Prev Predicted:    " + str(predicted_picklists[picklist_no]))
 
-    for i in range(len(predicted_picklists[picklist_index])):
+    for i in range(len(predicted_picklists[picklist_no])):
         # get the corrected label
-        predicted_picklists[picklist_index][i] = object_mapping[predicted_picklists[picklist_index][i]]
+        predicted_picklists[picklist_no][i] = object_mapping[predicted_picklists[picklist_no][i]]
 
-    print("Updated Predicted: " + str(predicted_picklists[picklist_index]))
+    print("Updated Predicted: " + str(predicted_picklists[picklist_no]))
+    print("Actual:            " + str(actual_picklists[picklist_no]))
 
     # fix the ground truth arrangement, e.g. rgb, then permute the labels for the current picklist e.g. rgb, bgr, brg
     # then put both the vectors from the current picklist and vector from the non-symmetric picklist and pick the
     # arrangement that gives the best match
 
 # flatten arrays
-actual_picklists = [i for j in actual_picklists for i in j]
-predicted_picklists = [i for j in predicted_picklists for i in j]
+actual_picklists = [i for j in actual_picklists.values() for i in j]
+predicted_picklists = [i for j in predicted_picklists.values() for i in j]
 
 confusions = defaultdict(int)
 label_counts = defaultdict(int)
