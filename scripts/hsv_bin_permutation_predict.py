@@ -126,7 +126,7 @@ pick_label_folder = configs["file_paths"]["label_file_path"]
 htk_output_folder = configs["file_paths"]["htk_output_file_path"]
 
 # picklists that we are looking at
-PICKLISTS = range(1, 81)
+PICKLISTS = range(76, 77)
 
 actual_picklists = []
 predicted_picklists = []
@@ -159,7 +159,7 @@ for picklist_no in PICKLISTS:
 
     # get the average hsv bins for each carry action sequence (might want to incorporate information from pick since
     # that should give some idea about what the object is as well)
-
+    
     pick_labels = ["carry_red", "carry_blue", "carry_green"]
 
     pick_frames = []
@@ -185,13 +185,16 @@ for picklist_no in PICKLISTS:
             raise Exception("pick timings are overlapping, check data")
 
     # avg hsv bins for each pick
-    avg_hsv_picks = [get_avg_hsv_bin_frames(htk_inputs, start_frame, end_frame)[0] for (start_frame, end_frame) \
+    try:
+        avg_hsv_picks = [get_avg_hsv_bin_frames(htk_inputs, start_frame, end_frame)[0] for (start_frame, end_frame) \
                         in pick_frames]
+    except:
+        continue
 
     avg_hsv_bins.append(avg_hsv_picks)
 
     with open(f"{pick_label_folder}/picklist_{picklist_no}_raw.txt") as infile:
-        pick_labels = [i for i in infile.read()[::2]]
+        pick_labels = [i for i in infile.read().replace("\n", "")[::2]]
 
     # check if there are two objects with the same count (will be integrated later)
     object_count_set = set()

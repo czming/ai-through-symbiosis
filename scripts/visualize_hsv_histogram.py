@@ -38,7 +38,7 @@ def avg_hsv_bins(hsv_inputs, elan_boundaries, action_label):
 
 
 
-configs = load_yaml_config("configs/zm.yaml")
+configs = load_yaml_config("configs/jon.yaml")
 
 elan_label_folder = configs["file_paths"]["elan_annotated_file_path"]
 htk_input_folder = configs["file_paths"]["htk_input_file_path"]
