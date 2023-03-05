@@ -111,6 +111,15 @@ def beta_cv(clusters):
 
     return intra_cluster_distance_mean / inter_cluster_distance_mean
 
+def get_count_mapping(array):
+	# gets count: [object] mapping of items in array
+	counts = defaultdict(lambda: 0) # get counts of each object first
+	for i in array:
+		counts[i] += 1
+	counts_mapping = defaultdict(lambda: [])
+	for key, value in counts.items():
+		counts_mapping[value].append(key)
+	return dict(counts_mapping)
 
 # 0.5 / (2 / 4) = 1
 # print (beta_cv([[1, 2], [2, 2]]))
@@ -193,7 +202,7 @@ for picklist_no in PICKLISTS:
     with open(f"{pick_label_folder}/picklist_{picklist_no}_raw.txt") as infile:
         pick_labels = [i for i in infile.read().replace("\n", "")[::2]]
 
-    # check if there are two objects with the same count (will be integrated later)
+    # check if there are two objects with the same count
     object_count_set = set()
     pick_label_count = dict(Counter(pick_labels))
     symmetric_count = False
@@ -206,12 +215,13 @@ for picklist_no in PICKLISTS:
 
     generate_permutations_from_dict(pick_label_count, all_permutations)
 
-    for i in pick_labels:
-        if i not in ['r', 'g', 'b']:
-            raise Exception("Unknown pick label: " + i)
+    # check for the pick labels
+    # for i in pick_labels:
+    #     if i not in ['r', 'g', 'b']:
+    #         raise Exception("Unknown pick label: " + i)
 
     # map the colors to an index where the vectors will be appended
-    color_index_mapping = {'r': 0, 'g': 1, 'b': 2}
+    color_index_mapping = {value: index for index, value in enumerate(list(set(pick_labels)))} # {'r': 0, 'g': 1, 'b': 2}
 
     # store the lowest beta_cv measure permutation
     best_result = (float('inf'), None)
@@ -257,52 +267,70 @@ for picklist_no in PICKLISTS:
 for picklist_no in picklists_w_symmetric_counts:
     # accumulate bins for the current hsv bin, likewise it's (hsv bin avg, count)
 
+    print ("Picklist " + str(picklist_no))
+    print("Prev Predicted:    " + str(predicted_picklists[picklist_no]))
+
     curr_picklist_hsv_bin_accumulator = defaultdict(lambda: [np.zeros(shape=(10,)), 0])
 
     for index, object in enumerate(predicted_picklists[picklist_no]):
         curr_picklist_hsv_bin_accumulator[object][0] += avg_hsv_bins_combined[picklist_no][index]
         curr_picklist_hsv_bin_accumulator[object][1] += 1
 
-    # get the avg hsv bins
-    curr_picklist_avg_hsv_bins = {key: value[0] / value[1] for key, value in curr_picklist_hsv_bin_accumulator.items()}
-    object_avg_hsv_bins = {key: value[0] / value[1] for key, value in objects_hsv_bin_accumulator.items()}
+    # get the count: [objects] mapping then go through each count, using predicted picklist for the counts since
+    # should have been enforced above
+    count_mapping = get_count_mapping(predicted_picklists[picklist_no])
 
-    # fix the arrangement of the objects that we are going to draw from the main hsv bins, now want to find the permutation
-    # that matches this the best then can assign
-    objects_in_picklist = list(curr_picklist_avg_hsv_bins.keys())
-
-    all_permutations = []
-
-    # 1 count for each object type in the picklist
-    generate_permutations_from_dict({i: 1 for i in objects_in_picklist}, all_permutations)
+    for count, curr_objects in count_mapping.items():
+        # only focus on objects that are in the current count bin
 
 
-    # print (object_avg_hsv_bins)
-    # print (all_permutations)
+        # get the avg hsv bins
+        curr_picklist_avg_hsv_bins = {key: value[0] / value[1] for key, value in curr_picklist_hsv_bin_accumulator.items() \
+                                        if key in curr_objects}
+        object_avg_hsv_bins = {key: value[0] / value[1] for key, value in objects_hsv_bin_accumulator.items() \
+                                    if key in curr_objects}
 
-    # store the lowest beta_cv measure permutation
-    best_result = (float('inf'), None)
+        # fix the arrangement of the objects that we are going to draw from the main hsv bins, now want to find the permutation
+        # that matches this the best then can assign
+        objects_in_picklist = list(curr_picklist_avg_hsv_bins.keys())
 
-    for permutation in all_permutations:
-        # from main one, get the hsv bin based on teh objects_in_picklist order while for the curr_picklist, look
-        # at the permutation
-        hsv_bin_clusters = [[object_avg_hsv_bins[objects_in_picklist[i]], curr_picklist_avg_hsv_bins[permutation[i]]]
-                            for i in range(len(permutation))]
 
-        curr_result = beta_cv(hsv_bin_clusters)
+        # --------------should work on those with the same counts as a group then ignore the rest each time------------
 
-        if curr_result < best_result[0]:
-            best_result = (curr_result, permutation)
+        all_permutations = []
 
-    # map from the previous label (in symmetric picklist, best result) to the corrected label (actual one from non-symmetric)
-    object_mapping = {best_result[1][i]: objects_in_picklist[i] for i in range(len(objects_in_picklist))}
+        # 1 count for each object type in the picklist
+        generate_permutations_from_dict({i: 1 for i in objects_in_picklist}, all_permutations)
 
-    print ("Picklist " + str(picklist_no))
-    print("Prev Predicted:    " + str(predicted_picklists[picklist_no]))
 
-    for i in range(len(predicted_picklists[picklist_no])):
-        # get the corrected label
-        predicted_picklists[picklist_no][i] = object_mapping[predicted_picklists[picklist_no][i]]
+        # print (object_avg_hsv_bins)
+        # print (all_permutations)
+
+        # store the lowest beta_cv measure permutation
+        best_result = (float('inf'), None)
+
+        for permutation in all_permutations:
+            # from main one, get the hsv bin based on teh objects_in_picklist order while for the curr_picklist, look
+            # at the permutation
+            hsv_bin_clusters = [[object_avg_hsv_bins[objects_in_picklist[i]], curr_picklist_avg_hsv_bins[permutation[i]]]
+                                for i in range(len(permutation))]
+
+            curr_result = beta_cv(hsv_bin_clusters)
+
+            if curr_result < best_result[0]:
+                best_result = (curr_result, permutation)
+
+        # map from the previous label (in symmetric picklist, best result) to the corrected label (actual one from non-symmetric)
+        object_mapping = {best_result[1][i]: objects_in_picklist[i] for i in range(len(objects_in_picklist))}
+
+        for i in range(len(predicted_picklists[picklist_no])):
+            if predicted_picklists[picklist_no][i] not in object_mapping.keys():
+                # not mapping this element in this iteration
+                continue
+            # get the corrected label
+            predicted_picklists[picklist_no][i] = object_mapping[predicted_picklists[picklist_no][i]]
+
+
 
     print("Updated Predicted: " + str(predicted_picklists[picklist_no]))
     print("Actual:            " + str(actual_picklists[picklist_no]))
