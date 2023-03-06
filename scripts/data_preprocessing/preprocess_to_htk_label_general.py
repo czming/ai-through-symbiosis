@@ -8,11 +8,12 @@ import glob
 
 import json
 
-files = glob.glob("../../../Labels/*51_raw.txt")
+files = glob.glob("../../Labels/*_raw.txt")
 
 for file in files:
     with open(file, "r") as infile:
         phrase = infile.read().strip()
+    print(file.replace("_raw.txt", ".lab"))
     print(file.replace("_raw.txt", ".lab"))
     with open(file.replace("_raw.txt", ".lab"), "w") as outfile:
         #prepend sil for HTK formatting
@@ -20,17 +21,7 @@ for file in files:
         for token_index in range(0, len(phrase), 2):
             token = phrase[token_index: token_index + 2]
             print(token)
-            if token[0] == "r":
-                #red object pick and carry
-                outfile.write("a\ne\n")
-            elif token[0] == "b":
-                #blue object pick and carry
-                outfile.write("a\ne\n")
-            elif token[0] == "g":
-                #green object pick and carry
-                outfile.write("a\ne\n")
-            else:
-                raise Exception(f"No such letter found for token[0]: {token}")
+            outfile.write("a\ne\n")
 
             if token[1] == "1":
                 #place in object bin 1

@@ -43,13 +43,17 @@ def get_hs_bins(cropped_hand_image):
 picklist = "picklist_2"
 # picklist_nums = [11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40]
 picklist_nums = list(range(81,91))
+picklist_nums = [3,4]
+previous_output = ['0'] * 20
 for picklist_num in picklist_nums:
     print(picklist_num)
     mphands = mp.solutions.hands
     hands = mphands.Hands()
     mp_drawing = mp.solutions.drawing_utils
     picklist_filename = "picklist_" + str(picklist_num) + ".MP4"
+    picklist_filename = 'GX01004' + str(picklist_num) + ".MP4"
     video_path = os.path.join("/Users/jonathanwomack/projects/ai-through-symbiosis/videos/", picklist_filename)
+    output_filename = "../experiments/imu-preliminary/data/picklist_" + str(picklist_num) + ".txt-test"
     cap = cv2.VideoCapture(video_path)
     _, frame = cap.read()
     h, w, c = frame.shape
@@ -82,14 +86,15 @@ for picklist_num in picklist_nums:
                 # mp_drawing.draw_landmarks(frame, handLMs, mphands.HAND_CONNECTIONS)
             frame = frame[y_min:y_max, x_min:x_max]
             hs_vector = [str(i) for i in get_hs_bins(frame)]
-            if len(hs_vector) == 0:
+            if len(hs_vector) == 0 and previous_output is not None:
                 hs_vector = previous_output
             previous_output = hs_vector
-        
-            with open("../experiments/show-hand-color/data/picklist_" + str(picklist_num) + ".txt-test", "a") as outfile:
+            print(hs_vector)
+            with open(output_filename, "a") as outfile:
                 outfile.write(" ".join(hs_vector) + "\n")
         else:
-            with open("../experiments/show-hand-color/data/picklist_" + str(picklist_num) + ".txt-test", "a") as outfile:
+            print(previous_output)
+            with open(output_filename, "a") as outfile:
                 outfile.write(" ".join(previous_output) + "\n")
         
         # cv2.imshow("Frame", frame)

@@ -42,7 +42,6 @@ def gaussian_kernel1D(length, sigma):
     kernel = np.exp(-0.5 * np.square(ax) / np.square(sigma))
     return kernel
 
-
 def average_kernel1D(length):
     return [1/length] * length
 
@@ -53,30 +52,36 @@ logging.getLogger().setLevel("INFO")
 # choose odd number of elements so there's a center element, otherwise we'll use the left
 # element as the center element for the convolutions
 # CONVOLUTION_FILTER = [1, 6, 15, 20, 15, 6, 1]
-length = 9
+length = 50
 sigma = 3
-convolution_filter = gaussian_kernel1D(length, sigma)
+# convolution_filter = gaussian_kernel1D(length, sigma)
+
+length = 1000
+convolution_filter = average_kernel1D(length)
+
 
 # choose the index of the columns that we want to visualize
-VISUALIZED_COLUMNS = [0, -1, -2]
+VISUALIZED_COLUMNS = [0, 1, 2, 3, 4, 5]
 
 # columns that we want to apply the filter to
-FILTER_COLUMNS = [0]
+FILTER_COLUMNS = [0, 1, 2, 3, 4, 5]
 
-    file_name = f"""../../../htk_inputs/picklist_{index}_forward_filled_30.txt"""
+    # file_name = f"""../../../htk_inputs/picklist_{index}_forward_filled_30.txt"""
+file_name = f"""../../htk_inputs/GX010043.txt"""
 
-    data = np.genfromtxt(file_name, delimiter=" ")
 
-    # make a copy
-    convolved_data = np.array(data)
+data = np.genfromtxt(file_name, delimiter=" ")
 
-    convolved_data[:, FILTER_COLUMNS] = reflect_convolve(data[:, FILTER_COLUMNS], convolution_filter)
+# make a copy
+convolved_data = np.array(data)
 
-    # make sure the lengths are the same
-    assert len(data) == len(convolved_data)
+convolved_data[:, FILTER_COLUMNS] = reflect_convolve(data[:, FILTER_COLUMNS], convolution_filter)
 
-    np.savetxt(file_name.replace(".txt", f"_gaussian_filter_{length}_{sigma}.txt"), convolved_data,
-               delimiter=" ")
+# make sure the lengths are the same
+assert len(data) == len(convolved_data)
+
+np.savetxt(file_name.replace(".txt", f"_gaussian_filter_{length}_{sigma}.txt"), convolved_data,
+            delimiter=" ")
 
 # show visualization of data
 fig, axs = plt.subplots(len(VISUALIZED_COLUMNS), 2)

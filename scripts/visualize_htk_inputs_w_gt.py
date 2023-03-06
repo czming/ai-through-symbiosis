@@ -18,8 +18,12 @@ HTK_INPUT_FILE = f"""../htk_inputs/picklist_{PICKLIST_NO}_forward_filled_30_gaus
 
 PICK_LABEL_FILE = f"../Labels/picklist_{PICKLIST_NO}_raw.txt"
 
+ELAN_ANNOTATION_FILE = '../elan_annotated/GX010043.eaf'
+HTK_INPUT_FILE = '../htk_inputs/GX010043_gaussian_filter_1000_3.txt'
+PICK_LABEL_FILE = '../Labels/GX010043.txt'
+
 # choose the index of the columns that we want to visualize
-VISUALIZED_COLUMNS = [0, -4,-3, -2, -1]
+VISUALIZED_COLUMNS = [0,1,2,3, 4,5] #[0, 1,2]
 
 
 # frames per second of the camera to correspond between the event timings and the frames
@@ -34,7 +38,7 @@ it = root[1][:]
 event_frames = []
 
 for index in it:
-    event_frames.append(int(int(index.attrib['TIME_VALUE']) * 60/1000))
+    event_frames.append(int(int(index.attrib['TIME_VALUE']) * 3.33333 * 60/1000))
 
 # getting the ending time based on the htk_inputs
 
@@ -57,6 +61,10 @@ points_color.append((0.5, 0.5, 0.5))
 points_color.append((0.5, 0.5, 0.5))
 
 for pick_label in pick_labels:
+    print(pick_label)
+    print("here")
+    if pick_label == '\n':
+        continue
     for i in range(8):
         # 8 labels, since 4 actions and includes (start, end)
         points_color.append(pick_labels_color[pick_label])
