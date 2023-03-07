@@ -124,7 +124,7 @@ def get_count_mapping(array):
 # 0.5 / (2 / 4) = 1
 # print (beta_cv([[1, 2], [2, 2]]))
 
-configs = load_yaml_config("configs/zm.yaml")
+configs = load_yaml_config("configs/jon.yaml")
 
 elan_label_folder = configs["file_paths"]["elan_annotated_file_path"]
 htk_input_folder = configs["file_paths"]["htk_input_file_path"]
@@ -181,8 +181,8 @@ for picklist_no in PICKLISTS:
         # look through each color
         for i in range(0, len(elan_boundaries[pick_label]), 2):
             # collect the red frames
-            start_frame = math.ceil(float(elan_boundaries[pick_label][i]) * 59.97)
-            end_frame = math.ceil(float(elan_boundaries[pick_label][i + 1]) * 59.97)
+            start_frame = math.ceil(float(elan_boundaries[pick_label][i]) * 30)
+            end_frame = math.ceil(float(elan_boundaries[pick_label][i + 1]) * 30)
             pick_frames.append([start_frame, end_frame])
 
     # sort based on start
