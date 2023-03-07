@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cnt=176
+cnt=136
 while read LINE
 do
     echo $LINE > "picklist_${cnt}_raw.txt"

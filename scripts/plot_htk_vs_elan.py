@@ -15,7 +15,7 @@ def produce_plots(result_dir, plots_dir):
     picklists = ['1','2','3','17','18','19','20','21','22','26']
     picklists = ['20', '21', '22', '26']
     # picklists = ['1', '2', '3', '17', '18', '19']
-    picklists = list(range(0,135))
+    picklists = list(range(0,235))
 
     for picklist_num in picklists:
         # Getting HTK boundaries (predicted)
@@ -33,8 +33,8 @@ def produce_plots(result_dir, plots_dir):
                     break
                 boundaries = line.split()[0:2]
                 letter = line.split()[2]
-                letter_start = [int(boundary)/120000 for boundary in boundaries][0] #2000 (HTK multiplier) * 60FPS
-                letter_end = [int(boundary)/120000 for boundary in boundaries][1] - viz_offset
+                letter_start = [int(boundary)/60000 for boundary in boundaries][0] #2000 (HTK multiplier) * 60FPS
+                letter_end = [int(boundary)/60000 for boundary in boundaries][1] - viz_offset
                 htk_boundaries[letter].append(letter_start)
                 htk_boundaries[letter].append(letter_end)
         # Getting Elan boundaries (ground truth)

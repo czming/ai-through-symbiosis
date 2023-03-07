@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Get filename from command line argument
+# Get raw picklist label filename from command line argument
 filename=$1
 
 # Get number of characters in file
