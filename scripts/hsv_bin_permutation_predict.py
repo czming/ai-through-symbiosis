@@ -135,7 +135,7 @@ pick_label_folder = configs["file_paths"]["label_file_path"]
 htk_output_folder = configs["file_paths"]["htk_output_file_path"]
 
 # picklists that we are looking at
-PICKLISTS = range(1, 81)
+PICKLISTS = range(1, 240)
 
 actual_picklists = {}
 predicted_picklists = {}
