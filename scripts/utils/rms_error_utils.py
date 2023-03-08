@@ -13,10 +13,10 @@ def get_elan_boundaries(file_name):
         all_descendants = list(annotation.iter())
         for desc in all_descendants:
             if desc.tag == "ANNOTATION_VALUE":
-                if 'empty' not in desc.text:
-                    elan_annotations.append(desc.text[0:desc.text.index("_")])
-                else:
-                    elan_annotations.append(desc.text)
+                # if 'empty' not in desc.text:
+                #     elan_annotations.append(desc.text[0:desc.text.index("_")])
+                # else:
+                elan_annotations.append(desc.text)
     prev_time_value = int(root[1][1].attrib['TIME_VALUE'])/1000
     it = root[1][:]
     for index in range(0, len(it), 2):
@@ -29,7 +29,7 @@ def get_elan_boundaries(file_name):
     # remove the first two points from carry_empty because seems to have extra 2 elements for the period before the first pick starts (if first element is 0 then this
     # seems to be the case)
     elan_boundaries["carry_empty"] = elan_boundaries["carry_empty"][2:] if elan_boundaries["carry_empty"][0] == 0 else elan_boundaries["carry_empty"]
-
+    
     return elan_boundaries
 
 

@@ -106,9 +106,7 @@ def beta_cv(clusters):
         return 0
 
     intra_cluster_distance_mean = intra_cluster_distance_sum / intra_cluster_edges_count
-
     inter_cluster_distance_mean = inter_cluster_distance_sum / inter_cluster_edges_count
-
     return intra_cluster_distance_mean / inter_cluster_distance_mean
 
 def get_count_mapping(array):
@@ -135,7 +133,9 @@ pick_label_folder = configs["file_paths"]["label_file_path"]
 htk_output_folder = configs["file_paths"]["htk_output_file_path"]
 
 # picklists that we are looking at
-PICKLISTS = range(1, 240)
+PICKLISTS = range(136, 240)
+PICKLISTS = range(136, 188)
+
 
 actual_picklists = {}
 predicted_picklists = {}
@@ -145,38 +145,54 @@ avg_hsv_bins_combined = {}
 
 # accumulates the hsv_bins for the different objects and stores the number of counts so we can get the average
 # hsv bin across the different picklists
-objects_hsv_bin_accumulator = defaultdict(lambda: [np.zeros(shape=(10,)), 0])
+objects_hsv_bin_accumulator = defaultdict(lambda: [np.zeros(shape=(20,)), 0])
 
 total_incorrect = 0
 for picklist_no in PICKLISTS:
     print (f"Picklist number {picklist_no}")
-    # load elan boundaries, so we can take average of each picks elan labels
-    # elan_label_file = f"{elan_label_folder}/picklist_{picklist_no}.eaf"
-    # elan_boundaries = get_elan_boundaries(elan_label_file)
-    # print(elan_boundaries)
+    try:
+        # load elan boundaries, so we can take average of each picks elan labels
+        elan_label_file = f"{elan_label_folder}/picklist_{picklist_no}.eaf"
+        elan_boundaries = get_elan_boundaries(elan_label_file)
+        # print(elan_boundaries)
+    except:
+        # no labels yet
+        print("Skipping picklist: No elan boundaries")
+        continue
     try:
         htk_results_file = f"{htk_output_folder}/results-" + str(picklist_no)
         htk_boundaries = get_htk_boundaries(htk_results_file)
         # print(htk_boundaries)
     except:
         # no labels yet
+        print("Skipping picklist: No htk boundaries")
         continue
 
     # get the htk_input to load the hsv bins from the relevant lines
-    with open(f"{htk_input_folder}/picklist_{picklist_no}.txt") as infile:
+    with open(f"{htk_input_folder}/picklist_{picklist_no}") as infile:
         htk_inputs = [i.split() for i in infile.readlines()]
 
     # get the average hsv bins for each carry action sequence (might want to incorporate information from pick since
     # that should give some idea about what the object is as well)
     
-    pick_labels = ["carry_red", "carry_blue", "carry_green"]
+    pick_labels = ["carry_red", 
+                   "carry_blue", 
+                   "carry_green",
+                   "carry_darkblue",
+                   "carry_darkgreen",
+                   "carry_clear",
+                   "carry_alligatorclip",
+                   "carry_yellow",
+                   "carry_orange",  
+                   "carry_candle",                                                       
+                   ]
 
     pick_frames = []
 
     # htk label for pick
-    pick_labels = ["e"]
-    elan_boundaries = htk_boundaries
-
+    # pick_labels = ["e"]
+    # elan_boundaries = htk_boundaries
+    
     for pick_label in pick_labels:
         # look through each color
         for i in range(0, len(elan_boundaries[pick_label]), 2):
@@ -194,6 +210,13 @@ for picklist_no in PICKLISTS:
             raise Exception("pick timings are overlapping, check data")
 
     # avg hsv bins for each pick
+    num_hand_detections = [get_avg_hsv_bin_frames(htk_inputs, start_frame, end_frame)[1] for (start_frame, end_frame) \
+                        in pick_frames]
+    if 0 in num_hand_detections:
+        print("skipping bad boundaries")
+        continue
+
+
     avg_hsv_picks = [get_avg_hsv_bin_frames(htk_inputs, start_frame, end_frame)[0] for (start_frame, end_frame) \
                         in pick_frames]
 
@@ -206,45 +229,55 @@ for picklist_no in PICKLISTS:
     object_count_set = set()
     pick_label_count = dict(Counter(pick_labels))
     symmetric_count = False
-    for pick_label, pick_count in pick_label_count.items():
-        if pick_count != 0:
-            symmetric_count = symmetric_count or (pick_count in object_count_set)
-            object_count_set.add(pick_count)
+
+    completely_symmetric_count = False
+    partially_symmetric_count = False
+
+    lst = pick_label_count.values()
+    counts = Counter(lst)
+    unique_counts = [x for x in counts if counts[x] == 1]
+    print(lst)
+    print(unique_counts)
+    print(pick_labels)
+    if len(unique_counts) == 0:
+        completely_symmetric_count = True
+
+    elif sum(unique_counts) < len(pick_labels):
+        partially_symmetric_count = True
+
+    print("Completely Symmetric: " + str(completely_symmetric_count))
+    print("Partially Symmetric: " + str(partially_symmetric_count))
+    # for pick_label, pick_count in pick_label_count.items():
+    #     if pick_count != 0:
+    #         symmetric_count = symmetric_count or (pick_count in object_count_set)
+    #         object_count_set.add(pick_count)
 
     all_permutations = []
 
     generate_permutations_from_dict(pick_label_count, all_permutations)
 
-    # check for the pick labels
-    # for i in pick_labels:
-    #     if i not in ['r', 'g', 'b']:
-    #         raise Exception("Unknown pick label: " + i)
 
     # map the colors to an index where the vectors will be appended
     color_index_mapping = {value: index for index, value in enumerate(list(set(pick_labels)))} # {'r': 0, 'g': 1, 'b': 2}
 
     # store the lowest beta_cv measure permutation
     best_result = (float('inf'), None)
-
     for permutation_index in range(len(all_permutations)):
         # iterate through the different permutations
         permutation = all_permutations[permutation_index]
         # gather the hsv bin average into clusters
-        hsv_color_cluster = [[] for i in range(3)]
+        hsv_color_cluster = [[] for i in range(len(pick_labels))]
         for index, value in enumerate(permutation):
             # add the hsv bins based on their colors assigned under this permutation
             hsv_color_cluster[color_index_mapping[value]].append(avg_hsv_picks[index])
-
+        # print(hsv_color_cluster)
         curr_result = beta_cv(hsv_color_cluster)
-
-
         if curr_result < best_result[0]:
             best_result = (curr_result, permutation)
-
     actual_picklists[picklist_no] = pick_labels
     predicted_picklists[picklist_no] = best_result[1]
 
-    if symmetric_count:
+    if completely_symmetric_count:
         # if there's symmetric count then don't add to accumulator
         picklists_w_symmetric_counts.append(picklist_no)
 
@@ -268,6 +301,7 @@ for picklist_no in PICKLISTS:
 
 
 
+
     # predicted already, non-symmetric
     print("Actual:    " + str(pick_labels))
     print("Predicted: " + str(best_result[1]))
@@ -282,7 +316,7 @@ for picklist_no in picklists_w_symmetric_counts:
     print ("Picklist " + str(picklist_no))
     print("Prev Predicted:    " + str(predicted_picklists[picklist_no]))
 
-    curr_picklist_hsv_bin_accumulator = defaultdict(lambda: [np.zeros(shape=(10,)), 0])
+    curr_picklist_hsv_bin_accumulator = defaultdict(lambda: [np.zeros(shape=(20,)), 0])
 
     for index, object in enumerate(predicted_picklists[picklist_no]):
         curr_picklist_hsv_bin_accumulator[object][0] += avg_hsv_bins_combined[picklist_no][index]
@@ -364,6 +398,6 @@ for pred, label in zip(predicted_picklists, actual_picklists):
 print(confusions)
 
 confusion_matrix = metrics.confusion_matrix(actual_picklists, predicted_picklists)
-cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = confusion_matrix, display_labels = ["blue", "green", "red"])
+cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = confusion_matrix, display_labels = ["blue", "green", "red", "4","5","6","7","8","9","10"])
 cm_display.plot()
 plt.show()
