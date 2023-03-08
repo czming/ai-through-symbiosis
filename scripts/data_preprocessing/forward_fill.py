@@ -6,6 +6,14 @@ number of frames after that as well)
 
 """
 
+## DO NOT PUSH, changed for the video id but should revert to one based on picklist number in remote (keep the use of
+# config file though)
+
+import sys
+
+sys.path.append("..")
+
+from utils import *
 
 # from aruco binning script
 # pick bins
@@ -16,10 +24,20 @@ place_bins = [i for i in range(24 * 2, 36 * 2)]
 # 0 indicates no persistence (i.e. only store for one frame and that's it
 PERSISTANCE = 30
 
-data_folder = "../../htk_inputs"
+configs = load_yaml_config("../configs/zm.yaml")
 
-for i in range(70,71):
-    with open(f"{data_folder}/picklist_{i}.txt") as infile:
+htk_input_folder = configs["file_paths"]["htk_input_file_path"]
+
+for i in range(124, 163):
+    print (i)
+    try:
+        print(f"{htk_input_folder}/GX010{str(i).zfill(3)}.txt")
+        open(f"{htk_input_folder}/GX010{str(i).zfill(3)}.txt")
+
+    except:
+        continue
+
+    with open(f"{htk_input_folder}/GX010{str(i).zfill(3)}.txt") as infile:
 
         # overwrite output file first
 
@@ -27,7 +45,7 @@ for i in range(70,71):
         # frames has passed)
         last_frame_detected = {}
 
-        with open(f"{data_folder}/picklist_{i}_forward_filled_{PERSISTANCE}.txt", "w") as outfile:
+        with open(f"{htk_input_folder}/GX010{str(i).zfill(3)}_forward_filled_{PERSISTANCE}.txt", "w") as outfile:
             
             infile = infile.readlines()
             for index, line in enumerate(infile):
@@ -62,4 +80,4 @@ for i in range(70,71):
                 outfile.write(" ".join(new_line))
                 outfile.write("\n")
                 
-        print (f"picklist_{i}.txt")
+        print (f"GX010{str(i).zfill(3)}.txt")

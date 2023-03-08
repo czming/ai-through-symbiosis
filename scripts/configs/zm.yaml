@@ -1,7 +1,7 @@
 owner: ming # fill in your name here
 file_paths:
-  video_file_path: "G:/My Drive/Georgia Tech/AI Through Symbiosis/pick_list_dataset/Videos" # directory containing videos
-  htk_input_file_path: "G:/My Drive/Georgia Tech/AI Through Symbiosis/pick_list_dataset/htk_inputs" # directory containing htk input vectors
-  label_file_path: "G:/My Drive/Georgia Tech/AI Through Symbiosis/pick_list_dataset/Labels" # directory containing pick labels (order of labels, i.e. r1b1...)
-  htk_output_file_path: "G:/My Drive/Georgia Tech/AI Through Symbiosis/pick_list_dataset/htk_outputs" # directory containing results from HTK (i.e. HTK output folder)
-  elan_annotated_file_path: "G:/My Drive/Georgia Tech/AI Through Symbiosis/pick_list_dataset/elan_annotated" # directory containing ELAN annotated labels for videos
+  video_file_path: "C:/Users/chngz/OneDrive/Georgia Tech/AI Through Symbiosis/pick_list_dataset/Videos" # directory containing videos
+  htk_input_file_path: "C:/Users/chngz/OneDrive/Georgia Tech/AI Through Symbiosis/pick_list_dataset/htk_inputs" # directory containing htk input vectors
+  label_file_path: "C:/Users/chngz/OneDrive/Georgia Tech/AI Through Symbiosis/pick_list_dataset/Labels" # directory containing pick labels (order of labels, i.e. r1b1...)
+  htk_output_file_path: "C:/Users/chngz/OneDrive/Georgia Tech/AI Through Symbiosis/pick_list_dataset/config-references/aruco-136/all-results" # directory containing results from HTK (i.e. HTK output folder)
+  elan_annotated_file_path: "C:/Users/chngz/OneDrive/Georgia Tech/AI Through Symbiosis/pick_list_dataset/elan_annotated" # directory containing ELAN annotated labels for videos

@@ -174,7 +174,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--video", "-v", type=str, default="G:/My Drive/Georgia Tech/AI Through Symbiosis/pick_list_dataset/Videos/picklist_1.MP4", help="Path to input video")
+    parser.add_argument("--video", "-v", type=str, default="G:/My Drive/Georgia Tech/AI Through Symbiosis/pick_list_dataset/Videos/GX010162.MP4", help="Path to input video")
     parser.add_argument("--pickpath", "-pp", type=str, default="C:/Users/chngz/Documents/AI through Symbiosis/AI through Symbiosis/picklist.csv", help="Path to picklist")
     # fill in for video output
     parser.add_argument("--outfile", "-o", type=str, default="", help="Path to video outfile to save to. If not provided, will not create video") # 'hand_detection_output.mp4'
@@ -353,6 +353,9 @@ if __name__ == "__main__":
 
         #image = cv2.undistort(image, newcameramtx, distortion, None)
 
+        # reduce resolution of image
+        image = cv2.resize(image, (ORIGINAL_FRAME_WIDTH, ORIGINAL_FRAME_HEIGHT))
+
         if TO_FLIP:
             # Flip the image horizontally for a later selfie-view display, and convert
             # the BGR image to RGB.
@@ -363,7 +366,7 @@ if __name__ == "__main__":
         #image = cv2.resize(image, (1920, 1080))
 
         #undistort image
-        image = cv2.undistort(image, initial_intrinsic, initial_distortion, None)
+        # image = cv2.undistort(image, initial_intrinsic, initial_distortion, None)
 
 
 

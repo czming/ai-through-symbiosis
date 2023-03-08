@@ -9,16 +9,25 @@ def get_avg_hsv_bin_frames(hsv_inputs, start_frame, end_frame):
     hsv_bin_sum = np.array([0 for i in range(20)]).astype(float)
     frame_count = 0
 
+    print (start_frame, end_frame, len(hsv_inputs))
+
     for j in range(start_frame, end_frame):
         # see whether the hand was detected (if hand was not detected, all bins would be 0)
         hand_detected = False
         for k in range(len(hsv_bin_sum)):
             # sum up the current values
             # k + 72 in both instances when looking at original
+
             # k + 1 when input is 25 dim
             hand_detected = hand_detected or float(hsv_inputs[j][k + 1]) != 0
             hsv_bin_sum[k] += float(hsv_inputs[j][k + 1])
+
         frame_count += hand_detected
+
+        if frame_count == 0:
+            # will be all zeros anyway
+            frame_count = 1
+
     return hsv_bin_sum / frame_count, frame_count
 
 def avg_hsv_bins(hsv_inputs, elan_boundaries, action_label):

@@ -122,7 +122,7 @@ def get_count_mapping(array):
 # 0.5 / (2 / 4) = 1
 # print (beta_cv([[1, 2], [2, 2]]))
 
-configs = load_yaml_config("configs/jon.yaml")
+configs = load_yaml_config("configs/zm.yaml")
 
 elan_label_folder = configs["file_paths"]["elan_annotated_file_path"]
 htk_input_folder = configs["file_paths"]["htk_input_file_path"]
@@ -133,8 +133,7 @@ pick_label_folder = configs["file_paths"]["label_file_path"]
 htk_output_folder = configs["file_paths"]["htk_output_file_path"]
 
 # picklists that we are looking at
-PICKLISTS = range(136, 240)
-PICKLISTS = range(136, 188)
+PICKLISTS = list(range(136, 224)) + list(range(225, 230)) + list(range(231, 235))
 
 
 actual_picklists = {}
@@ -197,8 +196,8 @@ for picklist_no in PICKLISTS:
         # look through each color
         for i in range(0, len(elan_boundaries[pick_label]), 2):
             # collect the red frames
-            start_frame = math.ceil(float(elan_boundaries[pick_label][i]) * 30)
-            end_frame = math.ceil(float(elan_boundaries[pick_label][i + 1]) * 30)
+            start_frame = math.ceil(float(elan_boundaries[pick_label][i]) * 29.97)
+            end_frame = math.ceil(float(elan_boundaries[pick_label][i + 1]) * 29.97)
             pick_frames.append([start_frame, end_frame])
 
     # sort based on start
@@ -256,9 +255,9 @@ for picklist_no in PICKLISTS:
 
     generate_permutations_from_dict(pick_label_count, all_permutations)
 
-
     # map the colors to an index where the vectors will be appended
     color_index_mapping = {value: index for index, value in enumerate(list(set(pick_labels)))} # {'r': 0, 'g': 1, 'b': 2}
+
 
     # store the lowest beta_cv measure permutation
     best_result = (float('inf'), None)
@@ -267,6 +266,7 @@ for picklist_no in PICKLISTS:
         permutation = all_permutations[permutation_index]
         # gather the hsv bin average into clusters
         hsv_color_cluster = [[] for i in range(len(pick_labels))]
+
         for index, value in enumerate(permutation):
             # add the hsv bins based on their colors assigned under this permutation
             hsv_color_cluster[color_index_mapping[value]].append(avg_hsv_picks[index])
@@ -319,6 +319,8 @@ for picklist_no in picklists_w_symmetric_counts:
     curr_picklist_hsv_bin_accumulator = defaultdict(lambda: [np.zeros(shape=(20,)), 0])
 
     for index, object in enumerate(predicted_picklists[picklist_no]):
+        # accumulator to get the average hsv bin for the current picklist (get the average for each pick from the
+        # ones computed earlier)
         curr_picklist_hsv_bin_accumulator[object][0] += avg_hsv_bins_combined[picklist_no][index]
         curr_picklist_hsv_bin_accumulator[object][1] += 1
 
@@ -374,8 +376,13 @@ for picklist_no in picklists_w_symmetric_counts:
                 # not mapping this element in this iteration
                 continue
             # get the corrected label
-            predicted_picklists[picklist_no][i] = object_mapping[predicted_picklists[picklist_no][i]]
+            corrected_label = object_mapping[predicted_picklists[picklist_no][i]]
+            predicted_picklists[picklist_no][i] = corrected_label
 
+            # to learn from symmetric picks
+            # # add this now assigned pick to the average bin accumulator for the relavent color
+            # objects_hsv_bin_accumulator[corrected_label][0] += avg_hsv_bins_combined[picklist_no][i]
+            # objects_hsv_bin_accumulator[corrected_label][1] += 1
 
 
     print("Updated Predicted: " + str(predicted_picklists[picklist_no]))

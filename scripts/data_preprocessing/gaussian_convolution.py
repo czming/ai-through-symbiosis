@@ -12,6 +12,7 @@ import sys
 # setting path
 sys.path.append('..')
 
+from utils import *
 from visualize_htk_inputs import plot_axs_columns 
 
 def reflect_convolve(data, convolution_filter):
@@ -46,7 +47,9 @@ def gaussian_kernel1D(length, sigma):
 def average_kernel1D(length):
     return [1/length] * length
 
+configs = load_yaml_config("../configs/zm.yaml")
 
+htk_input_folder = configs["file_paths"]["htk_input_file_path"]
 
 logging.getLogger().setLevel("INFO")
 
@@ -63,7 +66,16 @@ VISUALIZED_COLUMNS = [0, -1, -2]
 # columns that we want to apply the filter to
 FILTER_COLUMNS = [0]
 
-    file_name = f"""../../../htk_inputs/picklist_{index}_forward_filled_30.txt"""
+
+for index in range(124, 163):
+
+    try:
+        open(f"""{htk_input_folder}/GX010{str(index).zfill(3)}_forward_filled_30.txt""")
+
+    except:
+        continue
+
+    file_name = f"""{htk_input_folder}/GX010{str(index).zfill(3)}_forward_filled_30.txt"""
 
     data = np.genfromtxt(file_name, delimiter=" ")
 
