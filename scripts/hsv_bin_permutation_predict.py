@@ -8,6 +8,7 @@ using silouhette coefficient and euclidean distance between the points as the di
 import numpy as np
 
 from utils import *
+import argparse
 import cv2
 import math
 import matplotlib.pyplot as plt
@@ -119,10 +120,16 @@ def get_count_mapping(array):
 		counts_mapping[value].append(key)
 	return dict(counts_mapping)
 
-# 0.5 / (2 / 4) = 1
-# print (beta_cv([[1, 2], [2, 2]]))
 
-configs = load_yaml_config("configs/zm.yaml")
+
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--config", "-c", type=str, default="configs/136-234-aruco1dim.yaml", help="Path to experiment config (scripts/configs)")
+args = parser.parse_args()
+
+
+configs = load_yaml_config(args.config)
 
 elan_label_folder = configs["file_paths"]["elan_annotated_file_path"]
 htk_input_folder = configs["file_paths"]["htk_input_file_path"]
@@ -134,7 +141,7 @@ htk_output_folder = configs["file_paths"]["htk_output_file_path"]
 
 # picklists that we are looking at
 PICKLISTS = list(range(136, 224)) + list(range(225, 230)) + list(range(231, 235))
-
+# PICKLISTS = list(range(1, 235))
 
 actual_picklists = {}
 predicted_picklists = {}
@@ -189,8 +196,8 @@ for picklist_no in PICKLISTS:
     pick_frames = []
 
     # htk label for pick
-    # pick_labels = ["e"]
-    # elan_boundaries = htk_boundaries
+    pick_labels = ["e"]
+    elan_boundaries = htk_boundaries
     
     for pick_label in pick_labels:
         # look through each color
@@ -235,21 +242,14 @@ for picklist_no in PICKLISTS:
     lst = pick_label_count.values()
     counts = Counter(lst)
     unique_counts = [x for x in counts if counts[x] == 1]
-    print(lst)
-    print(unique_counts)
-    print(pick_labels)
     if len(unique_counts) == 0:
         completely_symmetric_count = True
 
     elif sum(unique_counts) < len(pick_labels):
         partially_symmetric_count = True
 
-    print("Completely Symmetric: " + str(completely_symmetric_count))
-    print("Partially Symmetric: " + str(partially_symmetric_count))
-    # for pick_label, pick_count in pick_label_count.items():
-    #     if pick_count != 0:
-    #         symmetric_count = symmetric_count or (pick_count in object_count_set)
-    #         object_count_set.add(pick_count)
+    # print("Completely Symmetric: " + str(completely_symmetric_count))
+    # print("Partially Symmetric: " + str(partially_symmetric_count))
 
     all_permutations = []
 
@@ -377,7 +377,7 @@ for picklist_no in picklists_w_symmetric_counts:
                 continue
             # get the corrected label
             corrected_label = object_mapping[predicted_picklists[picklist_no][i]]
-            predicted_picklists[picklist_no][i] = corrected_label
+            # predicted_picklists[picklist_no][i] = corrected_label
 
             # to learn from symmetric picks
             # # add this now assigned pick to the average bin accumulator for the relavent color
@@ -402,7 +402,6 @@ for pred, label in zip(predicted_picklists, actual_picklists):
     if pred != label:
         confusions[pred + label] += 1
 
-print(confusions)
 
 confusion_matrix = metrics.confusion_matrix(actual_picklists, predicted_picklists)
 cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = confusion_matrix, display_labels = ["blue", "green", "red", "4","5","6","7","8","9","10"])
