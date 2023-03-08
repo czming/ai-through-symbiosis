@@ -247,14 +247,26 @@ for picklist_no in PICKLISTS:
     if symmetric_count:
         # if there's symmetric count then don't add to accumulator
         picklists_w_symmetric_counts.append(picklist_no)
-        continue
 
-    for i in range(len(pick_labels)):
-        # add the avg hsv bin of each pick to the accumulator if there's no symmetric count
-        pred_label = best_result[1][i]
-        # add the hsv bin to the predicted label's bin and increment the count
-        objects_hsv_bin_accumulator[pred_label][0] += avg_hsv_picks[i]
-        objects_hsv_bin_accumulator[pred_label][1] += 1
+
+    count_mapping = get_count_mapping(predicted_picklists[picklist_no])
+
+    for count, curr_objects in count_mapping.items():
+        # looking at the different objects count
+        if len(curr_objects) != 1:
+            # continue since there are multiple objects with the same counts so cannot determine anything
+            continue
+        else:
+            for i in range(len(pick_labels)):
+                if pick_labels[i] == curr_objects[0]:
+                    # looking only at the current object type
+                    # add the avg hsv bin of each pick to the accumulator if there's no symmetric count
+                    pred_label = best_result[1][i]
+                    # add the hsv bin to the predicted label's bin and increment the count
+                    objects_hsv_bin_accumulator[pred_label][0] += avg_hsv_picks[i]
+                    objects_hsv_bin_accumulator[pred_label][1] += 1
+
+
 
     # predicted already, non-symmetric
     print("Actual:    " + str(pick_labels))
