@@ -402,8 +402,9 @@ for pred, label in zip(predicted_picklists, actual_picklists):
     if pred != label:
         confusions[pred + label] += 1
 
-
 confusion_matrix = metrics.confusion_matrix(actual_picklists, predicted_picklists)
-cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = confusion_matrix, display_labels = ["blue", "green", "red", "4","5","6","7","8","9","10"])
+print(actual_picklists)
+print(predicted_picklists)
+cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = confusion_matrix, display_labels = ["b", "g", "r", "p","q","o","s","a","t","u"])
 cm_display.plot()
 plt.show()
