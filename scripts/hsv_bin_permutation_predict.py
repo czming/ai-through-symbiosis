@@ -209,7 +209,7 @@ for picklist_no in PICKLISTS:
 
     # sort based on start
     pick_frames = sorted(pick_frames, key=lambda x: x[0])
-
+    print(pick_frames)
     for i in range(len(pick_frames) - 1):
         if pick_frames[i + 1][0] <= pick_frames[i][1]:
             # start frame of subsequent pick is at or before the end of the current pick (there's an issue)

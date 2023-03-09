@@ -6,9 +6,9 @@ from utils import *
 
 
 
-def calculate_fold_rms_errors(results_folder_path):
-    configs = load_yaml_config("scripts/configs/jon.yaml")
-    PICKLISTS = list(range(1, 90))
+def calculate_fold_rms_errors(results_folder_path, config):
+    configs = load_yaml_config(config)
+    PICKLISTS = list(range(136, 235))
     
     htk_output_folder = configs["file_paths"]["htk_output_file_path"]
     htk_output_folder = results_folder_path
@@ -28,7 +28,7 @@ def calculate_fold_rms_errors(results_folder_path):
                 # such a file exists, look at the rms error            
                 elan_annotated_file = f'{elan_annotated_folder}/picklist_'+str(picklist_num)+'.eaf'
 
-                elan_boundaries = get_elan_boundaries(elan_annotated_file)
+                elan_boundaries = get_elan_boundaries_general(elan_annotated_file)
 
                 htk_results_file = fold_dir + f"/results-{picklist_num}"
 
@@ -57,8 +57,7 @@ def calculate_fold_rms_errors(results_folder_path):
     
         
 
-    bin_edges = [0, 1, 2, 3, 4, 5]
-    bin_edges = np.linspace(0, 4, 25)    
+    bin_edges = np.linspace(0, 25, 25)    
     plt.hist(errors, bins=bin_edges)
     plt.show()
 
@@ -73,5 +72,6 @@ if __name__ == "__main__":
         required=True,
         help="Relative or absolute path to results folder containing folds",
     )
+    parser.add_argument("--config", "-c", type=str, default="configs/136-234-aruco1dim.yaml", help="Path to experiment config (scripts/configs)")
     args = parser.parse_args()
-    calculate_fold_rms_errors(args.result_folder)
+    calculate_fold_rms_errors(args.result_folder, args.config)

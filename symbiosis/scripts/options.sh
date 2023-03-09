@@ -22,7 +22,7 @@ SCRIPTS_DIR=$PRJ/scripts			# location of scripts directory
 UTIL_DIR=/gt2k/utils			# location of utils directory
 						#
 						#
-VECTOR_LENGTH=6				# number of elements in your
+VECTOR_LENGTH=1				# number of elements in your
 						# feature vector. This is the
 						# number of observations per
 						# state for the HMMs.
@@ -44,7 +44,7 @@ PRUNING_THRESHOLD=0
 HMM_TOPOLOGY_DIR=${PRJ}/hmmdefs
 
 # general HMM_TOPOLOGIES
-HMM_LOCATION=$HMM_TOPOLOGY_DIR/6state-6dims	#text hmm topology file
+HMM_LOCATION=$HMM_TOPOLOGY_DIR/6state-1dims	#text hmm topology file
 HMM_ALL=$HMM_LOCATION
 
 # whether or not to initialize the starting model in a generic way:
