@@ -336,6 +336,10 @@ for picklist_no in picklists_w_symmetric_counts:
     for count, curr_objects in count_mapping.items():
         # only focus on objects that are in the current count bin
 
+        if len(curr_objects) == 1:
+            # not symmetric
+            continue
+
 
         # get the avg hsv bins
         curr_picklist_avg_hsv_bins = {key: value[0] / value[1] for key, value in curr_picklist_hsv_bin_accumulator.items() \
