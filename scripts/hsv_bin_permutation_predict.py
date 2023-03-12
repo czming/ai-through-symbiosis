@@ -14,6 +14,8 @@ import matplotlib.pyplot as plt
 from collections import Counter
 from sklearn import metrics
 
+import pickle
+
 
 def generate_permutations_from_dict(count_dict, all_permutations, curr_permutation=None):
     # generate permutations from d recursively by iterating through the keys and for non-zero keys, add that to the
@@ -385,6 +387,7 @@ for picklist_no in picklists_w_symmetric_counts:
             # objects_hsv_bin_accumulator[corrected_label][1] += 1
 
 
+
     print("Updated Predicted: " + str(predicted_picklists[picklist_no]))
     print("Actual:            " + str(actual_picklists[picklist_no]))
 
@@ -403,6 +406,12 @@ for pred, label in zip(predicted_picklists, actual_picklists):
         confusions[pred + label] += 1
 
 print(confusions)
+
+print (objects_hsv_bin_accumulator)
+
+with open("objects_hsv_bin_accumulator.pkl", "wb") as outfile:
+    # without removing the hand
+    pickle.dump(dict(objects_hsv_bin_accumulator), outfile)
 
 confusion_matrix = metrics.confusion_matrix(actual_picklists, predicted_picklists)
 cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = confusion_matrix, display_labels = ["blue", "green", "red", "4","5","6","7","8","9","10"])
