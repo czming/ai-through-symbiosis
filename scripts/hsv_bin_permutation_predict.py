@@ -18,114 +18,6 @@ from sklearn import metrics
 import pickle
 
 
-def generate_permutations_from_dict(count_dict, all_permutations, curr_permutation=None):
-    # generate permutations from d recursively by iterating through the keys and for non-zero keys, add that to the
-    # permutation
-
-    total_count = sum([value for value in count_dict.values()])
-
-    if total_count == 0:
-        all_permutations.append(list(curr_permutation))
-
-    if curr_permutation == None:
-        curr_permutation = []
-
-    for key, value in count_dict.items():
-        if value == 0:
-            continue
-        count_dict[key] -= 1
-        curr_permutation.append(key)
-        generate_permutations_from_dict(count_dict, all_permutations, curr_permutation)
-        count_dict[key] += 1
-        curr_permutation.pop()
-
-
-
-def sum_point_distance(point, cluster):
-    # calculate the sum of the distance between the point and points in the cluster
-
-    total_distance = 0
-
-    for point1 in cluster:
-        # distance between point and point1 (point1 from cluster), can replace the distance function here if desired
-        total_distance += np.linalg.norm(point - point1)
-
-    return total_distance
-
-
-def sum_cluster_distance(cluster1, cluster2):
-    # return the sum of the distance in the points between the cluster and the number of edges between the two clusters
-    # (assumes clusters are different so if they are the same cluster then everything should be scaled by half)
-
-    total_distance = 0
-    total_edges = 0
-
-    for point1_index, point1 in enumerate(cluster1):
-        # sum distance between all points in clsuter2 and point1
-        total_distance += sum_point_distance(point1, cluster2)
-        total_edges += len(cluster2)
-
-    return total_distance, total_edges
-
-
-def beta_cv(clusters):
-    """
-    calculates betacv measure for clusters of points
-    :param clusters: array of points that are in each cluster, [cluster1's points, cluster2's points, ...]
-    :return: betacv measure of clustering
-    """
-
-    intra_cluster_distance_sum = 0
-    inter_cluster_distance_sum = 0
-
-    # compute the number of edges used when summing together inter/intra_cluster_distance
-    inter_cluster_edges_count = 0
-    intra_cluster_edges_count = 0
-
-    # get total sum of intra class distance
-    for cluster_index, cluster in enumerate(clusters):
-        distance, num_edges = sum_cluster_distance(cluster, cluster)
-        intra_cluster_distance_sum += distance
-        # don't double count the same combination (same combination, different permutation)
-        intra_cluster_edges_count += num_edges // 2
-
-    # get total sum of inter class distance
-    for cluster1_index, cluster1 in enumerate(clusters):
-        for cluster2_index in range(cluster1_index + 1, len(clusters)):
-            # avoid double counting two clusters against each other
-            cluster2 = clusters[cluster2_index]
-
-            distance, num_edges = sum_cluster_distance(cluster1, cluster2)
-            inter_cluster_distance_sum += distance
-            inter_cluster_edges_count += num_edges
-
-    # both cases there's not much that we can do
-    if inter_cluster_edges_count == 0:
-        # there's only one color
-        return 0
-
-    elif intra_cluster_edges_count == 0:
-        # each color has at most one picklist
-        return 0
-
-    intra_cluster_distance_mean = intra_cluster_distance_sum / intra_cluster_edges_count
-    inter_cluster_distance_mean = inter_cluster_distance_sum / inter_cluster_edges_count
-    return intra_cluster_distance_mean / inter_cluster_distance_mean
-
-def get_count_mapping(array):
-	# gets count: [object] mapping of items in array
-	counts = defaultdict(lambda: 0) # get counts of each object first
-	for i in array:
-		counts[i] += 1
-	counts_mapping = defaultdict(lambda: [])
-	for key, value in counts.items():
-		counts_mapping[value].append(key)
-	return dict(counts_mapping)
-
-
-
-
-
 parser = argparse.ArgumentParser()
 parser.add_argument("--config", "-c", type=str, default="configs/136-234-aruco1dim.yaml", help="Path to experiment config (scripts/configs)")
 args = parser.parse_args()
@@ -153,7 +45,7 @@ avg_hsv_bins_combined = {}
 
 # accumulates the hsv_bins for the different objects and stores the number of counts so we can get the average
 # hsv bin across the different picklists
-objects_hsv_bin_accumulator = defaultdict(lambda: [np.zeros(shape=(20,)), 0])
+objects_hsv_bin_accumulator = defaultdict(lambda: [np.zeros(shape=(10,)), 0])
 
 total_picks = 0
 
@@ -227,9 +119,35 @@ for picklist_no in PICKLISTS:
         print("skipping bad boundaries")
         continue
 
+    empty_hand_label = "m"
 
-    avg_hsv_picks = [get_avg_hsv_bin_frames(htk_inputs, start_frame, end_frame)[0] for (start_frame, end_frame) \
+    empty_hand_frames = []
+
+    for i in range(0, len(elan_boundaries[empty_hand_label]), 2):
+        # collect the red frames
+        start_frame = math.ceil(float(elan_boundaries[empty_hand_label][i]) * 29.97)
+        end_frame = math.ceil(float(elan_boundaries[empty_hand_label][i + 1]) * 29.97)
+        empty_hand_frames.append([start_frame, end_frame])
+
+    # getting the sum, multiply average by counts
+    sum_empty_hand_hsv = np.zeros(10)
+    empty_hand_frame_count = 0
+
+    for (start_frame, end_frame) in empty_hand_frames:
+        curr_avg_empty_hand_hsv, frame_count = get_avg_hsv_bin_frames(htk_inputs, start_frame, end_frame)
+        sum_empty_hand_hsv += (curr_avg_empty_hand_hsv * frame_count)
+        empty_hand_frame_count += frame_count
+
+    avg_empty_hand_hsv = sum_empty_hand_hsv / empty_hand_frame_count
+
+    # plt.bar(range(20), avg_empty_hand_hsv)
+    # plt.show()
+
+
+    avg_hsv_picks = [get_avg_hsv_bin_frames(htk_inputs, start_frame, end_frame)[0] - avg_empty_hand_hsv for (start_frame, end_frame) \
                         in pick_frames]
+
+    print (avg_hsv_picks)
 
     avg_hsv_bins_combined[picklist_no] = avg_hsv_picks
 
@@ -321,7 +239,7 @@ for picklist_no in picklists_w_symmetric_counts:
     print ("Picklist " + str(picklist_no))
     print("Prev Predicted:    " + str(predicted_picklists[picklist_no]))
 
-    curr_picklist_hsv_bin_accumulator = defaultdict(lambda: [np.zeros(shape=(20,)), 0])
+    curr_picklist_hsv_bin_accumulator = defaultdict(lambda: [np.zeros(shape=(10,)), 0])
 
     for index, object in enumerate(predicted_picklists[picklist_no]):
         # accumulator to get the average hsv bin for the current picklist (get the average for each pick from the
@@ -416,9 +334,6 @@ print(confusions)
 
 print (objects_hsv_bin_accumulator)
 
-print (total_picks)
-
-print (sum([i[1] for i in dict(objects_hsv_bin_accumulator).values()]))
 
 with open("objects_hsv_bin_accumulator.pkl", "wb") as outfile:
     # without removing the hand
