@@ -1,0 +1,7 @@
+owner: jon # fill in your name here
+file_paths:
+  video_file_path: "G:/My Drive/Georgia Tech/AI Through Symbiosis/pick_list_dataset/Videos" # directory containing videos
+  htk_input_file_path: "../ambient_experiments/136-234-aruco1dim/full-data-30-gauss-9-3" # directory containing htk input vectors
+  label_file_path: "../Labels" # directory containing pick labels (order of labels, i.e. r1b1...)
+  htk_output_file_path: "../ambient_experiments/136-234-imu/all-results/" # directory containing results from HTK (i.e. HTK output folder)
+  elan_annotated_file_path: "../elan_annotated" # directory containing ELAN annotated labels for videos

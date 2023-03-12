@@ -8,6 +8,7 @@ using silouhette coefficient and euclidean distance between the points as the di
 import numpy as np
 
 from utils import *
+import argparse
 import cv2
 import math
 import matplotlib.pyplot as plt
@@ -121,10 +122,16 @@ def get_count_mapping(array):
 		counts_mapping[value].append(key)
 	return dict(counts_mapping)
 
-# 0.5 / (2 / 4) = 1
-# print (beta_cv([[1, 2], [2, 2]]))
 
-configs = load_yaml_config("configs/zm.yaml")
+
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--config", "-c", type=str, default="configs/136-234-aruco1dim.yaml", help="Path to experiment config (scripts/configs)")
+args = parser.parse_args()
+
+
+configs = load_yaml_config(args.config)
 
 elan_label_folder = configs["file_paths"]["elan_annotated_file_path"]
 htk_input_folder = configs["file_paths"]["htk_input_file_path"]
@@ -135,12 +142,12 @@ pick_label_folder = configs["file_paths"]["label_file_path"]
 htk_output_folder = configs["file_paths"]["htk_output_file_path"]
 
 # picklists that we are looking at
-PICKLISTS = list(range(136, 224)) + list(range(225, 230)) + list(range(231, 235))
-
+# PICKLISTS = list(range(136, 224)) + list(range(225, 230)) + list(range(231, 235))
+PICKLISTS = list(range(136, 235))
 
 actual_picklists = {}
 predicted_picklists = {}
-picklists_w_symmetric_counts = []
+picklists_w_symmetric_counts = set()
 
 avg_hsv_bins_combined = {}
 
@@ -148,7 +155,10 @@ avg_hsv_bins_combined = {}
 # hsv bin across the different picklists
 objects_hsv_bin_accumulator = defaultdict(lambda: [np.zeros(shape=(20,)), 0])
 
+total_picks = 0
+
 total_incorrect = 0
+
 for picklist_no in PICKLISTS:
     print (f"Picklist number {picklist_no}")
     try:
@@ -191,8 +201,8 @@ for picklist_no in PICKLISTS:
     pick_frames = []
 
     # htk label for pick
-    # pick_labels = ["e"]
-    # elan_boundaries = htk_boundaries
+    pick_labels = ["e"]
+    elan_boundaries = htk_boundaries
     
     for pick_label in pick_labels:
         # look through each color
@@ -237,21 +247,14 @@ for picklist_no in PICKLISTS:
     lst = pick_label_count.values()
     counts = Counter(lst)
     unique_counts = [x for x in counts if counts[x] == 1]
-    print(lst)
-    print(unique_counts)
-    print(pick_labels)
     if len(unique_counts) == 0:
         completely_symmetric_count = True
 
     elif sum(unique_counts) < len(pick_labels):
         partially_symmetric_count = True
 
-    print("Completely Symmetric: " + str(completely_symmetric_count))
-    print("Partially Symmetric: " + str(partially_symmetric_count))
-    # for pick_label, pick_count in pick_label_count.items():
-    #     if pick_count != 0:
-    #         symmetric_count = symmetric_count or (pick_count in object_count_set)
-    #         object_count_set.add(pick_count)
+    # print("Completely Symmetric: " + str(completely_symmetric_count))
+    # print("Partially Symmetric: " + str(partially_symmetric_count))
 
     all_permutations = []
 
@@ -279,29 +282,29 @@ for picklist_no in PICKLISTS:
     actual_picklists[picklist_no] = pick_labels
     predicted_picklists[picklist_no] = best_result[1]
 
-    if completely_symmetric_count:
-        # if there's symmetric count then don't add to accumulator
-        picklists_w_symmetric_counts.append(picklist_no)
-
 
     count_mapping = get_count_mapping(predicted_picklists[picklist_no])
+
+    total_picks += len(avg_hsv_picks)
+
+    print (count_mapping)
 
     for count, curr_objects in count_mapping.items():
         # looking at the different objects count
         if len(curr_objects) != 1:
             # continue since there are multiple objects with the same counts so cannot determine anything
+            picklists_w_symmetric_counts.add(picklist_no)
+            print (count, curr_objects)
             continue
         else:
-            for i in range(len(pick_labels)):
-                if pick_labels[i] == curr_objects[0]:
-                    # looking only at the current object type
+            for i in range(len(predicted_picklists[picklist_no])):
+                if predicted_picklists[picklist_no][i] == curr_objects[0]:
+                    # looking only at the current object type (should have only one object)
                     # add the avg hsv bin of each pick to the accumulator if there's no symmetric count
                     pred_label = best_result[1][i]
                     # add the hsv bin to the predicted label's bin and increment the count
                     objects_hsv_bin_accumulator[pred_label][0] += avg_hsv_picks[i]
                     objects_hsv_bin_accumulator[pred_label][1] += 1
-
-
 
 
     # predicted already, non-symmetric
@@ -379,12 +382,12 @@ for picklist_no in picklists_w_symmetric_counts:
                 continue
             # get the corrected label
             corrected_label = object_mapping[predicted_picklists[picklist_no][i]]
-            predicted_picklists[picklist_no][i] = corrected_label
+            # predicted_picklists[picklist_no][i] = corrected_label
 
             # to learn from symmetric picks
             # # add this now assigned pick to the average bin accumulator for the relavent color
-            # objects_hsv_bin_accumulator[corrected_label][0] += avg_hsv_bins_combined[picklist_no][i]
-            # objects_hsv_bin_accumulator[corrected_label][1] += 1
+            objects_hsv_bin_accumulator[corrected_label][0] += avg_hsv_bins_combined[picklist_no][i]
+            objects_hsv_bin_accumulator[corrected_label][1] += 1
 
 
 
@@ -409,11 +412,17 @@ print(confusions)
 
 print (objects_hsv_bin_accumulator)
 
+print (total_picks)
+
+print (sum([i[1] for i in dict(objects_hsv_bin_accumulator).values()]))
+
 with open("objects_hsv_bin_accumulator.pkl", "wb") as outfile:
     # without removing the hand
     pickle.dump(dict(objects_hsv_bin_accumulator), outfile)
 
 confusion_matrix = metrics.confusion_matrix(actual_picklists, predicted_picklists)
-cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = confusion_matrix, display_labels = ["blue", "green", "red", "4","5","6","7","8","9","10"])
+print(actual_picklists)
+print(predicted_picklists)
+cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = confusion_matrix, display_labels = ["b", "g", "r", "p","q","o","s","a","t","u"])
 cm_display.plot()
 plt.show()
