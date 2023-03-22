@@ -18,6 +18,8 @@ import logging
 
 import pickle
 
+np.random.seed(42)
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--config", "-c", type=str, default="configs/zm.yaml",
@@ -59,6 +61,24 @@ pred_objects = defaultdict(lambda: set())
 objects_pred = {}
 
 combined_pick_labels = []
+
+def gaussian_kernel1D(length, sigma):
+    ax = np.linspace(-(length - 1) / 2., (length - 1) / 2., length)
+    kernel = np.exp(-0.5 * np.square(ax) / np.square(sigma))
+    return kernel
+
+def collapse_hue_bins(hue_bins, centers, sigma):
+    # [0, 60, 120] for the centers, need to control for wraparound
+    gaussian_kernel = gaussian_kernel1D(180, sigma)
+    gaussian_kernel_one_side = gaussian_kernel[len(gaussian_kernel) // 2:]
+    bin_sums = [0 for _ in range(len(centers))]
+    for center_index, center in enumerate(centers):
+        # this one needs to be treated specially otherwise would be summed twice
+        bin_sums[center_index] += gaussian_kernel_one_side[0] * hue_bins[center]
+        for i in range(1, 60):
+            bin_sums[center_index] += gaussian_kernel_one_side[i] * hue_bins[(center + i) % len(hue_bins)]
+            bin_sums[center_index] += gaussian_kernel_one_side[i] * hue_bins[center - i]
+    return bin_sums
 
 # initialization (randomly assign colors)
 for picklist_no in PICKLISTS:
@@ -168,7 +188,16 @@ for picklist_no in PICKLISTS:
 
     print (pick_labels, pred_labels)
 
-    collapse_hue_bins = lambda x: np.array([x[150:180].sum() + x[:30].sum(), x[30:90].sum(), x[90:150].sum()])
+    # must be a divisor of 180
+    collapse_bin_size = 60
+
+    # collapse_hue_bins = lambda x: np.array([x[180 - collapse_bin_size//2:180].sum() + x[:collapse_bin_size//2].sum()] + \
+    #                                         [x[collapse_bin_size//2 + i * collapse_bin_size: collapse_bin_size//2 + (i + 1) * collapse_bin_size].sum() \
+    #                                             for i in range(180 // collapse_bin_size - 1)])
+    #
+    # collapse_hue_bins = lambda x: np.array([x[150:180].sum() + x[:30].sum(), x[30:90].sum(), x[90:150].sum()])
+
+    # collapse_hue_bins = lambda x: np.array([x[60 * i:60 * (i + 1)].sum() for i in range(3)])
 
     for i in range(len(avg_hsv_picks)):
         object_id = len(objects_avg_hsv_bins)
@@ -176,10 +205,44 @@ for picklist_no in PICKLISTS:
         # map object to prediction and prediction to all objects with the same
         pred_objects[pred_labels[i]].add(object_id)
         objects_pred[object_id] = pred_labels[i]
-        objects_avg_hsv_bins.append(collapse_hue_bins(avg_hsv_picks[i]))
+        objects_avg_hsv_bins.append(collapse_hue_bins(avg_hsv_picks[i], [0, 60, 120], 20))
+
+        # plt.bar(range(180), avg_hsv_picks[i])
+        #
+        # plt.show()
+        #
+        # plt.bar(range(3), collapse_hue_bins(avg_hsv_picks[i],[0, 60, 120], 20))
+        #
+        # plt.show()
+
+ax = plt.figure().add_subplot(projection='3d')
+
+color_mapping = {
+    'r': '#ff0000',
+    'g': '#009900',
+    'b': '#000099',
+    'p': '#0000ff',
+    'q': '#00ff00',
+    'o': '#FFA500',
+    's': '#000000',
+    'a': '#FFEA00',
+    't': '#777777',
+    'u': '#E1C16E'
+}
+
+ax.scatter([i[0] for i in objects_avg_hsv_bins], [i[1] for i in objects_avg_hsv_bins], [i[2] for i in objects_avg_hsv_bins], \
+           c = [color_mapping[i] for i in combined_pick_labels])
+
+plt.show()
 
 epochs = 0
-num_epochs = 500
+num_epochs = 1000
+
+cluster_fig = plt.figure()
+
+cluster_ax = cluster_fig.add_subplot(projection="3d")
+
+plt.show(block=False)
 
 while epochs < num_epochs:
     print (f"Starting epoch {epochs}...")
@@ -233,21 +296,30 @@ while epochs < num_epochs:
                 best_pos_object2 = object2
 
         if object2_distance_reduction[best_pos_object2] < 0:
+
+            object2_distance_reduction_sum = sum(object2_distance_reduction.values())
             # all negative, need to pick one at random with decreasing probability based on the numbers,
             # take exponential of the distance reduction which should all be negative
-            swap_object_id = np.random.choice(list(object2_distance_reduction.keys()), p=np.array([math.e ** i for i in
-                                        object2_distance_reduction.values()]) / sum([math.e ** i for i in
+            swap_object_id = np.random.choice(list(object2_distance_reduction.keys()), p=np.array([math.e ** (i / object2_distance_reduction_sum) for i in
+                                        object2_distance_reduction.values()]) / sum([math.e ** (i / object2_distance_reduction_sum) for i in
                                         object2_distance_reduction.values()]))
 
-            to_swap = np.random.choice([0, 1], p = [1 - (num_epochs/500 - epochs/500), num_epochs/500 - epochs/500])
+            to_swap = np.random.choice([0, 1], p = [1 - math.e ** (-epochs/100), math.e ** (-epochs/100)])
 
             if not to_swap:
+                # to_swap is False so skip the rest of the assignment
                 continue
 
 
         else:
             # have the most positive distance reduction, just swap
             swap_object_id = best_pos_object2
+
+            # definitely swap, but some uncertainty about which element it is swapped with
+            # swap_object_id = np.random.choice(list(object2_distance_reduction.keys()), p=np.array([math.e ** ((epochs + 1) * i) for i in
+            #                             object2_distance_reduction.values()]) / sum([math.e ** ((epochs + 1) * i) for i in
+            #                             object2_distance_reduction.values()]))
+
 
         # swap the objects, update objects_pred and pred_objects
         object1_prev_pred = objects_pred[object1_id]
@@ -265,6 +337,39 @@ while epochs < num_epochs:
 
     epochs += 1
 
+    predicted_picklists = [objects_pred[i] for i in range(len(combined_pick_labels))]
+
+    cluster_ax.clear()
+
+    cluster_ax.scatter([i[0] for i in objects_avg_hsv_bins], [i[1] for i in objects_avg_hsv_bins], [i[2] for i in objects_avg_hsv_bins], \
+               c = [color_mapping[i] for i in predicted_picklists])
+
+    cluster_fig.canvas.draw()
+
+
+
+
+plt_display_index = 0
+fig, axs = plt.subplots(2, len(pred_objects) // 2)
+
+for object, predicted_objects in pred_objects.items():
+
+    hsv_bins = np.array([objects_avg_hsv_bins[i] for i in predicted_objects]).mean(axis=0)
+
+    if plt_display_index < len(pred_objects) // 2:
+        axs[0, plt_display_index].bar(range(len(hsv_bins)), hsv_bins)
+        axs[0, plt_display_index].set_title(object)
+    else:
+        axs[1, plt_display_index - len(pred_objects) // 2].bar(range(len(hsv_bins)), hsv_bins)
+        axs[1, plt_display_index - len(pred_objects) // 2].set_title(object)
+    plt_display_index += 1
+
+
+plt.show()
+
+
+
+
 
 # print the results on a per picklist level
 for picklist_no, objects_in_picklist in picklist_objects.items():
@@ -279,6 +384,13 @@ for picklist_no, objects_in_picklist in picklist_objects.items():
 # flatten arrays
 actual_picklists = combined_pick_labels
 predicted_picklists = [objects_pred[i] for i in range(len(combined_pick_labels))]
+
+ax = plt.figure().add_subplot(projection='3d')
+
+ax.scatter([i[0] for i in objects_avg_hsv_bins], [i[1] for i in objects_avg_hsv_bins], [i[2] for i in objects_avg_hsv_bins], \
+           c = [color_mapping[i] for i in predicted_picklists])
+
+plt.show()
 
 confusions = defaultdict(int)
 label_counts = defaultdict(int)
@@ -331,8 +443,3 @@ cm_display.plot(cmap=plt.cm.Blues)
 plt.xticks(rotation=90)
 
 plt.show()
-
-print (f"Picklist count: {total_picklists}")
-print (f"Order count: {total_order_count}")
-print (f"Total time: {total_time}")
-print (f"Num permutations total: {num_permutations_total}")
