@@ -205,7 +205,8 @@ for picklist_no in PICKLISTS:
         # map object to prediction and prediction to all objects with the same
         pred_objects[pred_labels[i]].add(object_id)
         objects_pred[object_id] = pred_labels[i]
-        objects_avg_hsv_bins.append(collapse_hue_bins(avg_hsv_picks[i], [0, 60, 120], 20))
+        # overlapping bins so there's no sudden dropoff
+        objects_avg_hsv_bins.append(collapse_hue_bins(avg_hsv_picks[i], [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165], 15))
 
         # plt.bar(range(180), avg_hsv_picks[i])
         #
@@ -236,7 +237,7 @@ ax.scatter([i[0] for i in objects_avg_hsv_bins], [i[1] for i in objects_avg_hsv_
 plt.show()
 
 epochs = 0
-num_epochs = 1000
+num_epochs = 500
 
 cluster_fig = plt.figure()
 
@@ -271,13 +272,18 @@ while epochs < num_epochs:
             object1_pred_mean = np.array([objects_avg_hsv_bins[i] for i in pred_objects[object1_pred] if i != object1_id]).mean(axis=0)
             object2_pred_mean = np.array([objects_avg_hsv_bins[i] for i in pred_objects[object2_pred] if i != object2_id]).mean(axis=0)
 
-            # current distance between the objects and their respective means
-            curr_distance = ((object1_pred_mean - objects_avg_hsv_bins[object1_id]) ** 2).sum(axis=0) + \
-                            ((object2_pred_mean - objects_avg_hsv_bins[object2_id]) ** 2).sum(axis=0)
+            object1_pred_std = np.array([objects_avg_hsv_bins[i] for i in pred_objects[object1_pred] if i != object1_id]).std(axis=0, ddof=1)
+            object2_pred_std = np.array([objects_avg_hsv_bins[i] for i in pred_objects[object2_pred] if i != object2_id]).std(axis=0, ddof=1)
+
+            # should be proportional to log likelihood (assume normal, then take exponential of these / 2 to get pdf
+
+            # current distance between the objects and their respective means, 0.00001 added for numerical stability
+            curr_distance = (((object1_pred_mean - objects_avg_hsv_bins[object1_id]) ** 2) / (object1_pred_std + 0.0000001)).sum(axis=0) + \
+                            (((object2_pred_mean - objects_avg_hsv_bins[object2_id]) ** 2) / (object2_pred_std + 0.0000001)).sum(axis=0)
 
             # distance if they were to swap
-            new_distance = ((object2_pred_mean - objects_avg_hsv_bins[object1_id]) ** 2).sum(axis=0) + \
-                            ((object2_pred_mean - objects_avg_hsv_bins[object1_id]) ** 2).sum(axis=0)
+            new_distance = (((object2_pred_mean - objects_avg_hsv_bins[object1_id]) ** 2) / (object2_pred_std + 0.0000001)).sum(axis=0) + \
+                            (((object1_pred_mean - objects_avg_hsv_bins[object2_id]) ** 2) / (object1_pred_std + 0.0000001)).sum(axis=0)
 
             distance_reduction = curr_distance - new_distance
 
@@ -295,8 +301,9 @@ while epochs < num_epochs:
                 # found a better one
                 best_pos_object2 = object2
 
-        if object2_distance_reduction[best_pos_object2] < 0:
 
+
+        if object2_distance_reduction[best_pos_object2] < 0:
             object2_distance_reduction_sum = sum(object2_distance_reduction.values())
             # all negative, need to pick one at random with decreasing probability based on the numbers,
             # take exponential of the distance reduction which should all be negative
@@ -304,7 +311,8 @@ while epochs < num_epochs:
                                         object2_distance_reduction.values()]) / sum([math.e ** (i / object2_distance_reduction_sum) for i in
                                         object2_distance_reduction.values()]))
 
-            to_swap = np.random.choice([0, 1], p = [1 - math.e ** (-epochs/100), math.e ** (-epochs/100)])
+            # give reducing odds of getting a random swap
+            to_swap = np.random.choice([0, 1], p = [1 - math.e ** (-epochs/50), math.e ** (-epochs/50)])
 
             if not to_swap:
                 # to_swap is False so skip the rest of the assignment
@@ -315,10 +323,20 @@ while epochs < num_epochs:
             # have the most positive distance reduction, just swap
             swap_object_id = best_pos_object2
 
-            # definitely swap, but some uncertainty about which element it is swapped with
-            # swap_object_id = np.random.choice(list(object2_distance_reduction.keys()), p=np.array([math.e ** ((epochs + 1) * i) for i in
-            #                             object2_distance_reduction.values()]) / sum([math.e ** ((epochs + 1) * i) for i in
-            #                             object2_distance_reduction.values()]))
+
+            # remove randomness towards the end
+
+            # only want to consider those with positive distance reduction
+            object2_distance_reduction_positive = {key: value for key, value in object2_distance_reduction.items() if value > 0}
+
+            # use to normalize the distances otherwise can get very small
+            object2_distance_reduction_sum_positive = sum([i for i in object2_distance_reduction_positive.values()])
+
+            # definitely swap, but some uncertainty about which element it is swapped with (decreasing temperature by adding epochs
+            # as a factor)
+            swap_object_id = np.random.choice(list(object2_distance_reduction_positive.keys()), p=np.array([math.e ** (i) for i in
+                                        object2_distance_reduction_positive.values()]) / sum([math.e ** (i) for i in
+                                        object2_distance_reduction_positive.values()]))
 
 
         # swap the objects, update objects_pred and pred_objects
@@ -343,6 +361,7 @@ while epochs < num_epochs:
 
     cluster_ax.scatter([i[0] for i in objects_avg_hsv_bins], [i[1] for i in objects_avg_hsv_bins], [i[2] for i in objects_avg_hsv_bins], \
                c = [color_mapping[i] for i in predicted_picklists])
+
 
     cluster_fig.canvas.draw()
 
