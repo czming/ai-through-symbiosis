@@ -114,8 +114,8 @@ def get_squared_error(elan_boundaries, htk_boundaries):
             start_elan, end_elan = elan_boundaries[elan_key][i], elan_boundaries[elan_key][i + 1]
             start_htk, end_htk = htk_boundaries[htk_key][i], htk_boundaries[htk_key][i + 1]
 
-            start_htk /= 2
-            end_htk /= 2
+            # start_htk /= 2
+            # end_htk /= 2
 
             num_points += 1
             squared_error += (start_elan - start_htk) ** 2
