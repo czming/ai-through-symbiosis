@@ -20,6 +20,8 @@ import pickle
 
 np.random.seed(42)
 
+# logging.basicConfig(level=logging.DEBUG)
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--config", "-c", type=str, default="configs/zm.yaml",
@@ -39,6 +41,10 @@ htk_output_folder = configs["file_paths"]["htk_output_file_path"]
 # PICKLISTS = list(range(136, 224)) + list(range(225, 230)) + list(range(231, 235))
 PICKLISTS = list(range(136, 235)) # list(range(136, 235)
 
+PICKLISTS.remove(179)
+PICKLISTS.remove(197)
+PICKLISTS.remove(223)
+
 # controls the number of bins that we are looking at (180 looks at all 180 hue bins, 280 looks at 180 hue bins +
 # 100 saturation bins)
 num_bins = 180
@@ -51,6 +57,7 @@ avg_hsv_bins_combined = {}
 
 # stores the objects
 objects_avg_hsv_bins = []
+classification_objects_avg_hsv_bins = []
 
 # {picklist_no: [index in objects_avg_hsv_bins for objects that are in this picklist]}
 picklist_objects = defaultdict(lambda: set())
@@ -61,24 +68,6 @@ pred_objects = defaultdict(lambda: set())
 objects_pred = {}
 
 combined_pick_labels = []
-
-def gaussian_kernel1D(length, sigma):
-    ax = np.linspace(-(length - 1) / 2., (length - 1) / 2., length)
-    kernel = np.exp(-0.5 * np.square(ax) / np.square(sigma))
-    return kernel
-
-def collapse_hue_bins(hue_bins, centers, sigma):
-    # [0, 60, 120] for the centers, need to control for wraparound
-    gaussian_kernel = gaussian_kernel1D(180, sigma)
-    gaussian_kernel_one_side = gaussian_kernel[len(gaussian_kernel) // 2:]
-    bin_sums = [0 for _ in range(len(centers))]
-    for center_index, center in enumerate(centers):
-        # this one needs to be treated specially otherwise would be summed twice
-        bin_sums[center_index] += gaussian_kernel_one_side[0] * hue_bins[center]
-        for i in range(1, 60):
-            bin_sums[center_index] += gaussian_kernel_one_side[i] * hue_bins[(center + i) % len(hue_bins)]
-            bin_sums[center_index] += gaussian_kernel_one_side[i] * hue_bins[center - i]
-    return bin_sums
 
 # initialization (randomly assign colors)
 for picklist_no in PICKLISTS:
@@ -138,6 +127,8 @@ for picklist_no in PICKLISTS:
     # sort based on start
     pick_frames = sorted(pick_frames, key=lambda x: x[0])
 
+    print (len(pick_frames))
+
     for i in range(len(pick_frames) - 1):
         if pick_frames[i + 1][0] <= pick_frames[i][1]:
             # start frame of subsequent pick is at or before the end of the current pick (there's an issue)
@@ -169,12 +160,13 @@ for picklist_no in PICKLISTS:
         sum_empty_hand_hsv += (curr_avg_empty_hand_hsv * frame_count)
         empty_hand_frame_count += frame_count
 
-    avg_empty_hand_hsv = sum_empty_hand_hsv / empty_hand_frame_count
+    # normalize so it's 1
+    avg_empty_hand_hsv = sum_empty_hand_hsv / np.sum(sum_empty_hand_hsv)
 
     # plt.bar(range(20), avg_empty_hand_hsv)
     # plt.show()
 
-    avg_hsv_picks = [get_avg_hsv_bin_frames(htk_inputs, start_frame, end_frame)[0] - avg_empty_hand_hsv for
+    avg_hsv_picks = [get_avg_hsv_bin_frames(htk_inputs, start_frame, end_frame)[0] / np.sum(get_avg_hsv_bin_frames(htk_inputs, start_frame, end_frame)[0]) - avg_empty_hand_hsv for
                      (start_frame, end_frame) \
                      in pick_frames]
 
@@ -206,8 +198,8 @@ for picklist_no in PICKLISTS:
         pred_objects[pred_labels[i]].add(object_id)
         objects_pred[object_id] = pred_labels[i]
         # overlapping bins so there's no sudden dropoff
-        objects_avg_hsv_bins.append(collapse_hue_bins(avg_hsv_picks[i], [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165], 15))
-
+        objects_avg_hsv_bins.append(collapse_hue_bins(avg_hsv_picks[i], [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165], 7.5))
+        classification_objects_avg_hsv_bins.append(collapse_hue_bins(avg_hsv_picks[i], [0, 30, 60, 90, 120, 150], 10))
         # plt.bar(range(180), avg_hsv_picks[i])
         #
         # plt.show()
@@ -231,7 +223,8 @@ color_mapping = {
     'u': '#E1C16E'
 }
 
-ax.scatter([i[0] for i in objects_avg_hsv_bins], [i[1] for i in objects_avg_hsv_bins], [i[2] for i in objects_avg_hsv_bins], \
+ax.scatter([i[0] for i in objects_avg_hsv_bins], [i[len(objects_avg_hsv_bins[0]) // 3] for i in objects_avg_hsv_bins], \
+           [i[2 * len(objects_avg_hsv_bins[0]) // 3] for i in objects_avg_hsv_bins], \
            c = [color_mapping[i] for i in combined_pick_labels])
 
 plt.show()
@@ -278,12 +271,14 @@ while epochs < num_epochs:
             # should be proportional to log likelihood (assume normal, then take exponential of these / 2 to get pdf
 
             # current distance between the objects and their respective means, 0.00001 added for numerical stability
-            curr_distance = (((object1_pred_mean - objects_avg_hsv_bins[object1_id]) ** 2) / (object1_pred_std + 0.0000001)).sum(axis=0) + \
-                            (((object2_pred_mean - objects_avg_hsv_bins[object2_id]) ** 2) / (object2_pred_std + 0.0000001)).sum(axis=0)
+            curr_distance = (((object1_pred_mean - objects_avg_hsv_bins[object1_id]) ** 2) / (object1_pred_std ** 2 + 0.000001)).sum(axis=0) + \
+                            (((object2_pred_mean - objects_avg_hsv_bins[object2_id]) ** 2) / (object2_pred_std ** 2 + 0.000001)).sum(axis=0)
+
+
 
             # distance if they were to swap
-            new_distance = (((object2_pred_mean - objects_avg_hsv_bins[object1_id]) ** 2) / (object2_pred_std + 0.0000001)).sum(axis=0) + \
-                            (((object1_pred_mean - objects_avg_hsv_bins[object2_id]) ** 2) / (object1_pred_std + 0.0000001)).sum(axis=0)
+            new_distance = (((object2_pred_mean - objects_avg_hsv_bins[object1_id]) ** 2) / (object2_pred_std ** 2 + 0.000001)).sum(axis=0) + \
+                            (((object1_pred_mean - objects_avg_hsv_bins[object2_id]) ** 2) / (object1_pred_std ** 2 + 0.000001)).sum(axis=0)
 
             distance_reduction = curr_distance - new_distance
 
@@ -334,8 +329,8 @@ while epochs < num_epochs:
 
             # definitely swap, but some uncertainty about which element it is swapped with (decreasing temperature by adding epochs
             # as a factor)
-            swap_object_id = np.random.choice(list(object2_distance_reduction_positive.keys()), p=np.array([math.e ** (i) for i in
-                                        object2_distance_reduction_positive.values()]) / sum([math.e ** (i) for i in
+            swap_object_id = np.random.choice(list(object2_distance_reduction_positive.keys()), p=np.array([math.e ** (i / object2_distance_reduction_sum_positive) for i in
+                                        object2_distance_reduction_positive.values()]) / sum([math.e ** (i / object2_distance_reduction_sum_positive) for i in
                                         object2_distance_reduction_positive.values()]))
 
 
@@ -359,7 +354,8 @@ while epochs < num_epochs:
 
     cluster_ax.clear()
 
-    cluster_ax.scatter([i[0] for i in objects_avg_hsv_bins], [i[1] for i in objects_avg_hsv_bins], [i[2] for i in objects_avg_hsv_bins], \
+    cluster_ax.scatter([i[0] for i in objects_avg_hsv_bins], [i[len(objects_avg_hsv_bins[0]) // 3] for i in objects_avg_hsv_bins], \
+                       [i[2 * len(objects_avg_hsv_bins[0]) // 3] for i in objects_avg_hsv_bins], \
                c = [color_mapping[i] for i in predicted_picklists])
 
 
@@ -387,9 +383,6 @@ for object, predicted_objects in pred_objects.items():
 plt.show()
 
 
-
-
-
 # print the results on a per picklist level
 for picklist_no, objects_in_picklist in picklist_objects.items():
     print (f"Picklist no. {picklist_no}")
@@ -397,6 +390,11 @@ for picklist_no, objects_in_picklist in picklist_objects.items():
     print (f"Predicted labels: {picklist_pred}")
     # use the same mapping for combined_pick_labels as object ids
     picklist_gt = [combined_pick_labels[i] for i in objects_in_picklist]
+
+
+    with open(f"pick_labels/picklist_{picklist_no}.csv", "w") as outfile:
+        outfile.write(f"{picklist_no}, {''.join(picklist_pred)}, {''.join(picklist_gt)}")
+
     print (f"Actual labels:    {picklist_gt}")
 
 
@@ -406,7 +404,8 @@ predicted_picklists = [objects_pred[i] for i in range(len(combined_pick_labels))
 
 ax = plt.figure().add_subplot(projection='3d')
 
-ax.scatter([i[0] for i in objects_avg_hsv_bins], [i[1] for i in objects_avg_hsv_bins], [i[2] for i in objects_avg_hsv_bins], \
+ax.scatter([i[0] for i in objects_avg_hsv_bins], [i[len(objects_avg_hsv_bins[0]) // 3] for i in objects_avg_hsv_bins], \
+           [i[2 * len(objects_avg_hsv_bins[0]) // 3] for i in objects_avg_hsv_bins], \
            c = [color_mapping[i] for i in predicted_picklists])
 
 plt.show()
@@ -462,3 +461,20 @@ cm_display.plot(cmap=plt.cm.Blues)
 plt.xticks(rotation=90)
 
 plt.show()
+
+objects_pred_hsv_bins = defaultdict(lambda: [])
+
+# gather the bins for the predicted
+for object, pred in objects_pred.items():
+    # use the one for classification
+    objects_pred_hsv_bins[pred].append(classification_objects_avg_hsv_bins[object])
+
+objects_pred_avg_hsv_bins = {}
+
+for object_type, object_hsv_bins in objects_pred_hsv_bins.items():
+    # store the standard deviation as well of the different axes
+    objects_pred_avg_hsv_bins[object_type] = [np.array(object_hsv_bins).mean(axis=0), np.array(object_hsv_bins).std(axis=0, ddof=1)]
+
+with open("object_type_hsv_bins.pkl", "wb") as outfile:
+    # without removing the hand
+    pickle.dump(objects_pred_avg_hsv_bins, outfile)
