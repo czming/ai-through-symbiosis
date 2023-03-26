@@ -10,7 +10,7 @@ from sklearn import metrics
 from sklearn.utils.multiclass import unique_labels
 
 
-def find_closest_in_set(vector, vector_dict):
+def find_closest_in_set(vector, vector_dict, pick_labels):
     # find the vector in vector_dict that has the smallest distance to vector and return the key for that vector
 
     # to restrict the objects that we want to consider
@@ -50,14 +50,19 @@ def find_closest_in_set(vector, vector_dict):
     #
     # plt.show()
 
-    # get the distances of each vector in vector_dict to vector
-    vector_distances = {key: np.linalg.norm((vector_dict[key][0] - vector) / vector_dict[key][1]) for key in vector_dict.keys()}
 
-    print (vector_distances)
+    # get the distances of each vector in vector_dict to vector
+    vector_distances = {key: np.linalg.norm((vector_dict[key][0] - vector)) for key in vector_dict.keys()}
+
+    # vector_distances = {key: np.linalg.norm(simple_collapse_hue_bins(vector_dict[key][0]) - simple_collapse_hue_bins(vector)) for key in
+    #                     vector_dict.keys()}
 
     return min(vector_distances.keys(), key=lambda x: vector_distances[x]), vector_distances
 
 
+simple_collapse_hue_bins = lambda vector: np.array([vector[150:180].sum() + vector[:30].sum(),
+                                                    vector[30:90].sum(),
+                                                    vector[90:150].sum()])
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--config", "-c", type=str, default="configs/zm.yaml", help="Path to experiment config (scripts/configs)")
@@ -79,7 +84,7 @@ htk_output_folder = configs["file_paths"]["htk_output_file_path"]
 # with open("objects_hsv_bin_accumulator.pkl", "rb") as infile:
 #     objects_hsv_bin_accumulator = pickle.load(infile)
 
-with open("object_type_hsv_bins.pkl", "rb") as infile:
+with open("object_type_hsv_bins1.pkl", "rb") as infile:
     objects_type_hsv_bins = pickle.load(infile)
 
 # object_hsv_representation = {key: value[0] / value[1] for key, value in objects_hsv_bin_accumulator.items()}
@@ -88,10 +93,16 @@ object_hsv_representation = objects_type_hsv_bins
 
 print (len(object_hsv_representation['r']))
 
-# one off thing, don't change configs
-ood_htk_outputs_folder = "C:/Users/chngz/OneDrive/Georgia Tech/AI Through Symbiosis/pick_list_dataset/htk_outputs/ood-1-90-results/ood-1-90-results"
+rmse_errors = []
 
-PICKLISTS = range(1, 41)
+# one off thing, don't change configs
+ood_htk_outputs_folder = "C:/Users/chngz/Downloads/10-random-held-out/"
+
+PICKLISTS = range(136,236)
+
+# ood_htk_outputs_folder = "C:/Users/chngz/OneDrive/Georgia Tech/AI Through Symbiosis/pick_list_dataset/htk_outputs/ood-1-90-results/ood-1-90-results/"
+#
+# PICKLISTS = range(71, 91)
 
 predicted_picklists = []
 actual_picklists = []
@@ -100,20 +111,27 @@ sum_squared_error = 0
 action_count = 0
 
 for picklist_no in PICKLISTS:
+    print (f"picklist_no: {picklist_no}")
+    try:
+        with open(f"{pick_label_folder}/picklist_{picklist_no}_raw.txt") as infile:
+            pick_labels = [i for i in infile.read().replace("\n", "")[::2]]
 
-    with open(f"{pick_label_folder}/picklist_{picklist_no}_raw.txt") as infile:
-        pick_labels = [i for i in infile.read().replace("\n", "")[::2]]
+        with open(f"{htk_input_folder}/picklist_{picklist_no}.txt") as infile:
+            htk_inputs = [i.split() for i in infile.readlines()]
 
-    with open(f"{htk_input_folder}/picklist_{picklist_no}.txt") as infile:
-        htk_inputs = [i.split() for i in infile.readlines()]
 
-    htk_boundaries = get_htk_boundaries(f"{ood_htk_outputs_folder}/results-{picklist_no}")
+        htk_boundaries = get_htk_boundaries(f"{ood_htk_outputs_folder}/results-{picklist_no}")
+    except:
+        print (f"Skipping picklist {picklist_no}")
+        continue
 
     # check with rmse to see if reasonable
     general_elan_boundaries = get_elan_boundaries_general(f"{elan_label_folder}/picklist_{picklist_no}.eaf")
     se, count = get_squared_error(general_elan_boundaries, htk_boundaries)
 
     print (se, count)
+
+    rmse_errors.append((se / count) ** 0.5)
 
     sum_squared_error += se
     action_count += count
@@ -141,8 +159,19 @@ for picklist_no in PICKLISTS:
     sum_empty_hand_hsv = np.zeros(180)
     empty_hand_frame_count = 0
 
+    # # avg hsv bins for each pick
+    # num_hand_detections = [get_avg_hsv_bin_frames(htk_inputs, start_frame + 5, end_frame - 5)[1] if (end_frame - start_frame) > 10 else for (start_frame, end_frame) \
+    #                        in empty_hand_frames]
+    # if 0 in num_hand_detections:
+    #     print("skipping bad boundaries")
+    #     continue
+
     for (start_frame, end_frame) in empty_hand_frames:
-        curr_avg_empty_hand_hsv, frame_count = get_avg_hsv_bin_frames(htk_inputs, start_frame, end_frame)
+        if end_frame - start_frame < 15:
+            continue
+        print (start_frame, end_frame)
+        print (len(htk_inputs))
+        curr_avg_empty_hand_hsv, frame_count = get_avg_hsv_bin_frames(htk_inputs, start_frame + 5, end_frame - 5)
         sum_empty_hand_hsv += (curr_avg_empty_hand_hsv * frame_count)
         empty_hand_frame_count += frame_count
 
@@ -150,7 +179,7 @@ for picklist_no in PICKLISTS:
 
     # plt.bar(range(10), avg_empty_hand_hsv[:10])
     # plt.show()
-    avg_hsv_picks = [get_avg_hsv_bin_frames(htk_inputs, start_frame, end_frame)[0] / np.sum(get_avg_hsv_bin_frames(htk_inputs, start_frame, end_frame)[0]) - avg_empty_hand_hsv for (start_frame, end_frame) \
+    avg_hsv_picks = [get_avg_hsv_bin_frames(htk_inputs, start_frame + 5, end_frame - 5)[0] - avg_empty_hand_hsv for (start_frame, end_frame) \
                      in pick_frames]
 
     ## if given picklist
@@ -182,11 +211,26 @@ for picklist_no in PICKLISTS:
 
     for index, i in enumerate(avg_hsv_picks):
         print(pick_labels[index])
-        i = collapse_hue_bins(i, [0, 30, 60, 90, 120, 150], 10)
+        i = collapse_hue_bins(i, [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165], 15)
 
 
-        pred, distances = find_closest_in_set(i, object_hsv_representation)
+        pred, distances = find_closest_in_set(i, object_hsv_representation, set(pick_labels))
 
+        # plt_display_index = 0
+        # fig, axs = plt.subplots(1, 3)
+        #
+        # axs[0].bar(range(len(i)), i)
+        # axs[0].set_title("curr")
+        #
+        # axs[1].bar(range(len(i)), object_hsv_representation[pred][0])
+        # axs[1].set_title(f"pred_class, {pred}")
+        #
+        # axs[2].bar(range(len(i)), object_hsv_representation[pick_labels[index]][0])
+        # axs[2].set_title(f"actual_class, {pick_labels[index]}")
+        #
+        # fig.tight_layout()
+        #
+        # plt.show()
 
         print (pred)
 
@@ -248,9 +292,9 @@ cm_display.plot(cmap=plt.cm.Blues)
 
 plt.xticks(rotation=90)
 
-plt.show()
-
 plt.tight_layout()
+
+plt.show()
 
 plt.savefig("object_classification.png")
 
@@ -259,3 +303,5 @@ print ("test")
 print (sum_squared_error, action_count)
 
 print (sum([1 if predicted_picklists[i] == actual_picklists[i] else 0 for i in range(len(predicted_picklists))]) / len(predicted_picklists))
+
+print (rmse_errors)

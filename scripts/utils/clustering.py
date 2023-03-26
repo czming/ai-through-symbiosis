@@ -31,7 +31,13 @@ def sum_point_distance(point, cluster):
 
     for point1 in cluster:
         # distance between point and point1 (point1 from cluster), can replace the distance function here if desired
-        total_distance += np.linalg.norm(point - point1)
+
+        # using only hue bins, binned into 6
+        collapse_hue_bins = lambda x: np.array([x[150:180].sum() + x[:30].sum(), x[30:90].sum(), x[90:150].sum()])
+
+        # collapse_hue_bins = lambda x: np.array([x[30 * i:30 * (i + 1)].sum() for i in range(6)])
+
+        total_distance += np.linalg.norm(collapse_hue_bins(point) - collapse_hue_bins(point1))
 
     return total_distance
 
@@ -104,3 +110,21 @@ def get_count_mapping(array):
 	for key, value in counts.items():
 		counts_mapping[value].append(key)
 	return dict(counts_mapping)
+
+def collapse_hue_bins(hue_bins, centers, sigma):
+    # [0, 60, 120] for the centers, need to control for wraparound
+    gaussian_kernel = gaussian_kernel1D(181, sigma)
+    gaussian_kernel_one_side = gaussian_kernel[len(gaussian_kernel) // 2:]
+    bin_sums = [0 for _ in range(len(centers))]
+    for center_index, center in enumerate(centers):
+        # this one needs to be treated specially otherwise would be summed twice
+        bin_sums[center_index] += gaussian_kernel_one_side[0] * hue_bins[center]
+        for i in range(1, 60):
+            bin_sums[center_index] += gaussian_kernel_one_side[i] * hue_bins[(center + i) % len(hue_bins)]
+            bin_sums[center_index] += gaussian_kernel_one_side[i] * hue_bins[center - i]
+    return bin_sums
+
+def gaussian_kernel1D(length, sigma):
+    ax = np.linspace(-(length - 1) / 2., (length - 1) / 2., length)
+    kernel = np.exp(-0.5 * np.square(ax) / np.square(sigma))
+    return kernel
