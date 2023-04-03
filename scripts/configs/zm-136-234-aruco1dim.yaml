@@ -1,0 +1,8 @@
+owner: zm # fill in your name here
+file_paths:
+  video_file_path: "C:/Users/chngz/OneDrive/Georgia Tech/AI Through Symbiosis/pick_list_dataset/Videos/" # directory containing videos
+  htk_input_file_path: "C:/Users/chngz/OneDrive/Georgia Tech/AI Through Symbiosis/pick_list_dataset/htk_inputs/" # directory containing htk input vectors
+  label_file_path: "C:/Users/chngz/OneDrive/Georgia Tech/AI Through Symbiosis/pick_list_dataset/Labels/" # directory containing pick labels (order of labels, i.e. r1b1...)
+  # C:/Users/chngz/OneDrive/Georgia Tech/AI Through Symbiosis/pick_list_dataset/htk_outputs/ood-1-90-results/ood-1-90-results/ for 3 object picklists
+  htk_output_file_path: "C:/Users/chngz/Downloads/10-random-held-out/" # directory containing results from HTK (i.e. HTK output folder)
+  elan_annotated_file_path: "C:/Users/chngz/Documents/AI through Symbiosis/HandGestureRecognition/elan_annotated/" # directory containing ELAN annotated labels for videos

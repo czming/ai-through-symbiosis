@@ -4,18 +4,15 @@ iterative improvement method that swaps pairs which result in smaller intraclust
 when there is no pair which would reduce the intracluster distance
 
 """
-import numpy as np
 
 from utils import *
 import argparse
-import cv2
 import math
 import matplotlib.pyplot as plt
-from collections import Counter
 from sklearn import metrics
 import copy
 import logging
-
+from sklearn.utils.multiclass import unique_labels
 import pickle
 
 np.random.seed(42)
@@ -53,12 +50,7 @@ avg_hsv_bins_combined = {}
 
 # stores the objects
 objects_avg_hsv_bins = []
-classification1_objects_avg_hsv_bins = []
-classification2_objects_avg_hsv_bins = []
-classification3_objects_avg_hsv_bins = []
-classification4_objects_avg_hsv_bins = []
-classification5_objects_avg_hsv_bins = []
-classification6_objects_avg_hsv_bins = []
+classification_objects_avg_hsv_bins = []
 
 # {picklist_no: [index in objects_avg_hsv_bins for objects that are in this picklist]}
 picklist_objects = defaultdict(lambda: set())
@@ -99,22 +91,24 @@ for picklist_no in PICKLISTS:
     # get the average hsv bins for each carry action sequence (might want to incorporate information from pick since
     # that should give some idea about what the object is as well)
 
-    pick_labels = ["carry_red",
-                   "carry_blue",
-                   "carry_green",
-                   "carry_darkblue",
-                   "carry_darkgreen",
-                   "carry_clear",
-                   "carry_alligatorclip",
-                   "carry_yellow",
-                   "carry_orange",
-                   "carry_candle",
-                   ]
+    # for ELAN labels
+    # pick_labels = ["carry_red",
+    #                "carry_blue",
+    #                "carry_green",
+    #                "carry_darkblue",
+    #                "carry_darkgreen",
+    #                "carry_clear",
+    #                "carry_alligatorclip",
+    #                "carry_yellow",
+    #                "carry_orange",
+    #                "carry_candle",
+    #                ]
 
     pick_frames = []
 
     # htk label for pick
     pick_labels = ["e"]
+    # using (predicted) htk boundaries instead of elan boundaries
     elan_boundaries = htk_boundaries
 
     for pick_label in pick_labels:
@@ -128,7 +122,7 @@ for picklist_no in PICKLISTS:
     # sort based on start
     pick_frames = sorted(pick_frames, key=lambda x: x[0])
 
-    print (len(pick_frames))
+    logging.debug(len(pick_frames))
 
     for i in range(len(pick_frames) - 1):
         if pick_frames[i + 1][0] <= pick_frames[i][1]:
@@ -183,25 +177,12 @@ for picklist_no in PICKLISTS:
     with open(f"{pick_label_folder}/picklist_{picklist_no}_raw.txt") as infile:
         pick_labels = [i for i in infile.read().replace("\n", "")[::2]]
 
-    print(len(pick_labels), len(avg_hsv_picks))
-
     combined_pick_labels.extend(pick_labels)
 
     # randomly assign pick labels for now
     pred_labels = np.random.choice(pick_labels, replace=False, size=len(pick_labels))
 
-    print (pick_labels, pred_labels)
-
-    # must be a divisor of 180
-    collapse_bin_size = 60
-
-    # collapse_hue_bins = lambda x: np.array([x[180 - collapse_bin_size//2:180].sum() + x[:collapse_bin_size//2].sum()] + \
-    #                                         [x[collapse_bin_size//2 + i * collapse_bin_size: collapse_bin_size//2 + (i + 1) * collapse_bin_size].sum() \
-    #                                             for i in range(180 // collapse_bin_size - 1)])
-    #
-    # collapse_hue_bins = lambda x: np.array([x[150:180].sum() + x[:30].sum(), x[30:90].sum(), x[90:150].sum()])
-
-    # collapse_hue_bins = lambda x: np.array([x[60 * i:60 * (i + 1)].sum() for i in range(3)])
+    logging.info(f"ground_truth: {pick_labels}, pred_labels: {pred_labels}")
 
     for i in range(len(avg_hsv_picks)):
         object_id = len(objects_avg_hsv_bins)
@@ -210,21 +191,9 @@ for picklist_no in PICKLISTS:
         pred_objects[pred_labels[i]].add(object_id)
         objects_pred[object_id] = pred_labels[i]
         # overlapping bins so there's no sudden dropoff
-        objects_avg_hsv_bins.append(collapse_hue_bins(avg_hsv_picks[i], [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165], 7.5))
-        classification1_objects_avg_hsv_bins.append(collapse_hue_bins(avg_hsv_picks[i], [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165], 15))
-        classification2_objects_avg_hsv_bins.append(collapse_hue_bins(avg_hsv_picks[i], [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165], 7.5))
-        classification3_objects_avg_hsv_bins.append(collapse_hue_bins(avg_hsv_picks[i], [i for i in range(180)], 3))
-        classification4_objects_avg_hsv_bins.append(collapse_hue_bins(avg_hsv_picks[i], [i for i in range(180)], 4))
-        classification5_objects_avg_hsv_bins.append(collapse_hue_bins(avg_hsv_picks[i], [i for i in range(180)], 10))
-        classification6_objects_avg_hsv_bins.append(i)
+        objects_avg_hsv_bins.append(collapse_hue_bins(avg_hsv_picks[i], [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165], 15))
+        classification_objects_avg_hsv_bins.append(collapse_hue_bins(avg_hsv_picks[i], [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165], 15))
 
-        # plt.bar(range(180), avg_hsv_picks[i])
-        #
-        # plt.show()
-        #
-        # plt.bar(range(3), collapse_hue_bins(avg_hsv_picks[i],[0, 60, 120], 20))
-        #
-        # plt.show()
 
 ax = plt.figure().add_subplot(projection='3d')
 
@@ -334,11 +303,7 @@ while epochs < num_epochs:
 
 
         else:
-            # have the most positive distance reduction, just swap
-            swap_object_id = best_pos_object2
-
-
-            # remove randomness towards the end
+            # reduce randomness towards the end (simulated annealing)
 
             # only want to consider those with positive distance reduction
             object2_distance_reduction_positive = {key: value for key, value in object2_distance_reduction.items() if value > 0}
@@ -400,20 +365,55 @@ for object, predicted_objects in pred_objects.items():
 
 plt.show()
 
+letter_to_name = {
+    'r': 'red',
+    'g': 'green',
+    'b': 'blue',
+    'p': 'darkblue',
+    'q': 'darkgreen',
+    'o': 'orange',
+    's': 'alligatorclip',
+    'a': 'yellow',
+    't': 'clear',
+    'u': 'candle'
+}
+
+colors = {
+    'g': 'green',
+    'a': 'yellow',
+    'u': 'tan',
+    'b': 'blue',
+    'q': 'darkgreen',
+    'r': 'red',
+    'o': 'orange',
+    'p': 'darkblue',
+    't': 'grey',
+    's': 'black'
+}
+
 plt_display_index = 0
 fig, axs = plt.subplots(2, len(pred_objects) // 2)
 
 for object, predicted_objects in pred_objects.items():
 
-    hsv_bins = np.array([classification1_objects_avg_hsv_bins[i] for i in predicted_objects]).mean(axis=0)
+    hsv_bins = np.array([classification_objects_avg_hsv_bins[i] for i in predicted_objects]).mean(axis=0)
     if plt_display_index < len(pred_objects) // 2:
-        axs[0, plt_display_index].bar(range(len(hsv_bins)), hsv_bins)
-        axs[0, plt_display_index].set_title(object)
+        axs[0, plt_display_index].bar(range(len(hsv_bins)), hsv_bins, color=colors[object])
+        axs[0, plt_display_index].set_title(letter_to_name[object])
+        axs[0, plt_display_index].set_ylim([-0.15, 0.15])
+        axs[0, plt_display_index].set_yticks([])
+        axs[0, plt_display_index].set_xticks([])
+
     else:
-        axs[1, plt_display_index - len(pred_objects) // 2].bar(range(len(hsv_bins)), hsv_bins)
-        axs[1, plt_display_index - len(pred_objects) // 2].set_title(object)
+        axs[1, plt_display_index - len(pred_objects) // 2].bar(range(len(hsv_bins)), hsv_bins, color=colors[object])
+        axs[1, plt_display_index - len(pred_objects) // 2].set_title(letter_to_name[object])
+        axs[1, plt_display_index - len(pred_objects) // 2].set_ylim([-0.15, 0.15])
+        axs[1, plt_display_index - len(pred_objects) // 2].set_yticks([])
+        axs[1, plt_display_index - len(pred_objects) // 2].set_xticks([])
     plt_display_index += 1
 
+    axs[0, 0].set_yticks([-0.15, -0.1, -0.05, 0, 0.05, 0.1, 0.15])
+    axs[1, 0].set_yticks([-0.15, -0.1, -0.05, 0, 0.05, 0.1, 0.15])
 
 plt.show()
 
@@ -451,26 +451,13 @@ for pred, label in zip(predicted_picklists, actual_picklists):
     if pred != label:
         confusions[pred + label] += 1
 
-print(confusions)
-
+logging.debug(confusions)
 
 confusion_matrix = metrics.confusion_matrix(actual_picklists, predicted_picklists)
-print(actual_picklists)
-print(predicted_picklists)
-from sklearn.utils.multiclass import unique_labels
 
-letter_to_name = {
-    'r': 'red',
-    'g': 'green',
-    'b': 'blue',
-    'p': 'darkblue',
-    'q': 'darkgreen',
-    'o': 'orange',
-    's': 'alligatorclip',
-    'a': 'yellow',
-    't': 'clear',
-    'u': 'candle'
-}
+logging.debug(actual_picklists)
+logging.debug(predicted_picklists)
+
 names = ['red', 'green', 'blue', 'darkblue', 'darkgreen', 'orange', 'alligatorclip', 'yellow', 'clear', 'candle']
 
 actual_picklists_names = []
@@ -495,6 +482,8 @@ cm_display.plot(cmap=plt.cm.Blues)
 
 plt.xticks(rotation=90)
 
+plt.tight_layout()
+
 plt.show()
 
 objects_pred_hsv_bins = defaultdict(lambda: [])
@@ -502,7 +491,7 @@ objects_pred_hsv_bins = defaultdict(lambda: [])
 # gather the bins for the predicted
 for object, pred in objects_pred.items():
     # use the one for classification
-    objects_pred_hsv_bins[pred].append(classification1_objects_avg_hsv_bins[object])
+    objects_pred_hsv_bins[pred].append(classification_objects_avg_hsv_bins[object])
 
 objects_pred_avg_hsv_bins = {}
 
@@ -515,86 +504,3 @@ with open("object_type_hsv_bins1.pkl", "wb") as outfile:
     pickle.dump(objects_pred_avg_hsv_bins, outfile)
 
 objects_pred_hsv_bins = defaultdict(lambda: [])
-
-# gather the bins for the predicted
-for object, pred in objects_pred.items():
-    # use the one for classification
-    objects_pred_hsv_bins[pred].append(classification2_objects_avg_hsv_bins[object])
-
-objects_pred_avg_hsv_bins = {}
-
-for object_type, object_hsv_bins in objects_pred_hsv_bins.items():
-    # store the standard deviation as well of the different axes
-    objects_pred_avg_hsv_bins[object_type] = [np.array(object_hsv_bins).mean(axis=0), np.array(object_hsv_bins).std(axis=0, ddof=1)]
-
-with open("object_type_hsv_bins2.pkl", "wb") as outfile:
-    # without removing the hand
-    pickle.dump(objects_pred_avg_hsv_bins, outfile)
-
-objects_pred_hsv_bins = defaultdict(lambda: [])
-
-# gather the bins for the predicted
-for object, pred in objects_pred.items():
-    # use the one for classification
-    objects_pred_hsv_bins[pred].append(classification3_objects_avg_hsv_bins[object])
-
-objects_pred_avg_hsv_bins = {}
-
-for object_type, object_hsv_bins in objects_pred_hsv_bins.items():
-    # store the standard deviation as well of the different axes
-    objects_pred_avg_hsv_bins[object_type] = [np.array(object_hsv_bins).mean(axis=0), np.array(object_hsv_bins).std(axis=0, ddof=1)]
-
-with open("object_type_hsv_bins3.pkl", "wb") as outfile:
-    # without removing the hand
-    pickle.dump(objects_pred_avg_hsv_bins, outfile)
-
-objects_pred_hsv_bins = defaultdict(lambda: [])
-
-# gather the bins for the predicted
-for object, pred in objects_pred.items():
-    # use the one for classification
-    objects_pred_hsv_bins[pred].append(classification4_objects_avg_hsv_bins[object])
-
-objects_pred_avg_hsv_bins = {}
-
-for object_type, object_hsv_bins in objects_pred_hsv_bins.items():
-    # store the standard deviation as well of the different axes
-    objects_pred_avg_hsv_bins[object_type] = [np.array(object_hsv_bins).mean(axis=0), np.array(object_hsv_bins).std(axis=0, ddof=1)]
-
-with open("object_type_hsv_bins4.pkl", "wb") as outfile:
-    # without removing the hand
-    pickle.dump(objects_pred_avg_hsv_bins, outfile)
-
-objects_pred_hsv_bins = defaultdict(lambda: [])
-
-# gather the bins for the predicted
-for object, pred in objects_pred.items():
-    # use the one for classification
-    objects_pred_hsv_bins[pred].append(classification5_objects_avg_hsv_bins[object])
-
-objects_pred_avg_hsv_bins = {}
-
-for object_type, object_hsv_bins in objects_pred_hsv_bins.items():
-    # store the standard deviation as well of the different axes
-    objects_pred_avg_hsv_bins[object_type] = [np.array(object_hsv_bins).mean(axis=0), np.array(object_hsv_bins).std(axis=0, ddof=1)]
-
-with open("object_type_hsv_bins5.pkl", "wb") as outfile:
-    # without removing the hand
-    pickle.dump(objects_pred_avg_hsv_bins, outfile)
-
-objects_pred_hsv_bins = defaultdict(lambda: [])
-
-# gather the bins for the predicted
-for object, pred in objects_pred.items():
-    # use the one for classification
-    objects_pred_hsv_bins[pred].append(classification6_objects_avg_hsv_bins[object])
-
-objects_pred_avg_hsv_bins = {}
-
-for object_type, object_hsv_bins in objects_pred_hsv_bins.items():
-    # store the standard deviation as well of the different axes
-    objects_pred_avg_hsv_bins[object_type] = [np.array(object_hsv_bins).mean(axis=0), np.array(object_hsv_bins).std(axis=0, ddof=1)]
-
-with open("object_type_hsv_bins6.pkl", "wb") as outfile:
-    # without removing the hand
-    pickle.dump(objects_pred_avg_hsv_bins, outfile)
