@@ -13,6 +13,8 @@ import matplotlib.pyplot as plt
 
 import skimage.color
 
+from scripts.utils import load_yaml_config
+
 # requirements: opencv-python, opencv-contrib-python
 
 class ArUcoDetector:
@@ -133,8 +135,12 @@ def get_hs_bins(cropped_hand_image):
                 # rgb_value = np.array([[color_image[i, j, 0],
                 #                        color_image[i, j, 1],
                 #                        color_image[i, j, 2]]]) / 255.0
+
                 hues.append(hsv_value[0][0])
                 saturations.append(hsv_value[0][1])
+
+    if np.array(hues).max() > 1 or np.array(hues).min() < 0 or np.array(saturations).max() > 1 or np.array(saturations).min() < 0:
+        raise Exception("Hue or saturation not in range [0, 1]")
 
     #visualizing color model
 
@@ -159,8 +165,8 @@ def get_hs_bins(cropped_hand_image):
     # print(sat_n, sat_bins)
 
     #calculate the histograms
-    hist_n, hist_bins = np.histogram(hues, bins=10, range=(0, 1))
-    sat_n, sat_bins = np.histogram(saturations, bins=10, range=(0, 1))
+    hist_n, hist_bins = np.histogram(hues, bins=180, range=(0, 1))
+    sat_n, sat_bins = np.histogram(saturations, bins=100, range=(0, 1))
 
     histsat = np.concatenate((hist_n, sat_n)) / number_of_pixels
     mystring = str(histsat).replace("[", "").replace("]", "").replace("\n", "")
@@ -174,11 +180,10 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--video", "-v", type=str, default="G:/My Drive/Georgia Tech/AI Through Symbiosis/pick_list_dataset/Videos/GX010162.MP4", help="Path to input video")
+    parser.add_argument("--video", "-v", type=str, default="C:/Users/chngz/OneDrive/Georgia Tech/AI Through Symbiosis/pick_list_dataset/Videos/picklist_41.MP4", help="Path to input video")
     parser.add_argument("--pickpath", "-pp", type=str, default="C:/Users/chngz/Documents/AI through Symbiosis/AI through Symbiosis/picklist.csv", help="Path to picklist")
     # fill in for video output
     parser.add_argument("--outfile", "-o", type=str, default="", help="Path to video outfile to save to. If not provided, will not create video") # 'hand_detection_output.mp4'
-    parser.add_argument("--check_pickpath", "-cp", action="store_false", help="Add this flag if you want to work with a picklist. Also be sure to pass a --pickpath argument")
 
     args = parser.parse_args()
 
@@ -267,8 +272,8 @@ if __name__ == "__main__":
     #offsets in the HTK output array
     ARUCO_MARKER_HTK_OFFSET = 0
     COLOR_BIN_HTK_OFFSET = 72
-    OPTICAL_FLOW_HTK_OFFSET = 92
-    HAND_POS_HTK_OFFSET = 94
+    OPTICAL_FLOW_HTK_OFFSET = 352
+    HAND_POS_HTK_OFFSET = 354
 
     #aruco camera matrices are after image is distorted, focal length shouldn't matter since everything is adjusted
     #proportionally
@@ -338,8 +343,9 @@ if __name__ == "__main__":
     while cap.isOpened():
         # aruco_marker = [x, y]
         # aruco_marker = [is_there, x, y]
-        #output vector for use with htk, [aruco_marker[:72], color_bins[72:92], optical_flow_avg[92:94], hand_loc[94:96]]
-        htk_output_vector = [0 for i in range(96)]
+        #output vector for use with htk, [aruco_marker[:72], color_bins[72:92], optical_flow_avg[92:94], hand_loc[94:96]], 96 dim version
+        # [aruco_marker[:72], color_bins[72:352], optical_flow_avg[352:354], hand_loc[354:356]] 356-dimversion
+        htk_output_vector = [0 for i in range(356)]
 
         success, image = cap.read()
         if not success:
@@ -951,7 +957,6 @@ if __name__ == "__main__":
             # cv2.waitKey(0)
 
             histsat = get_hs_bins(cropped_hand_image)
-
 
             # hand might not be detected so number of pixels might be 0
             if histsat != []:
