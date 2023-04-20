@@ -1,4 +1,4 @@
-#AI Through Symbiosis
+# AI Through Symbiosis
 
 ----------------------
 
@@ -38,7 +38,6 @@ Change the
 
 ## <ins> Results </ins>
 
-
 Train set results from clustering (i.e. accuracy of matching labels to pick frame sequences in the train set), which is used to
 label the weakly supervised action sets and obtain object representations
 ![clustering train set results](images/clustering_train_set.png)
@@ -57,3 +56,4 @@ Test set results on ten object test set (unconstrained):
 
 [//]: # ()
 [//]: # (If you find our work helpful, consider contributing )
+
