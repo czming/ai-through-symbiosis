@@ -180,8 +180,8 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--video", "-v", type=str, default="C:/Users/chngz/OneDrive/Georgia Tech/AI Through Symbiosis/pick_list_dataset/Videos/picklist_41.MP4", help="Path to input video")
-    parser.add_argument("--pickpath", "-pp", type=str, default="C:/Users/chngz/Documents/AI through Symbiosis/AI through Symbiosis/picklist.csv", help="Path to picklist")
+    # can load from configs
+    parser.add_argument("--video", "-v", type=str, help="Path to input video", required=True)
     # fill in for video output
     parser.add_argument("--outfile", "-o", type=str, default="", help="Path to video outfile to save to. If not provided, will not create video") # 'hand_detection_output.mp4'
 
@@ -201,9 +201,6 @@ if __name__ == "__main__":
     cap = cv2.VideoCapture(args.video)
     #don't flip camera view unless you want selfie view
     TO_FLIP = False
-
-    #contains one instruction for pick and another instruction for drop
-    pick_list = parse_picklist(args.pickpath) if args.check_pickpath else None
 
     picked = []
 
@@ -242,8 +239,8 @@ if __name__ == "__main__":
 
     frames = 0
 
-    # show images of the processed points
-    DISPLAY_VISUAL = False
+    # change this to visualize the detections in the image
+    DISPLAY_VISUAL = True
 
     OUTPUT_FILE = os.path.basename(args.video.split(".")[0] + ".txt")
 
@@ -281,8 +278,8 @@ if __name__ == "__main__":
     distortion = np.array([[0., 0., 0., 0., 0.]])
 
     #to undistort the image
-    initial_intrinsic = np.load("intrinsic_gopro.npy")
-    initial_distortion = np.load("distortion_gopro.npy")
+    # initial_intrinsic = np.load("intrinsic_gopro.npy")
+    # initial_distortion = np.load("distortion_gopro.npy")
 
 
     #all the markers that we know of so far
@@ -833,18 +830,6 @@ if __name__ == "__main__":
             cv2.circle(output_image, (int(curr_hand_loc[0]), int(curr_hand_loc[1])), 3, (255, 0, 255), 3)
 
             # calculate hand pos distribution stats
-            hand_mean_x, hand_var_x = calculate_new_mean_variance(hand_mean_x, hand_var_x, frames, curr_hand_loc[0])
-            hand_mean_y, hand_var_y = calculate_new_mean_variance(hand_mean_y, hand_var_y, frames, curr_hand_loc[1])
-
-            hand_sd_x = int(hand_var_x ** 0.5)
-            hand_sd_y = int(hand_var_y ** 0.5)
-            #euclidean_sd = (hand_var_x + hand_var_y) ** (1/2)
-
-            cv2.circle(output_image, (int(hand_mean_x), int(hand_mean_y)), 3, (255, 255, 0), 3)
-            #cv2.circle(output_image, (int(hand_mean_x), int(hand_mean_y)), int(euclidean_sd), (255, 255, 0), 3)
-            cv2.ellipse(output_image, (int(hand_mean_x), int(hand_mean_y)), (2 * hand_sd_x, 2 * hand_sd_y), 0, 0, 360, (255, 255, 0), 3)
-
-            # find bounding box of hand
             bounding_box, bounding_box_size = hand_bounding_box(first_hand_points, output_image)
             for point_index in range(len(bounding_box)):
                 #use the %len(bounding_box) to wrap around back to the start
@@ -856,73 +841,6 @@ if __name__ == "__main__":
             cv2.putText(output_image, f"{fingers_open}", (bounding_box[0][0], bounding_box[0][1] - 20) , cv2.FONT_HERSHEY_SIMPLEX,
                                                 fontScale = 1, color = (0,0, 255), thickness = 3)
 
-            if time.time() - last_change >= TIME_CHANGE_BUFFER and sum(fingers_open) == 5 and not hand_open:
-                #detected that hand has reopened, process the pick
-                hand_open = True
-                #pick the stuff after the whole thing has been processed
-                if pick_list:
-                    picked.append(pick_list.pop(0))
-                logging.debug(f"\n{top_center_bottom}{left_center_right}")
-                left_center_right = -1
-                top_center_bottom = -1
-                max_hand_discrepancy = 0
-
-            elif time.time() - last_change >= TIME_CHANGE_BUFFER and sum(fingers_open) <= 2 and hand_open:
-                #closed palms seem harder to detect due to angle, so only need to see 3 closed fingers
-                #hand was previously open, so something is being picked up/dropped
-
-                #change state of curr_holding
-                curr_holding = not curr_holding
-                hand_open = False
-                last_change = time.time()
-
-            if time.time() - last_change < TIME_CHANGE_BUFFER and sum(fingers_open) <= 2:
-                if max_hand_discrepancy < get_distance(curr_hand_loc, (hand_mean_x, hand_mean_y)):
-                    # hand is at greatest distance from mean detected so far, detect hand position relative to fiducials
-                    #initialize closest_distance as an integer greater than size of output_image
-                    closest_distance = 10000
-                    max_hand_discrepancy = get_distance(curr_hand_loc, (hand_mean_x, hand_mean_y))
-                    for marker_index in range(len(aruco_vectors)):
-                        #later replace corners with a persistent measure of fiducial location
-                        marker = aruco_vectors[marker_index].corners
-
-                        # top left point of marker should be to the left and underneath the hand
-                        if marker[0][0] < curr_hand_loc[0] and marker[0][1] > curr_hand_loc[1] \
-                            and	get_distance(marker[0], curr_hand_loc) < closest_distance:
-
-                        # #this version just finds nearest fiducial marker, problematic since picker might pick towards one
-                        #side of the bin
-                        # if get_distance(marker[0], curr_hand_loc) < closest_distance:
-
-                            closest_distance = get_distance(marker[0], curr_hand_loc)
-                            #get left center right based on marker index, ids of aruco stored as int
-                            left_center_right = aruco_vectors[marker_index].get_id() % 10
-                            top_center_bottom = aruco_vectors[marker_index].get_id() // 10
-
-
-            # motion related stuff that is checked every fixed period (otherwise different frame refresh rates lead to
-            # inconsistencies in measuring movement in pixels)
-            if (time_change > REFRESH_TIME):
-                # checks when the time_change is greater than the REFRESH TIME
-
-                logging.debug(f"curr_holding: {curr_holding}", handedness)
-                if prev_hand_loc != () and (curr_hand_loc[0] > prev_hand_loc[0] + MOVEMENT_MOE * time_change / REFRESH_TIME):
-                    # curr_hand is more than MOVEMENT_MOE pixels to the right of prev_hand_loc
-                    logging.debug("Moving right")
-                elif prev_hand_loc != () and (curr_hand_loc[0] < prev_hand_loc[0] - MOVEMENT_MOE * time_change / REFRESH_TIME):
-                    logging.debug("Moving left")
-
-                if prev_hand_loc != () and (curr_hand_loc[1] > prev_hand_loc[1] + MOVEMENT_MOE * time_change / REFRESH_TIME):
-                    # curr_hand is more than MOVEMENT_MOE pixels to the bottom of prev_hand_loc
-                    logging.debug("Moving down")
-                elif prev_hand_loc != () and (curr_hand_loc[1] < prev_hand_loc[1] - MOVEMENT_MOE * time_change / REFRESH_TIME):
-                    logging.debug("Moving up")
-
-                logging.debug(len(picked))
-
-
-                prev_hand_loc = curr_hand_loc
-                prev_time = curr_time
 
             #resize output_image to be a little smaller
             #output_image = cv2.resize(output_image, (int(output_image.shape[1] * 0.75), int(output_image.shape[0] * 0.75)))
