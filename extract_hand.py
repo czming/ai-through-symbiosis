@@ -22,10 +22,10 @@ cv2.namedWindow(WINDOW)
 #Use Camera
 #capture = cv2.VideoCapture(0)
 
-video_name = "picklist_17"
-dataset_path = '../2022Spring/dataset/'
+video_name = "picklist_105"
+dataset_path = '../videos'
 
-capture = cv2.VideoCapture(dataset_path + video_name + '.MP4')
+capture = cv2.VideoCapture(os.path.join(dataset_path, video_name, '.MP4'))
 #green2
 #Use Video
 fps = capture.get(cv2.CAP_PROP_FPS)      # OpenCV2 version 2 used "CV_CAP_PROP_FPS"
