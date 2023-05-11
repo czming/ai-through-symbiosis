@@ -26,13 +26,34 @@ extract_features.py script to `True`
 Next, preprocess the data by running the ```scripts/data_preprocessing/forward_fill.py``` and ```scripts/data_preprocessing/gaussian_convolution.py```
 scripts. Create a config file by copying ```scripts/configs/base.yaml``` and filling in the appropriate paths to folders in your local environment.
 
-Change the 
+To set the configs for the above and subsequent python script calls, use the ```-c, --config_file``` argument in the command line call.
 
 ### Training HMMs
 
 (In development)
 
 ### Extracting pick labels for pick sequences
+
+Set the ```PICKLISTS``` variable in ```iterative_improvement_clustering.py``` to specify the range of picklists numbers to iterate over (script will skip over picklists that are not in the folder)
+
+```
+# run from ai-through-symbiosis root directory
+python3 scripts/iterative_improvement_clustering.py
+```
+
+which should give you the predicted labels for the different picklists using the iterative clustering algorithm constrained by the object count set for each picklist. It will also output the hsv bins to ```object_type_hsv_bins.pkl``` representing the different object types which serves as our object representation, along with a confusion matrix similar to the results below
+
+### Testing HSV object representation
+
+After obtaining ```object_type_hsv_bins.pkl``` from the previous step, run the object classification script on the relevant picklists by setting the ```PICKLISTS``` variable in ```object_classification.py```
+
+```
+# run from ai-through-symbiosis root directory
+python3 scripts/object_classification.py
+```
+
+
+NOTE: If you are using a 30fps video instead of 60fps video, change the 
 
 
 

@@ -712,7 +712,7 @@ if __name__ == "__main__":
                         #take x as the one in the direction of the id1 to id2 vector, fill 0 as variance since not using it
                         x_coords = calculate_new_mean_variance(curr_coords[0], 0, curr_coords[2], u_v_coords[0])[0]
 
-                        #exponentially weighted moving average, doesn't seem to work well
+                        #exponentially weighted moving average
                         x_coords = curr_coords[0] * beta + u_v_coords[0] * (1 - beta)
 
                         y_coords = calculate_new_mean_variance(curr_coords[1], 0, curr_coords[2], u_v_coords[1])[0]
