@@ -30,7 +30,29 @@ To set the configs for the above and subsequent python script calls, use the ```
 
 ### Training HMMs
 
-(In development)
+Build the docker image that is setup for running The Hidden Markov Model Toolkit (HTK)
+```
+cd symbiosis
+docker build -t aits:latest .
+```
+
+Enter the container mounting the symbiosis folder
+```
+docker run -ti -v $PWD:/tmp/ -w /tmp/ aits /bin/bash
+```
+
+From outside the container, choose and copy the training data and labels from an experiment
+```
+cp -R ./ambient_experiments/136-234-aruco1dim/all-data/* ./symbiosis/all-data/
+cp -R ./ambient_experiments/136-234-aruco1dim/all-labels/* ./symbiosis/all-labels/
+```
+
+Run n-fold cross validation from within the container (this example has a training/testing split of 80/20 and 20 folds)
+```
+./scripts/n_fold.sh -s .8 -d all-data/ -n 20
+```
+
+The output of this script will be a number of fold directories containing the segmentation boundaries of each picklist.
 
 ### Extracting pick labels for pick sequences
 
