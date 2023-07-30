@@ -27,19 +27,36 @@ class ArUcoDetector:
 
     def getCorners(self, image: np.ndarray):
         #corners seem to be (x, y)
-        corners, ids, rejected = cv2.aruco.detectMarkers(image, self.aruco_dict, cameraMatrix=self.intrinsic, distCoeff=self.distortion)
+        detector = cv2.aruco.ArucoDetector(self.aruco_dict, cv2.aruco.DetectorParameters())
+        markerCorners, ids, rejected = detector.detectMarkers(image)
 
-        if corners:
-            #try and find all 4 points
-            rvecs, tvecs, markerPoints = cv2.aruco.estimatePoseSingleMarkers(corners, self.square_length, self.intrinsic, self.distortion)
+        if markerCorners:
+            #try and find all 4 points of each ArUco
+            objPoints = np.array([
+                (-self.square_length/2, self.square_length/2, 0),
+                (self.square_length/2, self.square_length/2, 0),
+                (self.square_length/2, -self.square_length/2, 0),
+                (-self.square_length/2, -self.square_length/2, 0)
+            ])
+            # print(corners.shape)
+            print(markerCorners)
+            rvecs = []
+            tvecs = []
+            for marker in markerCorners:
+                markerPointCount = marker.shape[0] * marker.shape[1]
+                pnpCorner = marker.reshape((markerPointCount, 1, 2))
+                retval, rvec, tvec = cv2.solvePnP(objPoints, pnpCorner, self.intrinsic, self.distortion,
+                                                    flags=cv2.SOLVEPNP_IPPE_SQUARE)
+                rvecs.append(rvec)
+                tvecs.append(tvec)
 
             ids = ids.flatten()
 
             #ensure that the 3D points and the 2D points are aligned
-            assert len(rvecs) == len(corners)
+            assert len(rvecs) == len(markerCorners)
 
             #only include those that are not in the horizontal margin (use top left point of marker as the reference)
-            return [ArUcoMarker(corners[i][0], int(ids[i]), rvecs[i].reshape((3,1)), tvecs[i].reshape((3,1))) for i in range(len(corners))]
+            return [ArUcoMarker(markerCorners[i][0], int(ids[i]), rvecs[i].reshape((3,1)), tvecs[i].reshape((3,1))) for i in range(len(markerCorners))]
         return []
 
 class ArUcoMarker(object):
