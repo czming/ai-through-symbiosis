@@ -122,22 +122,9 @@ def get_hs_bins(cropped_hand_image):
     cropped_hand_image = cv2.cvtColor(cropped_hand_image, cv2.COLOR_BGR2RGB)
     hsv_image = skimage.color.rgb2hsv(cropped_hand_image)
     dims = hsv_image.shape
-    hues = []
-    saturations = []
-    for i in range(0, dims[0]):
-        for j in range(0, dims[1]):
-            # subsample
-            if i % 1 == 0:
-                # BGR
-                hsv_value = np.array([[hsv_image[i, j, 0],
-                                       hsv_image[i, j, 1],
-                                       hsv_image[i, j, 2]]])
-                # rgb_value = np.array([[color_image[i, j, 0],
-                #                        color_image[i, j, 1],
-                #                        color_image[i, j, 2]]]) / 255.0
 
-                hues.append(hsv_value[0][0])
-                saturations.append(hsv_value[0][1])
+    hues = hsv_image[:, :, 0]
+    saturations = hsv_image[:, :, 1]
 
     if np.array(hues).max() > 1 or np.array(hues).min() < 0 or np.array(saturations).max() > 1 or np.array(saturations).min() < 0:
         raise Exception("Hue or saturation not in range [0, 1]")
@@ -294,7 +281,7 @@ if __name__ == "__main__":
 
     frames = 0
 
-    arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_5X5_1000)
+    arucoDict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_5X5_1000)
 
     #get optimal camera matrix to undistort the image
     #newcameramtx, roi = cv2.getOptimalNewCameraMatrix(intrinsic, distortion, (1920, 1080), 1,
