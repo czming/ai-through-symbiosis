@@ -27,19 +27,36 @@ class ArUcoDetector:
 
     def getCorners(self, image: np.ndarray):
         #corners seem to be (x, y)
-        corners, ids, rejected = cv2.aruco.detectMarkers(image, self.aruco_dict, cameraMatrix=self.intrinsic, distCoeff=self.distortion)
+        detector = cv2.aruco.ArucoDetector(self.aruco_dict, cv2.aruco.DetectorParameters())
+        markerCorners, ids, rejected = detector.detectMarkers(image)
 
-        if corners:
-            #try and find all 4 points
-            rvecs, tvecs, markerPoints = cv2.aruco.estimatePoseSingleMarkers(corners, self.square_length, self.intrinsic, self.distortion)
+        if markerCorners:
+            #try and find all 4 points of each ArUco
+            objPoints = np.array([
+                (-self.square_length/2, self.square_length/2, 0),
+                (self.square_length/2, self.square_length/2, 0),
+                (self.square_length/2, -self.square_length/2, 0),
+                (-self.square_length/2, -self.square_length/2, 0)
+            ])
+            # print(corners.shape)
+            print(markerCorners)
+            rvecs = []
+            tvecs = []
+            for marker in markerCorners:
+                markerPointCount = marker.shape[0] * marker.shape[1]
+                pnpCorner = marker.reshape((markerPointCount, 1, 2))
+                retval, rvec, tvec = cv2.solvePnP(objPoints, pnpCorner, self.intrinsic, self.distortion,
+                                                    flags=cv2.SOLVEPNP_IPPE_SQUARE)
+                rvecs.append(rvec)
+                tvecs.append(tvec)
 
             ids = ids.flatten()
 
             #ensure that the 3D points and the 2D points are aligned
-            assert len(rvecs) == len(corners)
+            assert len(rvecs) == len(markerCorners)
 
             #only include those that are not in the horizontal margin (use top left point of marker as the reference)
-            return [ArUcoMarker(corners[i][0], int(ids[i]), rvecs[i].reshape((3,1)), tvecs[i].reshape((3,1))) for i in range(len(corners))]
+            return [ArUcoMarker(markerCorners[i][0], int(ids[i]), rvecs[i].reshape((3,1)), tvecs[i].reshape((3,1))) for i in range(len(markerCorners))]
         return []
 
 class ArUcoMarker(object):
@@ -122,22 +139,9 @@ def get_hs_bins(cropped_hand_image):
     cropped_hand_image = cv2.cvtColor(cropped_hand_image, cv2.COLOR_BGR2RGB)
     hsv_image = skimage.color.rgb2hsv(cropped_hand_image)
     dims = hsv_image.shape
-    hues = []
-    saturations = []
-    for i in range(0, dims[0]):
-        for j in range(0, dims[1]):
-            # subsample
-            if i % 1 == 0:
-                # BGR
-                hsv_value = np.array([[hsv_image[i, j, 0],
-                                       hsv_image[i, j, 1],
-                                       hsv_image[i, j, 2]]])
-                # rgb_value = np.array([[color_image[i, j, 0],
-                #                        color_image[i, j, 1],
-                #                        color_image[i, j, 2]]]) / 255.0
 
-                hues.append(hsv_value[0][0])
-                saturations.append(hsv_value[0][1])
+    hues = hsv_image[:, :, 0]
+    saturations = hsv_image[:, :, 1]
 
     if np.array(hues).max() > 1 or np.array(hues).min() < 0 or np.array(saturations).max() > 1 or np.array(saturations).min() < 0:
         raise Exception("Hue or saturation not in range [0, 1]")
@@ -294,7 +298,7 @@ if __name__ == "__main__":
 
     frames = 0
 
-    arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_5X5_1000)
+    arucoDict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_5X5_1000)
 
     #get optimal camera matrix to undistort the image
     #newcameramtx, roi = cv2.getOptimalNewCameraMatrix(intrinsic, distortion, (1920, 1080), 1,
