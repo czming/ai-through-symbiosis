@@ -21,11 +21,11 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--config", "-c", type=str, default="configs/zm.yaml",
+parser.add_argument("--config_file", "-c", type=str, default="configs/zm.yaml",
                     help="Path to experiment config (scripts/configs)")
 args = parser.parse_args()
 
-configs = load_yaml_config(args.config)
+configs = load_yaml_config(args.config_file)
 
 elan_label_folder = configs["file_paths"]["elan_annotated_file_path"]
 htk_input_folder = configs["file_paths"]["htk_input_file_path"]
@@ -499,7 +499,7 @@ for object_type, object_hsv_bins in objects_pred_hsv_bins.items():
     # store the standard deviation as well of the different axes
     objects_pred_avg_hsv_bins[object_type] = [np.array(object_hsv_bins).mean(axis=0), np.array(object_hsv_bins).std(axis=0, ddof=1)]
 
-with open("object_type_hsv_bins1.pkl", "wb") as outfile:
+with open("object_type_hsv_bins.pkl", "wb") as outfile:
     # without removing the hand
     pickle.dump(objects_pred_avg_hsv_bins, outfile)
 
