@@ -37,10 +37,7 @@ class IterativeClusteringModel(Model):
         # preprocessing
 
         # {picklist_no: [index in objects_avg_hsv_bins for objects that are in this picklist]}
-        picklist_objects = defaultdict(lambda: set())
-
-        # {object type: [index in objects_avg_hsv_bins for objects that are predicted to be of that type]
-        pred_objects = defaultdict(lambda: set())
+        picklist_objects = defaultdict(lambda: [])
 
         # stores the avg_hsv_bins for all objects in a 1D list (mapped by the object id)
         objects_avg_hsv_bins = []
@@ -56,6 +53,7 @@ class IterativeClusteringModel(Model):
 
         for picklist_no, picklist_vectors in enumerate(train_samples):
             # picklist_vectors contains the list of vectors representing each pick in the pioklist
+            # picklist no is just the order of their occurrence in train_samples)
 
             # get the list of labels that are present (the list is unordered, the only thing that is important is the
             # count of each element in the labels)
@@ -76,7 +74,7 @@ class IterativeClusteringModel(Model):
                 object_vector = picklist_vectors[i]
 
                 object_id = len(objects_avg_hsv_bins)
-                picklist_objects[picklist_no].add(object_id)
+                picklist_objects[picklist_no].append(object_id)
                 # map object to prediction and prediction to all objects with the same
                 pred_objects[pred_labels[i]].add(object_id)
                 objects_pred[object_id] = pred_labels[i]
@@ -122,7 +120,7 @@ class IterativeClusteringModel(Model):
                 # check whether swapping the current element with any of the other
 
                 # randomly pick an object
-                object1_id = np.random.choice(list(picklist_objects[picklist_no]))
+                object1_id = np.random.choice(picklist_objects[picklist_no])
 
                 # stores the reductions for the different object2s
                 object2_distance_reduction = {}
@@ -252,18 +250,28 @@ class IterativeClusteringModel(Model):
                 cluster_fig.canvas.draw()
 
         # reinitialize self.class_hsv_bins
-        self.class_hsv_bins = {}
+        self.class_hsv_bins_mean = {}
+        self.class_hsv_bins_std = {}
+
 
         for object_class, object_indices in pred_objects.items():
-            self.class_hsv_bins[object_class] = np.array([objects_avg_hsv_bins[i] for i in object_indices]).mean(axis=0)
-
+            self.class_hsv_bins_mean[object_class] = np.array([objects_avg_hsv_bins[i] for i in object_indices]).mean(axis=0)
+            self.class_hsv_bins_std[object_class] = np.array([objects_avg_hsv_bins[i] for i in object_indices]).std(axis=0, ddof=1)
         # print (self.class_hsv_bins)
 
-        return self.class_hsv_bins
+        # predictions for the objects grouped by the picklist (and in order of the objects as they occurred in the picklist
+        objects_pred_grouped_picklist = {}
+
+        for picklist_index in picklist_objects.keys():
+            objects_pred_grouped_picklist[picklist_index] = [objects_pred[i] for i in picklist_objects[picklist_index]]
+
+
+        # need to change objects_pred to be object predictions grouped by picklist
+        return self.class_hsv_bins_mean, self.class_hsv_bins_std, objects_pred_grouped_picklist
 
 
     # need a method to fit just a single new example (get the ones closest and add that to the mean
 
 
-    def predict(self):
+    def predict(self, hsv_bin_vector):
         pass

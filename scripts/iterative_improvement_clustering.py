@@ -55,11 +55,6 @@ objects_avg_hsv_bins = []
 
 
 
-
-
-# {index in objects_avg_hsv_bins: curr_predicted_object_type}
-objects_pred = {}
-
 # list of labels (corresponding to each
 combined_pick_labels = []
 
@@ -191,6 +186,7 @@ for picklist_no in PICKLISTS:
         pick_labels = [i for i in infile.read().replace("\n", "")[::2]]
 
     combined_pick_labels.extend(pick_labels)
+    objects_avg_hsv_bins.extend(avg_hsv_picks)
 
     pick_labels_grouped_picklist.append(pick_labels)
     objects_avg_hsv_bins_grouped_picklist.append(avg_hsv_picks)
@@ -204,16 +200,9 @@ for picklist_no in PICKLISTS:
 
 iterative_clustering_model = IterativeClusteringModel()
 
-# gather the object hsv bins to match the expected format for IterativeClusteringModel fit function
-train_object_hsv_bins = []
-
-print (len(avg_hsv_bins_combined), avg_hsv_bins_combined)
-
-print (len(avg_hsv_picks), avg_hsv_picks)
-
-object_class_hsv_bins = \
+object_class_hsv_bins, object_class_hsv_bins_std, objects_pred_grouped_picklist = \
     iterative_clustering_model.fit(train_samples=objects_avg_hsv_bins_grouped_picklist, train_labels=pick_labels_grouped_picklist, \
-                               num_epochs=50, display_visual=True)
+                               num_epochs=500, display_visual=True)
 
 
 
@@ -260,6 +249,19 @@ colors = {
     's': 'black'
 }
 
+color_mapping = {
+    'r': '#ff0000',
+    'g': '#009900',
+    'b': '#000099',
+    'p': '#0000ff',
+    'q': '#00ff00',
+    'o': '#FFA500',
+    's': '#000000',
+    'a': '#FFEA00',
+    't': '#777777',
+    'u': '#E1C16E'
+}
+
 plt_display_index = 0
 fig, axs = plt.subplots(2, len(object_class_hsv_bins) // 2)
 
@@ -287,12 +289,12 @@ plt.show()
 
 
 # print the results on a per picklist level
-for picklist_no, objects_in_picklist in picklist_objects.items():
+for picklist_no, picklist_pred in objects_pred_grouped_picklist.items():
+
     print (f"Picklist no. {picklist_no}")
-    picklist_pred = [objects_pred[i] for i in objects_in_picklist]
     print (f"Predicted labels: {picklist_pred}")
     # use the same mapping for combined_pick_labels as object ids
-    picklist_gt = [combined_pick_labels[i] for i in objects_in_picklist]
+    picklist_gt = pick_labels_grouped_picklist[picklist_no]
 
 
     with open(f"pick_labels/picklist_{picklist_no}.csv", "w") as outfile:
@@ -303,7 +305,7 @@ for picklist_no, objects_in_picklist in picklist_objects.items():
 
 # flatten arrays
 actual_picklists = combined_pick_labels
-predicted_picklists = [objects_pred[i] for i in range(len(combined_pick_labels))]
+predicted_picklists = [i for j in sorted(objects_pred_grouped_picklist.keys()) for i in objects_pred_grouped_picklist[j]]
 
 ax = plt.figure().add_subplot(projection='3d')
 
@@ -354,21 +356,23 @@ plt.tight_layout()
 
 plt.show()
 
-objects_pred_hsv_bins = defaultdict(lambda: [])
+# saving the model
 
-# gather the bins for the predicted
-for object, pred in objects_pred.items():
-    # use the one for classification
-    objects_pred_hsv_bins[pred].append(objects_avg_hsv_bins[object])
-
-objects_pred_avg_hsv_bins = {}
-
-for object_type, object_hsv_bins in objects_pred_hsv_bins.items():
-    # store the standard deviation as well of the different axes
-    objects_pred_avg_hsv_bins[object_type] = [np.array(object_hsv_bins).mean(axis=0), np.array(object_hsv_bins).std(axis=0, ddof=1)]
-
-with open("object_type_hsv_bins_copy.pkl", "wb") as outfile:
-    # without removing the hand
-    pickle.dump(objects_pred_avg_hsv_bins, outfile)
-
-objects_pred_hsv_bins = defaultdict(lambda: [])
+# objects_pred_hsv_bins = defaultdict(lambda: [])
+#
+# # gather the bins for the predicted
+# for object, pred in objects_pred.items():
+#     # use the one for classification
+#     objects_pred_hsv_bins[pred].append(objects_avg_hsv_bins[object])
+#
+# objects_pred_avg_hsv_bins = {}
+#
+# for object_type, object_hsv_bins in objects_pred_hsv_bins.items():
+#     # store the standard deviation as well of the different axes
+#     objects_pred_avg_hsv_bins[object_type] = [np.array(object_hsv_bins).mean(axis=0), np.array(object_hsv_bins).std(axis=0, ddof=1)]
+#
+# with open("object_type_hsv_bins_copy.pkl", "wb") as outfile:
+#     # without removing the hand
+#     pickle.dump(objects_pred_avg_hsv_bins, outfile)
+#
+# objects_pred_hsv_bins = defaultdict(lambda: [])
