@@ -7,5 +7,5 @@ class Model(ABC):
         pass
 
     @abstractmethod
-    def predict(self, input_vector):
+    def predict(self):
         pass

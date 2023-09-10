@@ -6,6 +6,7 @@ when there is no pair which would reduce the intracluster distance
 """
 
 from utils import *
+from models import IterativeClusteringModel
 import argparse
 import math
 import matplotlib.pyplot as plt
@@ -49,18 +50,23 @@ picklists_w_symmetric_counts = set()
 avg_hsv_bins_combined = {}
 
 # stores the objects
+# stores the avg_hsv_bins for all objects in a 1D list (mapped by the object id)
 objects_avg_hsv_bins = []
-classification_objects_avg_hsv_bins = []
 
-# {picklist_no: [index in objects_avg_hsv_bins for objects that are in this picklist]}
-picklist_objects = defaultdict(lambda: set())
 
-# {object type: [index in objects_avg_hsv_bins for objects that are predicted to be of that type]
-pred_objects = defaultdict(lambda: set())
 
+
+
+# {index in objects_avg_hsv_bins: curr_predicted_object_type}
 objects_pred = {}
 
+# list of labels (corresponding to each
 combined_pick_labels = []
+
+# set of pick_labels
+pick_labels_grouped_picklist = []
+# object avg hsv bin vectors grouped by picklist
+objects_avg_hsv_bins_grouped_picklist = []
 
 # initialization (randomly assign colors)
 for picklist_no in PICKLISTS:
@@ -132,10 +138,13 @@ for picklist_no in PICKLISTS:
     # avg hsv bins for each pick
     num_hand_detections = [get_avg_hsv_bin_frames(htk_inputs, start_frame + 10, end_frame - 10)[1] for (start_frame, end_frame) \
                            in pick_frames]
+
     if 0 in num_hand_detections:
         print("skipping bad boundaries")
         continue
 
+
+    # gather empty hand hsv bins to compare with the hsv bins of the picks
     empty_hand_label = "m"
 
     empty_hand_frames = []
@@ -173,193 +182,53 @@ for picklist_no in PICKLISTS:
                      in pick_frames]
 
 
+    # collapse the avg_hsv_picks into more discrete bins for training
+    avg_hsv_picks = [collapse_hue_bins(i, [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165], 15) \
+                     for i in avg_hsv_picks]
+
 
     with open(f"{pick_label_folder}/picklist_{picklist_no}_raw.txt") as infile:
         pick_labels = [i for i in infile.read().replace("\n", "")[::2]]
 
     combined_pick_labels.extend(pick_labels)
 
-    # randomly assign pick labels for now
-    pred_labels = np.random.choice(pick_labels, replace=False, size=len(pick_labels))
+    pick_labels_grouped_picklist.append(pick_labels)
+    objects_avg_hsv_bins_grouped_picklist.append(avg_hsv_picks)
 
-    logging.info(f"ground_truth: {pick_labels}, pred_labels: {pred_labels}")
+    # # randomly assign pick labels for now
+    # pred_labels = np.random.choice(pick_labels, replace=False, size=len(pick_labels))
 
-    for i in range(len(avg_hsv_picks)):
-        object_id = len(objects_avg_hsv_bins)
-        picklist_objects[picklist_no].add(object_id)
-        # map object to prediction and prediction to all objects with the same
-        pred_objects[pred_labels[i]].add(object_id)
-        objects_pred[object_id] = pred_labels[i]
-        # overlapping bins so there's no sudden dropoff
-        objects_avg_hsv_bins.append(collapse_hue_bins(avg_hsv_picks[i], [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165], 15))
-        classification_objects_avg_hsv_bins.append(collapse_hue_bins(avg_hsv_picks[i], [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165], 15))
-
-
-ax = plt.figure().add_subplot(projection='3d')
-
-color_mapping = {
-    'r': '#ff0000',
-    'g': '#009900',
-    'b': '#000099',
-    'p': '#0000ff',
-    'q': '#00ff00',
-    'o': '#FFA500',
-    's': '#000000',
-    'a': '#FFEA00',
-    't': '#777777',
-    'u': '#E1C16E'
-}
-
-ax.scatter([i[0] for i in objects_avg_hsv_bins], [i[len(objects_avg_hsv_bins[0]) // 3] for i in objects_avg_hsv_bins], \
-           [i[2 * len(objects_avg_hsv_bins[0]) // 3] for i in objects_avg_hsv_bins], \
-           c = [color_mapping[i] for i in combined_pick_labels])
-
-plt.show()
-
-epochs = 0
-num_epochs = 500
-
-cluster_fig = plt.figure()
-
-cluster_ax = cluster_fig.add_subplot(projection="3d")
-
-plt.show(block=False)
-
-while epochs < num_epochs:
-    print (f"Starting epoch {epochs}...")
-    # for each epoch, iterate through all the picklists and offer one swap
-    for picklist_no, objects_in_picklist in picklist_objects.items():
-        # check whether swapping the current element with any of the other
-
-        # randomly pick an object
-        object1_id = np.random.choice(list(picklist_objects[picklist_no]))
-
-        # stores the reductions for the different object2s
-        object2_distance_reduction = {}
-
-        ## TODO: add controls on the number of objects looked at (if limiting the number of objects in the
-        # picklist to compare to, just pick a bunch randomly to be looked at)
-        for object2_id in objects_in_picklist:
-            object1_pred = objects_pred[object1_id]
-            object2_pred = objects_pred[object2_id]
-
-            if objects_pred[object2_id] == objects_pred[object1_id]:
-                # they objects have the same prediction currently, no point swapping
-                continue
-
-            # simple approach, look at the relative distance between the two points and the center of their
-            # clusters, don't count themselves
-            object1_pred_mean = np.array([objects_avg_hsv_bins[i] for i in pred_objects[object1_pred] if i != object1_id]).mean(axis=0)
-            object2_pred_mean = np.array([objects_avg_hsv_bins[i] for i in pred_objects[object2_pred] if i != object2_id]).mean(axis=0)
-
-            object1_pred_std = np.array([objects_avg_hsv_bins[i] for i in pred_objects[object1_pred] if i != object1_id]).std(axis=0, ddof=1)
-            object2_pred_std = np.array([objects_avg_hsv_bins[i] for i in pred_objects[object2_pred] if i != object2_id]).std(axis=0, ddof=1)
-
-            object1_pred_std = np.nan_to_num(object1_pred_std)
-            object2_pred_std = np.nan_to_num(object2_pred_std)
-
-            # should be proportional to log likelihood (assume normal, then take exponential of these / 2 to get pdf
-
-            # current distance between the objects and their respective means, 0.00001 added for numerical stability
-            curr_distance = (((object1_pred_mean - objects_avg_hsv_bins[object1_id]) ** 2) / (object1_pred_std ** 2 + 0.000001)).sum(axis=0) + \
-                            (((object2_pred_mean - objects_avg_hsv_bins[object2_id]) ** 2) / (object2_pred_std ** 2 + 0.000001)).sum(axis=0)
-
-            # distance if they were to swap
-            new_distance = (((object2_pred_mean - objects_avg_hsv_bins[object1_id]) ** 2) / (object2_pred_std ** 2 + 0.000001)).sum(axis=0) + \
-                            (((object1_pred_mean - objects_avg_hsv_bins[object2_id]) ** 2) / (object1_pred_std ** 2 + 0.000001)).sum(axis=0)
+    # logging.info(f"ground_truth: {pick_labels}, pred_labels: {pred_labels}")
 
 
 
-            distance_reduction = curr_distance - new_distance
+iterative_clustering_model = IterativeClusteringModel()
 
-            object2_distance_reduction[object2_id] = distance_reduction
+# gather the object hsv bins to match the expected format for IterativeClusteringModel fit function
+train_object_hsv_bins = []
 
-        if len(object2_distance_reduction) == 0:
-            # no object of different type
-            continue
+print (len(avg_hsv_bins_combined), avg_hsv_bins_combined)
 
-        # keep best distance reduction
-        best_pos_object2 = list(object2_distance_reduction.keys())[0]
+print (len(avg_hsv_picks), avg_hsv_picks)
 
-        for object2, distance_reduction in object2_distance_reduction.items():
-            if distance_reduction > object2_distance_reduction[best_pos_object2]:
-                # found a better one
-                best_pos_object2 = object2
-
-        if object2_distance_reduction[best_pos_object2] <= 0:
-            object2_distance_reduction_sum = sum(object2_distance_reduction.values())
-            # all negative, need to pick one at random with decreasing probability based on the numbers,
-            # take exponential of the distance reduction which should all be negative
-            swap_object_id = np.random.choice(list(object2_distance_reduction.keys()), p=np.array([math.e ** (i / object2_distance_reduction_sum) for i in
-                                        object2_distance_reduction.values()]) / sum([math.e ** (i / object2_distance_reduction_sum) for i in
-                                        object2_distance_reduction.values()]))
-
-            # give reducing odds of getting a random swap
-            to_swap = np.random.choice([0, 1], p = [1 - math.e ** (-epochs/50), math.e ** (-epochs/50)])
-
-            if not to_swap:
-                # to_swap is False so skip the rest of the assignment
-                continue
-
-
-        else:
-            # reduce randomness towards the end (simulated annealing)
-
-            # only want to consider those with positive distance reduction
-            object2_distance_reduction_positive = {key: value for key, value in object2_distance_reduction.items() if value > 0}
-
-            # use to normalize the distances otherwise can get very small
-            object2_distance_reduction_sum_positive = sum([i for i in object2_distance_reduction_positive.values()])
-
-            # definitely swap, but some uncertainty about which element it is swapped with (decreasing temperature by adding epochs
-            # as a factor)
-            swap_object_id = np.random.choice(list(object2_distance_reduction_positive.keys()), p=np.array([math.e ** (i / object2_distance_reduction_sum_positive) for i in
-                                        object2_distance_reduction_positive.values()]) / sum([math.e ** (i / object2_distance_reduction_sum_positive) for i in
-                                        object2_distance_reduction_positive.values()]))
-
-
-        # swap the objects, update objects_pred and pred_objects
-        object1_prev_pred = objects_pred[object1_id]
-        swap_object_prev_pred = objects_pred[swap_object_id]
-
-        pred_objects[object1_prev_pred].remove(object1_id)
-        pred_objects[swap_object_prev_pred].remove(swap_object_id)
-
-        pred_objects[object1_prev_pred].add(swap_object_id)
-        pred_objects[swap_object_prev_pred].add(object1_id)
-
-        objects_pred[object1_id] = swap_object_prev_pred
-        objects_pred[swap_object_id] = object1_prev_pred
-
-
-    epochs += 1
-
-    predicted_picklists = [objects_pred[i] for i in range(len(combined_pick_labels))]
-
-    cluster_ax.clear()
-
-    cluster_ax.scatter([i[0] for i in objects_avg_hsv_bins], [i[len(objects_avg_hsv_bins[0]) // 3] for i in objects_avg_hsv_bins], \
-                       [i[2 * len(objects_avg_hsv_bins[0]) // 3] for i in objects_avg_hsv_bins], \
-               c = [color_mapping[i] for i in predicted_picklists])
-
-
-    cluster_fig.canvas.draw()
+object_class_hsv_bins = \
+    iterative_clustering_model.fit(train_samples=objects_avg_hsv_bins_grouped_picklist, train_labels=pick_labels_grouped_picklist, \
+                               num_epochs=50, display_visual=True)
 
 
 
 
 plt_display_index = 0
-fig, axs = plt.subplots(2, len(pred_objects) // 2)
+fig, axs = plt.subplots(2, len(object_class_hsv_bins) // 2)
 
-for object, predicted_objects in pred_objects.items():
+for object_class, hsv_bins in object_class_hsv_bins.items():
 
-    hsv_bins = np.array([objects_avg_hsv_bins[i] for i in predicted_objects]).mean(axis=0)
-    if plt_display_index < len(pred_objects) // 2:
+    if plt_display_index < len(object_class_hsv_bins) // 2:
         axs[0, plt_display_index].bar(range(len(hsv_bins)), hsv_bins)
         axs[0, plt_display_index].set_title(object)
     else:
-        axs[1, plt_display_index - len(pred_objects) // 2].bar(range(len(hsv_bins)), hsv_bins)
-        axs[1, plt_display_index - len(pred_objects) // 2].set_title(object)
+        axs[1, plt_display_index - len(object_class_hsv_bins) // 2].bar(range(len(hsv_bins)), hsv_bins)
+        axs[1, plt_display_index - len(object_class_hsv_bins) // 2].set_title(object)
     plt_display_index += 1
 
 
@@ -392,24 +261,23 @@ colors = {
 }
 
 plt_display_index = 0
-fig, axs = plt.subplots(2, len(pred_objects) // 2)
+fig, axs = plt.subplots(2, len(object_class_hsv_bins) // 2)
 
-for object, predicted_objects in pred_objects.items():
+for object_class, hsv_bins in object_class_hsv_bins.items():
 
-    hsv_bins = np.array([classification_objects_avg_hsv_bins[i] for i in predicted_objects]).mean(axis=0)
-    if plt_display_index < len(pred_objects) // 2:
-        axs[0, plt_display_index].bar(range(len(hsv_bins)), hsv_bins, color=colors[object])
-        axs[0, plt_display_index].set_title(letter_to_name[object])
+    if plt_display_index < len(object_class_hsv_bins) // 2:
+        axs[0, plt_display_index].bar(range(len(hsv_bins)), hsv_bins, color=colors[object_class])
+        axs[0, plt_display_index].set_title(letter_to_name[object_class])
         axs[0, plt_display_index].set_ylim([-0.15, 0.15])
         axs[0, plt_display_index].set_yticks([])
         axs[0, plt_display_index].set_xticks([])
 
     else:
-        axs[1, plt_display_index - len(pred_objects) // 2].bar(range(len(hsv_bins)), hsv_bins, color=colors[object])
-        axs[1, plt_display_index - len(pred_objects) // 2].set_title(letter_to_name[object])
-        axs[1, plt_display_index - len(pred_objects) // 2].set_ylim([-0.15, 0.15])
-        axs[1, plt_display_index - len(pred_objects) // 2].set_yticks([])
-        axs[1, plt_display_index - len(pred_objects) // 2].set_xticks([])
+        axs[1, plt_display_index - len(object_class_hsv_bins) // 2].bar(range(len(hsv_bins)), hsv_bins, color=colors[object_class])
+        axs[1, plt_display_index - len(object_class_hsv_bins) // 2].set_title(letter_to_name[object_class])
+        axs[1, plt_display_index - len(object_class_hsv_bins) // 2].set_ylim([-0.15, 0.15])
+        axs[1, plt_display_index - len(object_class_hsv_bins) // 2].set_yticks([])
+        axs[1, plt_display_index - len(object_class_hsv_bins) // 2].set_xticks([])
     plt_display_index += 1
 
     axs[0, 0].set_yticks([-0.15, -0.1, -0.05, 0, 0.05, 0.1, 0.15])
@@ -491,7 +359,7 @@ objects_pred_hsv_bins = defaultdict(lambda: [])
 # gather the bins for the predicted
 for object, pred in objects_pred.items():
     # use the one for classification
-    objects_pred_hsv_bins[pred].append(classification_objects_avg_hsv_bins[object])
+    objects_pred_hsv_bins[pred].append(objects_avg_hsv_bins[object])
 
 objects_pred_avg_hsv_bins = {}
 
@@ -499,7 +367,7 @@ for object_type, object_hsv_bins in objects_pred_hsv_bins.items():
     # store the standard deviation as well of the different axes
     objects_pred_avg_hsv_bins[object_type] = [np.array(object_hsv_bins).mean(axis=0), np.array(object_hsv_bins).std(axis=0, ddof=1)]
 
-with open("object_type_hsv_bins.pkl", "wb") as outfile:
+with open("object_type_hsv_bins_copy.pkl", "wb") as outfile:
     # without removing the hand
     pickle.dump(objects_pred_avg_hsv_bins, outfile)
 
