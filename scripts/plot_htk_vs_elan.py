@@ -15,7 +15,7 @@ def produce_plots(result_dir, plots_dir):
     picklists = ['1','2','3','17','18','19','20','21','22','26']
     picklists = ['20', '21', '22', '26']
     # picklists = ['1', '2', '3', '17', '18', '19']
-    picklists = list(range(0,135))
+    picklists = list(range(0,235))
 
     for picklist_num in picklists:
         # Getting HTK boundaries (predicted)

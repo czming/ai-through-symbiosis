@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 
 import skimage.color
 
-# from scripts.utils import load_yaml_config
+from scripts.utils import load_yaml_config
 
 # requirements: opencv-python, opencv-contrib-python
 
@@ -65,8 +65,15 @@ class ArUcoMarker(object):
 def get_hand_corners(hand_points:list) -> np.ndarray:
     """
 	Get pseudo ArUco landmarks for hand positions
+<<<<<<< HEAD
 	params:
 		- hand_points: list of MediaPipe hand positions
+=======
+
+	params:
+		- hand_points: list of MediaPipe hand positions
+
+>>>>>>> master
 	return:
 		- ArUco corners
 	"""
@@ -105,6 +112,10 @@ def parse_picklist(file):
 def get_hs_bins(cropped_hand_image):
     """
     returns the hue and saturation bins for cropped_hand_image (bins are proportion of pixels within the image)
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
     :param cropped_hand_image: image to calculate the hue and saturation over
     :return: [hue_bins[:10], saturation_bins[10:20]], [] if cropped_hand_image is empty
     """
@@ -237,9 +248,11 @@ if __name__ == "__main__":
     frames = 0
 
     # change this to visualize the detections in the image
-    DISPLAY_VISUAL = False
+    DISPLAY_VISUAL = True
 
-    OUTPUT_FILE = os.path.basename(args.video[:args.video.rindex(".")])
+    OUTPUT_FILE = os.path.basename(args.video.split(".")[0] + ".txt")
+
+    print (OUTPUT_FILE)
 
     with open(OUTPUT_FILE, "w") as outfile:
         # clear the output file
@@ -266,8 +279,10 @@ if __name__ == "__main__":
     COLOR_BIN_HTK_OFFSET = 72
     OPTICAL_FLOW_HTK_OFFSET = 352
     HAND_POS_HTK_OFFSET = 354
-    HAND_LANDMARK_OFFSET = 356 #21 * 3
-    FINGERS_OFFSET = 419 #[fingers 0..4, >0 fingers, >1 finger, >2, >3, >4]
+
+    #Hand landmark and fingers data - not in master yet apparently
+    # HAND_LANDMARK_OFFSET = 356 #21 * 3
+    # FINGERS_OFFSET = 419 #[fingers 0..4, >0 fingers, >1 finger, >2, >3, >4]
 
     #aruco camera matrices are after image is distorted, focal length shouldn't matter since everything is adjusted
     #proportionally
@@ -339,8 +354,12 @@ if __name__ == "__main__":
         # aruco_marker = [is_there, x, y]
         #output vector for use with htk, [aruco_marker[:72], color_bins[72:92], optical_flow_avg[92:94], hand_loc[94:96]], 96 dim version
         # [aruco_marker[:72], color_bins[72:352], optical_flow_avg[352:354], hand_loc[354:356]] 356-dimversion
-        htk_output_vector = [0 for i in range(429)]
         
+        # update to 429 when using hand landmark + fingers openclose data
+        # htk_output_vector = [0 for i in range(429)]
+        
+        htk_output_vector = [0 for i in range(356)]
+
         success, image = cap.read()
         if not success:
             print("Ignoring empty camera frame.")
@@ -709,7 +728,7 @@ if __name__ == "__main__":
                         #take x as the one in the direction of the id1 to id2 vector, fill 0 as variance since not using it
                         x_coords = calculate_new_mean_variance(curr_coords[0], 0, curr_coords[2], u_v_coords[0])[0]
 
-                        #exponentially weighted moving average, doesn't seem to work well
+                        #exponentially weighted moving average
                         x_coords = curr_coords[0] * beta + u_v_coords[0] * (1 - beta)
 
                         y_coords = calculate_new_mean_variance(curr_coords[1], 0, curr_coords[2], u_v_coords[1])[0]
@@ -786,18 +805,22 @@ if __name__ == "__main__":
             #get which hand we're looking at (look at the first hand that is detected)
             handedness = MessageToDict(results.multi_handedness[0])['classification'][0]['label']
             for hand_landmarks in results.multi_hand_landmarks:
-                #look only at the first hand detected if there are multiple hands
-                used_landmarks = hand_landmarks.landmark[:21]
-                for i in range(21): 
-                    landmark_pos = [used_landmarks[i].x, used_landmarks[i].y, used_landmarks[i].z]
-                    first_hand_points.append(landmark_pos)
-                    htk_output_vector[HAND_LANDMARK_OFFSET + 3 * i : HAND_LANDMARK_OFFSET + (3 * i) + 3] = landmark_pos
+        #        #look only at the first hand detected if there are multiple hands
+        #         used_landmarks = hand_landmarks.landmark[:21]
+        #         for i in range(21): 
+        #             landmark_pos = [used_landmarks[i].x, used_landmarks[i].y, used_landmarks[i].z]
+        #             first_hand_points.append(landmark_pos)
+        #             htk_output_vector[HAND_LANDMARK_OFFSET + 3 * i : HAND_LANDMARK_OFFSET + (3 * i) + 3] = landmark_pos
+        #             #output_image = cv2.circle(output_image, (int(i.x * output_image.shape[1]), int(i.y * output_image.shape[0])), 2, (0, 0, 255), 3)
+        #             mp_drawing.draw_landmarks(output_image, hand_landmarks, mp_hands.HAND_CONNECTIONS)
+        # else:
+        #     #what should we put hand landmarks at if not visible? I'm putting [-1, -1, -1] for now
+        #     htk_output_vector[HAND_LANDMARK_OFFSET : HAND_LANDMARK_OFFSET + 63] = [-1 for i in range(63)]
+        
+                for i in hand_landmarks.landmark[:21]:
+                    first_hand_points.append([i.x, i.y, i.z])
                     #output_image = cv2.circle(output_image, (int(i.x * output_image.shape[1]), int(i.y * output_image.shape[0])), 2, (0, 0, 255), 3)
                     mp_drawing.draw_landmarks(output_image, hand_landmarks, mp_hands.HAND_CONNECTIONS)
-        else:
-            #what should we put hand landmarks at if not visible? I'm putting [-1, -1, -1] for now
-            htk_output_vector[HAND_LANDMARK_OFFSET : HAND_LANDMARK_OFFSET + 63] = [-1 for i in range(63)]
-        
 
         #        8   12  16  20
         #        |   |   |   |
@@ -845,9 +868,10 @@ if __name__ == "__main__":
             cv2.putText(output_image, f"{fingers_open}", (bounding_box[0][0], bounding_box[0][1] - 20) , cv2.FONT_HERSHEY_SIMPLEX,
                                                 fontScale = 1, color = (0,0, 255), thickness = 3)
             
-            #add to features
-            htk_output_vector[FINGERS_OFFSET : FINGERS_OFFSET + 5] = fingers_open
-            htk_output_vector[FINGERS_OFFSET + 5 : FINGERS_OFFSET + 10] = [1 if sum(fingers_open) > i else 0 for i in range(5)]
+            # uncomment when using fingers openclose data
+            # #add to features
+            # htk_output_vector[FINGERS_OFFSET : FINGERS_OFFSET + 5] = fingers_open
+            # htk_output_vector[FINGERS_OFFSET + 5 : FINGERS_OFFSET + 10] = [1 if sum(fingers_open) > i else 0 for i in range(5)]
 
             #resize output_image to be a little smaller
             #output_image = cv2.resize(output_image, (int(output_image.shape[1] * 0.75), int(output_image.shape[0] * 0.75)))
@@ -943,3 +967,4 @@ if __name__ == "__main__":
 
     # Closes all the frames
     cv2.destroyAllWindows()
+

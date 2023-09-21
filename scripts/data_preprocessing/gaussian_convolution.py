@@ -6,12 +6,14 @@ import numpy as np
 import math
 import logging
 import matplotlib.pyplot as plt
+import argparse
 
 import sys
  
 # setting path
 sys.path.append('..')
 
+from utils import *
 from visualize_htk_inputs import plot_axs_columns 
 
 def reflect_convolve(data, convolution_filter):
@@ -46,7 +48,14 @@ def gaussian_kernel1D(length, sigma):
 def average_kernel1D(length):
     return [1/length] * length
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--config_file", "-c", type=str, default="../configs/zm.yaml",
+                    help="Path to experiment config (scripts/configs)")
+args = parser.parse_args()
 
+configs = load_yaml_config(args.config_file)
+
+htk_input_folder = configs["file_paths"]["htk_input_file_path"]
 
 logging.getLogger().setLevel("INFO")
 
@@ -56,14 +65,24 @@ logging.getLogger().setLevel("INFO")
 length = 9
 sigma = 3
 convolution_filter = gaussian_kernel1D(length, sigma)
-
+#convolution_filter = average_kernel1D(length)
 # choose the index of the columns that we want to visualize
-VISUALIZED_COLUMNS = [0, -1, -2]
+VISUALIZED_COLUMNS = [0, 1, 2,3,4,5]
 
 # columns that we want to apply the filter to
 FILTER_COLUMNS = [0]
 
-    file_name = f"""../../../htk_inputs/picklist_{index}_forward_filled_30.txt"""
+
+for index in range(135, 235):
+
+    file_name = f"""{htk_input_folder}/picklist_{str(index)}_forward_filled_30.txt"""
+
+    try:
+        open(file_name)
+
+    except:
+        print("Skipping picklist" + str(index))
+        continue
 
     data = np.genfromtxt(file_name, delimiter=" ")
 
@@ -75,8 +94,9 @@ FILTER_COLUMNS = [0]
     # make sure the lengths are the same
     assert len(data) == len(convolved_data)
 
-    np.savetxt(file_name.replace(".txt", f"_gaussian_filter_{length}_{sigma}.txt"), convolved_data,
-               delimiter=" ")
+    print(file_name + f"_gaussian_filter_{length}_{sigma}.txt")
+    # np.savetxt(file_name + f"_gaussian_filter_{length}_{sigma}.txt", convolved_data,
+    #            delimiter=" ")
 
 # show visualization of data
 fig, axs = plt.subplots(len(VISUALIZED_COLUMNS), 2)
@@ -90,7 +110,7 @@ if len(VISUALIZED_COLUMNS) == 1:
 
     axs[0].set_title("Original data")
     axs[1].set_title("Filtered data")
-    
+
 else:
     for i, column in enumerate(VISUALIZED_COLUMNS):
         old_data = data[:, column]
@@ -103,3 +123,4 @@ else:
 
 fig.show()
 fig.waitforbuttonpress()
+plt.close()

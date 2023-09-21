@@ -11,3 +11,4 @@ symbiosis/datafiles
 symbiosis/hresults.log_letter
 symbiosis/data
 *.pyc
+*.txt
