@@ -65,15 +65,10 @@ class ArUcoMarker(object):
 def get_hand_corners(hand_points:list) -> np.ndarray:
     """
 	Get pseudo ArUco landmarks for hand positions
-<<<<<<< HEAD
-	params:
-		- hand_points: list of MediaPipe hand positions
-=======
 
 	params:
 		- hand_points: list of MediaPipe hand positions
 
->>>>>>> master
 	return:
 		- ArUco corners
 	"""
@@ -112,10 +107,6 @@ def parse_picklist(file):
 def get_hs_bins(cropped_hand_image):
     """
     returns the hue and saturation bins for cropped_hand_image (bins are proportion of pixels within the image)
-<<<<<<< HEAD
-=======
-
->>>>>>> master
     :param cropped_hand_image: image to calculate the hue and saturation over
     :return: [hue_bins[:10], saturation_bins[10:20]], [] if cropped_hand_image is empty
     """
