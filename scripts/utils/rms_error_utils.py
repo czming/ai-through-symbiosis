@@ -1,6 +1,8 @@
 import xml.etree.ElementTree as ET
 from collections import defaultdict
 
+HTK_TO_FRAME_RATIO = 2000
+
 def get_elan_boundaries(file_name):
     # Passing the path of the xml document to enable the parsing process
     tree = ET.parse(file_name)
@@ -62,7 +64,10 @@ def get_elan_boundaries_general(file_name):
     return elan_boundaries
 
 
-def get_htk_boundaries(file_name):
+"""
+Convert the boundaries in an htk output file from htk ticks to seconds.
+"""
+def get_htk_boundaries(file_name, fps = 30):
 
     htk_boundaries = defaultdict(list)
     with open(file_name, 'r') as f:
@@ -73,8 +78,8 @@ def get_htk_boundaries(file_name):
                 break
             boundaries = line.split()[0:2]
             letter = line.split()[2]
-            letter_start = [int(boundary)/60000 for boundary in boundaries][0]
-            letter_end = [int(boundary)/60000 for boundary in boundaries][1]
+            letter_start = [int(boundary)/(HTK_TO_FRAME_RATIO * fps) for boundary in boundaries][0]
+            letter_end = [int(boundary)/(HTK_TO_FRAME_RATIO * fps) for boundary in boundaries][1]
             htk_boundaries[letter].append(letter_start)
             htk_boundaries[letter].append(letter_end)
 
