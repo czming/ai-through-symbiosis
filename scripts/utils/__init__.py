@@ -3,3 +3,5 @@ from .rms_error_utils import *
 from .file_loader import *
 from .data_processing import *
 from .clustering import *
+from .hand_tracker import *
+from .non_maximum_suppression import *
