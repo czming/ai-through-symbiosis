@@ -20,46 +20,6 @@ detector = HandTracker(
     box_enlarge=1
 )
 
-# https://stackoverflow.com/a/58126805
-def resize_img(image, width=None, height=None, inter=cv2.INTER_AREA):
-    dim = None
-    (h, w) = image.shape[:2]
-
-    if width is None and height is None:
-        return image
-    if width is None:
-        r = height / float(h)
-        dim = (int(w * r), height)
-    else:
-        r = width / float(w)
-        dim = (width, int(h * r))
-
-    return cv2.resize(image, dim, interpolation=inter)
-
-'''
-Get a specific frame from a capture. Returns the image itself.
-'''
-def get_frame(cap, frame = 0):
-    curr = cap.get(cv2.CAP_PROP_POS_FRAMES)
-    cap.set(cv2.CAP_PROP_POS_FRAMES, frame - 1)
-    ret, img = cap.read()
-    cap.set(cv2.CAP_PROP_POS_FRAMES, curr - 1)
-    if ret:
-        return img 
-    else:
-        return RuntimeError("could not read frame number " + int(frame) + " from capture.")
-
-'''
-Display an image in a computer-friendly way (resize to normal screen dims)
-'''
-def show_frame(image, name = "", dims = [1280, 720]):
-    image = resize_img(image, dims[0], dims[1])
-
-    cv2.imshow(name, image)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-    
-
 '''
 Takes in a frame (image), returns region of hand crop
 '''
@@ -112,13 +72,13 @@ def get_midpoint_carry_item_frames(video_path: str, htk_output_path: str, show_f
     for start, end in carry_sequences_frames:
         #show the middle image (print time stamp)
         midpt = int((start + end) / 2)
-        image = get_frame(cap, midpt)
+        image = utils.get_frame(cap, midpt)
 
         hand_region_image = extract_hand_region_from_frame(image)
         hand_region_images.append(hand_region_image)
 
         if show_frames:
-            show_frame(hand_region_image, "hand region crop", [480, 480])
+            utils.show_frame(hand_region_image, [480, 480])
 
     return hand_region_images
 

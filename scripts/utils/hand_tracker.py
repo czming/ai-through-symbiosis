@@ -25,7 +25,7 @@ class HandTracker():
         >>> keypoints, bbox = det(input_img)
     """
 
-    def __init__(self, hand_3d, palm_model, joint_model, anchors_path,
+    def __init__(self, hand_3d: bool, palm_model, joint_model, anchors_path,
                 box_enlarge=1.5, box_shift=0.2):
         self.box_shift = box_shift
         self.box_enlarge = box_enlarge
