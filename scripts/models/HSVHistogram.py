@@ -6,53 +6,38 @@ import matplotlib.pyplot as plt
 from sklearn import metrics
 from sklearn.utils.multiclass import unique_labels
 
-class HSVHistogramModel(Model):
+class CarryHSVHistogramModel(Model):
     # takes in some embedding vector and
 
     def __init__(self):
         pass
 
-    def preprocess(self, action_boundaries):
-        # get the avg hsv vectors from the video and subtract away hand, then ready to train/fit on the vector obtained
-        pass
-
-    def fit(self, picklist_nos, htk_input_folder, htk_output_folder, pick_label_folder, visualize=False):
+    def load_hsv_vectors(self, picklist_nos, htk_input_folder, htk_output_folder):
         """
 
-        :param picklist_nos: picklist numbers that we want to train on
-        :param htk_input_folder: folder containing the htk_inputs (used to read hsv bin data from)
-        :param htk_output_folder: folder containing the htk boundary predictions
-        :param pick_label_folder: folder containing the pick labels for the different picklists
-        :param visualize: flag to visualize outputs from the result of the model
-        :return:
+        load hsv bin data from the htk_inputs and preprocess to get the avg hsv vectors from the video and
+        subtract away hand, then ready to train/fit on the vector obtained
+
+        :param htk_inputs: htk inputs for the whole video (including non-carry sequences)
+        :param action_boundaries: dict containing labels for the boundaries of actions (aeim action labels for
+        pick, carry, place, carry empty)
+        :return: average hsv vectors (preprocessed to get the vector that we want for iterative clustering model)
+        for the picks in the sequence
         """
+
         # controls the number of bins that we are looking at (180 looks at all 180 hue bins, 280 looks at 180 hue bins +
         # 100 saturation bins)
         num_bins = 180
 
-        # actual_picklists = {}
-        # predicted_picklists = {}
-        # picklists_w_symmetric_counts = set()
-        #
-        # avg_hsv_bins_combined = {}
-
         # stores the objects
         # stores the avg_hsv_bins for all objects in a 1D list (mapped by the object id)
         objects_avg_hsv_bins = []
-
-        # list of labels (corresponding to each
-        combined_pick_labels = []
-
-        # set of pick_labels
-        pick_labels_grouped_picklist = []
         # object avg hsv bin vectors grouped by picklist
         objects_avg_hsv_bins_grouped_picklist = []
 
-
-
-        # iterating through all of the different picklists
         for picklist_no in picklist_nos:
-            logging.debug(f"Picklist number {picklist_no}")
+            logging.debug(f"Get hsv vectors, picklist number {picklist_no}")
+
             # try:
             #     # load elan boundaries, so we can take average of each picks elan labels
             #     elan_label_file = f"{elan_label_folder}/picklist_{picklist_no}.eaf"
@@ -96,16 +81,16 @@ class HSVHistogramModel(Model):
             pick_frames = []
 
             # htk label for pick
-            pick_labels = ["e"]
+            pick_labels_char = ["e"]
             # using (predicted) htk boundaries instead of elan boundaries
-            elan_boundaries = htk_boundaries
+            # elan_boundaries = htk_boundaries
 
-            for pick_label in pick_labels:
+            for pick_label in pick_labels_char:
                 # look through each color
-                for i in range(0, len(elan_boundaries[pick_label]), 2):
+                for i in range(0, len(htk_boundaries[pick_label]), 2):
                     # collect the red frames
-                    start_frame = math.ceil(float(elan_boundaries[pick_label][i]) * 29.97)
-                    end_frame = math.ceil(float(elan_boundaries[pick_label][i + 1]) * 29.97)
+                    start_frame = math.ceil(float(htk_boundaries[pick_label][i]) * 29.97)
+                    end_frame = math.ceil(float(htk_boundaries[pick_label][i + 1]) * 29.97)
                     pick_frames.append([start_frame, end_frame])
 
             # sort based on start
@@ -132,10 +117,10 @@ class HSVHistogramModel(Model):
 
             empty_hand_frames = []
 
-            for i in range(0, len(elan_boundaries[empty_hand_label]), 2):
+            for i in range(0, len(htk_boundaries[empty_hand_label]), 2):
                 # collect the red frames
-                start_frame = math.ceil(float(elan_boundaries[empty_hand_label][i]) * 29.97)
-                end_frame = math.ceil(float(elan_boundaries[empty_hand_label][i + 1]) * 29.97)
+                start_frame = math.ceil(float(htk_boundaries[empty_hand_label][i]) * 29.97)
+                end_frame = math.ceil(float(htk_boundaries[empty_hand_label][i + 1]) * 29.97)
                 empty_hand_frames.append([start_frame, end_frame])
 
             # avg hsv bins for each pick
@@ -171,19 +156,53 @@ class HSVHistogramModel(Model):
             avg_hsv_picks = [collapse_hue_bins(i, [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165], 15) \
                              for i in avg_hsv_picks]
 
+            objects_avg_hsv_bins.extend(avg_hsv_picks)
+            objects_avg_hsv_bins_grouped_picklist.append(avg_hsv_picks)
+
+        return objects_avg_hsv_bins, objects_avg_hsv_bins_grouped_picklist
+
+
+    def fit(self, picklist_nos, htk_input_folder, htk_output_folder, pick_label_folder, visualize=False):
+        """
+
+        :param picklist_nos: picklist numbers that we want to train on
+        :param htk_input_folder: folder containing the htk_inputs (used to read hsv bin data from)
+        :param htk_output_folder: folder containing the htk boundary predictions
+        :param pick_label_folder: folder containing the pick labels for the different picklists
+        :param visualize: flag to visualize outputs from the result of the model
+        :return:
+        """
+
+        # actual_picklists = {}
+        # predicted_picklists = {}
+        # picklists_w_symmetric_counts = set()
+        #
+        # avg_hsv_bins_combined = {}
+
+        # list of labels (corresponding to each
+        combined_pick_labels = []
+
+        # set of pick_labels
+        pick_labels_grouped_picklist = []
+
+        # iterating through all of the different picklists
+        for picklist_no in picklist_nos:
+            logging.debug(f"Picklist number {picklist_no}")
+
             with open(f"{pick_label_folder}/picklist_{picklist_no}_raw.txt") as infile:
                 pick_labels = [i for i in infile.read().replace("\n", "")[::2]]
 
             combined_pick_labels.extend(pick_labels)
-            objects_avg_hsv_bins.extend(avg_hsv_picks)
-
             pick_labels_grouped_picklist.append(pick_labels)
-            objects_avg_hsv_bins_grouped_picklist.append(avg_hsv_picks)
+
 
             # # randomly assign pick labels for now
             # pred_labels = np.random.choice(pick_labels, replace=False, size=len(pick_labels))
 
             # logging.info(f"ground_truth: {pick_labels}, pred_labels: {pred_labels}")
+
+        objects_avg_hsv_bins, objects_avg_hsv_bins_grouped_picklist = \
+            self.load_hsv_vectors(picklist_nos, htk_input_folder, htk_output_folder)
 
         iterative_clustering_model = IterativeClusteringModel()
 
