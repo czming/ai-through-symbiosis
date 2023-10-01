@@ -5,12 +5,13 @@ from . import IterativeClusteringModel
 import matplotlib.pyplot as plt
 from sklearn import metrics
 from sklearn.utils.multiclass import unique_labels
+import pickle
 
 class CarryHSVHistogramModel(Model):
     # takes in some embedding vector and
 
     def __init__(self):
-        pass
+        self.iterative_clustering_model = None
 
     def load_hsv_vectors(self, picklist_nos, htk_input_folder, htk_output_folder):
         """
@@ -204,10 +205,10 @@ class CarryHSVHistogramModel(Model):
         objects_avg_hsv_bins, objects_avg_hsv_bins_grouped_picklist = \
             self.load_hsv_vectors(picklist_nos, htk_input_folder, htk_output_folder)
 
-        iterative_clustering_model = IterativeClusteringModel()
+        self.iterative_clustering_model = IterativeClusteringModel()
 
         object_class_hsv_bins, object_class_hsv_bins_std, objects_pred_grouped_picklist = \
-            iterative_clustering_model.fit(train_samples=objects_avg_hsv_bins_grouped_picklist,
+            self.iterative_clustering_model.fit(train_samples=objects_avg_hsv_bins_grouped_picklist,
                                            train_labels=pick_labels_grouped_picklist, \
                                            num_epochs=500, display_visual=visualize)
 
@@ -363,9 +364,25 @@ class CarryHSVHistogramModel(Model):
 
         plt.show()
 
-    def predict(self, hsv_vector, action_boundaries):
-        # hsv_vector: int[280], 180 bins for hue, 100 bins for saturation
+
+    def predict(self, picklist_nos, htk_input_folder, htk_output_folder):
+        # hsv_inputs: list[int[280]], 180 bins for hue, 100 bins for saturation
         # action_boundaries: dict[str, int] --> contains the timestamps of the different action start and end times
         # e.g. {'a': [start1, end1]}
+        if not self.iterative_clustering_model:
+            raise Exception("Model not trained")
 
-        return predicted_class
+        objects_avg_hsv_bins, objects_avg_hsv_bins_grouped_picklist = self.load_hsv_vectors(picklist_nos,
+                                                                                            htk_input_folder,
+                                                                                            htk_output_folder)
+
+        output = []
+
+        for picklist_no, curr_hsv_bins in zip(picklist_nos, objects_avg_hsv_bins_grouped_picklist):
+            curr = []
+            # For each vector per action boundary (pick)
+            for hsv_vector in curr_hsv_bins:
+                curr.append(self.iterative_clustering_model.predict(hsv_vector))
+            output.extend(curr)
+
+        return output
