@@ -273,10 +273,17 @@ class IterativeClusteringModel(Model):
     # need a method to fit just a single new example (get the ones closest and add that to the mean
 
 
-    def predict(self, input_vector):
+    def predict(self, input_vector, constrained_classes=None):
 
-        vector_distances = {key: np.linalg.norm((self.class_hsv_bins_mean[key] - input_vector) / self.class_hsv_bins_std[key]) for key in
-                            self.class_hsv_bins_mean.keys()}
+        if constrained_classes is not None:
+            classes = constrained_classes
+        else:
+            classes = self.class_hsv_bins_mean.keys()
+
+
+        vector_distances = {key: np.linalg.norm((self.class_hsv_bins_mean[key] - input_vector) / self.class_hsv_bins_std[key]) \
+                            for key in classes
+                            }
 
         # print(vector_distances)
 
