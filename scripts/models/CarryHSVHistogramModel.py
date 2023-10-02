@@ -10,6 +10,7 @@ from sklearn import metrics
 from sklearn.utils.multiclass import unique_labels
 import pickle
 import math
+import numpy as np
 
 class CarryHSVHistogramModel(Model):
     # takes in some embedding vector and
@@ -17,7 +18,7 @@ class CarryHSVHistogramModel(Model):
     def __init__(self):
         self.iterative_clustering_model = None
 
-    def load_hsv_vectors(self, picklist_nos, htk_input_folder, htk_output_folder):
+    def load_hsv_vectors(self, picklist_nos, htk_input_folder, htk_output_folder, fps):
         """
 
         load hsv bin data from the htk_inputs and preprocess to get the avg hsv vectors from the video and
@@ -57,7 +58,7 @@ class CarryHSVHistogramModel(Model):
 
             try:
                 htk_results_file = f"{htk_output_folder}/results-" + str(picklist_no)
-                htk_boundaries = get_htk_boundaries(htk_results_file, fps=30.)
+                htk_boundaries = get_htk_boundaries(htk_results_file, fps=fps)
                 # print(htk_boundaries)
             except:
                 # no labels yet
@@ -107,8 +108,8 @@ class CarryHSVHistogramModel(Model):
                 # look through each color
                 for i in range(0, len(htk_boundaries[pick_label]), 2):
                     # collect the red frames
-                    start_frame = math.ceil(float(htk_boundaries[pick_label][i]) * 29.97)
-                    end_frame = math.ceil(float(htk_boundaries[pick_label][i + 1]) * 29.97)
+                    start_frame = math.ceil(float(htk_boundaries[pick_label][i]) * fps)
+                    end_frame = math.ceil(float(htk_boundaries[pick_label][i + 1]) * fps)
                     pick_frames.append([start_frame, end_frame])
 
             # sort based on start
@@ -141,8 +142,8 @@ class CarryHSVHistogramModel(Model):
 
             for i in range(0, len(htk_boundaries[empty_hand_label]), 2):
                 # collect the red frames
-                start_frame = math.ceil(float(htk_boundaries[empty_hand_label][i]) * 29.97)
-                end_frame = math.ceil(float(htk_boundaries[empty_hand_label][i + 1]) * 29.97)
+                start_frame = math.ceil(float(htk_boundaries[empty_hand_label][i]) * fps)
+                end_frame = math.ceil(float(htk_boundaries[empty_hand_label][i + 1]) * fps)
                 empty_hand_frames.append([start_frame, end_frame])
 
             # avg hsv bins for each pick
@@ -150,11 +151,9 @@ class CarryHSVHistogramModel(Model):
                                    (start_frame, end_frame) \
                                    in empty_hand_frames]
 
-            # print(f"empty_hand_frames: {empty_hand_frames}")
+            print(f"empty_hand_frames: {empty_hand_frames}")
 
-            num_hand_detections = [i for i in num_hand_detections if i is not 0]
-
-            if len(num_hand_detections) == 0:
+            if 0 in num_hand_detections:
                 print("no empty hand, skipping bad boundaries")
 
                 continue
@@ -166,14 +165,18 @@ class CarryHSVHistogramModel(Model):
             empty_hand_frame_count = 0
 
             for (start_frame, end_frame) in empty_hand_frames:
-                curr_avg_empty_hand_hsv, frame_count = get_avg_hsv_bin_frames(htk_inputs, start_frame + 10,
-                                                                              end_frame - 10)
+                curr_avg_empty_hand_hsv, frame_count = get_avg_hsv_bin_frames(htk_inputs, start_frame + 5,
+                                                                              end_frame - 5)
 
-                if frame_count == 0:
-                    # no frames where the hand was present
-                    continue
+                # if frame_count == 0:
+                #     # no frames where the hand was present
+                #     continue
                 sum_empty_hand_hsv += (curr_avg_empty_hand_hsv * frame_count)
                 empty_hand_frame_count += frame_count
+
+            # if empty_hand_frame_count == 0:
+            #     # no empty hand at all
+            #     continue
 
             # normalize so it's 1
             avg_empty_hand_hsv = sum_empty_hand_hsv / np.sum(sum_empty_hand_hsv)
@@ -200,7 +203,7 @@ class CarryHSVHistogramModel(Model):
         return objects_avg_hsv_bins, objects_avg_hsv_bins_grouped_picklist
 
 
-    def fit(self, picklist_nos, htk_input_folder, htk_output_folder, pick_label_folder, visualize=False):
+    def fit(self, picklist_nos, htk_input_folder, htk_output_folder, pick_label_folder, fps=29.97, visualize=False):
         """
 
         :param picklist_nos: picklist numbers that we want to train on
@@ -246,7 +249,7 @@ class CarryHSVHistogramModel(Model):
             # logging.info(f"ground_truth: {pick_labels}, pred_labels: {pred_labels}")
 
         objects_avg_hsv_bins, objects_avg_hsv_bins_grouped_picklist = \
-            self.load_hsv_vectors(picklist_nos, htk_input_folder, htk_output_folder)
+            self.load_hsv_vectors(picklist_nos, htk_input_folder, htk_output_folder, fps=fps)
 
         self.iterative_clustering_model = IterativeClusteringModel()
 
@@ -410,7 +413,7 @@ class CarryHSVHistogramModel(Model):
         plt.show()
 
 
-    def predict(self, picklist_nos, htk_input_folder, htk_output_folder):
+    def predict(self, picklist_nos, htk_input_folder, htk_output_folder, fps=29.97):
         # hsv_inputs: list[int[280]], 180 bins for hue, 100 bins for saturation
         # action_boundaries: dict[str, int] --> contains the timestamps of the different action start and end times
         # e.g. {'a': [start1, end1]}
@@ -419,7 +422,8 @@ class CarryHSVHistogramModel(Model):
 
         objects_avg_hsv_bins, objects_avg_hsv_bins_grouped_picklist = self.load_hsv_vectors(picklist_nos,
                                                                                             htk_input_folder,
-                                                                                            htk_output_folder)
+                                                                                            htk_output_folder,
+                                                                                            fps=fps)
 
         output = []
 
