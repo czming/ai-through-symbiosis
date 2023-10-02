@@ -40,8 +40,10 @@ PICKLISTS = list(range(136, 235)) # list(range(136, 235)
 
 carry_histogram_hsv_model = CarryHSVHistogramModel()
 
-carry_histogram_hsv_model.fit(PICKLISTS, htk_input_folder, htk_output_folder, pick_label_folder, visualize=True)
-
+carry_histogram_hsv_model.fit(PICKLISTS, htk_input_folder, htk_output_folder, pick_label_folder, \
+                              fps=29.97, visualize=True)
+with open("saved_models/carry_histogram_hsv_model.pkl", "wb") as outfile:
+    pickle.dump(carry_histogram_hsv_model, outfile)
 
 
 # saving the model
