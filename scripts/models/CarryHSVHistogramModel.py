@@ -18,7 +18,7 @@ class CarryHSVHistogramModel(Model):
     def __init__(self):
         self.iterative_clustering_model = None
 
-    def load_hsv_vectors(self, picklist_nos, htk_input_folder, htk_output_folder, fps):
+    def load_hsv_vectors(self, picklist_nos, htk_input_folder, htk_output_folder, fps=29.97):
         """
 
         load hsv bin data from the htk_inputs and preprocess to get the avg hsv vectors from the video and
@@ -420,18 +420,17 @@ class CarryHSVHistogramModel(Model):
         if not self.iterative_clustering_model:
             raise Exception("Model not trained")
 
-        objects_avg_hsv_bins, objects_avg_hsv_bins_grouped_picklist = self.load_hsv_vectors(picklist_nos,
-                                                                                            htk_input_folder,
-                                                                                            htk_output_folder,
-                                                                                            fps=fps)
+        _, objects_avg_hsv_bins_grouped_picklist = self.load_hsv_vectors(picklist_nos, htk_input_folder,
+                                                                         htk_output_folder, fps)
 
-        output = []
+        output = {}
 
-        for picklist_no, curr_hsv_bins in zip(picklist_nos, objects_avg_hsv_bins_grouped_picklist):
+        for picklist_no in objects_avg_hsv_bins_grouped_picklist:
+            curr_hsv_bins = objects_avg_hsv_bins_grouped_picklist[picklist_no]
             curr = []
             # For each vector per action boundary (pick)
             for hsv_vector in curr_hsv_bins:
-                curr.append(self.iterative_clustering_model.predict(hsv_vector))
-            output.extend(curr)
+                curr.append(self.iterative_clustering_model.predict(hsv_vector)[0])
+            output[picklist_no] = curr
 
         return output
