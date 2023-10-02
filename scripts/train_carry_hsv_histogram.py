@@ -40,17 +40,7 @@ PICKLISTS = list(range(136, 235)) # list(range(136, 235)
 
 carry_histogram_hsv_model = CarryHSVHistogramModel()
 
-carry_histogram_hsv_model.fit(PICKLISTS, htk_input_folder, htk_output_folder)
-
-
-
-# initialization (randomly assign colors)
-
-
-
-### HSV MODEL CODE
-# picklist_nos: PICKLISTS
-
+carry_histogram_hsv_model.fit(PICKLISTS, htk_input_folder, htk_output_folder, pick_label_folder, visualize=True)
 
 
 

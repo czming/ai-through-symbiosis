@@ -6,11 +6,12 @@ import cv2
 # from mediapipe import HandTracker
 from utils.hand_tracker import HandTracker
 import numpy as np
+from pathlib import Path
 
 #stolen from extract_hand
-PALM_MODEL_PATH = os.path.join(os.getcwd(), "scripts", "utils", "models", "palm_detection_without_custom_op.tflite")
-LANDMARK_MODEL_PATH =  os.path.join(os.getcwd(), "scripts", "utils", "models", "hand_landmark.tflite")
-ANCHORS_PATH = os.path.join(os.getcwd(), "scripts", "utils", "models", "anchors.csv")
+PALM_MODEL_PATH = os.path.join(Path(__file__).parent, "models", "palm_detection_without_custom_op.tflite")
+LANDMARK_MODEL_PATH =  os.path.join(Path(__file__).parent, "models", "hand_landmark.tflite")
+ANCHORS_PATH = os.path.join(Path(__file__).parent, "models", "anchors.csv")
 detector = HandTracker(
     "True", #True = hand, False = palm i think
     PALM_MODEL_PATH,
