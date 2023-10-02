@@ -24,15 +24,19 @@ class IterativeClusteringModel(Model):
 
     def fit(self, train_samples, train_labels, num_epochs, display_visual=False):
         """
-        :param train_samples: list of list of vectors, [[vector for (vector representing pick sequence) in picklist] \
+        :param train_samples: dict of list of vectors, [[vector for (vector representing pick sequence) in picklist] \
                                                                 for picklist in training_set]
-        :param train_labels: list of list of labels, [{labels in picklist} for picklist in training_set, disregard the ordering
+        :param train_labels: dict of list of labels, [{labels in picklist} for picklist in training_set, disregard the ordering
                             of the labels in the list (figuring that out using the iterative clustering algorithm)
 
         :param num_epochs: num of epochs to run for
         :param display_visual: to display vector visualization
         :return: None (model is trained in-place
         """
+
+        # take the intersection of the keys of both the train_samples and the train_labels sets
+        # only work with the intersection
+        picklist_nos = set(train_samples.keys()) & set(train_labels.keys())
 
         # preprocessing
 
@@ -51,7 +55,8 @@ class IterativeClusteringModel(Model):
         # {object type: [index in objects_avg_hsv_bins for objects that are predicted to be of that type]
         pred_objects = defaultdict(lambda: set())
 
-        for picklist_no, picklist_vectors in enumerate(train_samples):
+        for picklist_no in picklist_nos:
+            picklist_vectors = train_samples[picklist_no]
             # picklist_vectors contains the list of vectors representing each pick in the pioklist
             # picklist no is just the order of their occurrence in train_samples)
 
@@ -61,7 +66,8 @@ class IterativeClusteringModel(Model):
 
             combined_pick_labels.extend(pick_labels)
 
-            print (pick_labels)
+
+            print (len(picklist_vectors))
 
             # randomly assign pick labels for now
             pred_labels = np.random.choice(pick_labels, replace=False, size=len(pick_labels))
@@ -118,7 +124,6 @@ class IterativeClusteringModel(Model):
             # for each epoch, iterate through all the picklists and offer one swap
             for picklist_no, objects_in_picklist in picklist_objects.items():
                 # check whether swapping the current element with any of the other
-
                 # randomly pick an object
                 object1_id = np.random.choice(picklist_objects[picklist_no])
 
