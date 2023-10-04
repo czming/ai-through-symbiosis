@@ -86,9 +86,9 @@ def create_drawing(color_image_mapping, bin_color_mapping, width = 720, height =
 if __name__ == '__main__':
     r, g, b = [cv2.imread(os.path.join(os.getcwd(), "pick_items", "new_photos", "normal_lens", x + ".JPG")) for x in ["red", "lightgreen", "darkblue"]]
     
-    r = utils.extract_hand_region_from_frame(r)
-    g = utils.extract_hand_region_from_frame(g)
-    b = utils.extract_hand_region_from_frame(b)
+    r = cv2.rotate(utils.extract_hand_region_from_frame(r), cv2.ROTATE_180)
+    g = cv2.rotate(utils.extract_hand_region_from_frame(g), cv2.ROTATE_180)
+    b = cv2.rotate(utils.extract_hand_region_from_frame(b), cv2.ROTATE_180)
 
     # utils.show_frame(r)
     
