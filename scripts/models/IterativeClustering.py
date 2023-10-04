@@ -24,9 +24,9 @@ class IterativeClusteringModel(Model):
 
     def fit(self, train_samples, train_labels, num_epochs, display_visual=False):
         """
-        :param train_samples: list of list of vectors, [[vector for (vector representing pick sequence) in picklist] \
+        :param train_samples: dict of list of vectors, [[vector for (vector representing pick sequence) in picklist] \
                                                                 for picklist in training_set]
-        :param train_labels: list of list of labels, [{labels in picklist} for picklist in training_set, disregard the ordering
+        :param train_labels: dict of list of labels, [{labels in picklist} for picklist in training_set, disregard the ordering
                             of the labels in the list (figuring that out using the iterative clustering algorithm)
 
         :param num_epochs: num of epochs to run for
@@ -34,6 +34,13 @@ class IterativeClusteringModel(Model):
         :return: None (model is trained in-place
         """
 
+        # take the intersection of the keys of both the train_samples and the train_labels sets
+        # only work with the intersection
+        picklist_nos = set(train_samples.keys()) & set(train_labels.keys())
+
+        print (f"picklists that have samples but no labels: {set(train_samples.keys()).difference(set(train_labels.keys()))}")
+
+        print (f"picklists that have labels but no samples: {set(train_labels.keys()).difference(set(train_samples.keys()))}")
         # preprocessing
 
         # {picklist_no: [index in objects_avg_hsv_bins for objects that are in this picklist]}
@@ -51,7 +58,8 @@ class IterativeClusteringModel(Model):
         # {object type: [index in objects_avg_hsv_bins for objects that are predicted to be of that type]
         pred_objects = defaultdict(lambda: set())
 
-        for picklist_no, picklist_vectors in enumerate(train_samples):
+        for picklist_no in picklist_nos:
+            picklist_vectors = train_samples[picklist_no]
             # picklist_vectors contains the list of vectors representing each pick in the pioklist
             # picklist no is just the order of their occurrence in train_samples)
 
@@ -60,8 +68,6 @@ class IterativeClusteringModel(Model):
             pick_labels = train_labels[picklist_no]
 
             combined_pick_labels.extend(pick_labels)
-
-            print (pick_labels)
 
             # randomly assign pick labels for now
             pred_labels = np.random.choice(pick_labels, replace=False, size=len(pick_labels))
@@ -118,7 +124,6 @@ class IterativeClusteringModel(Model):
             # for each epoch, iterate through all the picklists and offer one swap
             for picklist_no, objects_in_picklist in picklist_objects.items():
                 # check whether swapping the current element with any of the other
-
                 # randomly pick an object
                 object1_id = np.random.choice(picklist_objects[picklist_no])
 
@@ -253,7 +258,6 @@ class IterativeClusteringModel(Model):
         self.class_hsv_bins_mean = {}
         self.class_hsv_bins_std = {}
 
-
         for object_class, object_indices in pred_objects.items():
             self.class_hsv_bins_mean[object_class] = np.array([objects_avg_hsv_bins[i] for i in object_indices]).mean(axis=0)
             self.class_hsv_bins_std[object_class] = np.array([objects_avg_hsv_bins[i] for i in object_indices]).std(axis=0, ddof=1)
@@ -266,6 +270,17 @@ class IterativeClusteringModel(Model):
             objects_pred_grouped_picklist[picklist_index] = [objects_pred[i] for i in picklist_objects[picklist_index]]
 
 
+
+        # use the predict function to predict labels
+        pred_labels = []
+
+        for input_vector in objects_avg_hsv_bins:
+            pred_labels.append(self.predict(input_vector)[0])
+
+        print(combined_pick_labels)
+        print (pred_labels)
+
+
         # need to change objects_pred to be object predictions grouped by picklist
         return self.class_hsv_bins_mean, self.class_hsv_bins_std, objects_pred_grouped_picklist
 
@@ -273,12 +288,19 @@ class IterativeClusteringModel(Model):
     # need a method to fit just a single new example (get the ones closest and add that to the mean
 
 
-    def predict(self, input_vector):
+    def predict(self, input_vector, constrained_classes=None):
 
-        vector_distances = {key: np.linalg.norm((self.class_hsv_bins_mean[key] - input_vector) / self.class_hsv_bins_std[key]) for key in
-                            self.class_hsv_bins_mean.keys()}
+        if constrained_classes is not None:
+            classes = constrained_classes
+        else:
+            classes = self.class_hsv_bins_mean.keys()
+        #
+        # for key in classes:
+        #     print (key, self.class_hsv_bins_mean[key], self.class_hsv_bins_std[key])
 
-        # print(vector_distances)
+        vector_distances = {key: np.linalg.norm((self.class_hsv_bins_mean[key] - input_vector) / self.class_hsv_bins_std[key]) \
+                            for key in classes
+                            }
 
         # return the best class and the distances between that class and the final output
         return min(vector_distances.keys(), key=lambda x: vector_distances[x]), vector_distances
