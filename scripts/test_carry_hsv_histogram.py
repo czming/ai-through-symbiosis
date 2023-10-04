@@ -36,13 +36,14 @@ htk_output_folder = configs["file_paths"]["htk_output_file_path"]
 
 # picklists that we are looking at
 # PICKLISTS = list(range(136, 224)) + list(range(225, 230)) + list(range(231, 235))
-PICKLISTS = list(range(136, 235)) # list(range(136, 235)
+PICKLISTS = list(range(41, 90)) # list(range(136, 235)
 
-with open("saved_models/carry_histogram_hsv_model.pkl", "rb") as f:
+with open("saved_models/carry_histogram_hsv_model_saved_icassp.pkl", "rb") as f:
     carry_histogram_hsv_model = pickle.load(f)
 
     # 10 class unconstrained
-    predictions = carry_histogram_hsv_model.predict(PICKLISTS, htk_input_folder, htk_output_folder, fps=29.97)
+    predictions = carry_histogram_hsv_model.predict(PICKLISTS, htk_input_folder, htk_output_folder, fps=59.94,
+                                                    constrained_classes=["r", "g", "b"])
 
     # 3 class constrained to r g b classes
     # predictions = carry_histogram_hsv_model.predict(PICKLISTS, htk_input_folder, htk_output_folder, fps=59.94,\
