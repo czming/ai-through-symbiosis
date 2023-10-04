@@ -18,7 +18,7 @@ class CarryHSVHistogramModel(Model):
     def __init__(self):
         self.iterative_clustering_model = None
 
-    def load_hsv_vectors(self, picklist_nos, htk_input_folder, htk_output_folder, fps=29.97):
+    def load_hsv_vectors(self, picklist_nos, htk_input_folder, htk_output_folder, fps=29.97, train=False):
         """
 
         load hsv bin data from the htk_inputs and preprocess to get the avg hsv vectors from the video and
@@ -127,6 +127,7 @@ class CarryHSVHistogramModel(Model):
                                    (start_frame, end_frame) \
                                    in pick_frames]
 
+            # these are actually frames where the picker is carrying something (carry action)
             print (f"pick_frames: {pick_frames}")
 
             print (len(htk_inputs))
@@ -153,7 +154,7 @@ class CarryHSVHistogramModel(Model):
 
             print(f"empty_hand_frames: {empty_hand_frames}")
 
-            if 0 in num_hand_detections:
+            if 0 in num_hand_detections and train:
                 print("no empty hand, skipping bad boundaries")
 
                 continue
@@ -165,8 +166,8 @@ class CarryHSVHistogramModel(Model):
             empty_hand_frame_count = 0
 
             for (start_frame, end_frame) in empty_hand_frames:
-                curr_avg_empty_hand_hsv, frame_count = get_avg_hsv_bin_frames(htk_inputs, start_frame + 5,
-                                                                              end_frame - 5)
+                curr_avg_empty_hand_hsv, frame_count = get_avg_hsv_bin_frames(htk_inputs, start_frame + 10,
+                                                                              end_frame - 10)
 
                 # if frame_count == 0:
                 #     # no frames where the hand was present
@@ -249,7 +250,7 @@ class CarryHSVHistogramModel(Model):
             # logging.info(f"ground_truth: {pick_labels}, pred_labels: {pred_labels}")
 
         objects_avg_hsv_bins, objects_avg_hsv_bins_grouped_picklist = \
-            self.load_hsv_vectors(picklist_nos, htk_input_folder, htk_output_folder, fps=fps)
+            self.load_hsv_vectors(picklist_nos, htk_input_folder, htk_output_folder, fps=fps, train=True)
 
         self.iterative_clustering_model = IterativeClusteringModel()
 
@@ -413,7 +414,7 @@ class CarryHSVHistogramModel(Model):
         plt.show()
 
 
-    def predict(self, picklist_nos, htk_input_folder, htk_output_folder, fps=29.97):
+    def predict(self, picklist_nos, htk_input_folder, htk_output_folder, fps=29.97, constrained_classes=None):
         # hsv_inputs: list[int[280]], 180 bins for hue, 100 bins for saturation
         # action_boundaries: dict[str, int] --> contains the timestamps of the different action start and end times
         # e.g. {'a': [start1, end1]}
@@ -421,16 +422,21 @@ class CarryHSVHistogramModel(Model):
             raise Exception("Model not trained")
 
         _, objects_avg_hsv_bins_grouped_picklist = self.load_hsv_vectors(picklist_nos, htk_input_folder,
-                                                                         htk_output_folder, fps)
+                                                   htk_output_folder, fps)
 
+        print(f"num picklists: {len(objects_avg_hsv_bins_grouped_picklist)}")
         output = {}
 
         for picklist_no in objects_avg_hsv_bins_grouped_picklist:
+
+            print (f"Picklist no. {picklist_no}")
+
             curr_hsv_bins = objects_avg_hsv_bins_grouped_picklist[picklist_no]
             curr = []
             # For each vector per action boundary (pick)
             for hsv_vector in curr_hsv_bins:
-                curr.append(self.iterative_clustering_model.predict(hsv_vector)[0])
+                curr.append(self.iterative_clustering_model.predict(hsv_vector,\
+                                                                    constrained_classes=constrained_classes)[0])
             output[picklist_no] = curr
 
         return output

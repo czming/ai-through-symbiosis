@@ -38,6 +38,9 @@ class IterativeClusteringModel(Model):
         # only work with the intersection
         picklist_nos = set(train_samples.keys()) & set(train_labels.keys())
 
+        print (f"picklists that have samples but no labels: {set(train_samples.keys()).difference(set(train_labels.keys()))}")
+
+        print (f"picklists that have labels but no samples: {set(train_labels.keys()).difference(set(train_samples.keys()))}")
         # preprocessing
 
         # {picklist_no: [index in objects_avg_hsv_bins for objects that are in this picklist]}
@@ -65,9 +68,6 @@ class IterativeClusteringModel(Model):
             pick_labels = train_labels[picklist_no]
 
             combined_pick_labels.extend(pick_labels)
-
-
-            print (len(picklist_vectors))
 
             # randomly assign pick labels for now
             pred_labels = np.random.choice(pick_labels, replace=False, size=len(pick_labels))
@@ -258,7 +258,6 @@ class IterativeClusteringModel(Model):
         self.class_hsv_bins_mean = {}
         self.class_hsv_bins_std = {}
 
-
         for object_class, object_indices in pred_objects.items():
             self.class_hsv_bins_mean[object_class] = np.array([objects_avg_hsv_bins[i] for i in object_indices]).mean(axis=0)
             self.class_hsv_bins_std[object_class] = np.array([objects_avg_hsv_bins[i] for i in object_indices]).std(axis=0, ddof=1)
@@ -269,6 +268,17 @@ class IterativeClusteringModel(Model):
 
         for picklist_index in picklist_objects.keys():
             objects_pred_grouped_picklist[picklist_index] = [objects_pred[i] for i in picklist_objects[picklist_index]]
+
+
+
+        # use the predict function to predict labels
+        pred_labels = []
+
+        for input_vector in objects_avg_hsv_bins:
+            pred_labels.append(self.predict(input_vector)[0])
+
+        print(combined_pick_labels)
+        print (pred_labels)
 
 
         # need to change objects_pred to be object predictions grouped by picklist
@@ -284,13 +294,13 @@ class IterativeClusteringModel(Model):
             classes = constrained_classes
         else:
             classes = self.class_hsv_bins_mean.keys()
-
+        #
+        # for key in classes:
+        #     print (key, self.class_hsv_bins_mean[key], self.class_hsv_bins_std[key])
 
         vector_distances = {key: np.linalg.norm((self.class_hsv_bins_mean[key] - input_vector) / self.class_hsv_bins_std[key]) \
                             for key in classes
                             }
-
-        # print(vector_distances)
 
         # return the best class and the distances between that class and the final output
         return min(vector_distances.keys(), key=lambda x: vector_distances[x]), vector_distances
