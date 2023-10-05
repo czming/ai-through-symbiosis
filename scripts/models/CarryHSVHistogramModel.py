@@ -127,7 +127,6 @@ class CarryHSVHistogramModel(Model):
                                    (start_frame, end_frame) \
                                    in pick_frames]
 
-            # these are actually frames where the picker is carrying something (carry action)
             print (f"pick_frames: {pick_frames}")
 
             print (len(htk_inputs))
