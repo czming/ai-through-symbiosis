@@ -261,7 +261,7 @@ class CarryHSVHistogramModel(Model):
 
         if not visualize:
             # the rest is just basically visualization of the code
-            return
+            return objects_pred_grouped_picklist
 
         plt_display_index = 0
         fig, axs = plt.subplots(2, len(object_class_hsv_bins) // 2)
@@ -412,6 +412,8 @@ class CarryHSVHistogramModel(Model):
         plt.tight_layout()
 
         plt.show()
+
+        return objects_pred_grouped_picklist
 
 
     def predict(self, picklist_nos, htk_input_folder, htk_output_folder, fps=29.97, constrained_classes=None):
