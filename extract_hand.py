@@ -21,7 +21,6 @@ THICKNESS = 4
 cv2.namedWindow(WINDOW)
 #Use Camera
 #capture = cv2.VideoCapture(0)
-
 video_name = "picklist_17"
 dataset_path = '../2022Spring/dataset/'
 
