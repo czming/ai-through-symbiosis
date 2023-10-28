@@ -1,0 +1,7 @@
+owner: shivang # fill in your name here
+file_paths:
+  video_file_path: "G:/My Drive/Georgia Tech/AI Through Symbiosis/pick_list_dataset/Videos" # directory containing videos
+  htk_input_file_path: "/Users/jonathanwomack/projects/ai-through-symbiosis/github-repo/experiments/show-hand-color/data" # directory containing htk input vectors
+  label_file_path: "G:/My Drive/Georgia Tech/AI Through Symbiosis/pick_list_dataset/Labels" # directory containing pick labels (order of labels, i.e. r1b1...)
+  htk_output_file_path: "/Users/jonathanwomack/projects/ai-through-symbiosis/github-repo/experiments/aruco1dim/results/all-results" # directory containing results from HTK (i.e. HTK output folder)
+  elan_annotated_file_path: "/Users/jonathanwomack/projects/ai-through-symbiosis/github-repo/elan_annotated" # directory containing ELAN annotated labels for videos
