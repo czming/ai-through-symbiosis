@@ -239,7 +239,7 @@ if __name__ == "__main__":
     frames = 0
 
     # change this to visualize the detections in the image
-    DISPLAY_VISUAL = True
+    DISPLAY_VISUAL = False
 
     OUTPUT_FILE = os.path.basename(args.video.split(".")[0] + ".txt")
 

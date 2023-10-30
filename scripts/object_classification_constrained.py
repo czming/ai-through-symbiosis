@@ -14,7 +14,7 @@ def find_closest_in_set(vector, vector_dict):
     # find the vector in vector_dict that has the smallest distance to vector and return the key for that vector
 
     # to restrict the objects that we want to consider
-    # vector_dict = {key: vector_dict[key] for key in ["r", "g", "b"]}
+    vector_dict = {key: vector_dict[key] for key in ["r", "g", "b"]}
 
     # collapsed_vector_dict = {}
 
@@ -91,7 +91,7 @@ print (len(object_hsv_representation['r']))
 # one off thing, don't change configs
 ood_htk_outputs_folder = "C:/Users/chngz/OneDrive/Georgia Tech/AI Through Symbiosis/pick_list_dataset/htk_outputs/ood-1-90-results/ood-1-90-results"
 
-PICKLISTS = range(1, 41)
+PICKLISTS = range(42, 91)
 
 predicted_picklists = []
 actual_picklists = []
@@ -108,6 +108,7 @@ for picklist_no in PICKLISTS:
         htk_inputs = [i.split() for i in infile.readlines()]
 
     htk_boundaries = get_htk_boundaries(f"{ood_htk_outputs_folder}/results-{picklist_no}")
+
 
     # check with rmse to see if reasonable
     general_elan_boundaries = get_elan_boundaries_general(f"{elan_label_folder}/picklist_{picklist_no}.eaf")
@@ -157,7 +158,7 @@ for picklist_no in PICKLISTS:
 
     for index, i in enumerate(avg_hsv_picks):
         print(pick_labels[index])
-        i = collapse_hue_bins(i, [0, 30, 60, 90, 120, 150], 10)
+        i = collapse_hue_bins(i, [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165], 15)
 
 
         pred, distances = find_closest_in_set(i, object_hsv_representation)

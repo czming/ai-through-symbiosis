@@ -21,6 +21,8 @@ def get_avg_hsv_bin_frames(hsv_inputs, start_frame, end_frame):
             # sum up the current values
             # k + 72 in both instances when looking at original
             # k + 1 when input is 25 dim
+            # print (j, len(hsv_inputs[j]), k, len(hsv_inputs), len(hsv_bin_sum))
+
             if len(hsv_inputs[j]) == 25:
                 hand_detected = hand_detected or float(hsv_inputs[j][k + 1]) != 0
                 hsv_bin_sum[k] += float(hsv_inputs[j][k + 1])

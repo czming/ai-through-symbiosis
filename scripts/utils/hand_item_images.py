@@ -1,10 +1,9 @@
-import utils
 import argparse
 import random
 import os
 import cv2
 # from mediapipe import HandTracker
-from utils.hand_tracker import HandTracker
+from .hand_tracker import HandTracker
 import numpy as np
 from pathlib import Path
 
