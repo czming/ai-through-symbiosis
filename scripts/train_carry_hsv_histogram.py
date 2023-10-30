@@ -4,7 +4,6 @@ iterative improvement method that swaps pairs which result in smaller intraclust
 when there is no pair which would reduce the intracluster distance
 
 """
-
 from utils import *
 
 import argparse
@@ -42,13 +41,12 @@ PICKLISTS = list(range(136, 235)) # list(range(136, 235)
 
 carry_histogram_hsv_model = CarryHSVHistogramModel()
 
-carry_histogram_hsv_model.fit(PICKLISTS, htk_input_folder, htk_output_folder, pick_label_folder, \
-                              fps=29.97, visualize=False)
+picklist_orderings = carry_histogram_hsv_model.fit(PICKLISTS, htk_input_folder, htk_output_folder, pick_label_folder, \
+                              fps=29.97)
 
-picklist_orderings = carry_histogram_hsv_model.predict(PICKLISTS, htk_input_folder, htk_output_folder, fps=29.97,
+carry_histogram_hsv_model.predict(PICKLISTS, htk_input_folder, htk_output_folder, fps=29.97,
                                                     constrained_classes=["r", "g", "b"])
 if write_files:
-    if
     for picklist_id, sequence in picklist_orderings.items():
         print(picklist_id)
         with open(f"../shivang-scripts/data/pick_labels/picklist-{picklist_id}.txt", mode='w') as file:
