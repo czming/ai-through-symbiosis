@@ -60,7 +60,7 @@ class CarryHSVHistogramModel(Model):
                 htk_results_file = f"{htk_output_folder}/results-" + str(picklist_no)
                 htk_boundaries = get_htk_boundaries(htk_results_file, fps=fps)
                 # print(htk_boundaries)
-            except:
+            except Exception as e:
                 # no labels yet
                 print("Skipping picklist: No htk boundaries")
                 continue

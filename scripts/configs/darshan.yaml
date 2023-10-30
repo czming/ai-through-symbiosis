@@ -1,0 +1,7 @@
+owner: darshan # fill in your name here
+file_paths:
+  video_file_path: "/home/darshan/ai-through-symbiosis/shivang-scripts/data/Videos" # directory containing videos of picker picking objects
+  htk_input_file_path: "/home/darshan/ai-through-symbiosis/picklist136to234_real/picklist136to234_280bins" # directory containing htk input vectors (output from running extract_features.py)
+  label_file_path: "/home/darshan/ai-through-symbiosis/Labels" # directory containing pick labels (order of labels, i.e. r1b1...)
+  htk_output_file_path: "/home/darshan/ai-through-symbiosis/htk_outputs/icassp_train_folds/avgFold" # directort containing results from HTK (i.e. HTK output folder)
+  elan_annotated_file_path: "/home/darshan/ai-through-symbiosis/elan_annotated" # directory containing ELAN annotated labels for videos
