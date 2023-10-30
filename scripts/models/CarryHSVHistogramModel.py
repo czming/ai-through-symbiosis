@@ -205,7 +205,7 @@ class CarryHSVHistogramModel(Model):
         return objects_avg_hsv_bins, objects_avg_hsv_bins_grouped_picklist
 
 
-    def fit(self, picklist_nos, htk_input_folder, htk_output_folder, pick_label_folder, fps=29.97, visualize=False):
+    def fit(self, picklist_nos, htk_input_folder, htk_output_folder, pick_label_folder, fps=29.97, visualize=False, write_predicted_labels=False):
         """
 
         :param picklist_nos: picklist numbers that we want to train on
@@ -262,7 +262,7 @@ class CarryHSVHistogramModel(Model):
 
         if not visualize:
             # the rest is just basically visualization of the code
-            return
+            return objects_pred_grouped_picklist
 
         plt_display_index = 0
         fig, axs = plt.subplots(2, len(object_class_hsv_bins) // 2)
@@ -350,9 +350,10 @@ class CarryHSVHistogramModel(Model):
             print(f"Predicted labels: {picklist_pred}")
             # use the same mapping for combined_pick_labels as object ids
             picklist_gt = pick_labels_grouped_picklist[picklist_no]
-
-            with open(f"pick_labels/picklist_{picklist_no}.csv", "w") as outfile:
-                outfile.write(f"{picklist_no}, {''.join(picklist_pred)}, {''.join(picklist_gt)}")
+            if write_predicted_labels:
+                # want to write the results
+                with open(f"pick_labels/picklist_{picklist_no}.csv", "w") as outfile:
+                    outfile.write(f"{picklist_no}, {''.join(picklist_pred)}, {''.join(picklist_gt)}")
 
             print(f"Actual labels:    {picklist_gt}")
 
@@ -413,6 +414,8 @@ class CarryHSVHistogramModel(Model):
         plt.tight_layout()
 
         plt.show()
+
+        return objects_pred_grouped_picklist
 
 
     def predict(self, picklist_nos, htk_input_folder, htk_output_folder, fps=29.97, constrained_classes=None):
