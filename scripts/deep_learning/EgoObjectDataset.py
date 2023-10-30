@@ -6,7 +6,6 @@ from torchvision.io import read_image
 from sklearn.preprocessing import OneHotEncoder
 import torch
 
-
 class EgoObjectDataset(Dataset):
     def __init__(self, dataset_path, transform):
         self.data = pd.read_csv(dataset_path)

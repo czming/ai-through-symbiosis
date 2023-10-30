@@ -5,8 +5,8 @@ from torchvision import transforms
 import os
 from torchsummary import summary
 from torch.optim import SGD, Adam
-from .EgoObjectDataset import EgoObjectClassificationDataset
-from ..models import Resnet18Classifier
+from EgoObjectDataset import EgoObjectClassificationDataset
+from scripts.models.resnet import Resnet18Classifier
 from torch.utils.data import Dataset, DataLoader
 import torch.optim as optim
 from tqdm import tqdm
@@ -56,29 +56,29 @@ def train():
             std=[0.2457, 0.2175, 0.2129]
         )
     ])
-    learning_rate = 0.075
-    batch_size = 512
+    learning_rate = 0.001
+    batch_size = 16
     dataset = EgoObjectClassificationDataset('data/labeled_objects_new.csv', transform=image_transforms)
-    train_dataloader = DataLoader(dataset, batch_size=batch_size)
+    train_dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
     model_architecture = 'resnet18'
     model = get_model()
     print(model)
     model = model.cuda()
     model.train()
-    margin = 0.2
-    l2_distance = PairwiseDistance(p=2)
+    # margin = 0.2
+    # l2_distance = PairwiseDistance(p=2)
     # progress_bar = enumerate(tqdm(train_dataloader))
-    optimizer_model = optim.SGD(
+    optimizer_model = optim.Adam(
         params=model.parameters(),
-        lr=learning_rate,
-        momentum=0.9,
-        dampening=0,
-        nesterov=False,
-        weight_decay=1e-5
+        # lr=learning_rate,
+        # momentum=0.9,
+        # dampening=0,
+        # nesterov=False,
+        # weight_decay=1e-5
     )
     criterion = torch.nn.CrossEntropyLoss()
     # criterion = torch.nn.NLLLoss()
-    total_epochs = 1000
+    total_epochs = 30
     cur_epoch = 0
     # print(len(train_dataloader))
     # exit()
@@ -96,6 +96,7 @@ def train():
             # print(batch_sample[1])
             labels = torch.tensor(batch_sample[1]).cuda()
             preds = model(imgs)
+            print (preds, labels)
             _, predicted = torch.max(preds.data, 1)
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
@@ -105,13 +106,15 @@ def train():
             loss.backward()
             optimizer_model.step()
             epoch_loss += loss.item()
-            print('Epoch {} Batch {}/{}:\tLoss: {}'.format(
-                cur_epoch,
-                batch_idx,
-                len(train_dataloader),
-                loss.item()
-            )
-            )
+            if batch_idx % (len(train_dataloader) // 10) == 0:
+                # only want to see like 10 batches per epoch
+                print('Epoch {} Batch {}/{}:\tLoss: {}'.format(
+                    cur_epoch,
+                    batch_idx,
+                    len(train_dataloader),
+                    loss.item()
+                )
+                )
         total_acc = correct / total
         print('###############################')
         print('Epoch {}:\tEpoch Loss: {}\tEpoch Accuracy: {}'.format(
@@ -221,5 +224,5 @@ def test():
 
 
 if __name__ == '__main__':
-    # train()
-    test()
+    train()
+    # test()
