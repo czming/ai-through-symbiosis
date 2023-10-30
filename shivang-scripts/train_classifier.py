@@ -56,7 +56,7 @@ def train():
     ])
     learning_rate = 0.075
     batch_size=512
-    dataset = EgoObjectClassificationDataset('data/labeled_objects_new.csv', transform=image_transforms)
+    dataset = EgoObjectClassificationDataset('../scripts/data/labeled_objects_new.csv', transform=image_transforms)
     train_dataloader = DataLoader(dataset, batch_size=batch_size)
     model_architecture = 'resnet18'
     model = get_model()
@@ -152,7 +152,7 @@ def test():
     learning_rate = 0.075
     model_path = 'model_training_checkpoints/model_resnet18_classifier_epoch_40.pt'
     batch_size=512
-    dataset = EgoObjectClassificationDataset('data/labeled_objects_test.csv', transform=image_transforms, test=True)
+    dataset = EgoObjectClassificationDataset('../scripts/data/labeled_objects_test.csv', transform=image_transforms, test=True)
     train_dataloader = DataLoader(dataset, batch_size=batch_size)
     model_architecture = 'resnet18'
     model = get_model()

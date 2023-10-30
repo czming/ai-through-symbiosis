@@ -87,12 +87,12 @@ def collapse_hue_bins(hue_bins, centers, sigma):
     return bin_sums
 
 def get_all_picklist_unique_objects():
-    df = pd.read_csv('data/labeled_objects_test.csv')
+    df = pd.read_csv('../scripts/data/labeled_objects_test.csv')
     # df_new = pd.DataFrame()
     new_picks = []
     new_ids = []
     new_labels = []
-    all_picklists = sorted(os.listdir('data/Videos'))
+    all_picklists = sorted(os.listdir('../scripts/data/Videos'))
     for picklist in tqdm(all_picklists):
         pick_name = picklist.split('.')[0]
         picklist_images = sorted(os.listdir('data/extracted_frames_test/'+pick_name))
@@ -123,7 +123,7 @@ def get_all_object_embeddings():
     model.load_state_dict(torch.load(ckpt_path)['model_state_dict'])
     model.eval()
 
-    obj_data = pd.read_csv('data/labeled_objects_test.csv')
+    obj_data = pd.read_csv('../scripts/data/labeled_objects_test.csv')
     print(obj_data.head())
     object_embeddings = []
     

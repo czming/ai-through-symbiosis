@@ -12,7 +12,7 @@ hands = mpHands.Hands()
 mpDraw = mp.solutions.drawing_utils
 
 def get_list_colors():
-    df = pd.read_csv('data/video_items.csv')
+    df = pd.read_csv('../scripts/data/video_items.csv')
     # print(df.values)
 
     picklist_label_dict = {}
@@ -42,7 +42,7 @@ def get_list_colors():
 
 def get_list_colors_new():
     picklist_label_dict = {}
-    pick_label_path = 'data/pick_labels/'
+    pick_label_path = '../scripts/data/pick_labels/'
     for fil in os.listdir(pick_label_path):
         with open(pick_label_path+fil, 'r') as f:
             data = f.read()
@@ -146,7 +146,7 @@ if __name__ == '__main__':
     frame_ids = []
     labels = []
     elan_files = []
-    videos = sorted(os.listdir('data/Videos'))
+    videos = sorted(os.listdir('../scripts/data/Videos'))
     test_picklists = [
         'picklist_138',
         'picklist_201',
@@ -170,7 +170,7 @@ if __name__ == '__main__':
         # elan_fil = 'data/elan_annotated/' + fil_name + '.eaf'
         # boundaries = get_elan_boundaries(elan_fil)
         # carry_times = boundaries['carry']
-        htk_file = 'data/testFolds/results-' + pick_id
+        htk_file = '../htk_outputs/icassp_train_folds/avgFold/results-' + pick_id
         if not os.path.exists(htk_file):
             os.makedirs(htk_file)
         print(picklist_label_dict.keys())

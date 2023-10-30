@@ -9,7 +9,7 @@ def intersection(lst1, lst2):
     return lst3
 
 def save_negative_picks():
-    df = pd.read_csv('data/video_items.csv')
+    df = pd.read_csv('../scripts/data/video_items.csv')
     print(df.values)
 
     lists = df.values[:,1]
@@ -51,7 +51,7 @@ def prep_negative_pick_dataset():
     anchors = []
     positives = []
     negatives = []
-    negs = pd.read_csv('data/picklist_negatives.csv')
+    negs = pd.read_csv('../scripts/data/picklist_negatives.csv')
     print(negs.head())
     neg_values = negs.values
     for idx in tqdm(range(neg_values.shape[0])):

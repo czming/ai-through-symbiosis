@@ -1,8 +1,8 @@
 import os
 from collections import defaultdict
 
-fold_path = 'data/nFold/'
-output_path = 'data/avgFold/'
+fold_path = '../scripts/data/nFold/'
+output_path = '../scripts/data/avgFold/'
 
 if __name__ == '__main__':
     pick_dict = {}

@@ -79,7 +79,7 @@ def get_hand_boundary(img):
 
 if __name__=='__main__':
     elan_files = []
-    videos = sorted(os.listdir('data/Videos'))
+    videos = sorted(os.listdir('../scripts/data/Videos'))
     for fil in videos:
         # print(fil)
         fil_name = fil.split('.')[0]

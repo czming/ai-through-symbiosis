@@ -54,7 +54,7 @@ def train():
     ])
     learning_rate = 0.075
     batch_size=512
-    dataset = EgoObjectDataset('data/final_dataset.csv', transform=image_transforms)
+    dataset = EgoObjectDataset('../scripts/data/final_dataset.csv', transform=image_transforms)
     train_dataloader = DataLoader(dataset, batch_size=batch_size)
     model_architecture = 'resnet18'
     model = get_model()
