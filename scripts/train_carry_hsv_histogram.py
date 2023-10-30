@@ -48,6 +48,7 @@ carry_histogram_hsv_model.fit(PICKLISTS, htk_input_folder, htk_output_folder, pi
 picklist_orderings = carry_histogram_hsv_model.predict(PICKLISTS, htk_input_folder, htk_output_folder, fps=29.97,
                                                     constrained_classes=["r", "g", "b"])
 if write_files:
+    if
     for picklist_id, sequence in picklist_orderings.items():
         print(picklist_id)
         with open(f"../shivang-scripts/data/pick_labels/picklist-{picklist_id}.txt", mode='w') as file:

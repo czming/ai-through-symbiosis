@@ -62,6 +62,7 @@ class CarryHSVHistogramModel(Model):
                 # print(htk_boundaries)
             except Exception as e:
                 # no labels yet
+                print (e)
                 print("Skipping picklist: No htk boundaries")
                 continue
 
@@ -69,7 +70,8 @@ class CarryHSVHistogramModel(Model):
                 # get the htk_input to load the hsv bins from the relevant lines
                 with open(f"{htk_input_folder}/picklist_{picklist_no}.txt") as infile:
                     htk_inputs = [i.split() for i in infile.readlines()]
-            except:
+            except Exception as e:
+                print (e)
                 print ("Skipping picklist: No htk boundaries")
                 continue
 

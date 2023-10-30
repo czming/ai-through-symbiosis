@@ -9,7 +9,7 @@ import cv2
 import numpy as np
 
 
-VIDEO_FILE_FORMAT = "../Videos/picklist_%(index)d.MP4"
+VIDEO_FILE_FORMAT = "../data/Videos/picklist_%(index)d.MP4"
 PICKLIST_FILE_FORMAT = "../htk_inputs/picklist_%(index)d_forward_filled_30_gaussian_filter_9_3.txt"
 
 

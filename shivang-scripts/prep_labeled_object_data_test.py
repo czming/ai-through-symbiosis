@@ -170,7 +170,7 @@ if __name__ == '__main__':
         # elan_fil = 'data/elan_annotated/' + fil_name + '.eaf'
         # boundaries = get_elan_boundaries(elan_fil)
         # carry_times = boundaries['carry']
-        htk_file = '../htk_outputs/icassp_train_folds/avgFold/results-' + pick_id
+        htk_file = 'C:/Users/chngz/OneDrive/Georgia Tech/AI Through Symbiosis/pick_list_dataset/htk_outputs/icassp_train_folds/avgFold/results-' + pick_id
         if not os.path.exists(htk_file):
             os.makedirs(htk_file)
         print(picklist_label_dict.keys())
