@@ -36,13 +36,14 @@ htk_output_folder = configs["file_paths"]["htk_output_file_path"]
 
 # picklists that we are looking at
 # PICKLISTS = list(range(136, 224)) + list(range(225, 230)) + list(range(231, 235))
-PICKLISTS = list(range(136, 235)) # list(range(136, 235)
+PICKLISTS = list(range(41, 90)) # list(range(136, 235)
 
-with open("saved_models/carry_histogram_hsv_model.pkl", "rb") as f:
+with open("saved_models/carry_histogram_hsv_model_saved_icassp.pkl", "rb") as f:
     carry_histogram_hsv_model = pickle.load(f)
 
     # 10 class unconstrained
-    predictions = carry_histogram_hsv_model.predict(PICKLISTS, htk_input_folder, htk_output_folder, fps=29.97)
+    predictions = carry_histogram_hsv_model.predict(PICKLISTS, htk_input_folder, htk_output_folder, fps=59.94,
+                                                    constrained_classes=["r", "g", "b"])
 
     # 3 class constrained to r g b classes
     # predictions = carry_histogram_hsv_model.predict(PICKLISTS, htk_input_folder, htk_output_folder, fps=59.94,\
@@ -98,39 +99,39 @@ with open("saved_models/carry_histogram_hsv_model.pkl", "rb") as f:
 
     # Confusion matrix:
 
-    confusion_matrix = metrics.confusion_matrix(actual_picklists, pred_picklists)
-    conf_mat_norm = (confusion_matrix.astype('float') / confusion_matrix.sum(axis=1)[:, np.newaxis])
-
-    letter_to_name = {
-        'r': 'red',
-        'g': 'green',
-        'b': 'blue',
-        'p': 'darkblue',
-        'q': 'darkgreen',
-        'o': 'orange',
-        's': 'alligatorclip',
-        'a': 'yellow',
-        't': 'clear',
-        'u': 'candle'
-    }
-    names = ['red', 'green', 'blue', 'darkblue', 'darkgreen', 'orange', 'alligatorclip', 'yellow', 'clear', 'candle']
-
-    actual_picklists_names = []
-    predicted_picklists_names = []
-
-    letter_counts = defaultdict(lambda: 0)
-    for letter in actual_picklists:
-        name = letter_to_name[letter]
-        letter_counts[name] += 1
-        actual_picklists_names.append(name)
-
-    for index, letter in enumerate(pred_picklists):
-        # print(index)
-        predicted_picklists_names.append(letter_to_name[letter])
-
-    unique_names = unique_labels(actual_picklists_names, predicted_picklists_names)
-    cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix=conf_mat_norm, display_labels = unique_names)
-    cm_display.plot(cmap=plt.cm.Blues)
-    plt.xticks(rotation=90)
-    plt.tight_layout()
-    plt.show()
+    # confusion_matrix = metrics.confusion_matrix(actual_picklists, pred_picklists)
+    # conf_mat_norm = (confusion_matrix.astype('float') / confusion_matrix.sum(axis=1)[:, np.newaxis])
+    #
+    # letter_to_name = {
+    #     'r': 'red',
+    #     'g': 'green',
+    #     'b': 'blue',
+    #     'p': 'darkblue',
+    #     'q': 'darkgreen',
+    #     'o': 'orange',
+    #     's': 'alligatorclip',
+    #     'a': 'yellow',
+    #     't': 'clear',
+    #     'u': 'candle'
+    # }
+    # names = ['red', 'green', 'blue', 'darkblue', 'darkgreen', 'orange', 'alligatorclip', 'yellow', 'clear', 'candle']
+    #
+    # actual_picklists_names = []
+    # predicted_picklists_names = []
+    #
+    # letter_counts = defaultdict(lambda: 0)
+    # for letter in actual_picklists:
+    #     name = letter_to_name[letter]
+    #     letter_counts[name] += 1
+    #     actual_picklists_names.append(name)
+    #
+    # for index, letter in enumerate(pred_picklists):
+    #     # print(index)
+    #     predicted_picklists_names.append(letter_to_name[letter])
+    #
+    # unique_names = unique_labels(actual_picklists_names, predicted_picklists_names)
+    # cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix=conf_mat_norm, display_labels = unique_names)
+    # cm_display.plot(cmap=plt.cm.Blues)
+    # plt.xticks(rotation=90)
+    # plt.tight_layout()
+    # plt.show()
