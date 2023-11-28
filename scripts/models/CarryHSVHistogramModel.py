@@ -58,19 +58,20 @@ class CarryHSVHistogramModel(Model):
 
             try:
                 htk_results_file = f"{htk_output_folder}/results-" + str(picklist_no)
+                print(htk_results_file)
                 htk_boundaries = get_htk_boundaries(htk_results_file, fps=fps)
                 # print(htk_boundaries)
-            except:
+            except Exception as e:
                 # no labels yet
-                print("Skipping picklist: No htk boundaries")
+                print("Skipping picklist: No htk output boundaries")
                 continue
 
             try:
                 # get the htk_input to load the hsv bins from the relevant lines
                 with open(f"{htk_input_folder}/picklist_{picklist_no}.txt") as infile:
                     htk_inputs = [i.split() for i in infile.readlines()]
-            except:
-                print ("Skipping picklist: No htk boundaries")
+            except Exception as e:
+                print ("Skipping picklist: No htk input boundaries")
                 continue
 
 
@@ -165,8 +166,10 @@ class CarryHSVHistogramModel(Model):
             empty_hand_frame_count = 0
 
             for (start_frame, end_frame) in empty_hand_frames:
-                curr_avg_empty_hand_hsv, frame_count = get_avg_hsv_bin_frames(htk_inputs, start_frame + 10,
-                                                                              end_frame - 10)
+                if end_frame - start_frame < 10:
+                    continue
+
+                curr_avg_empty_hand_hsv, frame_count = get_avg_hsv_bin_frames(htk_inputs, start_frame, end_frame)
 
                 # if frame_count == 0:
                 #     # no frames where the hand was present
