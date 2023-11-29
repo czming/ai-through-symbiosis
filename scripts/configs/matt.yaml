@@ -1,0 +1,8 @@
+owner: matt # fill in your name here
+file_paths:
+  video_file_path: "/Users/matthewso/OneDrive/AI Through Symbiosis/pick_list_dataset/Videos" # directory containing videos
+  htk_input_file_path: "/Users/matthewso/OneDrive/AI Through Symbiosis/pick_list_dataset/htk_inputs/picklist136to234_280bins" # directory containing htk input vectors
+#  htk_input_file_path: "/Users/matthewso/OneDrive/AI Through Symbiosis/pick_list_dataset/htk_inputs" # directory containing htk input vectors
+  label_file_path: "/Users/matthewso/OneDrive/AI Through Symbiosis/pick_list_dataset/Labels" # directory containing pick labels (order of labels, i.e. r1b1...)
+  htk_output_file_path: "/Users/matthewso/OneDrive/AI Through Symbiosis/pick_list_dataset/htk_outputs/icassp_train_folds/avgFold" # directory containing results from HTK (i.e. HTK output folder)
+  elan_annotated_file_path: "/Users/matthewso/OneDrive/AI Through Symbiosis/HandGestureRecognition/elan_annotated" # directory containing ELAN annotated labels for videos
