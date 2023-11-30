@@ -1,29 +1,63 @@
+import numpy as np 
 import cv2 
+import argparse
+
+#notes: 
+# * the dji action 2 only allows 1280x720 resolution wiht 30 fps when used as a webcam. when recording on its own, we can do 4k x 60fps.
+# this code works on ubuntu.
+# run python cv2_live_ubuntu.py and it automatically records as webcam hooked up to laptop. Then when done, press a and the video will save.
+
+
 
 if __name__ == '__main__':
-    #this is needed for windows - not sure about linux/mac systems.
-    #VideoCapture(i), i = 0, 1, 2, ... might work. Depends on the specific computer you use 
-    cam = cv2.VideoCapture(cv2.CAP_DSHOW)
+        
+    # This will return video from the first webcam on your computer. 
+    cap = cv2.VideoCapture(0)   
 
-    if not cam.isOpened():
-        print("error opening camera")
-        exit()
+    width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH ))
+    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT ))
+    fps =  cap.get(cv2.CAP_PROP_FPS)
+    print("video in " + str(width) + " x " + str(height) + " resolution at " + str(fps) + " fps.")
+
+    # Define the codec and create VideoWriter object 
+    # fourcc = cv2.VideoWriter_fourcc(*'XVID')
+    fourcc = cv2.VideoWriter_fourcc(*'XVID') 
+    out = cv2.VideoWriter('picklist_41_mock.mp4', fourcc, fps, (width, height)) 
     
-    while True:
-        # Capture frame-by-frame
-        ret, frame = cam.read()
-        # if frame is read correctly ret is True
-        if not ret:
-            print("error in retrieving frame")
-            break
-        # img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        img = frame
-        cv2.imshow('frame', img)
-        # file.write(img)
+    img = np.zeros((640, 480))
 
-        if cv2.waitKey(1) == ord('q'):
-            break
+    ret, _ = cap.read()
 
-cam.release()
-# file.release()
-cv2.destroyAllWindows()
+    if ret:
+        # loop runs if capturing has been initialized.  
+        while(True): 
+            # reads frames from a camera  
+            # ret checks return at each frame 
+            ret, frame = cap.read()  
+        
+            
+            # output the frame 
+            out.write(frame)  
+            
+            # The original input frame is shown in the window  
+            # cv2.imshow('Press a to quit', img) 
+        
+            cv2.imshow('press a to quit', cv2.resize(img, (426, 240)))
+            # The window showing the operated video stream  
+            # cv2.imshow('frame', hsv) 
+        
+            
+            # Wait for 'a' key to stop the program  
+            if cv2.waitKey(1) & 0xFF == ord('a'): 
+                break
+        
+
+    print("video closed")
+    # Close the window / Release webcam 
+    cap.release() 
+    
+    # After we release our webcam, we also release the output 
+    out.release()  
+    
+    # De-allocate any associated memory usage  
+    cv2.destroyAllWindows() 
