@@ -15,7 +15,7 @@ except ImportError:
 
 __all__ = ['ResNet', 'resnet18', 'resnet34', 'resnet50', 'resnet101',
            'resnet152', 'resnext50_32x4d', 'resnext101_32x8d',
-           'wide_resnet50_2', 'wide_resnet101_2', 'Resnet18Classifier']
+           'wide_resnet50_2', 'wide_resnet101_2', 'Resnet18Classifier', 'Resnet34Classifier']
 
 
 model_urls = {
@@ -232,6 +232,7 @@ class ResNet(nn.Module):
 
 def _resnet(arch, block, layers, pretrained, progress, **kwargs):
     model = ResNet(block, layers, **kwargs)
+    print (pretrained)
     if pretrained:
         state_dict = load_state_dict_from_url(model_urls[arch],
                                               progress=progress)
@@ -247,6 +248,16 @@ def resnet18(pretrained=False, progress=True, **kwargs):
         progress (bool): If True, displays a progress bar of the download to stderr
     """
     return _resnet('resnet18', BasicBlock, [2, 2, 2, 2], pretrained, progress,
+                   **kwargs)
+
+def resnet9(pretrained=False, progress=True, **kwargs):
+    r"""Half number of blocks from ResNet-18 model from
+    `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>`_
+    Args:
+        pretrained (bool): If True, returns a model pre-trained on ImageNet
+        progress (bool): If True, displays a progress bar of the download to stderr
+    """
+    return _resnet('resnet9', BasicBlock, [1, 1, 1, 1], pretrained, progress,
                    **kwargs)
 
 
@@ -363,6 +374,51 @@ class Resnet18Classifier(nn.Module):
 
     def __init__(self, num_classes=10, pretrained=False):
         super(Resnet18Classifier, self).__init__()
+        self.model = resnet18(pretrained=pretrained)
+
+        # Output embedding
+        input_features_fc_layer = self.model.fc.in_features
+        self.model.fc = nn.Linear(input_features_fc_layer, num_classes, bias=False)
+
+    def forward(self, images):
+        res = self.model(images)
+        res = nn.functional.softmax(res)
+        return res
+
+
+class Resnet9Classifier(nn.Module):
+    """Constructs a ResNet-18 model for FaceNet training using triplet loss.
+    Args:
+        embedding_dimension (int): Required dimension of the resulting embedding layer that is outputted by the model.
+                                   using triplet loss. Defaults to 512.
+        pretrained (bool): If True, returns a model pre-trained on the ImageNet dataset from a PyTorch repository.
+                           Defaults to False.
+    """
+
+    def __init__(self, num_classes=10, pretrained=False):
+        super(Resnet9Classifier, self).__init__()
+        self.model = resnet9(pretrained=pretrained)
+
+        # Output embedding
+        input_features_fc_layer = self.model.fc.in_features
+        self.model.fc = nn.Linear(input_features_fc_layer, num_classes, bias=False)
+
+    def forward(self, images):
+        res = self.model(images)
+        res = nn.functional.softmax(res)
+        return res
+
+class Resnet34Classifier(nn.Module):
+    """Constructs a ResNet-18 model for FaceNet training using triplet loss.
+    Args:
+        embedding_dimension (int): Required dimension of the resulting embedding layer that is outputted by the model.
+                                   using triplet loss. Defaults to 512.
+        pretrained (bool): If True, returns a model pre-trained on the ImageNet dataset from a PyTorch repository.
+                           Defaults to False.
+    """
+
+    def __init__(self, num_classes=10, pretrained=False):
+        super(Resnet34Classifier, self).__init__()
         self.model = resnet18(pretrained=pretrained)
 
         # Output embedding
