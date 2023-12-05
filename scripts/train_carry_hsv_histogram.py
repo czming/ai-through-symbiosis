@@ -42,7 +42,7 @@ PICKLISTS = list(range(136, 235)) # list(range(136, 235)
 carry_histogram_hsv_model = CarryHSVHistogramModel()
 
 picklist_orderings = carry_histogram_hsv_model.fit(PICKLISTS, htk_input_folder, htk_output_folder, pick_label_folder, \
-                              fps=29.97)
+                              fps=29.97, visualize=True)
 
 carry_histogram_hsv_model.predict(PICKLISTS, htk_input_folder, htk_output_folder, fps=29.97,
                                                     constrained_classes=["r", "g", "b"])

@@ -13,7 +13,7 @@ VIDEO_FILE_FORMAT = "../data/Videos/picklist_%(index)d.MP4"
 PICKLIST_FILE_FORMAT = "../htk_inputs/picklist_%(index)d_forward_filled_30_gaussian_filter_9_3.txt"
 
 
-for index in range(41, 71):
+for index in range(234, 235):
 
     cap = cv2.VideoCapture(VIDEO_FILE_FORMAT % {"index": index})
     frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
