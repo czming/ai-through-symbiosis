@@ -59,5 +59,5 @@ if __name__ == '__main__':
     # After we release our webcam, we also release the output 
     out.release()  
     
-    # De-allocate any associated memory usage  
+    # De-allocate any associated memory usage
     cv2.destroyAllWindows() 
