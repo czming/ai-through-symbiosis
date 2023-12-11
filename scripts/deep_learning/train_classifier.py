@@ -6,9 +6,10 @@ import os
 from torchsummary import summary
 from torch.optim import SGD, Adam
 from EgoObjectDataset import EgoObjectClassificationDataset
-from scripts.models.resnet import Resnet18Classifier
+from scripts.models.resnet import Resnet18Classifier, Resnet34Classifier, Resnet9Classifier
 from torch.utils.data import Dataset, DataLoader
 import torch.optim as optim
+from torch.optim.lr_scheduler import StepLR
 from tqdm import tqdm
 from torch.nn.modules.distance import PairwiseDistance
 import numpy as np
@@ -20,8 +21,8 @@ import matplotlib.pyplot as plt
 
 # from losses import TripletLoss, Accuracy
 
-def get_model(pretrained=True, num_classes=10):
-    model = Resnet18Classifier(
+def get_model(pretrained=False, num_classes=10):
+    model = Resnet34Classifier(
         num_classes=num_classes,
         pretrained=pretrained
     )
@@ -56,11 +57,11 @@ def train():
             std=[0.2457, 0.2175, 0.2129]
         )
     ])
-    learning_rate = 0.001
-    batch_size = 16
+    learning_rate = 0.0001
+    batch_size = 64
     dataset = EgoObjectClassificationDataset('data/labeled_objects_new.csv', transform=image_transforms)
     train_dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
-    model_architecture = 'resnet18'
+    model_architecture = 'resnet34'
     model = get_model()
     print(model)
     model = model.cuda()
@@ -70,19 +71,25 @@ def train():
     # progress_bar = enumerate(tqdm(train_dataloader))
     optimizer_model = optim.Adam(
         params=model.parameters(),
-        # lr=learning_rate,
+        lr=learning_rate,
         # momentum=0.9,
         # dampening=0,
         # nesterov=False,
         # weight_decay=1e-5
     )
+
+    lr_scheduler = StepLR(optimizer_model, step_size=20, gamma=0.5)
+
     criterion = torch.nn.CrossEntropyLoss()
     # criterion = torch.nn.NLLLoss()
-    total_epochs = 30
+    total_epochs = 60
     cur_epoch = 0
     # print(len(train_dataloader))
     # exit()
     while cur_epoch < total_epochs:
+
+        print (f"lr: {lr_scheduler.get_last_lr()}")
+
         time_now = time.time()
         total_loss = 0
         num_valid_training_triplets = 0
@@ -96,7 +103,7 @@ def train():
             # print(batch_sample[1])
             labels = torch.tensor(batch_sample[1]).cuda()
             preds = model(imgs)
-            print (preds, labels)
+            # print (preds, labels)
             _, predicted = torch.max(preds.data, 1)
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
@@ -124,6 +131,10 @@ def train():
         )
         )
         print('###############################')
+
+        # step for lr_scheduler after one epoch
+        lr_scheduler.step()
+
         state = {
             'epoch': cur_epoch,
             'batch_size_training': batch_size,
@@ -136,7 +147,7 @@ def train():
                 model_architecture,
                 cur_epoch
             )
-                       )
+            )
 
 
 def test():
@@ -144,9 +155,9 @@ def test():
         transforms.ToPILImage(),
         # transforms.RandomApply([transforms.RandomResizedCrop((256,256))], p = 0.2),
         transforms.Resize((64, 64)),
-        transforms.RandomRotation(45),
-        transforms.RandomHorizontalFlip(0.3),
-        transforms.RandomVerticalFlip(0.3),
+        # transforms.RandomRotation(45),
+        # transforms.RandomHorizontalFlip(0.3),
+        # transforms.RandomVerticalFlip(0.3),
         transforms.ToTensor(),
         transforms.Normalize(
             mean=[0.6071, 0.4609, 0.3944],
@@ -154,11 +165,11 @@ def test():
         )
     ])
     learning_rate = 0.075
-    model_path = 'model_training_checkpoints/model_resnet18_classifier_epoch_40.pt'
+    model_path = 'model_training_checkpoints/resnet34_1/model_resnet34_classifier_epoch_30.pt'
     batch_size = 512
-    dataset = EgoObjectClassificationDataset('data/labeled_objects_test.csv', transform=image_transforms, test=True)
+    dataset = EgoObjectClassificationDataset('data/labeled_objects_test.csv', test=True, transform=image_transforms)
     train_dataloader = DataLoader(dataset, batch_size=batch_size)
-    model_architecture = 'resnet18'
+    model_architecture = 'resnet34'
     model = get_model()
     model.load_state_dict(torch.load(model_path)['model_state_dict'])
     print(model)
@@ -213,16 +224,21 @@ def test():
     conf_mat_norm = np.around(conf_mat_norm, decimals=2)
     # unique_names = unique_labels(actual_picklists_names, predicted_picklists_names)
     cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix=conf_mat_norm,
-                                                display_labels=['red', 'green', 'blue', 'darkblue', 'darkgreen',
-                                                                'orange', 'alligatorclip', 'yellow', 'clear', 'candle'])
+                                                display_labels=['alligatorclip', 'blue', 'candle', 'clear', \
+                                                                'darkblue', 'darkgreen', 'green', 'orange', \
+                                                                'red', 'yellow'])
 
     cm_display.plot(cmap=plt.cm.Blues)
 
     plt.xticks(rotation=90)
 
+    plt.tight_layout()
+
+    # plt.show()
+
     plt.savefig('results_test_classifier.png')
 
 
 if __name__ == '__main__':
-    train()
-    # test()
+    # train()
+    test()
