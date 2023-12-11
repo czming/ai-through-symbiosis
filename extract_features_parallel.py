@@ -16,10 +16,10 @@ from optical_flow import *
 from google.protobuf.json_format import MessageToDict
 import time
 import matplotlib.pyplot as plt
-
+import gc
 import skimage.color
 
-from multiprocessing import Process, Manager, Pool
+from multiprocessing import Process, Manager, Pool, set_start_method
 import time
 from mlsocket import MLSocket
 
@@ -430,9 +430,11 @@ def extract_features(image, output_dict, counter):
 
     # store output
     # output_dict[counter] = htk_output_vector
+    gc.collect()
     return output_dict, counter, htk_output_vector
 def store_result(htk_output):
     output_dict, counter, htk_output_vector = htk_output
+    print(f"Finished {counter}")
     output_dict[counter] = htk_output_vector
 
 # ----------------------------------------DECLARING CONSTANTS----------------------------------------------------
@@ -529,7 +531,6 @@ if __name__ == "__main__":
 
     # seeing only hands from video
 
-    cap = cv2.VideoCapture(args.video)
 
 
 
@@ -553,15 +554,16 @@ if __name__ == "__main__":
     plt.show()
 
     counter = 0
-
+    set_start_method('spawn')
     with MLSocket() as socket:
         with Manager() as manager:
             with Pool() as pool:
                 # to do the multiprocessing
-
                 # store the result
                 result = manager.dict({})
                 # parity = 0
+                cap = cv2.VideoCapture(args.video)
+
                 while cap.isOpened():
                     # aruco_marker = [x, y]
                     # aruco_marker = [is_there, x, y]
@@ -576,7 +578,7 @@ if __name__ == "__main__":
                         print("Ignoring empty camera frame.")
                         # If loading a video, use 'break' instead of 'continue'.
                         break
-                    # parity = (parity + 1) % 10
+                    # parity = (parity + 1) % 2
                     # if parity != 0:
                     #     continue
 
@@ -595,6 +597,7 @@ if __name__ == "__main__":
                     print(f"{frames} start: {time.time()}")
                     pool.apply_async(extract_features, args=(image, result, frames), callback=store_result)
                     print(f"{frames} after start: {time.time()}")
+                    gc.collect()
                     # p = Process(target=extract_features, args=(image, result, frames))
 
                     # with open(OUTPUT_FILE, "a") as outfile:
