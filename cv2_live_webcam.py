@@ -1,15 +1,21 @@
 import numpy as np 
 import cv2 
 import argparse
+from mlsocket import MLSocket
+
 
 #notes: 
 # * the dji action 2 only allows 1280x720 resolution wiht 30 fps when used as a webcam. when recording on its own, we can do 4k x 60fps.
 # this code works on ubuntu.
 # run python cv2_live_ubuntu.py and it automatically records as webcam hooked up to laptop. Then when done, press a and the video will save.
 
-
+HOST = "127.0.0.1"
+PORT = 48293
 
 if __name__ == '__main__':
+
+    with MLSocket() as socket:
+        socket.connect((HOST, PORT))
         
     # This will return video from the first webcam on your computer. 
     cap = cv2.VideoCapture(0)   
@@ -21,8 +27,7 @@ if __name__ == '__main__':
 
     # Define the codec and create VideoWriter object 
     # fourcc = cv2.VideoWriter_fourcc(*'XVID')
-    fourcc = cv2.VideoWriter_fourcc(*'XVID') 
-    out = cv2.VideoWriter('picklist_41_mock.mp4', fourcc, fps, (width, height)) 
+    # out = cv2.VideoWriter('picklist_41_mock.mp4', fourcc, fps, (width, height)) 
     
     img = np.zeros((640, 480))
 
@@ -34,17 +39,20 @@ if __name__ == '__main__':
             # reads frames from a camera  
             # ret checks return at each frame 
             ret, frame = cap.read()  
-        
-            
+                    
             # output the frame 
-            out.write(frame)  
+            # out.write(frame)  
+            # socket.send(frame)
             
             # The original input frame is shown in the window  
             # cv2.imshow('Press a to quit', img) 
         
-            cv2.imshow('press a to quit', cv2.resize(img, (426, 240)))
+            cv2.imshow('press a to quit', cv2.resize(frame, (426, 240)))
             # The window showing the operated video stream  
             # cv2.imshow('frame', hsv) 
+
+            if frame.size > 0:
+                socket.send(frame)
         
             
             # Wait for 'a' key to stop the program  
@@ -57,7 +65,7 @@ if __name__ == '__main__':
     cap.release() 
     
     # After we release our webcam, we also release the output 
-    out.release()  
+    # out.release()  
     
     # De-allocate any associated memory usage
     cv2.destroyAllWindows() 
