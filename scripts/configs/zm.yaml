@@ -10,4 +10,5 @@ file_paths:
 #  htk_output_file_path: "C:/Users/chngz/OneDrive/Georgia Tech/AI Through Symbiosis/pick_list_dataset/htk_outputs/icassp_train_folds/avgFold" # directory containing results from HTK (i.e. HTK output folder)
   # testing, picklists 1-90
   htk_output_file_path: "C:/Users/chngz/OneDrive/Georgia Tech/AI Through Symbiosis/pick_list_dataset/htk_outputs/ood-1-90-results/ood-1-90-results"
+  # htk_output_file_path: "C:/Users/chngz/OneDrive/Georgia Tech/AI Through Symbiosis/pick_list_dataset/htk_outputs/ood-1-90-results/ood-1-90-results"
   elan_annotated_file_path: "C:/Users/chngz/Documents/AI through Symbiosis/HandGestureRecognition/elan_annotated" # directory containing ELAN annotated labels for videos

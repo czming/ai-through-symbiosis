@@ -4,6 +4,7 @@ iterative improvement method that swaps pairs which result in smaller intraclust
 when there is no pair which would reduce the intracluster distance
 
 """
+
 from utils import *
 
 import argparse
@@ -22,11 +23,9 @@ logging.basicConfig(level=logging.DEBUG)
 parser = argparse.ArgumentParser()
 parser.add_argument("--config_file", "-c", type=str, default="configs/zm.yaml",
                     help="Path to experiment config (scripts/configs)")
-parser.add_argument("--write-files", '-w', action='store_true')
 args = parser.parse_args()
 
 configs = load_yaml_config(args.config_file)
-write_files = args.write_files
 
 elan_label_folder = configs["file_paths"]["elan_annotated_file_path"]
 htk_input_folder = configs["file_paths"]["htk_input_file_path"]
@@ -41,16 +40,9 @@ PICKLISTS = list(range(136, 235)) # list(range(136, 235)
 
 carry_histogram_hsv_model = CarryHSVHistogramModel()
 
-picklist_orderings = carry_histogram_hsv_model.fit(PICKLISTS, htk_input_folder, htk_output_folder, pick_label_folder, \
+carry_histogram_hsv_model.fit(PICKLISTS, htk_input_folder, htk_output_folder, pick_label_folder, \
                               fps=29.97, visualize=True)
 
-carry_histogram_hsv_model.predict(PICKLISTS, htk_input_folder, htk_output_folder, fps=29.97,
-                                                    constrained_classes=["r", "g", "b"])
-if write_files:
-    for picklist_id, sequence in picklist_orderings.items():
-        print(picklist_id)
-        with open(f"../shivang-scripts/data/pick_labels/picklist-{picklist_id}.txt", mode='w') as file:
-            file.write(f"{picklist_id},{''.join(sequence)}")
 with open("saved_models/carry_histogram_hsv_model.pkl", "wb") as outfile:
     pickle.dump(carry_histogram_hsv_model, outfile)
 

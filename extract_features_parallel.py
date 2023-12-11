@@ -187,14 +187,18 @@ def get_hs_bins(cropped_hand_image):
 
     return histsat
 
-def extract_features(image):
+def extract_features(image, hands):
+    """
 
+    :param image: array containing the image to be processed
+    :param hands: mediapipe hands detector
+    :return:
+    """
+    pass
 
 # ----------------------------------------DECLARING CONSTANTS----------------------------------------------------
 # change this to visualize the detections in the image
 DISPLAY_VISUAL = False
-
-OUTPUT_FILE = os.path.basename(args.video.split(".")[0] + ".txt")
 
 ORIGINAL_FRAME_WIDTH = 1920
 ORIGINAL_FRAME_HEIGHT = 1080
@@ -223,10 +227,8 @@ HAND_POS_HTK_OFFSET = 354
 # don't flip camera view unless you want selfie view
 TO_FLIP = False
 
-TIME_CHANGE_BUFFER = 5
-
-MOVEMENT_MOE = 5
-REFRESH_TIME = 0.05
+intrinsic = np.array([[900., 0, 640], [0, 900, 360], [0, 0, 1]])
+distortion = np.array([[0., 0., 0., 0., 0.]])
 
 
 if __name__ == "__main__":
@@ -241,6 +243,8 @@ if __name__ == "__main__":
                         help="Path to video outfile to save to. If not provided, will not create video")  # 'hand_detection_output.mp4'
 
     args = parser.parse_args()
+
+    OUTPUT_FILE = os.path.basename(args.video.split(".")[0] + ".txt")
 
     mp_drawing = mp.solutions.drawing_utils
     mp_hands = mp.solutions.hands
@@ -263,36 +267,6 @@ if __name__ == "__main__":
 
     picked = []
 
-    # start out open
-    hand_closed = False
-    hand_open = True
-    curr_holding = False
-    last_change = 0
-
-
-
-    prev_hand_loc = ()
-    curr_hand_loc = ()
-    prev_time = time.time()
-
-    hand_mean_x = 0
-    hand_mean_y = 0
-    hand_var_x = 0
-    hand_var_y = 0
-
-    closed_hand_mean_x = 0
-    closed_hand_mean_y = 0
-    closed_hand_var_x = 0
-    closed_hand_var_y = 0
-    closed_hand_frames = 0
-
-    # -1 for uninitialized
-    left_center_right = -1
-    top_center_bottom = -1
-
-    # max distance between hand and average so far during pick attempt
-    max_hand_discrepancy = 0
-
     frames = 0
 
     # Hand landmark and fingers data - not in master yet apparently
@@ -301,8 +275,7 @@ if __name__ == "__main__":
 
     # aruco camera matrices are after image is distorted, focal length shouldn't matter since everything is adjusted
     # proportionally
-    intrinsic = np.array([[900., 0, 640], [0, 900, 360], [0, 0, 1]])
-    distortion = np.array([[0., 0., 0., 0., 0.]])
+
 
     # to undistort the image
     # initial_intrinsic = np.load("intrinsic_gopro.npy")
@@ -475,335 +448,12 @@ if __name__ == "__main__":
                 # if hand found, hand aruco marker should have id 0
                 aruco_hand_tvec = np.array(i.tvec[:, 0])
 
-        # while len(remove_aruco_vectors) != 0:
-        #     # delete from aruco_vectors and then delete that element from remove_aruco_vectors
-        #     del (aruco_vectors[remove_aruco_vectors[-1]])
-        #     remove_aruco_vectors.pop()
-
-        # print (htk_output_vector)
-        #
-        # logging.debug("Double check: ")
-        #
-        # # #this for loop just to check if the markers are actually valid after back projection
-        # # for index in range(len(aruco_vectors)):
-        # #     i = aruco_vectors[index]
-        # #     if i.get_id() in VALID_SHELF_MARKERS:
-        # #         #make sure the aruco marker is valid shelf marker
-        # #         logging.debug(f"{i.get_id()}: {i.tvec[:,0]}")
-        # #
-        # #         aruco_2d = cv2.projectPoints(np.array([0.0,0.0,0.0]), np.array([0.0,0.0,0.0]), i.tvec[:,0], intrinsic, distortion)[0][0][0]
-        # #
-        # #
-        # #         logging.debug(f"{i.get_id()}: {aruco_2d}")
-        #
-        # # print(aruco_tvecs.keys(), end=" ")
-        # # print(markers, end=" ")
-        #
-        # # want at least 4 points
-        # if len(aruco_tvecs) >= 4:
-        #     # aruco_tvecs numpy array
-        #     aruco_tvecs_plot_np = np.array(aruco_tvecs_plot)
-        #     # use another copy of aruco_tvecs because we are deleting stuff from this one
-        #     aruco_tvecs_copy = copy.deepcopy(aruco_tvecs)
-        #     aruco_tvecs_plot_copy = []
-        #     aruco_plot_plane = None
-        #     try:
-        #         aruco_plane = get_best_fit_plane(aruco_tvecs_plot_np)
-        #         # vector that is perpendicular to the plane
-        #         aruco_plane_normal_vector = np.array([-aruco_plane[1], -aruco_plane[2], 1])
-        #         aruco_plane_normal_vector = aruco_plane_normal_vector / np.linalg.norm(aruco_plane_normal_vector)
-        #
-        #         errors = {}
-        #
-        #         # outlier removal
-        #         for i in aruco_tvecs_copy.keys():
-        #             error = np.linalg.norm(
-        #                 best_fit_point([-aruco_plane[1], -aruco_plane[2], 1, aruco_plane[0]], aruco_tvecs_copy[i]) -
-        #                 aruco_tvecs_copy[i])
-        #             errors[i] = error
-        #
-        #         mean_plane_error = np.mean([i for i in errors.values()])
-        #         std_plane_error = np.std([i for i in errors.values()])
-        #
-        #         for i in errors.keys():
-        #             if errors[i] >= mean_plane_error + 2 * std_plane_error:
-        #                 # more than 2 standard deviations of error above mean, remove point
-        #                 del (aruco_tvecs_copy[i])
-        #
-        #         if len(aruco_tvecs_copy) <= 3:
-        #             break
-        #
-        #         # gather all the points again in a copy
-        #         for i in aruco_vectors:
-        #             if i.get_id() in VALID_SHELF_MARKERS:
-        #                 aruco_tvecs_plot_copy.append(i.tvec[:, 0])
-        #
-        #         logging.debug(aruco_tvecs_copy)
-        #         logging.debug(errors)
-        #
-        #         aruco_tvecs_plot_np_copy = np.array(aruco_tvecs_plot_copy)
-        #
-        #         # update new plane equations
-        #         aruco_plane = get_best_fit_plane(aruco_tvecs_plot_np_copy)
-        #         # vector that is perpendicular to the plane
-        #         aruco_plane_normal_vector = np.array([-aruco_plane[1], -aruco_plane[2], 1])
-        #         aruco_plane_normal_vector = aruco_plane_normal_vector / np.linalg.norm(aruco_plane_normal_vector)
-        #
-        #         x = np.linspace(-1.5, 1.5, 10)
-        #         y = np.linspace(-1.5, 1.5, 10)
-        #         X, Y = np.meshgrid(x, y)
-        #         Z = aruco_plane[0] + aruco_plane[1] * X + aruco_plane[2] * Y
-        #
-        #         aruco_plot_plane = aruco_tvec_sp.plot_surface(X, Y, Z, alpha=0.3, color=(0, 0, 1))
-        #
-        #
-        #
-        #     except np.linalg.LinAlgError:
-        #         # insufficient points, singular matrix
-        #         continue
-        #
-        #     # get updated tvec location
-        #     for i in aruco_tvecs.keys():
-        #         aruco_tvecs[i] = best_fit_point([-aruco_plane[1], -aruco_plane[2], 1, aruco_plane[0]], aruco_tvecs[i])
-        #
-        #     adjusted_aruco_tvecs_plot_np = []
-        #
-        #     for i in aruco_tvecs.keys():
-        #         # get the adjusted marker positions for plotting
-        #         adjusted_aruco_tvecs_plot_np.append(aruco_tvecs[i])
-        #
-        #     # get tvecs for ready to plot in pyplot
-        #     adjusted_aruco_tvecs_plot_np = np.array(adjusted_aruco_tvecs_plot_np)
-        #
-        #     predicted_aruco_tvecs = {}
-        #     predicted_aruco_tvecs_plot = []
-        #
-        #     logging.debug("Predicted: ")
-        #
-        #     # predicting arcuo marker location based on other aruco markers
-        #     for marker in markers:
-        #         # if marker in aruco_tvecs.keys():
-        #         # if marker is detected in the current frame, ignore
-        #
-        #         # continue
-        #
-        #         # looking at the undetected markers (marker is an undetected marker)
-        #
-        #         # [x, y, z, num_readings], ignoring variance, only looking at mean predicted location
-        #         predicted_loc = [0, 0, 0, 0]
-        #
-        #         for aruco_id1 in markers_rel_pos.keys():
-        #             if aruco_id1 not in aruco_tvecs.keys():
-        #                 # if the aruco marker is not detected then won't be used (can add functionality to detect second
-        #                 # degree predictions, e.g. use the predicted marker to predict another marker's location, but that
-        #                 # is not implemented here)
-        #                 continue
-        #             for aruco_id2 in markers_rel_pos[aruco_id1].keys():
-        #                 if aruco_id2 not in aruco_tvecs.keys():
-        #                     continue
-        #                 if marker in markers_rel_pos[aruco_id1][aruco_id2].keys():
-        #                     # found the marker
-        #
-        #                     # getting the location in u and v (u and v are the basis vectors)
-        #                     u_v_loc = np.array(markers_rel_pos[aruco_id1][aruco_id2][marker][:2])
-        #
-        #                     num_readings = markers_rel_pos[aruco_id1][aruco_id2][marker][2]
-        #
-        #                     ewma_bias = 1 / (1 - beta ** num_readings) if num_readings < 4 / (1 - beta) else 1
-        #
-        #                     u_v_loc = u_v_loc * ewma_bias
-        #
-        #                     # u is the vector from marker to aruco_id2
-        #                     u = np.array(aruco_tvecs[aruco_id2]) - np.array(aruco_tvecs[aruco_id1])
-        #
-        #                     # v is the vector that is perpendicular to u in the plane (i.e. perpendicular to both u and the normal vector
-        #                     # for the plane)
-        #                     v = np.cross(u, aruco_plane_normal_vector)
-        #
-        #                     # the location predicted by current
-        #                     # determined by original location of marker, then the vector to aruco_id2 after a change of
-        #                     # base back to x, y, z
-        #
-        #                     curr_predicted = u * u_v_loc[0] + v * u_v_loc[1] + aruco_tvecs[aruco_id1]
-        #
-        #                     predicted_loc[:3] = predicted_loc[:3] + curr_predicted[:3] * num_readings
-        #
-        #                     # for i in range(num_readings):
-        #                     #     #repeat based on number of readings for this current combination
-        #                     #     predicted_loc[0] = calculate_new_mean_variance(predicted_loc[0], 0, predicted_loc[3] + i,
-        #                     #                                                    curr_predicted[0])[0]
-        #                     #     predicted_loc[1] = calculate_new_mean_variance(predicted_loc[1], 0, predicted_loc[3] + i,
-        #                     #                                                    curr_predicted[1])[0]
-        #                     #     predicted_loc[2] = calculate_new_mean_variance(predicted_loc[2], 0, predicted_loc[3] + i,
-        #                     #                                                    curr_predicted[2])[0]
-        #
-        #                     # update num readings
-        #                     predicted_loc[3] = predicted_loc[3] + num_readings
-        #
-        #         if predicted_loc[3] != 0:
-        #             # there are detected readings
-        #             # take the simple average based on number of readings across the different markers
-        #             predicted_aruco_tvecs[marker] = np.array([i / predicted_loc[3] for i in predicted_loc[:3]])
-        #             predicted_aruco_tvecs_plot.append(predicted_aruco_tvecs[marker])
-        #
-        #             logging.debug(f"{marker}: {predicted_aruco_tvecs[marker]}")
-        #
-        #     if len(predicted_aruco_tvecs) > 0:
-        #         predicted_aruco_tvecs_plot_np = np.array(predicted_aruco_tvecs_plot)
-        #         # plot predicted points
-        #         aruco_sp_predicted_points = aruco_tvec_sp.scatter3D(predicted_aruco_tvecs_plot_np[:, 0],
-        #                                                             predicted_aruco_tvecs_plot_np[:, 1],
-        #                                                             predicted_aruco_tvecs_plot_np[:, 2],
-        #                                                             c=[(0, 0, 0) for i in
-        #                                                                predicted_aruco_tvecs_plot_np])
-        #         for (marker_id, tvec) in predicted_aruco_tvecs.items():
-        #             # draw the aruco points back on the output_image
-        #             # projectPoints returns points, Jacobian (first dimension), can do multiple points together to speedup
-        #             # aruco_2d = cv2.projectPoints(-tvec, np.array([0.0, 0.0, 0.0]), np.array([0.0, 0.0, 0.0]), intrinsic,
-        #             #                             distortion)[0][0][0]
-        #             aruco_2d = \
-        #                 cv2.projectPoints(np.array([0.0, 0.0, 0.0]), np.array([0.0, 0.0, 0.0]), tvec, intrinsic,
-        #                                   distortion)[0][0][0]
-        #             if 0 <= int(aruco_2d[0]) and int(aruco_2d[0]) <= output_image.shape[1] and \
-        #                     0 <= int(aruco_2d[1]) and int(aruco_2d[1]) <= output_image.shape[0]:
-        #                 cv2.circle(output_image, (int(aruco_2d[0]), int(aruco_2d[1])), 3, (0, 255, 0), 3)
-        #
-        #                 logging.debug(f"{marker_id}: {aruco_2d}")
-        #
-        #                 cv2.putText(output_image, f"id: {marker_id}", (int(aruco_2d[0]), int(aruco_2d[1] + 30)),
-        #                             cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(255, 0, 255), thickness=3)
-        #
-        #             # add the aruco marker regardless of whether it is in the frame or not
-        #             # if marker has not been detected, htk vector position would be 0
-        #             if htk_output_vector[
-        #                 SORTED_VALID_SHELF_MARKERS_DICT[marker_id] * 2 + ARUCO_MARKER_HTK_OFFSET] is None:
-        #                 htk_output_vector[SORTED_VALID_SHELF_MARKERS_DICT[marker_id] * 2 + ARUCO_MARKER_HTK_OFFSET] = \
-        #                 aruco_2d[0]
-        #                 htk_output_vector[
-        #                     SORTED_VALID_SHELF_MARKERS_DICT[marker_id] * 2 + ARUCO_MARKER_HTK_OFFSET + 1] = \
-        #                     aruco_2d[1]
-        #
-        #     # plot x, y, z for the aruco markers
-        #     aruco_sp_points = aruco_tvec_sp.scatter3D(aruco_tvecs_plot_np[:, 0], aruco_tvecs_plot_np[:, 1],
-        #                                               aruco_tvecs_plot_np[:, 2],
-        #                                               c=[(1, 0, 0) for i in aruco_tvecs_plot_np])
-        #     # print (aruco_tvecs_np)
-        #
-        #     # update the relative positions for aruco_tvecs on the plane
-        #
-        #     # get the sorted ids
-        #     sorted_aruco_ids = sorted(aruco_tvecs.keys())
-        #
-        #     for i in range(len(sorted_aruco_ids)):
-        #         # looking at each aruco marker
-        #         for j in range(i + 1, len(sorted_aruco_ids)):
-        #             # looking at each aruco marker after that (i < j, assuming that aruco markers are unique)
-        #             aruco_id1 = sorted_aruco_ids[i]
-        #             aruco_id2 = sorted_aruco_ids[j]
-        #             assert aruco_id1 != aruco_id2, "Aruco marker ids must be unique"
-        #
-        #             if aruco_id2 not in markers_rel_pos[aruco_id1].keys():
-        #                 markers_rel_pos[aruco_id1][aruco_id2] = {}
-        #
-        #             # use u and v which as basis vectors (calculated using aruco_id1 and aruco_id2) for the vector
-        #             # between aruco_id1 and aruco_id3
-        #
-        #             # u is the vector from aruco_id1 to aruco_id2
-        #             u = np.array(aruco_tvecs[aruco_id2]) - np.array(aruco_tvecs[aruco_id1])
-        #
-        #             # v is the vector that is perpendicular to u in the plane (i.e. perpendicular to both u and the normal vector
-        #             # for the plane)
-        #             v = np.cross(u, aruco_plane_normal_vector)
-        #             try:
-        #                 # check that the vectors are perpendicular to each other
-        #                 assert abs(np.sum(u * v)) < 0.000001, "Vectors are not perpendicular"
-        #                 assert abs(
-        #                     np.sum(u * np.array(aruco_plane_normal_vector))) < 0.000001, "Vectors are not perpendicular"
-        #                 assert abs(
-        #                     np.sum(v * np.array(aruco_plane_normal_vector))) < 0.000001, "Vectors are not perpendicular"
-        #             except:
-        #                 raise Exception(f"Vectors are not perpendicular: {u} {v} {aruco_plane_normal_vector}")
-        #
-        #             for k in range(len(sorted_aruco_ids)):
-        #                 if i == k or j == k:
-        #                     # ignore if the same vector because it will be [1, 0] since the vector between them is
-        #                     # one of the basis vector, or if the start id is the id itself
-        #                     continue
-        #
-        #                 aruco_id3 = sorted_aruco_ids[k]
-        #
-        #                 # vector bewteen id3 and id1
-        #                 curr_vector = np.array(aruco_tvecs[aruco_id3]) - np.array(aruco_tvecs[aruco_id1])
-        #
-        #                 # change of base of relative position of marker2 from marker1 to the basis vectors
-        #                 # of the vector from marker1 to marker2 and the vector perpendicular to that in the plane
-        #                 u_v_coords = in_basis_vector(curr_vector, u, v)
-        #
-        #                 # print (f"{aruco_id1} {aruco_id2} {aruco_id3}: {u_v_coords}")
-        #
-        #                 if aruco_id3 not in markers_rel_pos[aruco_id1][aruco_id2].keys():
-        #                     # [x_mean, y_mean, num_readings], ignoring the variance
-        #                     markers_rel_pos[aruco_id1][aruco_id2][aruco_id3] = [0, 0, 0]
-        #
-        #                 curr_coords = markers_rel_pos[aruco_id1][aruco_id2][aruco_id3]
-        #
-        #                 beta = 0.95
-        #
-        #                 # take x as the one in the direction of the id1 to id2 vector, fill 0 as variance since not using it
-        #                 x_coords = calculate_new_mean_variance(curr_coords[0], 0, curr_coords[2], u_v_coords[0])[0]
-        #
-        #                 # exponentially weighted moving average
-        #                 x_coords = curr_coords[0] * beta + u_v_coords[0] * (1 - beta)
-        #
-        #                 y_coords = calculate_new_mean_variance(curr_coords[1], 0, curr_coords[2], u_v_coords[1])[0]
-        #                 y_coords = (curr_coords[1] * beta + u_v_coords[1] * (1 - beta))
-        #
-        #                 # set a cap on the num readings to 2 * the inverse of 1 - beta
-        #                 markers_rel_pos[aruco_id1][aruco_id2][aruco_id3] = [x_coords, y_coords,
-        #                                                                     min(10 / (1 - beta), curr_coords[2] + 1)]
-        #
-        #                 # print (markers_rel_pos[aruco_id1][aruco_id2][aruco_id3])
-        #
-        # if aruco_hand_tvec is not None and aruco_plane is not None:
-        #     # if the hand is detected, check if the hand is in front or behind the plane
-        #     if aruco_plane[0] + aruco_plane[1] * aruco_hand_tvec[0] + aruco_plane[2] * aruco_hand_tvec[1] > \
-        #             aruco_hand_tvec[2]:
-        #         aruco_hand_sp_points = aruco_tvec_sp.scatter3D(aruco_hand_tvec[0], aruco_hand_tvec[1],
-        #                                                        aruco_hand_tvec[2], color=(0, 1, 0))
-        #     else:
-        #         aruco_hand_sp_points = aruco_tvec_sp.scatter3D(aruco_hand_tvec[0], aruco_hand_tvec[1],
-        #                                                        aruco_hand_tvec[2],
-        #                                                        color=(0, 0, 0))
-        #     logging.debug(aruco_hand_tvec)
-        #     logging.debug(aruco_plane[0] + aruco_plane[1] * aruco_hand_tvec[0] + aruco_plane[2] * aruco_hand_tvec[1],
-        #                   aruco_hand_tvec[2])
-        #
-        # for marker_index in range(len(aruco_vectors)):
-        #     points = aruco_vectors[marker_index].corners
-        #     # plot the lines between the corners of the aruco markers
-        #
-        #     # print (aruco_vectors[marker_index].get_id(), points[0])
-        #     cv2.line(output_image, (int(points[0][0]), int(points[0][1])), (int(points[1][0]), int(points[1][1])),
-        #              (0, 255, 0), 2)
-        #     cv2.line(output_image, (int(points[1][0]), int(points[1][1])), (int(points[2][0]), int(points[2][1])),
-        #              (0, 255, 0), 2)
-        #     cv2.line(output_image, (int(points[2][0]), int(points[2][1])), (int(points[3][0]), int(points[3][1])),
-        #              (0, 255, 0), 2)
-        #     cv2.line(output_image, (int(points[3][0]), int(points[3][1])), (int(points[0][0]), int(points[0][1])),
-        #              (0, 255, 0), 2)
-        #
-        #     marker_id = aruco_vectors[marker_index].get_id()
-        #     # use the top left point as the marker's coordinates
-        #     marker_coords = points[0]
-        #
-        #     cv2.putText(output_image, f"id: {marker_id}", (int(marker_coords[0]), int(marker_coords[1] - 20)),
-        #                 cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(0, 0, 255), thickness=3)
-
         # ----------------------------------OPTICAL FLOW DETECTION--------------------------------------------------
         # mag, ang = optical_flow_algo.calc(output_image)
         #
         # mag, ang = mag.mean(), ang.mean()
 
+        # optical flow detection not enabled
         mag, ang = 0, 0
 
         logging.debug(f"Optical flow: {mag} {ang}")
@@ -867,7 +517,7 @@ if __name__ == "__main__":
 
         if len(first_hand_points) >= 21:
             curr_time = time.time()
-            time_change = curr_time - prev_time
+            # time_change = curr_time - prev_time
 
             # find current location of hand, (x, y)
             curr_hand_loc = hand_pos(first_hand_points, output_image)

@@ -73,7 +73,7 @@ VISUALIZED_COLUMNS = [0, 1, 2,3,4,5]
 FILTER_COLUMNS = [0]
 
 
-for index in range(135, 235):
+for index in range(236, 237):
 
     file_name = f"""{htk_input_folder}/picklist_{str(index)}_forward_filled_30.txt"""
 
@@ -95,8 +95,8 @@ for index in range(135, 235):
     assert len(data) == len(convolved_data)
 
     print(file_name + f"_gaussian_filter_{length}_{sigma}.txt")
-    # np.savetxt(file_name + f"_gaussian_filter_{length}_{sigma}.txt", convolved_data,
-    #            delimiter=" ")
+    np.savetxt(file_name + f"_gaussian_filter_{length}_{sigma}.txt", convolved_data,
+               delimiter=" ")
 
 # show visualization of data
 fig, axs = plt.subplots(len(VISUALIZED_COLUMNS), 2)
