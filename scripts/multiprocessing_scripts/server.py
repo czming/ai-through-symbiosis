@@ -25,7 +25,7 @@ if __name__ == "__main__":
             while True:
                 t1 = time.time()
                 image = conn.recv(1024)
-                if image.sum() == 0:
+                if (image == -1).all():
                     break
                 p = Process(target=process_image, args=(image, counter, result))
                 processes[counter] = p

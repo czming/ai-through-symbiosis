@@ -64,7 +64,7 @@ if __name__ == '__main__':
     print("video closed")
     # Close the window / Release webcam 
     cap.release() 
-    socket.send(np.zeros((640, 480, 3)))
+    socket.send(-1 * np.ones((640, 480, 3)))
     
     # After we release our webcam, we also release the output 
     # out.release()  
