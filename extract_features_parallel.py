@@ -19,6 +19,13 @@ import matplotlib.pyplot as plt
 
 import skimage.color
 
+from multiprocessing import Process, Manager
+import time
+from mlsocket import MLSocket
+
+HOST = "127.0.0.1"
+PORT = 48293
+
 # from scripts.utils import load_yaml_config
 
 
@@ -187,11 +194,12 @@ def get_hs_bins(cropped_hand_image):
 
     return histsat
 
-def extract_features(image, hands):
+def extract_features(image, output_dict, counter):
     """
 
     :param image: array containing the image to be processed
-    :param hands: mediapipe hands detector
+    :param output_dict: dict to store the output
+    :param counter: index to store the output at (index for the output dict)
     :return:
     """
 
@@ -223,12 +231,6 @@ def extract_features(image, hands):
     hand_sp_points = None
 
     logging.debug("\rnumber of markers: " + str(len(aruco_vectors)))
-
-    for marker in aruco_vectors:
-        if marker.get_id() not in markers and marker.get_id() in VALID_SHELF_MARKERS:
-            # new marker
-            markers.add(marker.get_id())
-            markers_rel_pos[marker.get_id()] = {}
 
         # draw axis for the aruco markers
         # cv2.aruco.drawAxis(image, newcameramtx, distortion, marker.rvec, marker.tvec, 0.05)
@@ -426,8 +428,8 @@ def extract_features(image, hands):
     logging.info(htk_output_vector)
     htk_output_vector = [str(i) for i in htk_output_vector]
 
-    return htk_output_vector
-
+    # store output
+    output_dict[counter] = htk_output_vector
 
 # ----------------------------------------DECLARING CONSTANTS----------------------------------------------------
 # change this to visualize the detections in the image
@@ -463,6 +465,35 @@ TO_FLIP = False
 intrinsic = np.array([[900., 0, 640], [0, 900, 360], [0, 0, 1]])
 distortion = np.array([[0., 0., 0., 0., 0.]])
 
+arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_5X5_1000)
+
+# need to declare outside the if __name__ statement otherwise the process doesn't seem to have access to this
+# as a global var
+# create aruco detector
+aruco_detector = ArUcoDetector(intrinsic, distortion, arucoDict, square_length=0.0254)
+
+mp_drawing = mp.solutions.drawing_utils
+mp_hands = mp.solutions.hands
+hands = mp_hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.3, max_num_hands=1)
+
+picked = []
+
+frames = 0
+
+# Hand landmark and fingers data - not in master yet apparently
+# HAND_LANDMARK_OFFSET = 356 #21 * 3
+# FINGERS_OFFSET = 419 #[fingers 0..4, >0 fingers, >1 finger, >2, >3, >4]
+
+# aruco camera matrices are after image is distorted, focal length shouldn't matter since everything is adjusted
+# proportionally
+
+
+# to undistort the image
+# initial_intrinsic = np.load("intrinsic_gopro.npy")
+# initial_distortion = np.load("distortion_gopro.npy")
+
+# all the markers that we know of so far
+markers = set()
 
 if __name__ == "__main__":
     # logging.getLogger().setLevel(logging.DEBUG)
@@ -479,8 +510,12 @@ if __name__ == "__main__":
 
     OUTPUT_FILE = os.path.basename(args.video.split(".")[0] + ".txt")
 
-    mp_drawing = mp.solutions.drawing_utils
-    mp_hands = mp.solutions.hands
+    print(OUTPUT_FILE)
+
+    with open(OUTPUT_FILE, "w") as outfile:
+        # clear the output file
+        pass
+
 
     # #live video feed from camera 0
     # hands = mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.6, max_num_hands=1)
@@ -489,70 +524,16 @@ if __name__ == "__main__":
     # TO_FLIP = True
 
     # seeing only hands from video
-    hands = mp_hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.3, max_num_hands=1)
+
     cap = cv2.VideoCapture(args.video)
 
-    print(OUTPUT_FILE)
 
-    with open(OUTPUT_FILE, "w") as outfile:
-        # clear the output file
-        pass
-
-    picked = []
-
-    frames = 0
-
-    # Hand landmark and fingers data - not in master yet apparently
-    # HAND_LANDMARK_OFFSET = 356 #21 * 3
-    # FINGERS_OFFSET = 419 #[fingers 0..4, >0 fingers, >1 finger, >2, >3, >4]
-
-    # aruco camera matrices are after image is distorted, focal length shouldn't matter since everything is adjusted
-    # proportionally
-
-
-    # to undistort the image
-    # initial_intrinsic = np.load("intrinsic_gopro.npy")
-    # initial_distortion = np.load("distortion_gopro.npy")
-
-    # all the markers that we know of so far
-    markers = set()
-
-    # stores the relative position of the markers (markers_rel_pos[id1][id2][id3]) which gives the vector between
-    # id1 and id3 in terms of [u, v], where u is the vector between id1 and id2 and v is the vector perpendicular
-    # to u and the normal vector of the plane
-    markers_rel_pos = {}
-
-    # the relative tvec locations between markers
-
-    frames = 0
-
-    arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_5X5_1000)
 
     # get optimal camera matrix to undistort the image
     # newcameramtx, roi = cv2.getOptimalNewCameraMatrix(intrinsic, distortion, (1920, 1080), 1,
     #                                                (1920, 1080))
 
     # intrisic c_x, c_y is off
-
-    # create aruco detector
-    aruco_detector = ArUcoDetector(intrinsic, distortion, arucoDict, square_length=0.0254)
-
-    curr_figure = None
-
-    # setting up plotting for the tvecs
-    aruco_fig = plt.figure()
-
-    aruco_tvec_ax = aruco_fig.add_subplot(projection="3d")
-
-    # scatter plot of aruco_tvecs
-    aruco_tvec_sp = aruco_fig.add_subplot(projection='3d')
-
-    # set limits for the scatter plot
-    aruco_tvec_sp.set_xlim(-1, 1)
-    aruco_tvec_sp.set_ylim(-1, 1)
-    aruco_tvec_sp.set_zlim(0, 2)
-
-    aruco_plane = None
 
     plt.show(block=False)
 
@@ -569,65 +550,81 @@ if __name__ == "__main__":
 
     counter = 0
 
-    while cap.isOpened():
-        # aruco_marker = [x, y]
-        # aruco_marker = [is_there, x, y]
-        # output vector for use with htk, [aruco_marker[:72], color_bins[72:92], optical_flow_avg[92:94], hand_loc[94:96]], 96 dim version
-        # [aruco_marker[:72], color_bins[72:352], optical_flow_avg[352:354], hand_loc[354:356]] 356-dimversion
+    with MLSocket() as socket:
+        with Manager() as manager:
+            # to do the multiprocessing
 
-        # update to 429 when using hand landmark + fingers openclose data
-        # htk_output_vector = [0 for i in range(429)]
+            # store the result
+            result = manager.dict({})
 
-        success, image = cap.read()
-        if not success:
-            print("Ignoring empty camera frame.")
-            # If loading a video, use 'break' instead of 'continue'.
-            break
+            while cap.isOpened():
+                # aruco_marker = [x, y]
+                # aruco_marker = [is_there, x, y]
+                # output vector for use with htk, [aruco_marker[:72], color_bins[72:92], optical_flow_avg[92:94], hand_loc[94:96]], 96 dim version
+                # [aruco_marker[:72], color_bins[72:352], optical_flow_avg[352:354], hand_loc[354:356]] 356-dimversion
 
-        logging.debug(f"Counter: {counter}")
+                # update to 429 when using hand landmark + fingers openclose data
+                # htk_output_vector = [0 for i in range(429)]
 
-        counter += 1
+                success, image = cap.read()
+                if not success:
+                    print("Ignoring empty camera frame.")
+                    # If loading a video, use 'break' instead of 'continue'.
+                    break
 
-        # image = cv2.undistort(image, newcameramtx, distortion, None)
+                logging.debug(f"Counter: {counter}")
 
-        # reduce resolution of image
+                counter += 1
 
-        # get the htk output vector from the image
-        htk_output_vector = extract_features(image, hands)
+                # image = cv2.undistort(image, newcameramtx, distortion, None)
 
-        with open(OUTPUT_FILE, "a") as outfile:
-            outfile.write(" ".join(htk_output_vector) + "\n")
+                # reduce resolution of image
 
-        # #removing distortion on output_image
-        # output_image = cv2.undistort(output_image, intrinsic, distortion, None)
+                # get the htk output vector from the image
+                # htk_output_vector = extract_features(image, hands)
 
-        # horizontal margin to be removed from the video (one for left and one for right so total fraction removed is
-        # double this proportion)
-        horizontal_margin = 0
+                # call to process
+                p = Process(target=extract_features, args=(image, result, frames))
 
-        if DISPLAY_VISUAL:
-            output_image = output_image[:, int(output_image.shape[1] * horizontal_margin): int(
-                output_image.shape[1] * (1 - horizontal_margin))]
+                # with open(OUTPUT_FILE, "a") as outfile:
+                #     outfile.write(" ".join(htk_output_vector) + "\n")
 
-            output_image = cv2.resize(output_image, (OUTPUT_FRAME_WIDTH, OUTPUT_FRAME_HEIGHT))
+                # #removing distortion on output_image
+                # output_image = cv2.undistort(output_image, intrinsic, distortion, None)
 
-            cv2.imshow('MediaPipe Hands', output_image)
+                # horizontal margin to be removed from the video (one for left and one for right so total fraction removed is
+                # double this proportion)
+                horizontal_margin = 0
+
+                if DISPLAY_VISUAL:
+                    output_image = output_image[:, int(output_image.shape[1] * horizontal_margin): int(
+                        output_image.shape[1] * (1 - horizontal_margin))]
+
+                    output_image = cv2.resize(output_image, (OUTPUT_FRAME_WIDTH, OUTPUT_FRAME_HEIGHT))
+
+                    cv2.imshow('MediaPipe Hands', output_image)
+
+                    if args.outfile:
+                        out.write(output_image)
+
+                    if cv2.waitKey(1) & 0xFF == ord('q'):
+                        break
+
+
+
+                print (f"{frames} start: {time.time()}")
+                p.start()
+                print(f"{frames} after start: {time.time()}")
+
+                frames += 1
+
+                print(frames)
+            hands.close()
+            cap.release()
 
             if args.outfile:
-                out.write(output_image)
+                out.release()
 
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
-
-        frames += 1
-
-        print(frames)
-    hands.close()
-    cap.release()
-
-    if args.outfile:
-        out.release()
-
-    # Closes all the frames
-    cv2.destroyAllWindows()
+            # Closes all the frames
+            cv2.destroyAllWindows()
 
