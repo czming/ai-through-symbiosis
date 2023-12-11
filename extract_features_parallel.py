@@ -19,7 +19,7 @@ import matplotlib.pyplot as plt
 
 import skimage.color
 
-from multiprocessing import Process, Manager
+from multiprocessing import Process, Manager, Pool
 import time
 from mlsocket import MLSocket
 
@@ -429,6 +429,10 @@ def extract_features(image, output_dict, counter):
     htk_output_vector = [str(i) for i in htk_output_vector]
 
     # store output
+    # output_dict[counter] = htk_output_vector
+    return output_dict, counter, htk_output_vector
+def store_result(htk_output):
+    output_dict, counter, htk_output_vector = htk_output
     output_dict[counter] = htk_output_vector
 
 # ----------------------------------------DECLARING CONSTANTS----------------------------------------------------
@@ -552,73 +556,79 @@ if __name__ == "__main__":
 
     with MLSocket() as socket:
         with Manager() as manager:
-            # to do the multiprocessing
+            with Pool() as pool:
+                # to do the multiprocessing
 
-            # store the result
-            result = manager.dict({})
+                # store the result
+                result = manager.dict({})
+                # parity = 0
+                while cap.isOpened():
+                    # aruco_marker = [x, y]
+                    # aruco_marker = [is_there, x, y]
+                    # output vector for use with htk, [aruco_marker[:72], color_bins[72:92], optical_flow_avg[92:94], hand_loc[94:96]], 96 dim version
+                    # [aruco_marker[:72], color_bins[72:352], optical_flow_avg[352:354], hand_loc[354:356]] 356-dimversion
 
-            while cap.isOpened():
-                # aruco_marker = [x, y]
-                # aruco_marker = [is_there, x, y]
-                # output vector for use with htk, [aruco_marker[:72], color_bins[72:92], optical_flow_avg[92:94], hand_loc[94:96]], 96 dim version
-                # [aruco_marker[:72], color_bins[72:352], optical_flow_avg[352:354], hand_loc[354:356]] 356-dimversion
+                    # update to 429 when using hand landmark + fingers openclose data
+                    # htk_output_vector = [0 for i in range(429)]
 
-                # update to 429 when using hand landmark + fingers openclose data
-                # htk_output_vector = [0 for i in range(429)]
-
-                success, image = cap.read()
-                if not success:
-                    print("Ignoring empty camera frame.")
-                    # If loading a video, use 'break' instead of 'continue'.
-                    break
-
-                logging.debug(f"Counter: {counter}")
-
-                counter += 1
-
-                # image = cv2.undistort(image, newcameramtx, distortion, None)
-
-                # reduce resolution of image
-
-                # get the htk output vector from the image
-                # htk_output_vector = extract_features(image, hands)
-
-                # call to process
-                p = Process(target=extract_features, args=(image, result, frames))
-
-                # with open(OUTPUT_FILE, "a") as outfile:
-                #     outfile.write(" ".join(htk_output_vector) + "\n")
-
-                # #removing distortion on output_image
-                # output_image = cv2.undistort(output_image, intrinsic, distortion, None)
-
-                # horizontal margin to be removed from the video (one for left and one for right so total fraction removed is
-                # double this proportion)
-                horizontal_margin = 0
-
-                if DISPLAY_VISUAL:
-                    output_image = output_image[:, int(output_image.shape[1] * horizontal_margin): int(
-                        output_image.shape[1] * (1 - horizontal_margin))]
-
-                    output_image = cv2.resize(output_image, (OUTPUT_FRAME_WIDTH, OUTPUT_FRAME_HEIGHT))
-
-                    cv2.imshow('MediaPipe Hands', output_image)
-
-                    if args.outfile:
-                        out.write(output_image)
-
-                    if cv2.waitKey(1) & 0xFF == ord('q'):
+                    success, image = cap.read()
+                    if not success:
+                        print("Ignoring empty camera frame.")
+                        # If loading a video, use 'break' instead of 'continue'.
                         break
+                    # parity = (parity + 1) % 10
+                    # if parity != 0:
+                    #     continue
+
+                    logging.debug(f"Counter: {counter}")
+
+                    counter += 1
+
+                    # image = cv2.undistort(image, newcameramtx, distortion, None)
+
+                    # reduce resolution of image
+
+                    # get the htk output vector from the image
+                    # htk_output_vector = extract_features(image, hands)
+
+                    # call to process
+                    print(f"{frames} start: {time.time()}")
+                    pool.apply_async(extract_features, args=(image, result, frames), callback=store_result)
+                    print(f"{frames} after start: {time.time()}")
+                    # p = Process(target=extract_features, args=(image, result, frames))
+
+                    # with open(OUTPUT_FILE, "a") as outfile:
+                    #     outfile.write(" ".join(htk_output_vector) + "\n")
+
+                    # #removing distortion on output_image
+                    # output_image = cv2.undistort(output_image, intrinsic, distortion, None)
+
+                    # horizontal margin to be removed from the video (one for left and one for right so total fraction removed is
+                    # double this proportion)
+                    horizontal_margin = 0
+
+                    if DISPLAY_VISUAL:
+                        output_image = output_image[:, int(output_image.shape[1] * horizontal_margin): int(
+                            output_image.shape[1] * (1 - horizontal_margin))]
+
+                        output_image = cv2.resize(output_image, (OUTPUT_FRAME_WIDTH, OUTPUT_FRAME_HEIGHT))
+
+                        cv2.imshow('MediaPipe Hands', output_image)
+
+                        if args.outfile:
+                            out.write(output_image)
+
+                        if cv2.waitKey(1) & 0xFF == ord('q'):
+                            break
 
 
 
-                print (f"{frames} start: {time.time()}")
-                p.start()
-                print(f"{frames} after start: {time.time()}")
 
-                frames += 1
 
-                print(frames)
+                    frames += 1
+
+                    print(frames)
+                pool.close()
             hands.close()
             cap.release()
 
