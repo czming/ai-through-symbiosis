@@ -22,7 +22,7 @@ import matplotlib.pyplot as plt
 # from losses import TripletLoss, Accuracy
 
 def get_model(pretrained=False, num_classes=10):
-    model = Resnet34Classifier(
+    model = Resnet9Classifier(
         num_classes=num_classes,
         pretrained=pretrained
     )
@@ -61,7 +61,7 @@ def train():
     batch_size = 64
     dataset = EgoObjectClassificationDataset('data/labeled_objects_new.csv', transform=image_transforms)
     train_dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
-    model_architecture = 'resnet34'
+    model_architecture = 'resnet9'
     model = get_model()
     print(model)
     model = model.cuda()
@@ -165,11 +165,11 @@ def test():
         )
     ])
     learning_rate = 0.075
-    model_path = 'model_training_checkpoints/resnet34_1/model_resnet34_classifier_epoch_30.pt'
+    model_path = 'model_training_checkpoints/resnet9_1/model_resnet9_classifier_epoch_20.pt'
     batch_size = 512
     dataset = EgoObjectClassificationDataset('data/labeled_objects_test.csv', test=True, transform=image_transforms)
     train_dataloader = DataLoader(dataset, batch_size=batch_size)
-    model_architecture = 'resnet34'
+    model_architecture = 'resnet9'
     model = get_model()
     model.load_state_dict(torch.load(model_path)['model_state_dict'])
     print(model)
