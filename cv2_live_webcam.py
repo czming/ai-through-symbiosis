@@ -14,8 +14,9 @@ PORT = 48293
 
 if __name__ == '__main__':
 
-    with MLSocket() as socket:
-        socket.connect((HOST, PORT))
+    socket = MLSocket()
+
+    socket.connect((HOST, PORT))
         
     # This will return video from the first webcam on your computer. 
     cap = cv2.VideoCapture(0)   
@@ -63,6 +64,7 @@ if __name__ == '__main__':
     print("video closed")
     # Close the window / Release webcam 
     cap.release() 
+    socket.send(np.zeros((640, 480, 3)))
     
     # After we release our webcam, we also release the output 
     # out.release()  
