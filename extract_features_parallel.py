@@ -203,6 +203,8 @@ def extract_features(image, output_dict, counter):
     :return:
     """
 
+    print (f"Process starting on frame {counter}")
+
     htk_output_vector = [0 for i in range(356)]
 
     image = cv2.resize(image, (ORIGINAL_FRAME_WIDTH, ORIGINAL_FRAME_HEIGHT))
@@ -331,7 +333,7 @@ def extract_features(image, output_dict, counter):
             for i in hand_landmarks.landmark[:21]:
                 first_hand_points.append([i.x, i.y, i.z])
                 # output_image = cv2.circle(output_image, (int(i.x * output_image.shape[1]), int(i.y * output_image.shape[0])), 2, (0, 0, 255), 3)
-                mp_drawing.draw_landmarks(output_image, hand_landmarks, mp_hands.HAND_CONNECTIONS)
+                # mp_drawing.draw_landmarks(output_image, hand_landmarks, mp_hands.HAND_CONNECTIONS)
 
     #        8   12  16  20
     #        |   |   |   |
@@ -364,20 +366,20 @@ def extract_features(image, output_dict, counter):
         htk_output_vector[HAND_POS_HTK_OFFSET] = curr_hand_loc[0]
         htk_output_vector[HAND_POS_HTK_OFFSET + 1] = curr_hand_loc[1]
 
-        cv2.circle(output_image, (int(curr_hand_loc[0]), int(curr_hand_loc[1])), 3, (255, 0, 255), 3)
+        # cv2.circle(output_image, (int(curr_hand_loc[0]), int(curr_hand_loc[1])), 3, (255, 0, 255), 3)
 
         # calculate hand pos distribution stats
         bounding_box, bounding_box_size = hand_bounding_box(first_hand_points, output_image)
-        for point_index in range(len(bounding_box)):
-            # use the %len(bounding_box) to wrap around back to the start
-            cv2.line(output_image, bounding_box[point_index], bounding_box[(point_index + 1) % len(bounding_box)],
-                     (0, 0, 255), 4)
+        # for point_index in range(len(bounding_box)):
+        #     # use the %len(bounding_box) to wrap around back to the start
+        #     cv2.line(output_image, bounding_box[point_index], bounding_box[(point_index + 1) % len(bounding_box)],
+        #             (0, 0, 255), 4)
 
         # write text
         fingers_open = improved_gesture_recognition(first_hand_points, handedness, output_image)
-        cv2.putText(output_image, f"{fingers_open}", (bounding_box[0][0], bounding_box[0][1] - 20),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    fontScale=1, color=(0, 0, 255), thickness=3)
+        # cv2.putText(output_image, f"{fingers_open}", (bounding_box[0][0], bounding_box[0][1] - 20),
+        #             cv2.FONT_HERSHEY_SIMPLEX,
+        #             fontScale=1, color=(0, 0, 255), thickness=3)
 
         # uncomment when using fingers openclose data
         # #add to features
@@ -407,7 +409,7 @@ def extract_features(image, output_dict, counter):
                 max_y = y
 
         cropped_out_points = [(min_x, min_y), (min_x, max_y), (max_x, max_y), (min_x, max_y), (min_x, min_y)]
-        cv2.rectangle(output_image, (int(min_x), int(max_y)), (int(max_x), int(min_y)), (255, 255, 0), 3)
+        # cv2.rectangle(output_image, (int(min_x), int(max_y)), (int(max_x), int(min_y)), (255, 255, 0), 3)
 
         # use the original image to get the colors (original image is in RGB)
         cropped_hand_image = image[min_y:max_y, min_x:max_x, :]
@@ -418,7 +420,7 @@ def extract_features(image, output_dict, counter):
         histsat = get_hs_bins(cropped_hand_image)
 
         # hand might not be detected so number of pixels might be 0
-        if histsat != []:
+        if histsat is not []:
             for i in range(len(histsat)):
                 # set the values in the htk_output_vector to the proportion of cropped points in each bin
                 htk_output_vector[COLOR_BIN_HTK_OFFSET + i] = histsat[i]
@@ -430,8 +432,9 @@ def extract_features(image, output_dict, counter):
 
     # store output
     # output_dict[counter] = htk_output_vector
-    gc.collect()
+    # gc.collect()
     return output_dict, counter, htk_output_vector
+    
 def store_result(htk_output):
     output_dict, counter, htk_output_vector = htk_output
     print(f"Finished {counter}")
@@ -504,6 +507,8 @@ markers = set()
 if __name__ == "__main__":
     # logging.getLogger().setLevel(logging.DEBUG)
 
+    start_time = time.time()
+
     parser = argparse.ArgumentParser()
 
     # can load from configs
@@ -573,6 +578,7 @@ if __name__ == "__main__":
                     # update to 429 when using hand landmark + fingers openclose data
                     # htk_output_vector = [0 for i in range(429)]
 
+
                     success, image = cap.read()
                     if not success:
                         print("Ignoring empty camera frame.")
@@ -595,9 +601,11 @@ if __name__ == "__main__":
 
                     # call to process
                     print(f"{frames} start: {time.time()}")
+                    # to find errors in the extract_features function, need to add try except within 
+                    # the function and print out the error message from within the process
                     pool.apply_async(extract_features, args=(image, result, frames), callback=store_result)
                     print(f"{frames} after start: {time.time()}")
-                    gc.collect()
+                    # gc.collect()
                     # p = Process(target=extract_features, args=(image, result, frames))
 
                     # with open(OUTPUT_FILE, "a") as outfile:
@@ -631,6 +639,17 @@ if __name__ == "__main__":
                     frames += 1
 
                     print(frames)
+
+                # ensure that everything is done before the pool is closed
+
+                while len(result.keys()) < frames:
+                    print (len(result.keys()))
+
+                    time.sleep(1)
+
+                # convert to normal Python dictionary
+                result = dict(result)
+
                 pool.close()
             hands.close()
             cap.release()
@@ -640,4 +659,13 @@ if __name__ == "__main__":
 
             # Closes all the frames
             cv2.destroyAllWindows()
+
+
+    # write the results to the outfile
+    with open(OUTPUT_FILE, "w") as outfile:
+        for i in range(frames):
+            # write each row to the outfile
+            outfile.write(" ".join(result[i]) + "\n")
+
+    print (f"Total processing time taken: {time.time() - start_time}")
 
