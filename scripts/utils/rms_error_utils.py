@@ -83,7 +83,6 @@ def get_htk_boundaries(file_name, fps = 30):
             htk_boundaries[letter].append(letter_start)
             htk_boundaries[letter].append(letter_end)
 
-
     return htk_boundaries
 
 def get_squared_error(elan_boundaries, htk_boundaries):
