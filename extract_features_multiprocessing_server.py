@@ -514,6 +514,9 @@ frames = 0
 # all the markers that we know of so far
 markers = set()
 
+HOST = "127.0.0.1"
+PORT = 48294
+
 if __name__ == "__main__":
     # logging.getLogger().setLevel(logging.DEBUG)
 
@@ -521,15 +524,13 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
 
-    # can load from configs
-    parser.add_argument("--video", "-v", type=str, help="Path to input video", required=True)
     # fill in for video output
     parser.add_argument("--outfile", "-o", type=str, default="",
                         help="Path to video outfile to save to. If not provided, will not create video")  # 'hand_detection_output.mp4'
 
     args = parser.parse_args()
 
-    OUTPUT_FILE = os.path.basename(args.video.split(".")[0] + ".txt")
+    OUTPUT_FILE = os.path.basename("extract_features_output.txt")
 
     print(OUTPUT_FILE)
 
@@ -571,15 +572,23 @@ if __name__ == "__main__":
     counter = 0
     set_start_method('spawn')
     with MLSocket() as socket:
+
+        # set up socket to listen for images coming in 
+        socket.bind((HOST, PORT))
+        socket.listen()
+        conn, addr = socket.accept()
+
         with Manager() as manager:
             with Pool() as pool:
                 # to do the multiprocessing
                 # store the result
                 result = manager.dict({})
-                # parity = 0
-                cap = cv2.VideoCapture(args.video)
 
-                while cap.isOpened():
+                bad_frames = 0
+                # parity = 0
+                # cap = cv2.VideoCapture(args.video)
+
+                while True:
                     # aruco_marker = [x, y]
                     # aruco_marker = [is_there, x, y]
                     # output vector for use with htk, [aruco_marker[:72], color_bins[72:92], optical_flow_avg[92:94], hand_loc[94:96]], 96 dim version
@@ -588,11 +597,22 @@ if __name__ == "__main__":
                     # update to 429 when using hand landmark + fingers openclose data
                     # htk_output_vector = [0 for i in range(429)]
 
+                    try: 
+                        image = conn.recv(1024)
 
-                    success, image = cap.read()
-                    if not success:
-                        print("Ignoring empty camera frame.")
-                        # If loading a video, use 'break' instead of 'continue'.
+                    except:
+                        # sometimes we get bad frames, just skip over them and count the number of bad frames
+                        bad_frames += 1
+                        continue
+
+                    if not isinstance(image, np.ndarray):
+                        # the image coming in is not a numpy array, likely corrupted data
+                        bad_frames += 1
+                        continue
+
+                    # success, image = cap.read()
+                    if (image == 0).all():
+                        # image is all -1, terminating condition
                         break
                     # parity = (parity + 1) % 2
                     # if parity != 0:
@@ -662,7 +682,7 @@ if __name__ == "__main__":
 
                 pool.close()
             hands.close()
-            cap.release()
+            # cap.release()
 
             if args.outfile:
                 out.release()
@@ -678,4 +698,6 @@ if __name__ == "__main__":
             outfile.write(" ".join(result[i]) + "\n")
 
     print (f"Total processing time taken: {time.time() - start_time}")
+
+    print (f"Bad frames: {bad_frames}")
 

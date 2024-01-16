@@ -1,9 +1,10 @@
 from multiprocessing import Process, Manager
 import time
 from mlsocket import MLSocket
+import cv2
 
 HOST = "127.0.0.1"
-PORT = 48293
+PORT = 48294
 
 
 def process_image(img, counter, result):
@@ -25,6 +26,7 @@ if __name__ == "__main__":
             while True:
                 t1 = time.time()
                 image = conn.recv(1024)
+                # print (image[0, 0])
                 if (image == -1).all():
                     break
                 p = Process(target=process_image, args=(image, counter, result))
