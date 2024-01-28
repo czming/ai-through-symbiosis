@@ -575,10 +575,9 @@ if __name__ == "__main__":
         # set up socket to listen for images coming in 
         socket.bind((HOST, PORT))
         socket.listen()
+        conn, addr = socket.accept()
 
         print(f"Listening at ({HOST}, {PORT})")
-
-        conn, addr = socket.accept()
 
         with Manager() as manager:
             with Pool() as pool:
@@ -590,8 +589,6 @@ if __name__ == "__main__":
                 # parity = 0
                 # cap = cv2.VideoCapture(args.video)
 
-                images = []
-
                 while True:
                     # aruco_marker = [x, y]
                     # aruco_marker = [is_there, x, y]
@@ -601,28 +598,18 @@ if __name__ == "__main__":
                     # update to 429 when using hand landmark + fingers openclose data
                     # htk_output_vector = [0 for i in range(429)]
 
-                    while len(images) == 0:
-                        # update the buffer
-                        try:
-                            images = conn.recv(1024)
+                    try: 
+                        image = conn.recv(1024)
 
-                        except:
-                            # sometimes we get bad frames, just skip over them and count the number of bad frames
-                            bad_frames += 1
-                            continue
+                    except:
+                        # sometimes we get bad frames, just skip over them and count the number of bad frames
+                        bad_frames += 1
+                        continue
 
-                        if not isinstance(images, np.ndarray):
-                            # the image coming in is not a numpy array, likely corrupted data
-                            bad_frames += 1
-                            # need to overwrite here
-                            images = []
-                            continue
-
-                    image = images[0]
-
-                    images = np.delete(images, 0, axis=0)
-
-                    print (images.shape)
+                    if not isinstance(image, np.ndarray):
+                        # the image coming in is not a numpy array, likely corrupted data
+                        bad_frames += 1
+                        continue
 
                     # success, image = cap.read()
                     if (image == 0).all():
