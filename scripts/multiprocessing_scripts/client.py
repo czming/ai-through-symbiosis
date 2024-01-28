@@ -3,11 +3,14 @@ from mlsocket import MLSocket
 import numpy as np
 import argparse
 
-HOST = "127.0.0.1"
-PORT = 48294
+HOST = "127.0.0.1" # "130.207.124.50"
+PORT = 48293
 
 ORIGINAL_FRAME_WIDTH = 1920
 ORIGINAL_FRAME_HEIGHT = 1080
+
+# how many images to bunch before sending
+FRAME_BUFFER_SIZE = 5
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -19,12 +22,25 @@ if __name__ == "__main__":
 
     cap = cv2.VideoCapture(args.video)
 
+    frame_buffer = []
+
+    counter = 0
+
     with MLSocket() as socket:
+
+        print(f"Setting up connection to ({HOST}, {PORT})")
+
         socket.connect((HOST, PORT))
+
+        print(f"Connection set up to ({HOST}, {PORT})")
 
         while cap.isOpened():
             success, image = cap.read()
             # image = cv2.imread("image.jpg")
+
+            counter += 1
+
+            print (counter)
 
             if not success:
                 print("Ignoring empty camera frame.")
@@ -33,6 +49,14 @@ if __name__ == "__main__":
 
             image = cv2.resize(image, (ORIGINAL_FRAME_WIDTH, ORIGINAL_FRAME_HEIGHT))
 
-            socket.send(image)
+            if len(frame_buffer) == FRAME_BUFFER_SIZE:
+                # send the frame buffer and then clear the buffer
+                socket.send(np.array(frame_buffer))
+                frame_buffer = []
+            else:
+                frame_buffer.append(image)
+        #    socket.send(image)
         # send final empty image
-        socket.send(np.zeros((1080, 1920, 3)))
+        frame_buffer.append(np.zeros((1080, 1920, 3)))
+
+        socket.send(np.array(frame_buffer))
