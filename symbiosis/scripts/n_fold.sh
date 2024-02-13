@@ -70,11 +70,12 @@ do
     ./scripts/prepare_files.sh
     ./scripts/train_parallel.sh ./scripts/options.sh
 
-    # CUSTOM HTK EVALUATINO (WITH PICKLIST SPECIFIC GRAMMAR)
-    
+    # CUSTOM HTK EVALUATION (WITH PICKLIST SPECIFIC GRAMMAR)
+
 
 
     while read filename; do
+      echo /tmp/ext/data/picklist_${filename:9}.ext >> testsets/testing-extfile-${filename:9}
       ./third-party/gt2k/utils/prepare all-data/picklist_${filename:9} 1 ext/data/picklist_${filename:9}.ext
       HParse grammar/grammar_letter_isolated_ai_general-${filename:9} word.lattice-${filename:9}
       HVite -a -b sil -p 0 -t 0 -s 0 -A -T 1 -H /tmp/models/hmm0.19/newMacros -w /tmp/word.lattice-${filename:9} -S testsets/testing-extfile-${filename:9} -I /tmp/mlf/labels.mlf_tri_internal -i /tmp/ext/result.mlf_letter0 /tmp/dict/dict_letter2letter_ai_general /tmp/commands/commands_letter_isolated_ai_general; mv ext/result.mlf_letter0 results-${filename:9}
@@ -89,4 +90,7 @@ do
     # DELETE TEMPORARY FILES
     rm training-list
     rm testing-list
+
+    rm -f trainsets/*
+    rm -f testsets/*
 done

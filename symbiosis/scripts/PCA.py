@@ -35,7 +35,10 @@ for filename in file_list:
         total_length += 1
         curr_line = np.asarray([float(x) for x in Lines[line].split()]) #line as float values in nparray
         curr_line = np.expand_dims(curr_line,1)
-        all_frames = np.concatenate((all_frames, curr_line),1)
+        try:
+            all_frames = np.concatenate((all_frames, curr_line),1)
+        except Exception as e:
+            print(filename)
     all_files = np.concatenate((all_files[:, 0:all_files.shape[1]], all_frames), 1)
 # print(total_length)    
     
