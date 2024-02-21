@@ -70,6 +70,7 @@ def get_avg_fold(n_folds, split, feature_vector_file, label_file):
         first_occurence = False
         cur_fold = f'fold{fold}'
         cur_fil_path = os.path.join(fold_path, cur_fold, fil_name)
+        ctr = 0
         if len(all_lines) == 0:
             first_occurence = True
         print(cur_fil_path)

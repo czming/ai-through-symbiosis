@@ -1,6 +1,9 @@
 from scripts.data_preprocessing.preprocess_pipeline import preprocess
-from symbiosis.run_n_fold_pipeline import
+from symbiosis.run_n_fold_pipeline import get_avg_fold
 import cv2
+
+NUM_FOLDS = 5
+SPLIT = 0.1
 
 video_file = "video.mp4"
 label_file = "label.txt"
@@ -20,8 +23,10 @@ while cap.isOpened():
 # call preprocessing on feature_vector
 preprocessed_features = preprocess(feature_vector, preprocessed_vector_file)
 # call HTK on preprocessed_features
-htk_features = run_nfold()
+htk_features = get_avg_fold(NUM_FOLDS, SPLIT, preprocessed_vector_file, label_file)
 # call image model on htk features and feature vector
-image_model = foo(htk_features, feature_vector)
+
+# image_model = foo(htk_features, feature_vector)
+
 cap.release()
 cv2.destroyAllWindows()
