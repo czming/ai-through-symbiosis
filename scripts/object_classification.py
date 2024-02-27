@@ -25,10 +25,7 @@ def find_closest_in_set(vector, vector_dict, pick_labels=None):
     return min(pick_labels, key=lambda x: vector_distances[x]), vector_distances
 
 
-def perform_classification(pick_labels, htk_inputs, htk_boundaries, general_elan_boundaries):
-
-
-
+def perform_classification(pick_labels, htk_inputs, htk_boundaries):
     pick_frames = []
 
     # looking through the various picks
