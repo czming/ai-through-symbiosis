@@ -73,7 +73,7 @@ if __name__ == "__main__":
 
     htk_input_folder = configs["file_paths"]["htk_input_file_path"]
 
-    for i in range(236, 237):
+    for i in range(136, 235):
         try:
             with open(f"{htk_input_folder}/picklist_{i}.txt") as infile:
 

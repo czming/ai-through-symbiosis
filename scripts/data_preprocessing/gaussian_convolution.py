@@ -85,7 +85,7 @@ if __name__ == "__main__":
     htk_input_folder = configs["file_paths"]["htk_input_file_path"]
 
     logging.getLogger().setLevel("INFO")
-    for index in range(236, 237):
+    for index in range(136, 235):
 
         file_name = f"""{htk_input_folder}/picklist_{str(index)}_forward_filled_30.txt"""
 
@@ -100,8 +100,8 @@ if __name__ == "__main__":
 
         # make a copy
         convolved_data = perform_gaussian_convolution(data)
-        print(file_name + f"_gaussian_filter_{length}_{sigma}.txt")
-        np.savetxt(file_name + f"_gaussian_filter_{length}_{sigma}.txt", convolved_data,
+        print(file_name.replace(".txt", f"_gaussian_filter_{length}_{sigma}.txt"))
+        np.savetxt(file_name.replace(".txt", f"_gaussian_filter_{length}_{sigma}.txt"), convolved_data,
                    delimiter=" ")
 
     # show visualization of data
