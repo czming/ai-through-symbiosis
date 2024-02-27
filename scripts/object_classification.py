@@ -25,61 +25,9 @@ def find_closest_in_set(vector, vector_dict, pick_labels=None):
     return min(pick_labels, key=lambda x: vector_distances[x]), vector_distances
 
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--config", "-c", type=str, help="Path to experiment config (scripts/configs)")
-args = parser.parse_args()
-
-# change depending on configs
-PICKLISTS = range(136, 235) # range(41, 91)
-
-configs = load_yaml_config(args.config)
-
-elan_label_folder = configs["file_paths"]["elan_annotated_file_path"]
-htk_input_folder = configs["file_paths"]["htk_input_file_path"]
-video_folder = configs["file_paths"]["video_file_path"]
-pick_label_folder = configs["file_paths"]["label_file_path"]
-htk_output_folder = configs["file_paths"]["htk_output_file_path"]
+def perform_classification(pick_labels, htk_inputs, htk_boundaries, general_elan_boundaries):
 
 
-with open("object_type_hsv_bins1.pkl", "rb") as infile:
-    objects_type_hsv_bins = pickle.load(infile)
-
-
-object_hsv_representation = objects_type_hsv_bins
-
-rmse_errors = []
-
-predicted_picklists = []
-actual_picklists = []
-
-sum_squared_error = 0
-action_count = 0
-
-for picklist_no in PICKLISTS:
-    print (f"picklist_no: {picklist_no}")
-    try:
-        with open(f"{pick_label_folder}/picklist_{picklist_no}_raw.txt") as infile:
-            pick_labels = [i for i in infile.read().replace("\n", "")[::2]]
-
-        with open(f"{htk_input_folder}/picklist_{picklist_no}.txt") as infile:
-            htk_inputs = [i.split() for i in infile.readlines()]
-
-
-        htk_boundaries = get_htk_boundaries(f"{htk_output_folder}/results-{picklist_no}")
-    except:
-        print (f"Skipping picklist {picklist_no}")
-        continue
-
-    # check with rmse to see if reasonable
-    general_elan_boundaries = get_elan_boundaries_general(f"{elan_label_folder}/picklist_{picklist_no}.eaf")
-    se, count = get_squared_error(general_elan_boundaries, htk_boundaries)
-
-    logging.debug(f"squared_error, count: {se}, {count}")
-
-    rmse_errors.append((se / count) ** 0.5)
-
-    sum_squared_error += se
-    action_count += count
 
     pick_frames = []
 
@@ -114,8 +62,8 @@ for picklist_no in PICKLISTS:
     for (start_frame, end_frame) in empty_hand_frames:
         if end_frame - start_frame < 10:
             continue
-        print (start_frame, end_frame)
-        print (len(htk_inputs))
+        print(start_frame, end_frame)
+        print(len(htk_inputs))
         # cut out 5 frames if 30fps and 10 frames if 60fps
         curr_avg_empty_hand_hsv, frame_count = get_avg_hsv_bin_frames(htk_inputs, start_frame, end_frame)
         sum_empty_hand_hsv += (curr_avg_empty_hand_hsv * frame_count)
@@ -123,7 +71,8 @@ for picklist_no in PICKLISTS:
 
     avg_empty_hand_hsv = sum_empty_hand_hsv / np.sum(sum_empty_hand_hsv)
 
-    avg_hsv_picks = [get_avg_hsv_bin_frames(htk_inputs, start_frame + 5, end_frame - 5)[0] - avg_empty_hand_hsv for (start_frame, end_frame) \
+    avg_hsv_picks = [get_avg_hsv_bin_frames(htk_inputs, start_frame + 5, end_frame - 5)[0] - avg_empty_hand_hsv for
+                     (start_frame, end_frame) \
                      in pick_frames]
 
     pred_labels = []
@@ -132,74 +81,132 @@ for picklist_no in PICKLISTS:
         print(pick_labels[index])
         i = collapse_hue_bins(i, [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165], 15)
 
-
         pred, distances = find_closest_in_set(i, object_hsv_representation, set(pick_labels))
 
         pred_labels.append(pred)
 
     logging.debug(pred_labels, pick_labels)
 
-    predicted_picklists.extend(pred_labels)
-    actual_picklists.extend(pick_labels)
+    return pred_labels
 
-confusion_matrix = metrics.confusion_matrix(actual_picklists, predicted_picklists)
-appeared_objects = set()
+if __name__ == "__main__":
 
-for i in actual_picklists:
-    for j in i:
-        appeared_objects.add(j)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--config", "-c", type=str, help="Path to experiment config (scripts/configs)")
+    args = parser.parse_args()
 
-for i in predicted_picklists:
-    for j in i:
-        appeared_objects.add(j)
+    # change depending on configs
+    PICKLISTS = range(136, 235) # range(41, 91)
 
+    configs = load_yaml_config(args.config)
 
-letter_to_name = {
-    'r': 'red',
-    'g': 'green',
-    'b': 'blue',
-    'p': 'darkblue',
-    'q': 'darkgreen',
-    'o': 'orange',
-    's': 'alligatorclip',
-    'a': 'yellow',
-    't': 'clear',
-    'u': 'candle'
-}
-names = ['red', 'green', 'blue', 'darkblue', 'darkgreen', 'orange', 'alligatorclip', 'yellow', 'clear', 'candle']
-
-actual_picklists_names = []
-predicted_picklists_names = []
-
-letter_counts = defaultdict(lambda: 0)
-for letter in actual_picklists:
-    name = letter_to_name[letter]
-    letter_counts[name] += 1
-    actual_picklists_names.append(name)
-
-for index, letter in enumerate(predicted_picklists):
-    # print(index)
-    predicted_picklists_names.append(letter_to_name[letter])
-confusion_matrix = metrics.confusion_matrix(actual_picklists_names, predicted_picklists_names)
-conf_mat_norm = (confusion_matrix.astype('float') / confusion_matrix.sum(axis=1)[:, np.newaxis])
-
-unique_names = unique_labels(actual_picklists_names, predicted_picklists_names)
-cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = conf_mat_norm, display_labels = unique_names)
-
-cm_display.plot(cmap=plt.cm.Blues)
-
-plt.xticks(rotation=90)
-
-plt.tight_layout()
-
-plt.show()
-
-plt.savefig("object_classification.png")
+    elan_label_folder = configs["file_paths"]["elan_annotated_file_path"]
+    htk_input_folder = configs["file_paths"]["htk_input_file_path"]
+    video_folder = configs["file_paths"]["video_file_path"]
+    pick_label_folder = configs["file_paths"]["label_file_path"]
+    htk_output_folder = configs["file_paths"]["htk_output_file_path"]
 
 
-print ("test")
-print (sum_squared_error, action_count)
+    with open("object_type_hsv_bins1.pkl", "rb") as infile:
+        objects_type_hsv_bins = pickle.load(infile)
 
-print (sum([1 if predicted_picklists[i] == actual_picklists[i] else 0 for i in range(len(predicted_picklists))]) / len(predicted_picklists))
 
-print (rmse_errors)
+    object_hsv_representation = objects_type_hsv_bins
+
+    rmse_errors = []
+
+    predicted_picklists = []
+    actual_picklists = []
+
+    sum_squared_error = 0
+    action_count = 0
+
+    for picklist_no in PICKLISTS:
+        print (f"picklist_no: {picklist_no}")
+        try:
+            with open(f"{pick_label_folder}/picklist_{picklist_no}_raw.txt") as infile:
+                pick_labels = [i for i in infile.read().replace("\n", "")[::2]]
+
+            with open(f"{htk_input_folder}/picklist_{picklist_no}.txt") as infile:
+                htk_inputs = [i.split() for i in infile.readlines()]
+
+
+            htk_boundaries = get_htk_boundaries(f"{htk_output_folder}/results-{picklist_no}")
+        except:
+            print (f"Skipping picklist {picklist_no}")
+            continue
+
+        # check with rmse to see if reasonable
+        general_elan_boundaries = get_elan_boundaries_general(f"{elan_label_folder}/picklist_{picklist_no}.eaf")
+        se, count = get_squared_error(general_elan_boundaries, htk_boundaries)
+        logging.debug(f"squared_error, count: {se}, {count}")
+        sum_squared_error += se
+        action_count += count
+        rmse_errors.append((se / count) ** 0.5)
+
+        pred_labels= perform_classification(pick_labels, htk_inputs, htk_boundaries, general_elan_boundaries)
+        predicted_picklists.extend(pred_labels)
+        actual_picklists.extend(pick_labels)
+
+
+    confusion_matrix = metrics.confusion_matrix(actual_picklists, predicted_picklists)
+    appeared_objects = set()
+
+    for i in actual_picklists:
+        for j in i:
+            appeared_objects.add(j)
+
+    for i in predicted_picklists:
+        for j in i:
+            appeared_objects.add(j)
+
+
+    letter_to_name = {
+        'r': 'red',
+        'g': 'green',
+        'b': 'blue',
+        'p': 'darkblue',
+        'q': 'darkgreen',
+        'o': 'orange',
+        's': 'alligatorclip',
+        'a': 'yellow',
+        't': 'clear',
+        'u': 'candle'
+    }
+    names = ['red', 'green', 'blue', 'darkblue', 'darkgreen', 'orange', 'alligatorclip', 'yellow', 'clear', 'candle']
+
+    actual_picklists_names = []
+    predicted_picklists_names = []
+
+    letter_counts = defaultdict(lambda: 0)
+    for letter in actual_picklists:
+        name = letter_to_name[letter]
+        letter_counts[name] += 1
+        actual_picklists_names.append(name)
+
+    for index, letter in enumerate(predicted_picklists):
+        # print(index)
+        predicted_picklists_names.append(letter_to_name[letter])
+    confusion_matrix = metrics.confusion_matrix(actual_picklists_names, predicted_picklists_names)
+    conf_mat_norm = (confusion_matrix.astype('float') / confusion_matrix.sum(axis=1)[:, np.newaxis])
+
+    unique_names = unique_labels(actual_picklists_names, predicted_picklists_names)
+    cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = conf_mat_norm, display_labels = unique_names)
+
+    cm_display.plot(cmap=plt.cm.Blues)
+
+    plt.xticks(rotation=90)
+
+    plt.tight_layout()
+
+    plt.show()
+
+    plt.savefig("object_classification.png")
+
+
+    print ("test")
+    print (sum_squared_error, action_count)
+
+    print (sum([1 if predicted_picklists[i] == actual_picklists[i] else 0 for i in range(len(predicted_picklists))]) / len(predicted_picklists))
+
+    print (rmse_errors)
