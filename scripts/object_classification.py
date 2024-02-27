@@ -141,7 +141,7 @@ if __name__ == "__main__":
         action_count += count
         rmse_errors.append((se / count) ** 0.5)
 
-        pred_labels= perform_classification(pick_labels, htk_inputs, htk_boundaries, general_elan_boundaries)
+        pred_labels= perform_classification(pick_labels, htk_inputs, htk_boundaries)
         predicted_picklists.extend(pred_labels)
         actual_picklists.extend(pick_labels)
 
