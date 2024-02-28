@@ -271,7 +271,7 @@ def extract_features(image):
 
 	# --------------------------------WRITING OUT HTK VECTOR TO FILE-----------------------------------------
 	logging.info(htk_output_vector)
-	htk_output_vector = [str(i) for i in htk_output_vector]
+	# htk_output_vector = [str(i) for i in htk_output_vector]
 
 	__end = 0
 	if os.environ.get("DEBUG_TIME", True):
