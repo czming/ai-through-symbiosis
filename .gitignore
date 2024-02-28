@@ -12,3 +12,4 @@ symbiosis/hresults.log_letter
 symbiosis/data
 *.pyc
 *.txt
+!requirements.txt
