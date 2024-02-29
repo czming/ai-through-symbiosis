@@ -1,0 +1,214 @@
+****************************************
+* Acceleglove Example Walkthrough
+* 11 Dec 2003 - Robert McGuire
+****************************************
+
+The Acceleglove was designed and built by Jose Rebollar at George Washington
+University.  It is a collection of 17 accelerometer axes  and potentiometers 
+that are polled via the serial port.
+
+In order to train an HMM using the glove, a set of phrases needed to be
+generated that included each sign we wished to recognize at least 10 times.
+
+First, a set of vocabulary was chosen from the list of signs recognized by
+the original Acceleglove system, which was then broken down into groups based
+on parts of speech.  You will find these words in the files:
+
+  nouns.txt pronouns.txt verbs.txt adjectives.txt
+
+To generate a simple set of sentences that express co-articulation
+between signs, a grammar was propsed of the form:
+
+  (noun | pronoun) verb adjective noun
+
+And a script was made to generate a list of sentences.  These can be found
+in the file:
+
+  sentences.txt
+
+These 665 sentences were all signed, and the data associated with them was
+saved into files from 1.TXT to 665.TXT.  These files can be found in the
+data/ directory.  Each numbered file corresponds to the same line number in
+sentences.txt.  This will help in labelling the data, later.
+
+The data was captured with the subject starting and ending in the same
+positions, so in order to get proper training on the real signs, we will
+introduce the start_sentence and end_sentence "signs" to capture the 
+motion from the rest position into the real signs and back again.
+-------------------------------------------------
+
+Now that you have an idea of the data, let's begin the process that will
+give us a trained model!
+
+A good place to start is to describe the data that we have for GT2k.  The
+first step is to enumerate all of the directories and files that contain data.
+These files are typically called "datadirs" and "datafiles", respectively.
+
+Since all of our data is in only one directory, we can just create data dirs
+with the simple command:
+
+  echo "data/" > datadirs
+
+creating the datafiles file isn't much harder.  We can just run:
+
+  find data/* > datafiles
+
+And the file datafiles will now hold a list of all of our .TXT files.
+
+A next good step would be to label the data that we have.  Rather than label
+each file individually, we will create a Master Label File (MLF) for the 
+entire data set.  This is accomplished with the project specific script
+in scripts/gen_mlf.sh.
+
+To run it, call it like so:
+
+  scripts/gen_mlf.sh datafiles ext/ sentences.txt > labels.mlf
+
+This tells the script to use the data listed in datafiles, that we are
+labelling data that will exist in the ext/ directory (to be made later), 
+and that the sentences describing the data are in sentences.txt.
+
+Please look at the labels.mlf file made by the script, as well as the script
+itself, so as to get a sense of what it does and the format of the MLF file.
+
+-------------------------------------------------
+Now we must describe to the toolkit more about what it will be
+recognizing.  For instance, the vocabulary, dictionary, and grammar that
+will be used as guidelines for the recognizer.  First, we need to create
+a vocabulary list, this file usually goes by the name of "commands"
+
+First, we'll put the start and end "signs" in:
+
+  echo "start_sentence" > commands
+  echo "end_sentence" >> commands
+
+We can insert the rest  by concatenating all of our parts of speech files 
+together, making sure there are no duplicates:
+
+  cat nouns.txt pronouns.txt adjectives.txt verbs.txt | sort | uniq >> commands
+
+To make the dictionary file, we will simply be defining each "sign" to be
+itself.  This can be done with a simple script:
+
+  for i in `cat commands`
+  do
+	  echo "$i $i" >> dict
+  done
+
+See the dict and commands files in the completed acceleglove example to make
+sure they match ours.
+
+Finally, we must make the grammar for our recognizer.  Recall that the grammar
+"(noun | pronoun) verb adjective noun" was used to generate our sentences.
+We could duplicate that for the recognizer, but a much more interesting
+grammar would be something of the form:
+
+  start_sentence < any word, any number of times > end_sentence
+
+Please see the files loosegrammar and strictgrammar in the examples/acceleglove
+directory that came with GT2k for the format of these files.  The script
+
+  scripts/list_to_grammar.pl
+
+Can help generate grammars by taking the noun.txt, etc. files  from standard 
+input and turning them into | separated lists.
+
+Whether you decide to copy an existing example, or make your own, make sure
+the result goes in the file "grammar" in the main project directory.
+
+---------------------------------------------
+Usually you will need to create an HMM model for HTK to start from. 
+There is a sample model provided with this tutorial in the hmmdefs/
+directory, but we will show you how to recreate it as well.
+
+The provided model is one with 4 states, a feature vector length of
+17, and no skip states.  To duplicate this model, or create a
+different one, use the gen_hmmdef.pl program located in the
+tools/hmm_generator directory of your GT2K directory (such as
+/usr/local/gt2k/tools/hmm_generator).  To create a model equivalent to
+the provided one, invoke:
+
+	gen_hmmdef.pl -n4 -v17 -s0 my_model
+
+In order to allow a jump from the first state to the last, we will
+slightly modify the my_model file. Open the my_model file with your
+favorite text editor, and find the section starting with "<TransP>".
+This is the transition matrix for our model. Each row represents a
+possible state, and each column represents the probability of
+transitioning from that state to another one. For this example, we'll
+modify the model so that there's a 50% chance of going from state 1 to
+state 2 or state 4. Currently, the first row, second column shows a 100%
+chance of going to state 2; change this to 5.000e-01 to reflect a 50%
+chance. Also change the first row, last column to 5.000e-01 so the model
+will have a 50% chance to go to state 4 from state 1.
+
+Make sure your new model is placed in the hmmdefs/ directory.
+------------------------------------------
+Now we are almost ready to train and test.  We just need to edit some
+final options for the project.  Edit the file scripts/options.sh with
+your favorite text editor.
+
+The PRJ variable should contain either the path to your project, or it can
+be set to:
+
+  PRJ=`pwd`
+
+As long as you always run the training from the main project directory.
+
+Make sure the UTIL_DIR points to the location of the gt2k utilities
+(for example, /usr/local/gt2k/utils).
+
+The VECTOR_LENGTH for our project is 17.
+
+HMM_LOCATION should point to either the original 4state-1skip-17vec, or
+to the new model that you created.
+
+The rest of the options should be properly set for this example, but please
+read through the rest of them and read the comments, as they control
+the whole training and testing process!  Note especially that we are
+specifically setting GEN_GRAMMAR=no, because we made the grammar ourselves, 
+earlier.  The default grammar generation process, which creates both the
+"grammar" and "dict" files assumes a 1-word grammar, while we are recognizing
+whole sentences!  It is also important to note that AUTO_ESTIMATE is set
+to yes, because the original guesses at gesture times in the labels.mlf
+file are wrong, and should be re-estimated by HTK.
+
+For purposes of this exercise, please leave TRAIN_TEST_VALIDATION set to
+"CROSS", as LEAVE_ONE_OUT takes quite a while (it makes a test set using
+only one piece of data, then trains on the rest and tests the result.  It then
+repeats this until EVERY PIECE OF DATA has been that test set)!  Cross
+validation, for this project, keeps a random 10% of the data for testing, 
+and trains on the rest.  Once you have generated a test/train set by running
+the train.sh script, you can keep this same set by setting
+GEN_TRAIN_TEST=no in the options.sh file.  This will ensure that the sets in
+trainset/ and testset/ are not overwritten.  Please also see the
+scripts/gen_cross_train.sh script if you would like to change the
+ratio of training to testing.
+----------------------------------------------
+Now we should be ready to go!  To start the training and tesing, and
+to keep the output results, run (from the main project directory):
+
+  scripts/train.sh scripts/options.sh 2>&1 > out.log
+
+This will run the training script with the proper options file, and save all
+(both stdout and stderr) data to out.log
+
+This will take quite a while.  If you would like to watch the output, run
+
+  scripts/train.sh scripts/options.sh 2>&1 > out.log & tail -f out.log
+
+instead.
+
+In the end, a sentence and word score are given, as well as a matrix
+showing which words in the test set were correctly recognized, and which
+words they were confused with.  These results also appear in hresults.log.
+----------------------------------------------------
+If everything worked, you will find your final trained model in 
+
+  models/hmm0.7/newMacros
+
+This file can be copied to anywhere you like and used to do recognition.
+
+An example recognition script is in scripts/recognize.sh
+
+Feel free to read through it to see how it works, and to see how to use it.

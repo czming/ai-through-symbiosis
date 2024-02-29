@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2K.1beta (1.48)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Data Collection and Annotation</TITLE>
+<META NAME="description" CONTENT="Data Collection and Annotation">
+<META NAME="keywords" CONTENT="main">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="main.css">
+
+<LINK REL="previous" HREF="node10.html">
+<LINK REL="up" HREF="node8.html">
+<LINK REL="next" HREF="node12.html">
+</HEAD>
+
+<BODY  bgcolor="#ffffff">
+<!--Navigation Panel-->
+<A NAME="tex2html221"
+  HREF="node12.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html215"
+  HREF="node8.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html211"
+  HREF="node10.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html217"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html219"
+  HREF="node27.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html222"
+  HREF="node12.html">Training</A>
+<B> Up:</B> <A NAME="tex2html216"
+  HREF="node8.html">Preparation</A>
+<B> Previous:</B> <A NAME="tex2html212"
+  HREF="node10.html">Specifying a Grammar</A>
+ &nbsp <B>  <A NAME="tex2html218"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp <B>  <A NAME="tex2html220"
+  HREF="node27.html">Index</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION12301300000000000000">
+Data Collection and Annotation</A>
+</H3>
+
+<P>
+Sensing devices are used to gather data about activities in the environment.
+Common sensing devices include cameras, accelerometers, microphones, laser
+range finders, and motion capture devices.  These sensors typically return raw
+data measurements of the observable environment. This raw data can be used
+directly for recognition or processed to extract the significant features as
+deemed appropriate for the task.  This data is stored as numerical vectors,
+known as <EM>feature vectors</EM>, and form the data set over which <B>GT<IMG
+ WIDTH="11" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.png"
+ ALT="$^{2}$">k </B>
+operates.
+The range of values and the length of the vector is dependent on the
+application.  A typical gesture example would appear as a sequence of these
+feature vectors. For instance, video-tracked gestures may return the position
+of the hand at each video frame as an <IMG
+ WIDTH="41" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img5.png"
+ ALT="$(x,y)$"> coordinate.  This results in a
+feature vector of length two with two real values corresponding to <IMG
+ WIDTH="41" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img5.png"
+ ALT="$(x,y)$">
+position.  A gesture which completes in 29 frames would be
+represented with 29 feature vectors.  
+
+<P>
+In order for <B>GT<IMG
+ WIDTH="11" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.png"
+ ALT="$^{2}$">k </B>to properly understand the data it receives, the
+data must be annotated by the user. This requires the user to specify
+which gestures appear in each of the training examples.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html221"
+  HREF="node12.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html215"
+  HREF="node8.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html211"
+  HREF="node10.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html217"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html219"
+  HREF="node27.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html222"
+  HREF="node12.html">Training</A>
+<B> Up:</B> <A NAME="tex2html216"
+  HREF="node8.html">Preparation</A>
+<B> Previous:</B> <A NAME="tex2html212"
+  HREF="node10.html">Specifying a Grammar</A>
+ &nbsp <B>  <A NAME="tex2html218"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp <B>  <A NAME="tex2html220"
+  HREF="node27.html">Index</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Debian User
+2003-12-13
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,29 @@
+============================================================================
+
+README
+distro/tools/mlf_from_lab
+
+9 Dec 2002
+maintained by: brashear@cc.gatech.edu, turtle@cc.gatech.edu
+
+============================================================================
+
+This is a quick little tool that takes a list of label files as input and
+consolidates them all to one MLF file to keep things tidy.  This is really only
+useful to you if you have data that has already been labeled in individual lab
+files for HTK by some other tool.
+
+============================================================================
+
+usage: make_mlf_from_lab
+note:
+looks for "labfiles" which contains a list of lab files to process
+
+============================================================================
+
+This directory is set up so that you can do an example run.  There are lab
+files: 1.lab  up_3.lab  up_4.lab  up_5.lab  up_6.lab  up_7.lab  up_8.lab
+up_9.lab.  The "labfiles" file contains a list of these files.  After running
+"make_mlf_from_labfiles" there will be an output file "labels.mlf" which will
+be a MLF file containing the information from all the label files it has
+processed.

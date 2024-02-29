@@ -1,0 +1,57 @@
+###############################################################################
+## File   : README for hv.sh
+## Author : Tracy L. Westeyn
+## Email  : turtle@cc.gatech.edu
+##
+## Purpose: Display a graphical representaion of an HTK HMM definition file.
+##
+## Input  : param1 --> name of the HMM definition file to vizualize
+##
+##
+## NOTES  : Several executables are required:
+##
+##    dot   ( a component of GraphViz )
+##    gv    ( a PostScript viewer     )
+##    htk2dot ( included executable     )
+##  
+##
+## BUGS    : Currently this script can only handle one file at a time 
+##         it cannot take in multiple files and generate the
+##       the postscript for them all.   
+###############################################################################
+
+Files
+~~~~~~
+
+  This distribution should contain:
+
+  htk2dot.c --> src for htk to dot translator
+  htk2dot.h --> src for htk to dot translator
+  Makefile  --> makefile to build htk2dot executable
+  hv.sh     --> script to automate the visualization process
+  README    --> this file
+
+
+Purpose
+~~~~~~~
+HTK HMM definition to GraphViz DOT vizualization tool.
+This program assumes a well formed definition file.  Its intent is to 
+graphically visualize the text definition file so that the user can ensure a 
+correct topology of the defined hmm.
+
+
+Setup
+~~~~~
+before executing the script be sure that "make" is typed in the directory
+containing the source to build htk2dot.  Make sure this file is in the same
+directory containing the script as the script will not work without it.
+
+
+Usage
+~~~~~
+to visualize HMM definition file <hmmfile> simple execute the script
+
+  ./hv.sh <hmmfile>
+
+
+

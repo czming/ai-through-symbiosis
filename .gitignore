@@ -13,3 +13,4 @@ symbiosis/data
 *.pyc
 *.txt
 !requirements.txt
+.DS_Store

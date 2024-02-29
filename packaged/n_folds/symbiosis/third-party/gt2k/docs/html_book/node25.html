@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2K.1beta (1.48)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Recognition</TITLE>
+<META NAME="description" CONTENT="Recognition">
+<META NAME="keywords" CONTENT="main">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="main.css">
+
+<LINK REL="previous" HREF="node24.html">
+<LINK REL="up" HREF="node23.html">
+<LINK REL="next" HREF="node26.html">
+</HEAD>
+
+<BODY  bgcolor="#ffffff">
+<!--Navigation Panel-->
+<A NAME="tex2html427"
+  HREF="node26.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html421"
+  HREF="node23.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html417"
+  HREF="node24.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html423"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html425"
+  HREF="node27.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html428"
+  HREF="node26.html">Bibliography</A>
+<B> Up:</B> <A NAME="tex2html422"
+  HREF="node23.html">Training</A>
+<B> Previous:</B> <A NAME="tex2html418"
+  HREF="node24.html">Training Options</A>
+ &nbsp <B>  <A NAME="tex2html424"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp <B>  <A NAME="tex2html426"
+  HREF="node27.html">Index</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION13201200000000000000"></A>
+<A NAME="1995"></A>
+<BR>
+Recognition
+</H3>
+
+<P>
+Once the HMM has been trained, new data can be used for recognition. 
+The script <TT>recognize.sh</TT>, found in the <TT>scripts/</TT>
+directory in your project directory can be used for this purpose. 
+<TT>recognize.sh</TT> requires four arguments:  the name of a data
+file to recognize, the name of a file to store the recognition results
+in, the name of the options file, and the name of the trained model. 
+The trained model is the one that was chosen at the end of the
+training process.
+
+<P>
+The output of the recognizer script will be in the form of a Master
+Label File. Several possible gestures will be listed, ranked by a
+likelihood score. The topmost gesture is the most likely classification.
+
+<P>
+
+<P>
+<BR><HR>
+<ADDRESS>
+Debian User
+2003-12-13
+</ADDRESS>
+</BODY>
+</HTML>

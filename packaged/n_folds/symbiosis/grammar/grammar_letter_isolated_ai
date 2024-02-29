@@ -1,0 +1,2 @@
+$char = a | b | c | d | e | f | g | h | i | j | sil;
+(sil < $char > sil)

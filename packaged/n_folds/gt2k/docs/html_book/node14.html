@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2K.1beta (1.48)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Recognition Application </TITLE>
+<META NAME="description" CONTENT="Recognition Application ">
+<META NAME="keywords" CONTENT="main">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="main.css">
+
+<LINK REL="previous" HREF="node13.html">
+<LINK REL="up" HREF="node7.html">
+<LINK REL="next" HREF="node15.html">
+</HEAD>
+
+<BODY  bgcolor="#ffffff">
+<!--Navigation Panel-->
+<A NAME="tex2html261"
+  HREF="node15.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html255"
+  HREF="node7.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html251"
+  HREF="node13.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html257"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html259"
+  HREF="node27.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html262"
+  HREF="node15.html">Using GTk</A>
+<B> Up:</B> <A NAME="tex2html256"
+  HREF="node7.html">Overview</A>
+<B> Previous:</B> <A NAME="tex2html252"
+  HREF="node13.html">Validation and System Performance</A>
+ &nbsp <B>  <A NAME="tex2html258"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp <B>  <A NAME="tex2html260"
+  HREF="node27.html">Index</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION12304000000000000000">
+ Recognition Application </A>
+</H2>
+Models generated during the training phase can be used for recognition of new
+data.  As with the training phase, the underlying algorithms have been
+abstracted.  Once an unclassified gesture is received, <B>GT<IMG
+ WIDTH="11" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.png"
+ ALT="$^{2}$">k </B>calculates the
+likelihood of each model.  The actual probabilities are calculated using the
+Viterbi algorithm.  This information can be used by the results interpreter as
+deemed appropriate by the application, for example, taking the most likely
+gesture or considering the probability of each gesture for making a decision.  
+
+<P>
+Once a model of each of the gestures has been trained, it can be used
+independently of the training system. For our fictitious example of
+recognizing gestures for controlling ground vehicles, the individual
+models could be embedded in an autonomous robot. When the traffic
+controller gestures towards the robot, <B>GT<IMG
+ WIDTH="11" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.png"
+ ALT="$^{2}$">k </B>receives features from
+the robot's sensors, calculates the probability of each model given
+the features, and returns a list of the most likely gestures issued by
+the traffic controller. The robot acts accordingly based on this data.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html261"
+  HREF="node15.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html255"
+  HREF="node7.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html251"
+  HREF="node13.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html257"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html259"
+  HREF="node27.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html262"
+  HREF="node15.html">Using GTk</A>
+<B> Up:</B> <A NAME="tex2html256"
+  HREF="node7.html">Overview</A>
+<B> Previous:</B> <A NAME="tex2html252"
+  HREF="node13.html">Validation and System Performance</A>
+ &nbsp <B>  <A NAME="tex2html258"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp <B>  <A NAME="tex2html260"
+  HREF="node27.html">Index</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Debian User
+2003-12-13
+</ADDRESS>
+</BODY>
+</HTML>

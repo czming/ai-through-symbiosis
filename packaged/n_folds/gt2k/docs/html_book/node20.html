@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2K.1beta (1.48)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Specifying a Grammar</TITLE>
+<META NAME="description" CONTENT="Specifying a Grammar">
+<META NAME="keywords" CONTENT="main">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="main.css">
+
+<LINK REL="next" HREF="node21.html">
+<LINK REL="previous" HREF="node17.html">
+<LINK REL="up" HREF="node16.html">
+<LINK REL="next" HREF="node21.html">
+</HEAD>
+
+<BODY  bgcolor="#ffffff">
+<!--Navigation Panel-->
+<A NAME="tex2html360"
+  HREF="node21.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html354"
+  HREF="node16.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html348"
+  HREF="node19.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html356"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html358"
+  HREF="node27.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html361"
+  HREF="node21.html">Data Collection and Annotation</A>
+<B> Up:</B> <A NAME="tex2html355"
+  HREF="node16.html">Data Preparation</A>
+<B> Previous:</B> <A NAME="tex2html349"
+  HREF="node19.html">HMM Visualization Tool</A>
+ &nbsp <B>  <A NAME="tex2html357"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp <B>  <A NAME="tex2html359"
+  HREF="node27.html">Index</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION13120000000000000000"></A>
+<A NAME="1466"></A>
+<BR>
+Specifying a Grammar
+</H1>
+
+<P>
+In order to perform training and recognition, <B>GT<IMG
+ WIDTH="11" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.png"
+ ALT="$^{2}$">k </B>must be supplied
+with a grammar.  This grammar can be automatically generated or the
+user may manually specify it.  In the case of automatic generation,
+the grammar will allow <B>GT<IMG
+ WIDTH="11" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.png"
+ ALT="$^{2}$">k </B>to perform isolated recognition; that
+is, one gesture at a time.  If continuous recognition is desired,
+better results may be obtained by manually specifying a grammar that
+more closely matches the structure of the data to be recognized.  A
+partial grammar for continuous recognition is shown in Figure
+<A HREF="node20.html#f:grammar">4.4</A>; for the entire sample, please see the file
+<TT>examples/acceleglove/strictgrammar</TT> in the <B>GT<IMG
+ WIDTH="11" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.png"
+ ALT="$^{2}$">k </B>directory.
+
+<P>
+A full description of the grammar file's format may be found in the
+HTK reference manual Section 17.15; however, we will briefly describe
+some of the more important features here.  The grammar is specified
+using variables and commands.  Each variable, or category, is denoted
+with a `<TT>$</TT>' symbol, as in ``<TT>$noun</TT>''.  Commands
+represent gestures to recognize, and are simple text strings such as
+``<TT>adult</TT>''.  Each category may consist of one or more
+commands, each separated with the `<TT><IMG
+ WIDTH="8" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img18.png"
+ ALT="$\vert$"></TT>' (pipe) character. 
+Sentences are specified using parenthesis.  For isolated recognition,
+a sentence is as simple as ``<TT>(&nbsp;$gesture&nbsp;)</TT>''; for continuous
+recognition, a sentence can be more complicated (as in Figure
+<A HREF="node20.html#f:grammar">4.4</A>).  Using angled brackets around a symbol or variable,
+such as ``<TT><IMG
+ WIDTH="16" HEIGHT="28" ALIGN="MIDDLE" BORDER="0"
+ SRC="img13.png"
+ ALT="$&lt;$">&nbsp;$word&nbsp;<IMG
+ WIDTH="16" HEIGHT="28" ALIGN="MIDDLE" BORDER="0"
+ SRC="img14.png"
+ ALT="$&gt;$"></TT>'' denotes that the enclosed symbol
+may appear any number of times.
+
+<P>
+
+<P>
+<DIV ALIGN="CENTER">
+<A NAME="f:grammar"></A><IMG
+ WIDTH="581" HEIGHT="236" ALIGN="MIDDLE" BORDER="0"
+ SRC="img19.png"
+ ALT="% latex2html id marker 2992
+$\textstyle \parbox{120mm}{\noindent
+\fbox{ \parbox...
+...\ \ Sample grammar specification for continuous
+recognition}
+\end{center}
+}$">
+</DIV> 
+
+<P>
+
+<P>
+<A NAME="1486"></A>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html360"
+  HREF="node21.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html354"
+  HREF="node16.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html348"
+  HREF="node19.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html356"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html358"
+  HREF="node27.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html361"
+  HREF="node21.html">Data Collection and Annotation</A>
+<B> Up:</B> <A NAME="tex2html355"
+  HREF="node16.html">Data Preparation</A>
+<B> Previous:</B> <A NAME="tex2html349"
+  HREF="node19.html">HMM Visualization Tool</A>
+ &nbsp <B>  <A NAME="tex2html357"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp <B>  <A NAME="tex2html359"
+  HREF="node27.html">Index</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Debian User
+2003-12-13
+</ADDRESS>
+</BODY>
+</HTML>

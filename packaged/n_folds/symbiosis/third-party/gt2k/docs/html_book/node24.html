@@ -1,0 +1,300 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2K.1beta (1.48)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Training Options</TITLE>
+<META NAME="description" CONTENT="Training Options">
+<META NAME="keywords" CONTENT="main">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="main.css">
+
+<LINK REL="next" HREF="node25.html">
+<LINK REL="previous" HREF="node23.html">
+<LINK REL="up" HREF="node23.html">
+<LINK REL="next" HREF="node25.html">
+</HEAD>
+
+<BODY  bgcolor="#ffffff">
+<!--Navigation Panel-->
+<A NAME="tex2html415"
+  HREF="node25.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html409"
+  HREF="node23.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html403"
+  HREF="node23.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html411"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html413"
+  HREF="node27.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html416"
+  HREF="node25.html">Recognition</A>
+<B> Up:</B> <A NAME="tex2html410"
+  HREF="node23.html">Training</A>
+<B> Previous:</B> <A NAME="tex2html404"
+  HREF="node23.html">Training</A>
+ &nbsp <B>  <A NAME="tex2html412"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp <B>  <A NAME="tex2html414"
+  HREF="node27.html">Index</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H3><A NAME="SECTION13201100000000000000"></A>
+<A NAME="1955"></A>
+<BR>
+Training Options
+</H3>
+
+<P>
+The <TT>scripts/options.sh</TT> file contains all of the settings that
+will dictate how your HMM is trained. The options are described here,
+and in the file itself. Most of the defaults should be okay, but please
+read over them at least once to be sure.
+
+<P>
+
+<UL>
+<LI><TT><B>PRJ</B></TT>  
+<BR>
+Defines the location of the project.  This can either be set to an
+		absolute pathname or <TT>`pwd`</TT> if <TT>scripts/train.sh</TT>
+		is run from the main project directory.
+
+<P>
+</LI>
+<LI><TT><B>SCRIPTS_DIR</B></TT>   
+<BR>
+Defines the location of the <TT>scripts</TT> directory. Generally
+		this is assumed to be inside the directory specified for <TT><B>PRJ</B></TT>
+		above.
+
+<P>
+</LI>
+<LI><TT><B>UTIL_DIR</B></TT>   
+<BR>
+Defines the location of the <B>GT<IMG
+ WIDTH="11" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.png"
+ ALT="$^{2}$">k </B><TT>utils</TT> directory. The
+		default location is <TT>/usr/local/gt2k</TT>, but may have been
+		changed during installation.
+
+<P>
+</LI>
+<LI><TT><B>VECTOR_LENGTH</B></TT>   
+<BR>
+Specifies the length of the feature vector used for this data. This
+		should be the same number as was specified with the
+		<TT>gen_hmmdef.pl</TT> script.
+
+<P>
+</LI>
+<LI><TT><B>MIN_VARIANCE</B></TT>   
+<BR>
+This is the minimum variance that each state should be allowed to
+		have during training. This is to prevent certain issues with HTK,
+		and should generally be left at the default.
+
+<P>
+</LI>
+<LI><TT><B>HMM_TOPOLOGY_DIR</B></TT>   
+<BR>
+Defines the location of the <TT>hmmdefs</TT> directory. Generally
+		this is assumed to be inside the directory specified for <TT><B>PRJ</B></TT>
+		above.
+
+<P>
+</LI>
+<LI><TT><B>HMM_LOCATION</B></TT>   
+<BR>
+Specifies the file that contains the topology for the HMM to train.
+		This is initially set to ``<TT><IMG
+ WIDTH="16" HEIGHT="28" ALIGN="MIDDLE" BORDER="0"
+ SRC="img13.png"
+ ALT="$&lt;$">none<IMG
+ WIDTH="16" HEIGHT="28" ALIGN="MIDDLE" BORDER="0"
+ SRC="img14.png"
+ ALT="$&gt;$"></TT>'', so make sure to
+		change it.
+
+<P>
+</LI>
+<LI><TT><B>INITIALIZE_HMM</B></TT>   
+<BR>
+Set to ``<TT>yes</TT>'' or ``<TT>no</TT>''. Defines whether to have
+		HTK initialize model parameters or not. Only set to <TT>no</TT>
+		if you have a previously-initialized HMM from another source.
+
+<P>
+</LI>
+<LI><TT><B>GEN_TRAIN_TEST</B></TT>   
+<BR>
+Set to ``<TT>yes</TT>'' or ``<TT>no</TT>''. If set to <TT>yes</TT>, <B>GT<IMG
+ WIDTH="11" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.png"
+ ALT="$^{2}$">k </B>will
+		automatically generate new testing and training sets each time
+		training is run. If you have defined your own testing and training
+		sets, or wish to reuse a previously generated set, set this to <TT>no</TT>.
+
+<P>
+</LI>
+<LI><TT><B>TRAIN_TEST_VALIDATION</B></TT>   
+<BR>
+Set to ``<TT>CROSS</TT>'' or ``<TT>LEAVE_ONE_OUT</TT>'' to select
+		the type of training/testing to perform. Cross-validation uses 66%
+		of the data as training data, and the remaining 33% as data for
+		testing. Leave-one-out validation uses all off the data except for
+		one sample as training data, and the remaining one as test data. It
+		does this for every possible permutation, and can take a very long
+		time.
+
+<P>
+</LI>
+<LI><TT><B>DATAFILES_LIST</B></TT>   
+<BR>
+Specifies a file containing a list of all the data files that will
+		be divided into training and testing sets.
+
+<P>
+</LI>
+<LI><TT><B>GRAMMARFILE</B></TT>   
+<BR>
+Specifies a file containing the grammar definition for the project.
+
+<P>
+</LI>
+<LI><TT><B>TOKENS</B></TT>   
+<BR>
+A file containing the commands defined in the grammar, one per line.
+
+<P>
+</LI>
+<LI><TT><B>MLF_LOCATION</B></TT>   
+<BR>
+Defines the location of the Master Label File.
+
+<P>
+</LI>
+<LI><TT><B>GEN_EXT_FILES</B></TT>   
+<BR>
+Set to ``<TT>yes</TT>'' or ``<TT>no</TT>''. Specifies whether or not <TT>.ext</TT>
+		files should be generate. Leave set to <TT>yes</TT>unless they have already
+		been generated.
+
+<P>
+</LI>
+<LI><TT><B>EXT_DIR</B></TT>   
+<BR>
+Specifies which directory HTK-specific files will be placed in.
+
+<P>
+</LI>
+<LI><TT><B>GEN_GRAMMAR</B></TT>   
+<BR>
+Set to ``<TT>yes</TT>'' or ``<TT>no</TT>''. Specifies whether or not to
+		automatically generate a grammar based on the data. If you have
+		manually specified a grammar, set to <TT>no</TT>.
+
+<P>
+</LI>
+<LI><TT><B>OUTPUT_MLF</B></TT>   
+<BR>
+Specifies the file that will contain the results of recognition.
+
+<P>
+</LI>
+<LI><TT><B>LOG_RESULTS</B></TT>   
+<BR>
+Specifies the file that will contain the results of the validation
+		process.
+
+<P>
+</LI>
+<LI><TT><B>AUTO_ESTIMATE</B></TT>   
+<BR>
+Set to ``<TT>yes</TT>'' or ``<TT>no</TT>''.  Specifies whether or not to allow HTK
+		to estimate gesture boundaries for data with multiple gestures per
+		file. This can be useful if you're unsure of the exact boundaries
+		between gestures. Setting this to <TT>no</TT>will speed up training.
+
+<P>
+</LI>
+<LI><TT><B>HMM_TEMP_DIR</B></TT>   
+<BR>
+Specifies the directory to use for storage of intermediate models
+		during training.
+
+<P>
+</LI>
+<LI><TT><B>TRACE_LEVEL</B></TT>   
+<BR>
+Set to 1--7. Specifies level of debugging for HTK. Level 7 provides
+		the most debugging output.
+</LI>
+</UL>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html415"
+  HREF="node25.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html409"
+  HREF="node23.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html403"
+  HREF="node23.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html411"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html413"
+  HREF="node27.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html416"
+  HREF="node25.html">Recognition</A>
+<B> Up:</B> <A NAME="tex2html410"
+  HREF="node23.html">Training</A>
+<B> Previous:</B> <A NAME="tex2html404"
+  HREF="node23.html">Training</A>
+ &nbsp <B>  <A NAME="tex2html412"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp <B>  <A NAME="tex2html414"
+  HREF="node27.html">Index</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Debian User
+2003-12-13
+</ADDRESS>
+</BODY>
+</HTML>
