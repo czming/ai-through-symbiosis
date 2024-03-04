@@ -30,13 +30,13 @@ def preprocess_features(data):
     if os.environ.get("DEBUG_TIME", True):
         __end = time.time()
   
-    return data, __end - __start
+    return data.tostring(), data.dtype.str, data.shape, __end - __start
 
 service = Service(
 		"preprocessing",
-		lambda id, shape, data: str((id, *preprocess_features(np.frombuffer(data.read(), dtype=np.float32).reshape([int(i) for i in shape.split(",")])))),
+		lambda id, shape, data: str((id, *preprocess_features(np.fromstring(data.read()).reshape([int(i) for i in shape.split(",")])))),
 		{
-      		'args': ['id', 'shape'],
+      		'form': ['id', 'shape'],
 			'files': ['data'],
 		}
 	).create_service(init_cors=True)

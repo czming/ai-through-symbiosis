@@ -11,10 +11,6 @@ import argparse
 import sys
  
 # setting path
-sys.path.append('..')
-
-from utils import *
-from visualize_htk_inputs import plot_axs_columns 
 
 def reflect_convolve(data, convolution_filter):
 

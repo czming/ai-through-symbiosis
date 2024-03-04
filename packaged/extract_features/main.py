@@ -187,10 +187,11 @@ def extract_features(image):
 			aruco_tvecs_plot.append(i.tvec[:, 0])
 			aruco_tvecs[i.get_id()] = i.tvec[:, 0]
 
-			__valid_shelf_markers_dict = dict(zip(
-					sorted(list(os.environ.get("VALID_BIN_MARKERS", {110, 120, 130, 210, 220, 230, 310, 320, 330, 410, 420, 430, 510, 520, 530, 610, 620, 630}))), 
-					list(range(len(os.environ.get("VALID_LOCALIZATION_MARKERS", {111, 121, 131, 211, 221, 231, 311, 321, 331, 411, 421, 431, 511, 521, 531, 611, 621, 631}))))
-					))
+			__valid_shelf_markers_dict = {
+				val: key for key, val in enumerate(
+					set(os.environ.get("VALID_BIN_MARKERS", {110, 120, 130, 210, 220, 230, 310, 320, 330, 410, 420, 430, 510, 520, 530, 610, 620, 630})) \
+			  		| set(os.environ.get("VALID_LOCALIZATION_MARKERS", {111, 121, 131, 211, 221, 231, 311, 321, 331, 411, 421, 431, 511, 521, 531, 611, 621, 631})))
+			}
 
 			# assign x, y
 			htk_output_vector[__valid_shelf_markers_dict[i.get_id()] * 2 + os.environ.get('ARUCO_MARKER_HTK_OFFSET', 0)] = aruco_2d[
@@ -276,7 +277,6 @@ def extract_features(image):
 	__end = 0
 	if os.environ.get("DEBUG_TIME", True):
 		__end = time.time()
-
 
 	return htk_output_vector, __end - __start
 

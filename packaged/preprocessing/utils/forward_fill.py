@@ -33,7 +33,11 @@ def perform_forward_fill(infile_data: np.ndarray) -> np.ndarray:
     Returns all_lines, a list of strings
     """
     all_lines = []
+
+    last_frame_detected = {}
+    
     for index, line in enumerate(infile_data):
+        print(line)
         aruco_markers = line[:72]
 
         # taking into account the forward fill
@@ -58,7 +62,7 @@ def perform_forward_fill(infile_data: np.ndarray) -> np.ndarray:
                     # -1 for place bin
                     aruco_pick_place_counter -= 1
 
-        new_line = [float(aruco_pick_place_counter)] + line[72:]
+        new_line = np.concatenate(([float(aruco_pick_place_counter)], line[72:]))
         all_lines.append(new_line)
     return np.array(all_lines)
 
