@@ -1,0 +1,5322 @@
+#!MLF!# 
+
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/1.TXT.lab"
+0 24666 start_sentence
+24666 49332 water
+49332 73998 swallow
+73998 98664 impossible
+98664 123330 food
+123330 148000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/10.TXT.lab"
+0 30333 start_sentence
+30333 60666 i
+60666 90999 believe
+90999 121332 sad
+121332 151665 grandfather
+151665 182000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/100.TXT.lab"
+0 25000 start_sentence
+25000 50000 woman
+50000 75000 start
+75000 100000 expert
+100000 125000 mother
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/101.TXT.lab"
+0 25666 start_sentence
+25666 51332 turkey
+51332 76998 understand
+76998 102664 expert
+102664 128330 senate
+128330 154000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/102.TXT.lab"
+0 22000 start_sentence
+22000 44000 you
+44000 66000 swallow
+66000 88000 hungry
+88000 110000 hell
+110000 132000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/103.TXT.lab"
+0 25000 start_sentence
+25000 50000 brother
+50000 75000 meet
+75000 100000 fine
+100000 125000 uncle
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/104.TXT.lab"
+0 25000 start_sentence
+25000 50000 they
+50000 75000 use
+75000 100000 yellow
+100000 125000 food
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/105.TXT.lab"
+0 24666 start_sentence
+24666 49332 lotion
+49332 73998 suspect
+73998 98664 expert
+98664 123330 wine
+123330 148000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/106.TXT.lab"
+0 22333 start_sentence
+22333 44666 they
+44666 66999 understand
+66999 89332 expert
+89332 111665 christmas
+111665 134000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/107.TXT.lab"
+0 28666 start_sentence
+28666 57332 i
+57332 85998 learn
+85998 114664 ignorant
+114664 143330 chicken
+143330 172000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/108.TXT.lab"
+0 29000 start_sentence
+29000 58000 idea
+58000 87000 swallow
+87000 116000 bald
+116000 145000 theory
+145000 174000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/109.TXT.lab"
+0 27333 start_sentence
+27333 54666 mother
+54666 81999 look_at
+81999 109332 hungry
+109332 136665 son
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/11.TXT.lab"
+0 28333 start_sentence
+28333 56666 daughter
+56666 84999 throw
+84999 113332 deaf
+113332 141665 girl
+141665 170000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/110.TXT.lab"
+0 27333 start_sentence
+27333 54666 man
+54666 81999 help
+81999 109332 yellow
+109332 136665 chief
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/111.TXT.lab"
+0 30333 start_sentence
+30333 60666 wife
+60666 90999 create
+90999 121332 full
+121332 151665 vice_prez
+151665 182000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/112.TXT.lab"
+0 27666 start_sentence
+27666 55332 committee
+55332 82998 turn
+82998 110664 sick
+110664 138330 nurse
+138330 166000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/113.TXT.lab"
+0 24666 start_sentence
+24666 49332 committee
+49332 73998 understand
+73998 98664 upset
+98664 123330 face
+123330 148000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/114.TXT.lab"
+0 28666 start_sentence
+28666 57332 uncle
+57332 85998 hear
+85998 114664 upset
+114664 143330 expert
+143330 172000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/115.TXT.lab"
+0 23666 start_sentence
+23666 47332 girl
+47332 70998 take
+70998 94664 expert
+94664 118330 french_fries
+118330 142000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/116.TXT.lab"
+0 26000 start_sentence
+26000 52000 thing
+52000 78000 learn
+78000 104000 deaf
+104000 130000 christmas
+130000 156000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/117.TXT.lab"
+0 24000 start_sentence
+24000 48000 girl
+48000 72000 take
+72000 96000 sick
+96000 120000 turkey
+120000 144000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/118.TXT.lab"
+0 27666 start_sentence
+27666 55332 idiot
+55332 82998 suspect
+82998 110664 bald
+110664 138330 governor
+138330 166000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/119.TXT.lab"
+0 27000 start_sentence
+27000 54000 history
+54000 81000 help
+81000 108000 skinny
+108000 135000 rooster
+135000 162000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/12.TXT.lab"
+0 28333 start_sentence
+28333 56666 couple
+56666 84999 shower
+84999 113332 sick
+113332 141665 vegetable
+141665 170000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/120.TXT.lab"
+0 26000 start_sentence
+26000 52000 misundertanding
+52000 78000 appreciate
+78000 104000 expert
+104000 130000 guess
+130000 156000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/121.TXT.lab"
+0 25333 start_sentence
+25333 50666 mother
+50666 75999 collect
+75999 101332 dizzy
+101332 126665 america
+126665 152000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/122.TXT.lab"
+0 27333 start_sentence
+27333 54666 sky
+54666 81999 use
+81999 109332 full
+109332 136665 husband
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/123.TXT.lab"
+0 28666 start_sentence
+28666 57332 chicken
+57332 85998 learn
+85998 114664 favorite
+114664 143330 twin
+143330 172000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/124.TXT.lab"
+0 26000 start_sentence
+26000 52000 column
+52000 78000 hear
+78000 104000 nice
+104000 130000 lie
+130000 156000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/125.TXT.lab"
+0 24666 start_sentence
+24666 49332 they
+49332 73998 create
+73998 98664 yellow
+98664 123330 man
+123330 148000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/126.TXT.lab"
+0 28333 start_sentence
+28333 56666 he
+56666 84999 swallow
+84999 113332 bald
+113332 141665 scream
+141665 170000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/127.TXT.lab"
+0 25333 start_sentence
+25333 50666 area
+50666 75999 understand
+75999 101332 ignorant
+101332 126665 couple
+126665 152000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/128.TXT.lab"
+0 25000 start_sentence
+25000 50000 they
+50000 75000 pass_out
+75000 100000 skinny
+100000 125000 christmas
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/129.TXT.lab"
+0 29666 start_sentence
+29666 59332 brother
+59332 88998 believe
+88998 118664 virtual
+118664 148330 menu
+148330 178000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/13.TXT.lab"
+0 25666 start_sentence
+25666 51332 hat
+51332 76998 respect
+76998 102664 false
+102664 128330 language
+128330 154000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/130.TXT.lab"
+0 24666 start_sentence
+24666 49332 emergency
+49332 73998 collect
+73998 98664 sad
+98664 123330 god
+123330 148000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/131.TXT.lab"
+0 26333 start_sentence
+26333 52666 emergency
+52666 78999 take
+78999 105332 virtual
+105332 131665 area
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/132.TXT.lab"
+0 27333 start_sentence
+27333 54666 cafeteria
+54666 81999 guess
+81999 109332 black
+109332 136665 french_fries
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/133.TXT.lab"
+0 27666 start_sentence
+27666 55332 cafeteria
+55332 82998 understand
+82998 110664 good
+110664 138330 vice_prez
+138330 166000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/134.TXT.lab"
+0 26333 start_sentence
+26333 52666 expert
+52666 78999 suspect
+78999 105332 deaf
+105332 131665 son
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/135.TXT.lab"
+0 28666 start_sentence
+28666 57332 vegetable
+57332 85998 guess
+85998 114664 yellow
+114664 143330 governor
+143330 172000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/136.TXT.lab"
+0 28333 start_sentence
+28333 56666 committee
+56666 84999 look_at
+84999 113332 bald
+113332 141665 wife
+141665 170000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/137.TXT.lab"
+0 26333 start_sentence
+26333 52666 coffee
+52666 78999 swallow
+78999 105332 sweet
+105332 131665 hell
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/138.TXT.lab"
+0 33000 start_sentence
+33000 66000 medic
+66000 99000 take
+99000 132000 puzzled
+132000 165000 coffee
+165000 198000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/139.TXT.lab"
+0 27000 start_sentence
+27000 54000 you
+54000 81000 start
+81000 108000 sweet
+108000 135000 hat
+135000 162000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/14.TXT.lab"
+0 33666 start_sentence
+33666 67332 arch
+67332 100998 help
+100998 134664 fine
+134664 168330 coffee
+168330 202000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/140.TXT.lab"
+0 24333 start_sentence
+24333 48666 couple
+48666 72999 recall
+72999 97332 upset
+97332 121665 theory
+121665 146000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/141.TXT.lab"
+0 27000 start_sentence
+27000 54000 christmas
+54000 81000 learn
+81000 108000 yellow
+108000 135000 daughter
+135000 162000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/142.TXT.lab"
+0 25666 start_sentence
+25666 51332 column
+51332 76998 hear
+76998 102664 ugly
+102664 128330 grandfather
+128330 154000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/143.TXT.lab"
+0 24666 start_sentence
+24666 49332 you
+49332 73998 tell
+73998 98664 expert
+98664 123330 hat
+123330 148000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/144.TXT.lab"
+0 25333 start_sentence
+25333 50666 lotion
+50666 75999 know
+75999 101332 proud
+101332 126665 brother
+126665 152000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/145.TXT.lab"
+0 32666 start_sentence
+32666 65332 wife
+65332 97998 shower
+97998 130664 virtual
+130664 163330 vice_prez
+163330 196000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/146.TXT.lab"
+0 31000 start_sentence
+31000 62000 adult
+62000 93000 collect
+93000 124000 english
+124000 155000 wife
+155000 186000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/147.TXT.lab"
+0 31000 start_sentence
+31000 62000 governor
+62000 93000 believe
+93000 124000 ugly
+124000 155000 government
+155000 186000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/148.TXT.lab"
+0 28666 start_sentence
+28666 57332 government
+57332 85998 collect
+85998 114664 sad
+114664 143330 firefighter
+143330 172000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/149.TXT.lab"
+0 28000 start_sentence
+28000 56000 medic
+56000 84000 use
+84000 112000 upset
+112000 140000 son
+140000 168000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/15.TXT.lab"
+0 30666 start_sentence
+30666 61332 twin
+61332 91998 shower
+91998 122664 beautiful
+122664 153330 husband
+153330 184000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/150.TXT.lab"
+0 25333 start_sentence
+25333 50666 food
+50666 75999 apologize
+75999 101332 beautiful
+101332 126665 column
+126665 152000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/151.TXT.lab"
+0 26666 start_sentence
+26666 53332 water
+53332 79998 learn
+79998 106664 expert
+106664 133330 grandfather
+133330 160000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/152.TXT.lab"
+0 31666 start_sentence
+31666 63332 we
+63332 94998 guess
+94998 126664 hungry
+126664 158330 chief
+158330 190000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/153.TXT.lab"
+0 29666 start_sentence
+29666 59332 button
+59332 88998 collect
+88998 118664 wrong
+118664 148330 nurse
+148330 178000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/154.TXT.lab"
+0 30666 start_sentence
+30666 61332 menu
+61332 91998 turn
+91998 122664 proud
+122664 153330 father
+153330 184000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/155.TXT.lab"
+0 28333 start_sentence
+28333 56666 nurse
+56666 84999 invite
+84999 113332 black
+113332 141665 king
+141665 170000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/156.TXT.lab"
+0 33000 start_sentence
+33000 66000 english
+66000 99000 start
+99000 132000 nice
+132000 165000 food
+165000 198000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/157.TXT.lab"
+0 27666 start_sentence
+27666 55332 man
+55332 82998 collect
+82998 110664 bald
+110664 138330 thing
+138330 166000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/158.TXT.lab"
+0 31000 start_sentence
+31000 62000 arch
+62000 93000 teach
+93000 124000 red
+124000 155000 lotion
+155000 186000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/159.TXT.lab"
+0 29333 start_sentence
+29333 58666 senate
+58666 87999 help
+87999 117332 dizzy
+117332 146665 christmas
+146665 176000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/16.TXT.lab"
+0 29000 start_sentence
+29000 58000 they
+58000 87000 use
+87000 116000 proud
+116000 145000 food
+145000 174000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/160.TXT.lab"
+0 33000 start_sentence
+33000 66000 chief
+66000 99000 collect
+99000 132000 fair
+132000 165000 couple
+165000 198000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/161.TXT.lab"
+0 27666 start_sentence
+27666 55332 sky
+55332 82998 suspect
+82998 110664 sweet
+110664 138330 hell
+138330 166000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/162.TXT.lab"
+0 32333 start_sentence
+32333 64666 firefighter
+64666 96999 shower
+96999 129332 dizzy
+129332 161665 wife
+161665 194000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/163.TXT.lab"
+0 31000 start_sentence
+31000 62000 english
+62000 93000 see
+93000 124000 puzzled
+124000 155000 chicken
+155000 186000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/164.TXT.lab"
+0 26000 start_sentence
+26000 52000 hell
+52000 78000 tell
+78000 104000 stupid
+104000 130000 man
+130000 156000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/165.TXT.lab"
+0 30000 start_sentence
+30000 60000 queen
+60000 90000 use
+90000 120000 virtual
+120000 150000 vegetable
+150000 180000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/166.TXT.lab"
+0 27666 start_sentence
+27666 55332 wife
+55332 82998 see
+82998 110664 sad
+110664 138330 chicken
+138330 166000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/167.TXT.lab"
+0 32666 start_sentence
+32666 65332 telephone
+65332 97998 memorize
+97998 130664 expert
+130664 163330 idiot
+163330 196000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/168.TXT.lab"
+0 27666 start_sentence
+27666 55332 column
+55332 82998 turn
+82998 110664 puzzled
+110664 138330 america
+138330 166000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/169.TXT.lab"
+0 26333 start_sentence
+26333 52666 idiot
+52666 78999 understand
+78999 105332 smart
+105332 131665 hell
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/17.TXT.lab"
+0 28000 start_sentence
+28000 56000 they
+56000 84000 go
+84000 112000 wrong
+112000 140000 sister
+140000 168000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/170.TXT.lab"
+0 34333 start_sentence
+34333 68666 scream
+68666 102999 appreciate
+102999 137332 stupid
+137332 171665 brother
+171665 206000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/171.TXT.lab"
+0 29333 start_sentence
+29333 58666 idea
+58666 87999 scream
+87999 117332 smart
+117332 146665 pill
+146665 176000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/172.TXT.lab"
+0 25000 start_sentence
+25000 50000 i
+50000 75000 hear
+75000 100000 english
+100000 125000 dinner
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/173.TXT.lab"
+0 27666 start_sentence
+27666 55332 christmas
+55332 82998 create
+82998 110664 deaf
+110664 138330 history
+138330 166000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/174.TXT.lab"
+0 30333 start_sentence
+30333 60666 french_fries
+60666 90999 believe
+90999 121332 expert
+121332 151665 badge
+151665 182000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/175.TXT.lab"
+0 28666 start_sentence
+28666 57332 turkey
+57332 85998 pass_out
+85998 114664 fine
+114664 143330 committee
+143330 172000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/176.TXT.lab"
+0 25666 start_sentence
+25666 51332 morning
+51332 76998 hear
+76998 102664 good
+102664 128330 wine
+128330 154000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/177.TXT.lab"
+0 27666 start_sentence
+27666 55332 twin
+55332 82998 forget
+82998 110664 english
+110664 138330 idiot
+138330 166000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/178.TXT.lab"
+0 27000 start_sentence
+27000 54000 mother
+54000 81000 hear
+81000 108000 yellow
+108000 135000 language
+135000 162000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/179.TXT.lab"
+0 26666 start_sentence
+26666 53332 guess
+53332 79998 look_at
+79998 106664 upset
+106664 133330 queen
+133330 160000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/18.TXT.lab"
+0 33000 start_sentence
+33000 66000 morning
+66000 99000 teach
+99000 132000 red
+132000 165000 guess
+165000 198000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/180.TXT.lab"
+0 30000 start_sentence
+30000 60000 chicken
+60000 90000 learn
+90000 120000 fine
+120000 150000 scream
+150000 180000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/181.TXT.lab"
+0 27333 start_sentence
+27333 54666 sky
+54666 81999 suspect
+81999 109332 sweet
+109332 136665 uncle
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/182.TXT.lab"
+0 30666 start_sentence
+30666 61332 menu
+61332 91998 collect
+91998 122664 sad
+122664 153330 sky
+153330 184000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/183.TXT.lab"
+0 26000 start_sentence
+26000 52000 daughter
+52000 78000 look_at
+78000 104000 sick
+104000 130000 area
+130000 156000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/184.TXT.lab"
+0 22000 start_sentence
+22000 44000 couple
+44000 66000 meet
+66000 88000 wrong
+88000 110000 thing
+110000 132000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/185.TXT.lab"
+0 29666 start_sentence
+29666 59332 hell
+59332 88998 guess
+88998 118664 upset
+118664 148330 invention
+148330 178000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/186.TXT.lab"
+0 28333 start_sentence
+28333 56666 committee
+56666 84999 know
+84999 113332 good
+113332 141665 misundertanding
+141665 170000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/187.TXT.lab"
+0 29666 start_sentence
+29666 59332 wife
+59332 88998 appreciate
+88998 118664 nice
+118664 148330 morning
+148330 178000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/188.TXT.lab"
+0 24000 start_sentence
+24000 48000 french_fries
+48000 72000 help
+72000 96000 skinny
+96000 120000 food
+120000 144000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/189.TXT.lab"
+0 29333 start_sentence
+29333 58666 vice_prez
+58666 87999 start
+87999 117332 smart
+117332 146665 history
+146665 176000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/19.TXT.lab"
+0 33666 start_sentence
+33666 67332 they
+67332 100998 go
+100998 134664 fine
+134664 168330 husband
+168330 202000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/190.TXT.lab"
+0 29333 start_sentence
+29333 58666 history
+58666 87999 respect
+87999 117332 false
+117332 146665 restaurant
+146665 176000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/191.TXT.lab"
+0 29666 start_sentence
+29666 59332 husband
+59332 88998 turn
+88998 118664 sick
+118664 148330 hat
+148330 178000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/192.TXT.lab"
+0 27000 start_sentence
+27000 54000 hell
+54000 81000 invite
+81000 108000 ugly
+108000 135000 invention
+135000 162000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/193.TXT.lab"
+0 27000 start_sentence
+27000 54000 column
+54000 81000 forget
+81000 108000 hungry
+108000 135000 food
+135000 162000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/194.TXT.lab"
+0 28000 start_sentence
+28000 56000 adult
+56000 84000 teach
+84000 112000 sad
+112000 140000 theory
+140000 168000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/195.TXT.lab"
+0 29333 start_sentence
+29333 58666 chief
+58666 87999 apologize
+87999 117332 yellow
+117332 146665 water
+146665 176000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/196.TXT.lab"
+0 29333 start_sentence
+29333 58666 woman
+58666 87999 pass_out
+87999 117332 sweet
+117332 146665 reason
+146665 176000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/197.TXT.lab"
+0 28666 start_sentence
+28666 57332 misundertanding
+57332 85998 guess
+85998 114664 expert
+114664 143330 idea
+143330 172000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/198.TXT.lab"
+0 25333 start_sentence
+25333 50666 philosophy
+50666 75999 know
+75999 101332 sad
+101332 126665 twin
+126665 152000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/199.TXT.lab"
+0 29000 start_sentence
+29000 58000 rooster
+58000 87000 teach
+87000 116000 smart
+116000 145000 badge
+145000 174000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/2.TXT.lab"
+0 25333 start_sentence
+25333 50666 lie
+50666 75999 collect
+75999 101332 impossible
+101332 126665 sky
+126665 152000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/20.TXT.lab"
+0 30666 start_sentence
+30666 61332 column
+61332 91998 recall
+91998 122664 smart
+122664 153330 nurse
+153330 184000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/200.TXT.lab"
+0 27666 start_sentence
+27666 55332 wife
+55332 82998 recall
+82998 110664 ugly
+110664 138330 man
+138330 166000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/201.TXT.lab"
+0 28000 start_sentence
+28000 56000 grandfather
+56000 84000 throw
+84000 112000 upset
+112000 140000 expert
+140000 168000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/202.TXT.lab"
+0 38000 start_sentence
+38000 76000 sister
+76000 114000 memorize
+114000 152000 beautiful
+152000 190000 morning
+190000 228000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/203.TXT.lab"
+0 29333 start_sentence
+29333 58666 name
+58666 87999 use
+87999 117332 beautiful
+117332 146665 mother
+146665 176000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/204.TXT.lab"
+0 28333 start_sentence
+28333 56666 uncle
+56666 84999 believe
+84999 113332 fine
+113332 141665 coffee
+141665 170000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/205.TXT.lab"
+0 32666 start_sentence
+32666 65332 theory
+65332 97998 appreciate
+97998 130664 ignorant
+130664 163330 toilet
+163330 196000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/206.TXT.lab"
+0 27666 start_sentence
+27666 55332 adult
+55332 82998 drink
+82998 110664 stupid
+110664 138330 idea
+138330 166000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/207.TXT.lab"
+0 26666 start_sentence
+26666 53332 theory
+53332 79998 meet
+79998 106664 yellow
+106664 133330 toilet
+133330 160000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/208.TXT.lab"
+0 29333 start_sentence
+29333 58666 reason
+58666 87999 take
+87999 117332 hungry
+117332 146665 mother
+146665 176000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/209.TXT.lab"
+0 32000 start_sentence
+32000 64000 man
+64000 96000 take
+96000 128000 dizzy
+128000 160000 dinner
+160000 192000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/21.TXT.lab"
+0 26000 start_sentence
+26000 52000 idea
+52000 78000 drink
+78000 104000 favorite
+104000 130000 coffee
+130000 156000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/210.TXT.lab"
+0 30333 start_sentence
+30333 60666 wife
+60666 90999 start
+90999 121332 sweet
+121332 151665 man
+151665 182000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/211.TXT.lab"
+0 30333 start_sentence
+30333 60666 toilet
+60666 90999 recall
+90999 121332 smart
+121332 151665 government
+151665 182000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/212.TXT.lab"
+0 28333 start_sentence
+28333 56666 name
+56666 84999 apologize
+84999 113332 yellow
+113332 141665 idea
+141665 170000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/213.TXT.lab"
+0 32666 start_sentence
+32666 65332 we
+65332 97998 memorize
+97998 130664 nice
+130664 163330 chicken
+163330 196000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/214.TXT.lab"
+0 25333 start_sentence
+25333 50666 committee
+50666 75999 apologize
+75999 101332 good
+101332 126665 thing
+126665 152000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/215.TXT.lab"
+0 29666 start_sentence
+29666 59332 history
+59332 88998 create
+88998 118664 impossible
+118664 148330 wine
+148330 178000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/216.TXT.lab"
+0 26333 start_sentence
+26333 52666 we
+52666 78999 go
+78999 105332 fine
+105332 131665 french_fries
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/217.TXT.lab"
+0 31000 start_sentence
+31000 62000 husband
+62000 93000 create
+93000 124000 english
+124000 155000 christmas
+155000 186000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/218.TXT.lab"
+0 32333 start_sentence
+32333 64666 chicken
+64666 96999 tell
+96999 129332 english
+129332 161665 restaurant
+161665 194000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/219.TXT.lab"
+0 27000 start_sentence
+27000 54000 dinner
+54000 81000 drink
+81000 108000 nice
+108000 135000 french_fries
+135000 162000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/22.TXT.lab"
+0 27333 start_sentence
+27333 54666 i
+54666 81999 memorize
+81999 109332 beautiful
+109332 136665 water
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/220.TXT.lab"
+0 34333 start_sentence
+34333 68666 chief
+68666 102999 understand
+102999 137332 hungry
+137332 171665 coffee
+171665 206000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/221.TXT.lab"
+0 29333 start_sentence
+29333 58666 scream
+58666 87999 take
+87999 117332 bald
+117332 146665 government
+146665 176000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/222.TXT.lab"
+0 35000 start_sentence
+35000 70000 water
+70000 105000 drink
+105000 140000 false
+140000 175000 menu
+175000 210000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/223.TXT.lab"
+0 29333 start_sentence
+29333 58666 king
+58666 87999 recall
+87999 117332 english
+117332 146665 husband
+146665 176000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/224.TXT.lab"
+0 27333 start_sentence
+27333 54666 turkey
+54666 81999 shower
+81999 109332 brown
+109332 136665 wife
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/225.TXT.lab"
+0 31333 start_sentence
+31333 62666 hell
+62666 93999 invite
+93999 125332 sick
+125332 156665 telephone
+156665 188000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/226.TXT.lab"
+0 25333 start_sentence
+25333 50666 you
+50666 75999 learn
+75999 101332 favorite
+101332 126665 senate
+126665 152000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/227.TXT.lab"
+0 26666 start_sentence
+26666 53332 face
+53332 79998 learn
+79998 106664 red
+106664 133330 hat
+133330 160000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/228.TXT.lab"
+0 23333 start_sentence
+23333 46666 we
+46666 69999 hear
+69999 93332 red
+93332 116665 badge
+116665 140000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/229.TXT.lab"
+0 28666 start_sentence
+28666 57332 morning
+57332 85998 drink
+85998 114664 yellow
+114664 143330 button
+143330 172000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/23.TXT.lab"
+0 31000 start_sentence
+31000 62000 man
+62000 93000 use
+93000 124000 dizzy
+124000 155000 uncle
+155000 186000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/230.TXT.lab"
+0 25000 start_sentence
+25000 50000 girl
+50000 75000 meet
+75000 100000 virtual
+100000 125000 man
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/231.TXT.lab"
+0 28333 start_sentence
+28333 56666 queen
+56666 84999 take
+84999 113332 english
+113332 141665 woman
+141665 170000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/232.TXT.lab"
+0 23666 start_sentence
+23666 47332 expert
+47332 70998 meet
+70998 94664 favorite
+94664 118330 thing
+118330 142000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/233.TXT.lab"
+0 27666 start_sentence
+27666 55332 guess
+55332 82998 meet
+82998 110664 favorite
+110664 138330 wine
+138330 166000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/234.TXT.lab"
+0 28333 start_sentence
+28333 56666 menu
+56666 84999 throw
+84999 113332 beautiful
+113332 141665 french_fries
+141665 170000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/235.TXT.lab"
+0 28333 start_sentence
+28333 56666 area
+56666 84999 see
+84999 113332 virtual
+113332 141665 toilet
+141665 170000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/236.TXT.lab"
+0 31000 start_sentence
+31000 62000 government
+62000 93000 use
+93000 124000 black
+124000 155000 menu
+155000 186000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/237.TXT.lab"
+0 31666 start_sentence
+31666 63332 invention
+63332 94998 meet
+94998 126664 favorite
+126664 158330 woman
+158330 190000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/238.TXT.lab"
+0 30000 start_sentence
+30000 60000 sky
+60000 90000 scream
+90000 120000 false
+120000 150000 area
+150000 180000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/239.TXT.lab"
+0 36000 start_sentence
+36000 72000 theory
+72000 108000 apologize
+108000 144000 expert
+144000 180000 misundertanding
+180000 216000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/24.TXT.lab"
+0 26666 start_sentence
+26666 53332 badge
+53332 79998 help
+79998 106664 beautiful
+106664 133330 mother
+133330 160000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/240.TXT.lab"
+0 30666 start_sentence
+30666 61332 telephone
+61332 91998 suspect
+91998 122664 smart
+122664 153330 arch
+153330 184000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/241.TXT.lab"
+0 29000 start_sentence
+29000 58000 vice_prez
+58000 87000 shower
+87000 116000 deaf
+116000 145000 face
+145000 174000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/242.TXT.lab"
+0 31000 start_sentence
+31000 62000 queen
+62000 93000 help
+93000 124000 skinny
+124000 155000 vice_prez
+155000 186000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/243.TXT.lab"
+0 28666 start_sentence
+28666 57332 mother
+57332 85998 see
+85998 114664 proud
+114664 143330 grandfather
+143330 172000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/244.TXT.lab"
+0 29666 start_sentence
+29666 59332 lie
+59332 88998 collect
+88998 118664 beautiful
+118664 148330 boy
+148330 178000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/245.TXT.lab"
+0 30666 start_sentence
+30666 61332 idiot
+61332 91998 look_at
+91998 122664 nice
+122664 153330 menu
+153330 184000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/246.TXT.lab"
+0 27666 start_sentence
+27666 55332 language
+55332 82998 memorize
+82998 110664 smart
+110664 138330 language
+138330 166000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/247.TXT.lab"
+0 23666 start_sentence
+23666 47332 emergency
+47332 70998 see
+70998 94664 puzzled
+94664 118330 god
+118330 142000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/248.TXT.lab"
+0 31333 start_sentence
+31333 62666 misundertanding
+62666 93999 apologize
+93999 125332 sick
+125332 156665 expert
+156665 188000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/249.TXT.lab"
+0 29666 start_sentence
+29666 59332 christmas
+59332 88998 understand
+88998 118664 proud
+118664 148330 lie
+148330 178000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/25.TXT.lab"
+0 30333 start_sentence
+30333 60666 america
+60666 90999 scream
+90999 121332 sick
+121332 151665 rooster
+151665 182000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/250.TXT.lab"
+0 30666 start_sentence
+30666 61332 expert
+61332 91998 collect
+91998 122664 virtual
+122664 153330 invention
+153330 184000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/251.TXT.lab"
+0 28666 start_sentence
+28666 57332 king
+57332 85998 turn
+85998 114664 yellow
+114664 143330 cafeteria
+143330 172000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/252.TXT.lab"
+0 30333 start_sentence
+30333 60666 rooster
+60666 90999 appreciate
+90999 121332 beautiful
+121332 151665 governor
+151665 182000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/253.TXT.lab"
+0 25666 start_sentence
+25666 51332 you
+51332 76998 throw
+76998 102664 sweet
+102664 128330 couple
+128330 154000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/254.TXT.lab"
+0 25000 start_sentence
+25000 50000 mother
+50000 75000 guess
+75000 100000 beautiful
+100000 125000 nurse
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/255.TXT.lab"
+0 34666 start_sentence
+34666 69332 telephone
+69332 103998 appreciate
+103998 138664 english
+138664 173330 son
+173330 208000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/256.TXT.lab"
+0 27000 start_sentence
+27000 54000 hat
+54000 81000 swallow
+81000 108000 nice
+108000 135000 scream
+135000 162000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/257.TXT.lab"
+0 27666 start_sentence
+27666 55332 idiot
+55332 82998 know
+82998 110664 beautiful
+110664 138330 emergency
+138330 166000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/258.TXT.lab"
+0 31666 start_sentence
+31666 63332 uncle
+63332 94998 swallow
+94998 126664 puzzled
+126664 158330 brother
+158330 190000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/259.TXT.lab"
+0 32333 start_sentence
+32333 64666 i
+64666 96999 invite
+96999 129332 ignorant
+129332 161665 man
+161665 194000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/26.TXT.lab"
+0 33333 start_sentence
+33333 66666 scream
+66666 99999 swallow
+99999 133332 ugly
+133332 166665 misundertanding
+166665 200000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/260.TXT.lab"
+0 27666 start_sentence
+27666 55332 turkey
+55332 82998 guess
+82998 110664 deaf
+110664 138330 uncle
+138330 166000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/261.TXT.lab"
+0 35666 start_sentence
+35666 71332 i
+71332 106998 apologize
+106998 142664 stupid
+142664 178330 son
+178330 214000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/262.TXT.lab"
+0 27000 start_sentence
+27000 54000 philosophy
+54000 81000 help
+81000 108000 proud
+108000 135000 chief
+135000 162000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/263.TXT.lab"
+0 32333 start_sentence
+32333 64666 governor
+64666 96999 memorize
+96999 129332 dizzy
+129332 161665 chicken
+161665 194000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/264.TXT.lab"
+0 29666 start_sentence
+29666 59332 you
+59332 88998 use
+88998 118664 black
+118664 148330 adult
+148330 178000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/265.TXT.lab"
+0 29666 start_sentence
+29666 59332 father
+59332 88998 start
+88998 118664 deaf
+118664 148330 couple
+148330 178000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/266.TXT.lab"
+0 36000 start_sentence
+36000 72000 sister
+72000 108000 help
+108000 144000 dizzy
+144000 180000 america
+180000 216000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/267.TXT.lab"
+0 26666 start_sentence
+26666 53332 i
+53332 79998 scream
+79998 106664 puzzled
+106664 133330 name
+133330 160000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/268.TXT.lab"
+0 24666 start_sentence
+24666 49332 daughter
+49332 73998 understand
+73998 98664 smart
+98664 123330 mother
+123330 148000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/269.TXT.lab"
+0 26000 start_sentence
+26000 52000 idiot
+52000 78000 see
+78000 104000 sad
+104000 130000 morning
+130000 156000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/27.TXT.lab"
+0 25666 start_sentence
+25666 51332 lie
+51332 76998 go
+76998 102664 sad
+102664 128330 uncle
+128330 154000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/270.TXT.lab"
+0 36000 start_sentence
+36000 72000 menu
+72000 108000 recall
+108000 144000 good
+144000 180000 woman
+180000 216000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/271.TXT.lab"
+0 27333 start_sentence
+27333 54666 guess
+54666 81999 see
+81999 109332 fine
+109332 136665 rooster
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/272.TXT.lab"
+0 31666 start_sentence
+31666 63332 adult
+63332 94998 tell
+94998 126664 puzzled
+126664 158330 brother
+158330 190000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/273.TXT.lab"
+0 31000 start_sentence
+31000 62000 guess
+62000 93000 look_at
+93000 124000 false
+124000 155000 invention
+155000 186000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/274.TXT.lab"
+0 23000 start_sentence
+23000 46000 cafeteria
+46000 69000 see
+69000 92000 fine
+92000 115000 god
+115000 138000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/275.TXT.lab"
+0 29000 start_sentence
+29000 58000 english
+58000 87000 create
+87000 116000 sad
+116000 145000 scream
+145000 174000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/276.TXT.lab"
+0 30000 start_sentence
+30000 60000 coffee
+60000 90000 take
+90000 120000 upset
+120000 150000 committee
+150000 180000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/277.TXT.lab"
+0 32000 start_sentence
+32000 64000 senate
+64000 96000 suspect
+96000 128000 favorite
+128000 160000 uncle
+160000 192000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/278.TXT.lab"
+0 30333 start_sentence
+30333 60666 food
+60666 90999 believe
+90999 121332 beautiful
+121332 151665 wine
+151665 182000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/279.TXT.lab"
+0 27666 start_sentence
+27666 55332 restaurant
+55332 82998 start
+82998 110664 upset
+110664 138330 nurse
+138330 166000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/28.TXT.lab"
+0 30666 start_sentence
+30666 61332 reason
+61332 91998 scream
+91998 122664 dizzy
+122664 153330 government
+153330 184000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/280.TXT.lab"
+0 31666 start_sentence
+31666 63332 son
+63332 94998 believe
+94998 126664 brown
+126664 158330 king
+158330 190000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/281.TXT.lab"
+0 40000 start_sentence
+40000 80000 father
+80000 120000 throw
+120000 160000 fair
+160000 200000 misundertanding
+200000 240000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/282.TXT.lab"
+0 29333 start_sentence
+29333 58666 dinner
+58666 87999 throw
+87999 117332 english
+117332 146665 toilet
+146665 176000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/283.TXT.lab"
+0 30666 start_sentence
+30666 61332 coffee
+61332 91998 understand
+91998 122664 dizzy
+122664 153330 dinner
+153330 184000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/284.TXT.lab"
+0 29666 start_sentence
+29666 59332 wife
+59332 88998 recall
+88998 118664 brown
+118664 148330 christmas
+148330 178000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/285.TXT.lab"
+0 25666 start_sentence
+25666 51332 chicken
+51332 76998 recall
+76998 102664 sad
+102664 128330 girl
+128330 154000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/286.TXT.lab"
+0 30666 start_sentence
+30666 61332 vice_prez
+61332 91998 turn
+91998 122664 black
+122664 153330 pill
+153330 184000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/287.TXT.lab"
+0 28333 start_sentence
+28333 56666 hat
+56666 84999 start
+84999 113332 yellow
+113332 141665 adult
+141665 170000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/288.TXT.lab"
+0 33000 start_sentence
+33000 66000 arch
+66000 99000 learn
+99000 132000 nice
+132000 165000 vice_prez
+165000 198000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/289.TXT.lab"
+0 32000 start_sentence
+32000 64000 son
+64000 96000 use
+96000 128000 ugly
+128000 160000 america
+160000 192000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/29.TXT.lab"
+0 32000 start_sentence
+32000 64000 firefighter
+64000 96000 swallow
+96000 128000 impossible
+128000 160000 toilet
+160000 192000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/290.TXT.lab"
+0 32666 start_sentence
+32666 65332 queen
+65332 97998 appreciate
+97998 130664 wrong
+130664 163330 vegetable
+163330 196000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/291.TXT.lab"
+0 35333 start_sentence
+35333 70666 woman
+70666 105999 respect
+105999 141332 yellow
+141332 176665 christmas
+176665 212000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/292.TXT.lab"
+0 28000 start_sentence
+28000 56000 thing
+56000 84000 scream
+84000 112000 ignorant
+112000 140000 scream
+140000 168000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/293.TXT.lab"
+0 30333 start_sentence
+30333 60666 vegetable
+60666 90999 suspect
+90999 121332 virtual
+121332 151665 morning
+151665 182000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/294.TXT.lab"
+0 29666 start_sentence
+29666 59332 dinner
+59332 88998 look_at
+88998 118664 stupid
+118664 148330 invention
+148330 178000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/295.TXT.lab"
+0 31000 start_sentence
+31000 62000 arch
+62000 93000 turn
+93000 124000 bald
+124000 155000 english
+155000 186000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/296.TXT.lab"
+0 24333 start_sentence
+24333 48666 you
+48666 72999 invite
+72999 97332 sick
+97332 121665 idea
+121665 146000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/297.TXT.lab"
+0 32333 start_sentence
+32333 64666 boy
+64666 96999 memorize
+96999 129332 smart
+129332 161665 area
+161665 194000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/298.TXT.lab"
+0 33000 start_sentence
+33000 66000 husband
+66000 99000 appreciate
+99000 132000 hungry
+132000 165000 badge
+165000 198000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/299.TXT.lab"
+0 32666 start_sentence
+32666 65332 man
+65332 97998 understand
+97998 130664 ignorant
+130664 163330 sky
+163330 196000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/3.TXT.lab"
+0 28333 start_sentence
+28333 56666 america
+56666 84999 understand
+84999 113332 nice
+113332 141665 mother
+141665 170000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/30.TXT.lab"
+0 31333 start_sentence
+31333 62666 they
+62666 93999 shower
+93999 125332 sweet
+125332 156665 grandfather
+156665 188000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/300.TXT.lab"
+0 28333 start_sentence
+28333 56666 dinner
+56666 84999 invite
+84999 113332 nice
+113332 141665 husband
+141665 170000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/301.TXT.lab"
+0 29000 start_sentence
+29000 58000 woman
+58000 87000 drink
+87000 116000 sick
+116000 145000 arch
+145000 174000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/302.TXT.lab"
+0 27333 start_sentence
+27333 54666 lie
+54666 81999 hear
+81999 109332 stupid
+109332 136665 firefighter
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/303.TXT.lab"
+0 26666 start_sentence
+26666 53332 pill
+53332 79998 understand
+79998 106664 sweet
+106664 133330 name
+133330 160000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/304.TXT.lab"
+0 26333 start_sentence
+26333 52666 medic
+52666 78999 recall
+78999 105332 fine
+105332 131665 twin
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/305.TXT.lab"
+0 25333 start_sentence
+25333 50666 rooster
+50666 75999 see
+75999 101332 impossible
+101332 126665 mother
+126665 152000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/306.TXT.lab"
+0 23333 start_sentence
+23333 46666 mother
+46666 69999 scream
+69999 93332 english
+93332 116665 english
+116665 140000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/307.TXT.lab"
+0 27000 start_sentence
+27000 54000 husband
+54000 81000 invite
+81000 108000 skinny
+108000 135000 committee
+135000 162000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/308.TXT.lab"
+0 22666 start_sentence
+22666 45332 he
+45332 67998 recall
+67998 90664 ugly
+90664 113330 column
+113330 136000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/309.TXT.lab"
+0 26000 start_sentence
+26000 52000 we
+52000 78000 forget
+78000 104000 good
+104000 130000 god
+130000 156000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/31.TXT.lab"
+0 32666 start_sentence
+32666 65332 restaurant
+65332 97998 start
+97998 130664 yellow
+130664 163330 cafeteria
+163330 196000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/310.TXT.lab"
+0 31000 start_sentence
+31000 62000 french_fries
+62000 93000 appreciate
+93000 124000 nice
+124000 155000 sky
+155000 186000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/311.TXT.lab"
+0 29333 start_sentence
+29333 58666 they
+58666 87999 respect
+87999 117332 proud
+117332 146665 invention
+146665 176000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/312.TXT.lab"
+0 27000 start_sentence
+27000 54000 theory
+54000 81000 know
+81000 108000 deaf
+108000 135000 reason
+135000 162000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/313.TXT.lab"
+0 29666 start_sentence
+29666 59332 turkey
+59332 88998 believe
+88998 118664 puzzled
+118664 148330 government
+148330 178000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/314.TXT.lab"
+0 29666 start_sentence
+29666 59332 name
+59332 88998 memorize
+88998 118664 bald
+118664 148330 wife
+148330 178000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/315.TXT.lab"
+0 27333 start_sentence
+27333 54666 lie
+54666 81999 collect
+81999 109332 nice
+109332 136665 history
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/316.TXT.lab"
+0 27000 start_sentence
+27000 54000 wine
+54000 81000 tell
+81000 108000 brown
+108000 135000 government
+135000 162000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/317.TXT.lab"
+0 29333 start_sentence
+29333 58666 grandfather
+58666 87999 drink
+87999 117332 dizzy
+117332 146665 rooster
+146665 176000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/318.TXT.lab"
+0 27333 start_sentence
+27333 54666 misundertanding
+54666 81999 see
+81999 109332 virtual
+109332 136665 committee
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/319.TXT.lab"
+0 26333 start_sentence
+26333 52666 food
+52666 78999 hear
+78999 105332 red
+105332 131665 badge
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/32.TXT.lab"
+0 27666 start_sentence
+27666 55332 misundertanding
+55332 82998 collect
+82998 110664 ugly
+110664 138330 telephone
+138330 166000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/320.TXT.lab"
+0 25666 start_sentence
+25666 51332 wine
+51332 76998 learn
+76998 102664 ugly
+102664 128330 arch
+128330 154000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/321.TXT.lab"
+0 28000 start_sentence
+28000 56000 he
+56000 84000 meet
+84000 112000 beautiful
+112000 140000 menu
+140000 168000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/322.TXT.lab"
+0 25000 start_sentence
+25000 50000 he
+50000 75000 go
+75000 100000 sad
+100000 125000 restaurant
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/323.TXT.lab"
+0 26666 start_sentence
+26666 53332 badge
+53332 79998 collect
+79998 106664 skinny
+106664 133330 invention
+133330 160000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/324.TXT.lab"
+0 26333 start_sentence
+26333 52666 invention
+52666 78999 appreciate
+78999 105332 yellow
+105332 131665 emergency
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/325.TXT.lab"
+0 25000 start_sentence
+25000 50000 king
+50000 75000 meet
+75000 100000 sick
+100000 125000 senate
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/326.TXT.lab"
+0 25000 start_sentence
+25000 50000 lie
+50000 75000 go
+75000 100000 black
+100000 125000 scream
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/327.TXT.lab"
+0 26333 start_sentence
+26333 52666 arch
+52666 78999 tell
+78999 105332 fine
+105332 131665 vegetable
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/328.TXT.lab"
+0 24333 start_sentence
+24333 48666 lotion
+48666 72999 scream
+72999 97332 stupid
+97332 121665 face
+121665 146000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/329.TXT.lab"
+0 28000 start_sentence
+28000 56000 grandfather
+56000 84000 hear
+84000 112000 full
+112000 140000 morning
+140000 168000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/33.TXT.lab"
+0 28000 start_sentence
+28000 56000 restaurant
+56000 84000 recall
+84000 112000 favorite
+112000 140000 restaurant
+140000 168000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/330.TXT.lab"
+0 25333 start_sentence
+25333 50666 i
+50666 75999 teach
+75999 101332 full
+101332 126665 man
+126665 152000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/331.TXT.lab"
+0 26000 start_sentence
+26000 52000 couple
+52000 78000 invite
+78000 104000 beautiful
+104000 130000 coffee
+130000 156000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/332.TXT.lab"
+0 28000 start_sentence
+28000 56000 reason
+56000 84000 use
+84000 112000 full
+112000 140000 telephone
+140000 168000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/333.TXT.lab"
+0 26000 start_sentence
+26000 52000 french_fries
+52000 78000 recall
+78000 104000 beautiful
+104000 130000 god
+130000 156000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/334.TXT.lab"
+0 29333 start_sentence
+29333 58666 king
+58666 87999 drink
+87999 117332 hungry
+117332 146665 governor
+146665 176000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/335.TXT.lab"
+0 30666 start_sentence
+30666 61332 queen
+61332 91998 scream
+91998 122664 red
+122664 153330 sky
+153330 184000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/336.TXT.lab"
+0 26666 start_sentence
+26666 53332 we
+53332 79998 scream
+79998 106664 stupid
+106664 133330 brother
+133330 160000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/337.TXT.lab"
+0 28000 start_sentence
+28000 56000 toilet
+56000 84000 start
+84000 112000 english
+112000 140000 dinner
+140000 168000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/338.TXT.lab"
+0 27333 start_sentence
+27333 54666 brother
+54666 81999 recall
+81999 109332 stupid
+109332 136665 language
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/339.TXT.lab"
+0 25000 start_sentence
+25000 50000 face
+50000 75000 take
+75000 100000 stupid
+100000 125000 scream
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/34.TXT.lab"
+0 30333 start_sentence
+30333 60666 guess
+60666 90999 pass_out
+90999 121332 sweet
+121332 151665 guess
+151665 182000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/340.TXT.lab"
+0 28333 start_sentence
+28333 56666 telephone
+56666 84999 believe
+84999 113332 ignorant
+113332 141665 telephone
+141665 170000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/341.TXT.lab"
+0 31000 start_sentence
+31000 62000 rooster
+62000 93000 believe
+93000 124000 impossible
+124000 155000 boy
+155000 186000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/342.TXT.lab"
+0 26000 start_sentence
+26000 52000 lie
+52000 78000 turn
+78000 104000 bald
+104000 130000 guess
+130000 156000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/343.TXT.lab"
+0 27000 start_sentence
+27000 54000 morning
+54000 81000 swallow
+81000 108000 bald
+108000 135000 english
+135000 162000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/344.TXT.lab"
+0 30000 start_sentence
+30000 60000 area
+60000 90000 create
+90000 120000 nice
+120000 150000 history
+150000 180000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/345.TXT.lab"
+0 32333 start_sentence
+32333 64666 husband
+64666 96999 forget
+96999 129332 smart
+129332 161665 menu
+161665 194000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/346.TXT.lab"
+0 26333 start_sentence
+26333 52666 name
+52666 78999 suspect
+78999 105332 expert
+105332 131665 nurse
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/347.TXT.lab"
+0 30000 start_sentence
+30000 60000 arch
+60000 90000 scream
+90000 120000 deaf
+120000 150000 rooster
+150000 180000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/348.TXT.lab"
+0 26333 start_sentence
+26333 52666 scream
+52666 78999 swallow
+78999 105332 ignorant
+105332 131665 expert
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/349.TXT.lab"
+0 31000 start_sentence
+31000 62000 he
+62000 93000 learn
+93000 124000 hungry
+124000 155000 governor
+155000 186000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/35.TXT.lab"
+0 26333 start_sentence
+26333 52666 couple
+52666 78999 swallow
+78999 105332 sad
+105332 131665 hell
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/350.TXT.lab"
+0 25000 start_sentence
+25000 50000 father
+50000 75000 look_at
+75000 100000 beautiful
+100000 125000 toilet
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/351.TXT.lab"
+0 28333 start_sentence
+28333 56666 idea
+56666 84999 drink
+84999 113332 black
+113332 141665 chicken
+141665 170000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/352.TXT.lab"
+0 26333 start_sentence
+26333 52666 husband
+52666 78999 tell
+78999 105332 red
+105332 131665 english
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/353.TXT.lab"
+0 25000 start_sentence
+25000 50000 area
+50000 75000 start
+75000 100000 fine
+100000 125000 man
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/354.TXT.lab"
+0 27000 start_sentence
+27000 54000 cafeteria
+54000 81000 pass_out
+81000 108000 virtual
+108000 135000 toilet
+135000 162000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/355.TXT.lab"
+0 27666 start_sentence
+27666 55332 language
+55332 82998 help
+82998 110664 impossible
+110664 138330 invention
+138330 166000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/356.TXT.lab"
+0 25000 start_sentence
+25000 50000 he
+50000 75000 create
+75000 100000 skinny
+100000 125000 telephone
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/357.TXT.lab"
+0 23666 start_sentence
+23666 47332 face
+47332 70998 teach
+70998 94664 good
+94664 118330 english
+118330 142000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/358.TXT.lab"
+0 28000 start_sentence
+28000 56000 we
+56000 84000 collect
+84000 112000 fair
+112000 140000 arch
+140000 168000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/359.TXT.lab"
+0 27666 start_sentence
+27666 55332 philosophy
+55332 82998 go
+82998 110664 yellow
+110664 138330 firefighter
+138330 166000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/36.TXT.lab"
+0 27000 start_sentence
+27000 54000 lotion
+54000 81000 invite
+81000 108000 red
+108000 135000 sky
+135000 162000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/360.TXT.lab"
+0 25333 start_sentence
+25333 50666 you
+50666 75999 meet
+75999 101332 favorite
+101332 126665 badge
+126665 152000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/361.TXT.lab"
+0 28666 start_sentence
+28666 57332 god
+57332 85998 invite
+85998 114664 english
+114664 143330 vegetable
+143330 172000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/362.TXT.lab"
+0 28333 start_sentence
+28333 56666 pill
+56666 84999 memorize
+84999 113332 stupid
+113332 141665 brother
+141665 170000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/363.TXT.lab"
+0 29333 start_sentence
+29333 58666 misundertanding
+58666 87999 go
+87999 117332 false
+117332 146665 area
+146665 176000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/364.TXT.lab"
+0 27333 start_sentence
+27333 54666 senate
+54666 81999 swallow
+81999 109332 fine
+109332 136665 english
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/365.TXT.lab"
+0 28000 start_sentence
+28000 56000 america
+56000 84000 throw
+84000 112000 skinny
+112000 140000 girl
+140000 168000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/366.TXT.lab"
+0 32000 start_sentence
+32000 64000 brother
+64000 96000 turn
+96000 128000 favorite
+128000 160000 hat
+160000 192000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/367.TXT.lab"
+0 25333 start_sentence
+25333 50666 name
+50666 75999 understand
+75999 101332 ugly
+101332 126665 wine
+126665 152000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/368.TXT.lab"
+0 28000 start_sentence
+28000 56000 rooster
+56000 84000 guess
+84000 112000 stupid
+112000 140000 government
+140000 168000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/369.TXT.lab"
+0 32000 start_sentence
+32000 64000 theory
+64000 96000 take
+96000 128000 skinny
+128000 160000 coffee
+160000 192000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/37.TXT.lab"
+0 36000 start_sentence
+36000 72000 vegetable
+72000 108000 respect
+108000 144000 dizzy
+144000 180000 god
+180000 216000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/370.TXT.lab"
+0 31333 start_sentence
+31333 62666 senate
+62666 93999 recall
+93999 125332 brown
+125332 156665 morning
+156665 188000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/371.TXT.lab"
+0 29333 start_sentence
+29333 58666 wine
+58666 87999 respect
+87999 117332 red
+117332 146665 father
+146665 176000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/372.TXT.lab"
+0 28666 start_sentence
+28666 57332 wife
+57332 85998 teach
+85998 114664 sweet
+114664 143330 column
+143330 172000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/373.TXT.lab"
+0 25333 start_sentence
+25333 50666 food
+50666 75999 start
+75999 101332 beautiful
+101332 126665 english
+126665 152000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/374.TXT.lab"
+0 28000 start_sentence
+28000 56000 father
+56000 84000 scream
+84000 112000 deaf
+112000 140000 coffee
+140000 168000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/375.TXT.lab"
+0 25333 start_sentence
+25333 50666 face
+50666 75999 shower
+75999 101332 red
+101332 126665 uncle
+126665 152000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/376.TXT.lab"
+0 29666 start_sentence
+29666 59332 badge
+59332 88998 believe
+88998 118664 bald
+118664 148330 area
+148330 178000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/377.TXT.lab"
+0 28333 start_sentence
+28333 56666 son
+56666 84999 believe
+84999 113332 upset
+113332 141665 idiot
+141665 170000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/378.TXT.lab"
+0 23666 start_sentence
+23666 47332 dinner
+47332 70998 suspect
+70998 94664 sweet
+94664 118330 thing
+118330 142000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/379.TXT.lab"
+0 23666 start_sentence
+23666 47332 they
+47332 70998 forget
+70998 94664 favorite
+94664 118330 lie
+118330 142000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/38.TXT.lab"
+0 25000 start_sentence
+25000 50000 column
+50000 75000 suspect
+75000 100000 brown
+100000 125000 idiot
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/380.TXT.lab"
+0 23666 start_sentence
+23666 47332 coffee
+47332 70998 turn
+70998 94664 ignorant
+94664 118330 scream
+118330 142000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/381.TXT.lab"
+0 26000 start_sentence
+26000 52000 firefighter
+52000 78000 scream
+78000 104000 full
+104000 130000 firefighter
+130000 156000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/382.TXT.lab"
+0 28000 start_sentence
+28000 56000 girl
+56000 84000 memorize
+84000 112000 smart
+112000 140000 toilet
+140000 168000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/383.TXT.lab"
+0 26000 start_sentence
+26000 52000 he
+52000 78000 learn
+78000 104000 false
+104000 130000 name
+130000 156000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/384.TXT.lab"
+0 26666 start_sentence
+26666 53332 government
+53332 79998 recall
+79998 106664 fair
+106664 133330 governor
+133330 160000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/385.TXT.lab"
+0 27333 start_sentence
+27333 54666 wine
+54666 81999 memorize
+81999 109332 english
+109332 136665 firefighter
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/386.TXT.lab"
+0 26333 start_sentence
+26333 52666 chief
+52666 78999 shower
+78999 105332 deaf
+105332 131665 english
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/387.TXT.lab"
+0 25666 start_sentence
+25666 51332 language
+51332 76998 teach
+76998 102664 upset
+102664 128330 name
+128330 154000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/388.TXT.lab"
+0 29666 start_sentence
+29666 59332 scream
+59332 88998 collect
+88998 118664 fine
+118664 148330 chief
+148330 178000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/389.TXT.lab"
+0 24666 start_sentence
+24666 49332 mother
+49332 73998 teach
+73998 98664 sweet
+98664 123330 firefighter
+123330 148000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/39.TXT.lab"
+0 21333 start_sentence
+21333 42666 scream
+42666 63999 recall
+63999 85332 english
+85332 106665 twin
+106665 128000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/390.TXT.lab"
+0 26000 start_sentence
+26000 52000 he
+52000 78000 guess
+78000 104000 expert
+104000 130000 husband
+130000 156000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/391.TXT.lab"
+0 26000 start_sentence
+26000 52000 menu
+52000 78000 throw
+78000 104000 yellow
+104000 130000 language
+130000 156000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/392.TXT.lab"
+0 25666 start_sentence
+25666 51332 food
+51332 76998 help
+76998 102664 black
+102664 128330 pill
+128330 154000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/393.TXT.lab"
+0 32000 start_sentence
+32000 64000 history
+64000 96000 invite
+96000 128000 nice
+128000 160000 vice_prez
+160000 192000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/394.TXT.lab"
+0 29666 start_sentence
+29666 59332 we
+59332 88998 respect
+88998 118664 nice
+118664 148330 medic
+148330 178000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/395.TXT.lab"
+0 26000 start_sentence
+26000 52000 guess
+52000 78000 understand
+78000 104000 fair
+104000 130000 menu
+130000 156000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/396.TXT.lab"
+0 26333 start_sentence
+26333 52666 misundertanding
+52666 78999 memorize
+78999 105332 good
+105332 131665 expert
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/397.TXT.lab"
+0 30666 start_sentence
+30666 61332 french_fries
+61332 91998 pass_out
+91998 122664 proud
+122664 153330 sky
+153330 184000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/398.TXT.lab"
+0 29000 start_sentence
+29000 58000 i
+58000 87000 understand
+87000 116000 false
+116000 145000 son
+145000 174000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/399.TXT.lab"
+0 30333 start_sentence
+30333 60666 hat
+60666 90999 use
+90999 121332 fine
+121332 151665 firefighter
+151665 182000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/4.TXT.lab"
+0 22000 start_sentence
+22000 44000 twin
+44000 66000 apologize
+66000 88000 proud
+88000 110000 brother
+110000 132000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/40.TXT.lab"
+0 26333 start_sentence
+26333 52666 uncle
+52666 78999 memorize
+78999 105332 dizzy
+105332 131665 coffee
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/400.TXT.lab"
+0 28666 start_sentence
+28666 57332 daughter
+57332 85998 teach
+85998 114664 proud
+114664 143330 expert
+143330 172000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/401.TXT.lab"
+0 25333 start_sentence
+25333 50666 chicken
+50666 75999 forget
+75999 101332 deaf
+101332 126665 turkey
+126665 152000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/402.TXT.lab"
+0 27333 start_sentence
+27333 54666 nurse
+54666 81999 suspect
+81999 109332 upset
+109332 136665 brother
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/403.TXT.lab"
+0 27666 start_sentence
+27666 55332 french_fries
+55332 82998 guess
+82998 110664 fair
+110664 138330 column
+138330 166000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/404.TXT.lab"
+0 26333 start_sentence
+26333 52666 button
+52666 78999 forget
+78999 105332 fine
+105332 131665 chicken
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/405.TXT.lab"
+0 26333 start_sentence
+26333 52666 we
+52666 78999 drink
+78999 105332 puzzled
+105332 131665 restaurant
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/406.TXT.lab"
+0 25666 start_sentence
+25666 51332 thing
+51332 76998 meet
+76998 102664 full
+102664 128330 turkey
+128330 154000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/407.TXT.lab"
+0 27000 start_sentence
+27000 54000 button
+54000 81000 teach
+81000 108000 impossible
+108000 135000 queen
+135000 162000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/408.TXT.lab"
+0 24666 start_sentence
+24666 49332 queen
+49332 73998 hear
+73998 98664 upset
+98664 123330 column
+123330 148000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/409.TXT.lab"
+0 25333 start_sentence
+25333 50666 menu
+50666 75999 scream
+75999 101332 fine
+101332 126665 god
+126665 152000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/41.TXT.lab"
+0 29666 start_sentence
+29666 59332 husband
+59332 88998 shower
+88998 118664 full
+118664 148330 nurse
+148330 178000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/410.TXT.lab"
+0 27333 start_sentence
+27333 54666 dinner
+54666 81999 tell
+81999 109332 impossible
+109332 136665 vegetable
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/411.TXT.lab"
+0 27333 start_sentence
+27333 54666 governor
+54666 81999 turn
+81999 109332 black
+109332 136665 arch
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/412.TXT.lab"
+0 26000 start_sentence
+26000 52000 french_fries
+52000 78000 learn
+78000 104000 ugly
+104000 130000 wine
+130000 156000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/413.TXT.lab"
+0 25000 start_sentence
+25000 50000 adult
+50000 75000 hear
+75000 100000 red
+100000 125000 lotion
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/414.TXT.lab"
+0 28000 start_sentence
+28000 56000 governor
+56000 84000 teach
+84000 112000 stupid
+112000 140000 toilet
+140000 168000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/415.TXT.lab"
+0 23000 start_sentence
+23000 46000 god
+46000 69000 help
+69000 92000 ignorant
+92000 115000 rooster
+115000 138000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/416.TXT.lab"
+0 24000 start_sentence
+24000 48000 emergency
+48000 72000 meet
+72000 96000 nice
+96000 120000 name
+120000 144000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/417.TXT.lab"
+0 25666 start_sentence
+25666 51332 guess
+51332 76998 see
+76998 102664 ugly
+102664 128330 firefighter
+128330 154000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/418.TXT.lab"
+0 27333 start_sentence
+27333 54666 cafeteria
+54666 81999 drink
+81999 109332 english
+109332 136665 coffee
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/419.TXT.lab"
+0 25000 start_sentence
+25000 50000 vice_prez
+50000 75000 pass_out
+75000 100000 bald
+100000 125000 reason
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/42.TXT.lab"
+0 28666 start_sentence
+28666 57332 hell
+57332 85998 look_at
+85998 114664 upset
+114664 143330 grandfather
+143330 172000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/420.TXT.lab"
+0 23333 start_sentence
+23333 46666 committee
+46666 69999 memorize
+69999 93332 brown
+93332 116665 toilet
+116665 140000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/421.TXT.lab"
+0 24666 start_sentence
+24666 49332 telephone
+49332 73998 use
+73998 98664 nice
+98664 123330 restaurant
+123330 148000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/422.TXT.lab"
+0 23666 start_sentence
+23666 47332 couple
+47332 70998 hear
+70998 94664 puzzled
+94664 118330 badge
+118330 142000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/423.TXT.lab"
+0 28666 start_sentence
+28666 57332 son
+57332 85998 invite
+85998 114664 hungry
+114664 143330 invention
+143330 172000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/424.TXT.lab"
+0 26333 start_sentence
+26333 52666 badge
+52666 78999 suspect
+78999 105332 good
+105332 131665 wife
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/425.TXT.lab"
+0 27666 start_sentence
+27666 55332 thing
+55332 82998 swallow
+82998 110664 black
+110664 138330 emergency
+138330 166000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/426.TXT.lab"
+0 26000 start_sentence
+26000 52000 god
+52000 78000 take
+78000 104000 impossible
+104000 130000 water
+130000 156000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/427.TXT.lab"
+0 30333 start_sentence
+30333 60666 uncle
+60666 90999 help
+90999 121332 sad
+121332 151665 nurse
+151665 182000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/428.TXT.lab"
+0 29333 start_sentence
+29333 58666 vegetable
+58666 87999 help
+87999 117332 sick
+117332 146665 scream
+146665 176000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/429.TXT.lab"
+0 24000 start_sentence
+24000 48000 telephone
+48000 72000 throw
+72000 96000 black
+96000 120000 man
+120000 144000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/43.TXT.lab"
+0 31333 start_sentence
+31333 62666 woman
+62666 93999 turn
+93999 125332 english
+125332 156665 turkey
+156665 188000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/430.TXT.lab"
+0 28333 start_sentence
+28333 56666 chief
+56666 84999 guess
+84999 113332 sick
+113332 141665 guess
+141665 170000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/431.TXT.lab"
+0 26000 start_sentence
+26000 52000 button
+52000 78000 see
+78000 104000 proud
+104000 130000 english
+130000 156000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/432.TXT.lab"
+0 27000 start_sentence
+27000 54000 wine
+54000 81000 recall
+81000 108000 yellow
+108000 135000 invention
+135000 162000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/433.TXT.lab"
+0 31666 start_sentence
+31666 63332 god
+63332 94998 forget
+94998 126664 upset
+126664 158330 america
+158330 190000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/434.TXT.lab"
+0 26000 start_sentence
+26000 52000 emergency
+52000 78000 turn
+78000 104000 black
+104000 130000 nurse
+130000 156000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/435.TXT.lab"
+0 30333 start_sentence
+30333 60666 america
+60666 90999 guess
+90999 121332 yellow
+121332 151665 grandfather
+151665 182000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/436.TXT.lab"
+0 26000 start_sentence
+26000 52000 sky
+52000 78000 memorize
+78000 104000 black
+104000 130000 boy
+130000 156000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/437.TXT.lab"
+0 26333 start_sentence
+26333 52666 senate
+52666 78999 teach
+78999 105332 stupid
+105332 131665 morning
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/438.TXT.lab"
+0 28000 start_sentence
+28000 56000 woman
+56000 84000 understand
+84000 112000 yellow
+112000 140000 firefighter
+140000 168000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/439.TXT.lab"
+0 24333 start_sentence
+24333 48666 america
+48666 72999 respect
+72999 97332 good
+97332 121665 lotion
+121665 146000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/44.TXT.lab"
+0 28333 start_sentence
+28333 56666 girl
+56666 84999 scream
+84999 113332 english
+113332 141665 man
+141665 170000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/440.TXT.lab"
+0 28000 start_sentence
+28000 56000 sky
+56000 84000 learn
+84000 112000 beautiful
+112000 140000 son
+140000 168000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/441.TXT.lab"
+0 28000 start_sentence
+28000 56000 restaurant
+56000 84000 apologize
+84000 112000 stupid
+112000 140000 grandfather
+140000 168000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/442.TXT.lab"
+0 24333 start_sentence
+24333 48666 morning
+48666 72999 invite
+72999 97332 dizzy
+97332 121665 wife
+121665 146000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/443.TXT.lab"
+0 21333 start_sentence
+21333 42666 scream
+42666 63999 drink
+63999 85332 sick
+85332 106665 mother
+106665 128000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/444.TXT.lab"
+0 24666 start_sentence
+24666 49332 face
+49332 73998 take
+73998 98664 dizzy
+98664 123330 button
+123330 148000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/445.TXT.lab"
+0 29666 start_sentence
+29666 59332 boy
+59332 88998 believe
+88998 118664 bald
+118664 148330 english
+148330 178000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/446.TXT.lab"
+0 26666 start_sentence
+26666 53332 son
+53332 79998 go
+79998 106664 virtual
+106664 133330 button
+133330 160000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/447.TXT.lab"
+0 28000 start_sentence
+28000 56000 thing
+56000 84000 forget
+84000 112000 virtual
+112000 140000 telephone
+140000 168000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/448.TXT.lab"
+0 29333 start_sentence
+29333 58666 queen
+58666 87999 scream
+87999 117332 false
+117332 146665 toilet
+146665 176000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/449.TXT.lab"
+0 25333 start_sentence
+25333 50666 brother
+50666 75999 scream
+75999 101332 smart
+101332 126665 morning
+126665 152000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/45.TXT.lab"
+0 27666 start_sentence
+27666 55332 idea
+55332 82998 use
+82998 110664 good
+110664 138330 couple
+138330 166000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/450.TXT.lab"
+0 26000 start_sentence
+26000 52000 uncle
+52000 78000 know
+78000 104000 hungry
+104000 130000 face
+130000 156000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/451.TXT.lab"
+0 24000 start_sentence
+24000 48000 lotion
+48000 72000 recall
+72000 96000 ugly
+96000 120000 woman
+120000 144000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/452.TXT.lab"
+0 25000 start_sentence
+25000 50000 governor
+50000 75000 meet
+75000 100000 sad
+100000 125000 idea
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/453.TXT.lab"
+0 22333 start_sentence
+22333 44666 he
+44666 66999 invite
+66999 89332 black
+89332 111665 hat
+111665 134000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/454.TXT.lab"
+0 24666 start_sentence
+24666 49332 arch
+49332 73998 pass_out
+73998 98664 brown
+98664 123330 thing
+123330 148000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/455.TXT.lab"
+0 25000 start_sentence
+25000 50000 king
+50000 75000 collect
+75000 100000 sad
+100000 125000 woman
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/456.TXT.lab"
+0 27333 start_sentence
+27333 54666 twin
+54666 81999 know
+81999 109332 puzzled
+109332 136665 brother
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/457.TXT.lab"
+0 26666 start_sentence
+26666 53332 emergency
+53332 79998 pass_out
+79998 106664 wrong
+106664 133330 pill
+133330 160000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/458.TXT.lab"
+0 26333 start_sentence
+26333 52666 button
+52666 78999 tell
+78999 105332 english
+105332 131665 french_fries
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/459.TXT.lab"
+0 26333 start_sentence
+26333 52666 christmas
+52666 78999 understand
+78999 105332 wrong
+105332 131665 coffee
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/46.TXT.lab"
+0 28333 start_sentence
+28333 56666 senate
+56666 84999 help
+84999 113332 impossible
+113332 141665 misundertanding
+141665 170000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/460.TXT.lab"
+0 28666 start_sentence
+28666 57332 philosophy
+57332 85998 memorize
+85998 114664 smart
+114664 143330 queen
+143330 172000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/461.TXT.lab"
+0 28333 start_sentence
+28333 56666 guess
+56666 84999 start
+84999 113332 dizzy
+113332 141665 philosophy
+141665 170000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/462.TXT.lab"
+0 28000 start_sentence
+28000 56000 hat
+56000 84000 memorize
+84000 112000 fair
+112000 140000 english
+140000 168000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/463.TXT.lab"
+0 27333 start_sentence
+27333 54666 water
+54666 81999 hear
+81999 109332 false
+109332 136665 twin
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/464.TXT.lab"
+0 26666 start_sentence
+26666 53332 you
+53332 79998 see
+79998 106664 sweet
+106664 133330 toilet
+133330 160000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/465.TXT.lab"
+0 28333 start_sentence
+28333 56666 cafeteria
+56666 84999 shower
+84999 113332 expert
+113332 141665 government
+141665 170000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/466.TXT.lab"
+0 30333 start_sentence
+30333 60666 father
+60666 90999 believe
+90999 121332 smart
+121332 151665 guess
+151665 182000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/467.TXT.lab"
+0 27333 start_sentence
+27333 54666 dinner
+54666 81999 help
+81999 109332 upset
+109332 136665 twin
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/468.TXT.lab"
+0 29333 start_sentence
+29333 58666 uncle
+58666 87999 shower
+87999 117332 sick
+117332 146665 son
+146665 176000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/469.TXT.lab"
+0 28000 start_sentence
+28000 56000 emergency
+56000 84000 recall
+84000 112000 false
+112000 140000 husband
+140000 168000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/47.TXT.lab"
+0 25000 start_sentence
+25000 50000 pill
+50000 75000 go
+75000 100000 ugly
+100000 125000 hat
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/470.TXT.lab"
+0 26666 start_sentence
+26666 53332 lotion
+53332 79998 collect
+79998 106664 upset
+106664 133330 government
+133330 160000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/471.TXT.lab"
+0 26666 start_sentence
+26666 53332 hat
+53332 79998 know
+79998 106664 stupid
+106664 133330 christmas
+133330 160000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/472.TXT.lab"
+0 28333 start_sentence
+28333 56666 wine
+56666 84999 go
+84999 113332 deaf
+113332 141665 sky
+141665 170000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/473.TXT.lab"
+0 28000 start_sentence
+28000 56000 daughter
+56000 84000 pass_out
+84000 112000 virtual
+112000 140000 pill
+140000 168000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/474.TXT.lab"
+0 27333 start_sentence
+27333 54666 government
+54666 81999 believe
+81999 109332 black
+109332 136665 wife
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/475.TXT.lab"
+0 24000 start_sentence
+24000 48000 medic
+48000 72000 go
+72000 96000 wrong
+96000 120000 wine
+120000 144000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/476.TXT.lab"
+0 29333 start_sentence
+29333 58666 invention
+58666 87999 use
+87999 117332 full
+117332 146665 man
+146665 176000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/477.TXT.lab"
+0 27333 start_sentence
+27333 54666 boy
+54666 81999 use
+81999 109332 stupid
+109332 136665 christmas
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/478.TXT.lab"
+0 28333 start_sentence
+28333 56666 button
+56666 84999 see
+84999 113332 impossible
+113332 141665 rooster
+141665 170000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/479.TXT.lab"
+0 31000 start_sentence
+31000 62000 christmas
+62000 93000 learn
+93000 124000 dizzy
+124000 155000 father
+155000 186000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/48.TXT.lab"
+0 25333 start_sentence
+25333 50666 nurse
+50666 75999 teach
+75999 101332 impossible
+101332 126665 idiot
+126665 152000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/480.TXT.lab"
+0 29333 start_sentence
+29333 58666 theory
+58666 87999 memorize
+87999 117332 good
+117332 146665 sky
+146665 176000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/481.TXT.lab"
+0 23000 start_sentence
+23000 46000 father
+46000 69000 recall
+69000 92000 good
+92000 115000 scream
+115000 138000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/482.TXT.lab"
+0 31666 start_sentence
+31666 63332 philosophy
+63332 94998 scream
+94998 126664 nice
+126664 158330 rooster
+158330 190000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/483.TXT.lab"
+0 27666 start_sentence
+27666 55332 they
+55332 82998 invite
+82998 110664 expert
+110664 138330 philosophy
+138330 166000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/484.TXT.lab"
+0 32333 start_sentence
+32333 64666 brother
+64666 96999 recall
+96999 129332 proud
+129332 161665 governor
+161665 194000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/485.TXT.lab"
+0 30000 start_sentence
+30000 60000 restaurant
+60000 90000 teach
+90000 120000 sick
+120000 150000 chicken
+150000 180000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/486.TXT.lab"
+0 27666 start_sentence
+27666 55332 daughter
+55332 82998 learn
+82998 110664 stupid
+110664 138330 thing
+138330 166000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/487.TXT.lab"
+0 25000 start_sentence
+25000 50000 sister
+50000 75000 look_at
+75000 100000 proud
+100000 125000 woman
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/488.TXT.lab"
+0 25333 start_sentence
+25333 50666 coffee
+50666 75999 create
+75999 101332 dizzy
+101332 126665 button
+126665 152000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/489.TXT.lab"
+0 25000 start_sentence
+25000 50000 reason
+50000 75000 look_at
+75000 100000 good
+100000 125000 cafeteria
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/49.TXT.lab"
+0 28333 start_sentence
+28333 56666 we
+56666 84999 meet
+84999 113332 skinny
+113332 141665 arch
+141665 170000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/490.TXT.lab"
+0 26333 start_sentence
+26333 52666 expert
+52666 78999 create
+78999 105332 impossible
+105332 131665 husband
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/491.TXT.lab"
+0 28666 start_sentence
+28666 57332 twin
+57332 85998 help
+85998 114664 beautiful
+114664 143330 reason
+143330 172000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/492.TXT.lab"
+0 29333 start_sentence
+29333 58666 nurse
+58666 87999 start
+87999 117332 ignorant
+117332 146665 christmas
+146665 176000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/493.TXT.lab"
+0 26333 start_sentence
+26333 52666 man
+52666 78999 believe
+78999 105332 brown
+105332 131665 husband
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/494.TXT.lab"
+0 26000 start_sentence
+26000 52000 they
+52000 78000 respect
+78000 104000 deaf
+104000 130000 food
+130000 156000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/495.TXT.lab"
+0 24000 start_sentence
+24000 48000 water
+48000 72000 know
+72000 96000 sad
+96000 120000 hell
+120000 144000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/496.TXT.lab"
+0 26666 start_sentence
+26666 53332 history
+53332 79998 help
+79998 106664 beautiful
+106664 133330 sky
+133330 160000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/497.TXT.lab"
+0 29333 start_sentence
+29333 58666 christmas
+58666 87999 turn
+87999 117332 beautiful
+117332 146665 rooster
+146665 176000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/498.TXT.lab"
+0 29333 start_sentence
+29333 58666 idiot
+58666 87999 recall
+87999 117332 virtual
+117332 146665 coffee
+146665 176000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/499.TXT.lab"
+0 28000 start_sentence
+28000 56000 area
+56000 84000 pass_out
+84000 112000 favorite
+112000 140000 morning
+140000 168000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/5.TXT.lab"
+0 25000 start_sentence
+25000 50000 theory
+50000 75000 swallow
+75000 100000 beautiful
+100000 125000 food
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/50.TXT.lab"
+0 25333 start_sentence
+25333 50666 couple
+50666 75999 memorize
+75999 101332 wrong
+101332 126665 button
+126665 152000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/500.TXT.lab"
+0 23000 start_sentence
+23000 46000 lotion
+46000 69000 recall
+69000 92000 deaf
+92000 115000 chief
+115000 138000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/501.TXT.lab"
+0 32000 start_sentence
+32000 64000 invention
+64000 96000 appreciate
+96000 128000 ugly
+128000 160000 sister
+160000 192000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/502.TXT.lab"
+0 26000 start_sentence
+26000 52000 face
+52000 78000 help
+78000 104000 dizzy
+104000 130000 water
+130000 156000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/503.TXT.lab"
+0 25333 start_sentence
+25333 50666 chief
+50666 75999 hear
+75999 101332 impossible
+101332 126665 idiot
+126665 152000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/504.TXT.lab"
+0 25000 start_sentence
+25000 50000 column
+50000 75000 shower
+75000 100000 sick
+100000 125000 pill
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/505.TXT.lab"
+0 27666 start_sentence
+27666 55332 idea
+55332 82998 know
+82998 110664 fair
+110664 138330 area
+138330 166000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/506.TXT.lab"
+0 31333 start_sentence
+31333 62666 invention
+62666 93999 believe
+93999 125332 upset
+125332 156665 invention
+156665 188000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/507.TXT.lab"
+0 26333 start_sentence
+26333 52666 christmas
+52666 78999 shower
+78999 105332 red
+105332 131665 name
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/508.TXT.lab"
+0 27000 start_sentence
+27000 54000 invention
+54000 81000 pass_out
+81000 108000 ugly
+108000 135000 king
+135000 162000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/509.TXT.lab"
+0 30333 start_sentence
+30333 60666 vice_prez
+60666 90999 teach
+90999 121332 bald
+121332 151665 nurse
+151665 182000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/51.TXT.lab"
+0 25000 start_sentence
+25000 50000 you
+50000 75000 look_at
+75000 100000 red
+100000 125000 boy
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/510.TXT.lab"
+0 28000 start_sentence
+28000 56000 he
+56000 84000 start
+84000 112000 dizzy
+112000 140000 reason
+140000 168000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/511.TXT.lab"
+0 28333 start_sentence
+28333 56666 committee
+56666 84999 swallow
+84999 113332 english
+113332 141665 committee
+141665 170000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/512.TXT.lab"
+0 28666 start_sentence
+28666 57332 toilet
+57332 85998 respect
+85998 114664 red
+114664 143330 senate
+143330 172000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/513.TXT.lab"
+0 29000 start_sentence
+29000 58000 we
+58000 87000 understand
+87000 116000 ignorant
+116000 145000 committee
+145000 174000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/514.TXT.lab"
+0 29333 start_sentence
+29333 58666 husband
+58666 87999 use
+87999 117332 ignorant
+117332 146665 committee
+146665 176000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/515.TXT.lab"
+0 25333 start_sentence
+25333 50666 i
+50666 75999 believe
+75999 101332 false
+101332 126665 morning
+126665 152000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/516.TXT.lab"
+0 35000 start_sentence
+35000 70000 sister
+70000 105000 memorize
+105000 140000 sick
+140000 175000 governor
+175000 210000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/517.TXT.lab"
+0 28000 start_sentence
+28000 56000 toilet
+56000 84000 teach
+84000 112000 impossible
+112000 140000 button
+140000 168000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/518.TXT.lab"
+0 27333 start_sentence
+27333 54666 boy
+54666 81999 help
+81999 109332 good
+109332 136665 food
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/519.TXT.lab"
+0 29333 start_sentence
+29333 58666 reason
+58666 87999 go
+87999 117332 upset
+117332 146665 theory
+146665 176000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/52.TXT.lab"
+0 24666 start_sentence
+24666 49332 sister
+49332 73998 invite
+73998 98664 black
+98664 123330 daughter
+123330 148000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/520.TXT.lab"
+0 29333 start_sentence
+29333 58666 history
+58666 87999 know
+87999 117332 sad
+117332 146665 husband
+146665 176000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/521.TXT.lab"
+0 25666 start_sentence
+25666 51332 badge
+51332 76998 swallow
+76998 102664 full
+102664 128330 boy
+128330 154000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/522.TXT.lab"
+0 26333 start_sentence
+26333 52666 chicken
+52666 78999 throw
+78999 105332 stupid
+105332 131665 lie
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/523.TXT.lab"
+0 24333 start_sentence
+24333 48666 i
+48666 72999 invite
+72999 97332 sick
+97332 121665 expert
+121665 146000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/524.TXT.lab"
+0 31000 start_sentence
+31000 62000 nurse
+62000 93000 use
+93000 124000 nice
+124000 155000 vice_prez
+155000 186000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/525.TXT.lab"
+0 27666 start_sentence
+27666 55332 rooster
+55332 82998 go
+82998 110664 false
+110664 138330 vice_prez
+138330 166000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/526.TXT.lab"
+0 29000 start_sentence
+29000 58000 telephone
+58000 87000 believe
+87000 116000 full
+116000 145000 coffee
+145000 174000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/527.TXT.lab"
+0 27000 start_sentence
+27000 54000 name
+54000 81000 suspect
+81000 108000 dizzy
+108000 135000 committee
+135000 162000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/528.TXT.lab"
+0 30333 start_sentence
+30333 60666 hat
+60666 90999 scream
+90999 121332 smart
+121332 151665 english
+151665 182000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/529.TXT.lab"
+0 27333 start_sentence
+27333 54666 father
+54666 81999 create
+81999 109332 wrong
+109332 136665 badge
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/53.TXT.lab"
+0 28666 start_sentence
+28666 57332 idiot
+57332 85998 recall
+85998 114664 proud
+114664 143330 morning
+143330 172000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/530.TXT.lab"
+0 29333 start_sentence
+29333 58666 boy
+58666 87999 use
+87999 117332 impossible
+117332 146665 governor
+146665 176000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/531.TXT.lab"
+0 26000 start_sentence
+26000 52000 pill
+52000 78000 scream
+78000 104000 dizzy
+104000 130000 food
+130000 156000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/532.TXT.lab"
+0 27000 start_sentence
+27000 54000 toilet
+54000 81000 appreciate
+81000 108000 upset
+108000 135000 father
+135000 162000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/533.TXT.lab"
+0 30000 start_sentence
+30000 60000 twin
+60000 90000 learn
+90000 120000 full
+120000 150000 america
+150000 180000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/534.TXT.lab"
+0 30666 start_sentence
+30666 61332 vegetable
+61332 91998 know
+91998 122664 sick
+122664 153330 philosophy
+153330 184000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/535.TXT.lab"
+0 24666 start_sentence
+24666 49332 language
+49332 73998 invite
+73998 98664 yellow
+98664 123330 expert
+123330 148000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/536.TXT.lab"
+0 28333 start_sentence
+28333 56666 sister
+56666 84999 start
+84999 113332 sad
+113332 141665 column
+141665 170000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/537.TXT.lab"
+0 28333 start_sentence
+28333 56666 restaurant
+56666 84999 pass_out
+84999 113332 beautiful
+113332 141665 philosophy
+141665 170000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/538.TXT.lab"
+0 26666 start_sentence
+26666 53332 government
+53332 79998 learn
+79998 106664 hungry
+106664 133330 expert
+133330 160000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/539.TXT.lab"
+0 28000 start_sentence
+28000 56000 medic
+56000 84000 shower
+84000 112000 fair
+112000 140000 emergency
+140000 168000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/54.TXT.lab"
+0 27333 start_sentence
+27333 54666 restaurant
+54666 81999 understand
+81999 109332 ignorant
+109332 136665 wine
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/540.TXT.lab"
+0 23666 start_sentence
+23666 47332 nurse
+47332 70998 understand
+70998 94664 stupid
+94664 118330 christmas
+118330 142000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/541.TXT.lab"
+0 24666 start_sentence
+24666 49332 couple
+49332 73998 scream
+73998 98664 dizzy
+98664 123330 language
+123330 148000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/542.TXT.lab"
+0 28000 start_sentence
+28000 56000 area
+56000 84000 go
+84000 112000 skinny
+112000 140000 brother
+140000 168000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/543.TXT.lab"
+0 25000 start_sentence
+25000 50000 government
+50000 75000 shower
+75000 100000 deaf
+100000 125000 couple
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/544.TXT.lab"
+0 24000 start_sentence
+24000 48000 you
+48000 72000 recall
+72000 96000 beautiful
+96000 120000 arch
+120000 144000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/545.TXT.lab"
+0 26333 start_sentence
+26333 52666 toilet
+52666 78999 take
+78999 105332 dizzy
+105332 131665 woman
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/546.TXT.lab"
+0 28333 start_sentence
+28333 56666 grandfather
+56666 84999 throw
+84999 113332 black
+113332 141665 husband
+141665 170000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/547.TXT.lab"
+0 29333 start_sentence
+29333 58666 governor
+58666 87999 hear
+87999 117332 english
+117332 146665 reason
+146665 176000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/548.TXT.lab"
+0 24666 start_sentence
+24666 49332 vice_prez
+49332 73998 tell
+73998 98664 smart
+98664 123330 misundertanding
+123330 148000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/549.TXT.lab"
+0 29666 start_sentence
+29666 59332 son
+59332 88998 forget
+88998 118664 yellow
+118664 148330 food
+148330 178000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/55.TXT.lab"
+0 30000 start_sentence
+30000 60000 telephone
+60000 90000 learn
+90000 120000 beautiful
+120000 150000 government
+150000 180000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/550.TXT.lab"
+0 30000 start_sentence
+30000 60000 cafeteria
+60000 90000 start
+90000 120000 virtual
+120000 150000 boy
+150000 180000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/551.TXT.lab"
+0 25333 start_sentence
+25333 50666 boy
+50666 75999 forget
+75999 101332 english
+101332 126665 mother
+126665 152000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/552.TXT.lab"
+0 28666 start_sentence
+28666 57332 twin
+57332 85998 guess
+85998 114664 ignorant
+114664 143330 vice_prez
+143330 172000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/553.TXT.lab"
+0 24666 start_sentence
+24666 49332 philosophy
+49332 73998 recall
+73998 98664 bald
+98664 123330 dinner
+123330 148000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/554.TXT.lab"
+0 25000 start_sentence
+25000 50000 king
+50000 75000 help
+75000 100000 black
+100000 125000 guess
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/555.TXT.lab"
+0 25000 start_sentence
+25000 50000 coffee
+50000 75000 pass_out
+75000 100000 good
+100000 125000 woman
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/556.TXT.lab"
+0 26333 start_sentence
+26333 52666 girl
+52666 78999 apologize
+78999 105332 proud
+105332 131665 idea
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/557.TXT.lab"
+0 28333 start_sentence
+28333 56666 turkey
+56666 84999 start
+84999 113332 fair
+113332 141665 food
+141665 170000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/558.TXT.lab"
+0 30000 start_sentence
+30000 60000 america
+60000 90000 apologize
+90000 120000 false
+120000 150000 cafeteria
+150000 180000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/559.TXT.lab"
+0 28333 start_sentence
+28333 56666 pill
+56666 84999 apologize
+84999 113332 fine
+113332 141665 philosophy
+141665 170000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/56.TXT.lab"
+0 25333 start_sentence
+25333 50666 nurse
+50666 75999 shower
+75999 101332 hungry
+101332 126665 mother
+126665 152000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/560.TXT.lab"
+0 28666 start_sentence
+28666 57332 coffee
+57332 85998 start
+85998 114664 virtual
+114664 143330 governor
+143330 172000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/561.TXT.lab"
+0 23333 start_sentence
+23333 46666 expert
+46666 69999 shower
+69999 93332 virtual
+93332 116665 pill
+116665 140000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/562.TXT.lab"
+0 29333 start_sentence
+29333 58666 son
+58666 87999 help
+87999 117332 bald
+117332 146665 area
+146665 176000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/563.TXT.lab"
+0 27666 start_sentence
+27666 55332 woman
+55332 82998 scream
+82998 110664 brown
+110664 138330 invention
+138330 166000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/564.TXT.lab"
+0 24666 start_sentence
+24666 49332 food
+49332 73998 drink
+73998 98664 favorite
+98664 123330 french_fries
+123330 148000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/565.TXT.lab"
+0 27333 start_sentence
+27333 54666 hell
+54666 81999 forget
+81999 109332 stupid
+109332 136665 vice_prez
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/566.TXT.lab"
+0 26666 start_sentence
+26666 53332 medic
+53332 79998 look_at
+79998 106664 skinny
+106664 133330 coffee
+133330 160000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/567.TXT.lab"
+0 30000 start_sentence
+30000 60000 invention
+60000 90000 respect
+90000 120000 wrong
+120000 150000 husband
+150000 180000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/568.TXT.lab"
+0 26666 start_sentence
+26666 53332 twin
+53332 79998 know
+79998 106664 proud
+106664 133330 morning
+133330 160000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/569.TXT.lab"
+0 31666 start_sentence
+31666 63332 toilet
+63332 94998 suspect
+94998 126664 full
+126664 158330 boy
+158330 190000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/57.TXT.lab"
+0 28666 start_sentence
+28666 57332 arch
+57332 85998 look_at
+85998 114664 hungry
+114664 143330 grandfather
+143330 172000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/570.TXT.lab"
+0 24000 start_sentence
+24000 48000 brother
+48000 72000 guess
+72000 96000 ugly
+96000 120000 chicken
+120000 144000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/571.TXT.lab"
+0 26000 start_sentence
+26000 52000 he
+52000 78000 invite
+78000 104000 expert
+104000 130000 son
+130000 156000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/572.TXT.lab"
+0 28666 start_sentence
+28666 57332 son
+57332 85998 apologize
+85998 114664 stupid
+114664 143330 father
+143330 172000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/573.TXT.lab"
+0 25000 start_sentence
+25000 50000 senate
+50000 75000 tell
+75000 100000 black
+100000 125000 father
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/574.TXT.lab"
+0 33000 start_sentence
+33000 66000 sister
+66000 99000 use
+99000 132000 hungry
+132000 165000 guess
+165000 198000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/575.TXT.lab"
+0 27666 start_sentence
+27666 55332 god
+55332 82998 turn
+82998 110664 sad
+110664 138330 idiot
+138330 166000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/576.TXT.lab"
+0 24000 start_sentence
+24000 48000 medic
+48000 72000 hear
+72000 96000 english
+96000 120000 arch
+120000 144000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/577.TXT.lab"
+0 24333 start_sentence
+24333 48666 uncle
+48666 72999 guess
+72999 97332 brown
+97332 121665 hat
+121665 146000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/578.TXT.lab"
+0 24000 start_sentence
+24000 48000 rooster
+48000 72000 start
+72000 96000 red
+96000 120000 toilet
+120000 144000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/579.TXT.lab"
+0 23000 start_sentence
+23000 46000 king
+46000 69000 see
+69000 92000 ugly
+92000 115000 queen
+115000 138000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/58.TXT.lab"
+0 26000 start_sentence
+26000 52000 hell
+52000 78000 pass_out
+78000 104000 beautiful
+104000 130000 god
+130000 156000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/580.TXT.lab"
+0 22000 start_sentence
+22000 44000 area
+44000 66000 drink
+66000 88000 yellow
+88000 110000 invention
+110000 132000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/581.TXT.lab"
+0 26000 start_sentence
+26000 52000 menu
+52000 78000 start
+78000 104000 ignorant
+104000 130000 turkey
+130000 156000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/582.TXT.lab"
+0 27666 start_sentence
+27666 55332 dinner
+55332 82998 suspect
+82998 110664 hungry
+110664 138330 daughter
+138330 166000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/583.TXT.lab"
+0 30333 start_sentence
+30333 60666 reason
+60666 90999 pass_out
+90999 121332 fine
+121332 151665 sky
+151665 182000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/584.TXT.lab"
+0 24333 start_sentence
+24333 48666 chicken
+48666 72999 hear
+72999 97332 upset
+97332 121665 name
+121665 146000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/585.TXT.lab"
+0 29333 start_sentence
+29333 58666 man
+58666 87999 create
+87999 117332 false
+117332 146665 husband
+146665 176000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/586.TXT.lab"
+0 23666 start_sentence
+23666 47332 column
+47332 70998 throw
+70998 94664 impossible
+94664 118330 philosophy
+118330 142000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/587.TXT.lab"
+0 26333 start_sentence
+26333 52666 button
+52666 78999 appreciate
+78999 105332 sick
+105332 131665 scream
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/588.TXT.lab"
+0 26333 start_sentence
+26333 52666 pill
+52666 78999 apologize
+78999 105332 sad
+105332 131665 girl
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/589.TXT.lab"
+0 25333 start_sentence
+25333 50666 wine
+50666 75999 swallow
+75999 101332 ugly
+101332 126665 rooster
+126665 152000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/59.TXT.lab"
+0 31333 start_sentence
+31333 62666 governor
+62666 93999 help
+93999 125332 ugly
+125332 156665 vice_prez
+156665 188000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/590.TXT.lab"
+0 23333 start_sentence
+23333 46666 you
+46666 69999 suspect
+69999 93332 wrong
+93332 116665 thing
+116665 140000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/591.TXT.lab"
+0 22000 start_sentence
+22000 44000 food
+44000 66000 go
+66000 88000 false
+88000 110000 wine
+110000 132000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/592.TXT.lab"
+0 31000 start_sentence
+31000 62000 brother
+62000 93000 turn
+93000 124000 sweet
+124000 155000 lie
+155000 186000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/593.TXT.lab"
+0 24333 start_sentence
+24333 48666 firefighter
+48666 72999 take
+72999 97332 dizzy
+97332 121665 rooster
+121665 146000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/594.TXT.lab"
+0 23000 start_sentence
+23000 46000 government
+46000 69000 go
+69000 92000 nice
+92000 115000 french_fries
+115000 138000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/595.TXT.lab"
+0 22000 start_sentence
+22000 44000 toilet
+44000 66000 memorize
+66000 88000 english
+88000 110000 column
+110000 132000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/596.TXT.lab"
+0 22000 start_sentence
+22000 44000 government
+44000 66000 guess
+66000 88000 deaf
+88000 110000 expert
+110000 132000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/597.TXT.lab"
+0 23666 start_sentence
+23666 47332 boy
+47332 70998 see
+70998 94664 ignorant
+94664 118330 twin
+118330 142000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/598.TXT.lab"
+0 26666 start_sentence
+26666 53332 daughter
+53332 79998 memorize
+79998 106664 hungry
+106664 133330 button
+133330 160000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/599.TXT.lab"
+0 23333 start_sentence
+23333 46666 adult
+46666 69999 swallow
+69999 93332 virtual
+93332 116665 man
+116665 140000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/6.TXT.lab"
+0 30000 start_sentence
+30000 60000 expert
+60000 90000 memorize
+90000 120000 ugly
+120000 150000 rooster
+150000 180000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/60.TXT.lab"
+0 27333 start_sentence
+27333 54666 i
+54666 81999 believe
+81999 109332 bald
+109332 136665 reason
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/600.TXT.lab"
+0 24666 start_sentence
+24666 49332 chief
+49332 73998 suspect
+73998 98664 smart
+98664 123330 senate
+123330 148000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/601.TXT.lab"
+0 26000 start_sentence
+26000 52000 language
+52000 78000 memorize
+78000 104000 yellow
+104000 130000 vice_prez
+130000 156000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/602.TXT.lab"
+0 22666 start_sentence
+22666 45332 hell
+45332 67998 hear
+67998 90664 black
+90664 113330 misundertanding
+113330 136000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/603.TXT.lab"
+0 23666 start_sentence
+23666 47332 english
+47332 70998 suspect
+70998 94664 black
+94664 118330 chicken
+118330 142000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/604.TXT.lab"
+0 22000 start_sentence
+22000 44000 adult
+44000 66000 teach
+66000 88000 bald
+88000 110000 column
+110000 132000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/605.TXT.lab"
+0 23666 start_sentence
+23666 47332 adult
+47332 70998 invite
+70998 94664 sweet
+94664 118330 misundertanding
+118330 142000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/606.TXT.lab"
+0 25666 start_sentence
+25666 51332 vegetable
+51332 76998 forget
+76998 102664 full
+102664 128330 brother
+128330 154000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/607.TXT.lab"
+0 24333 start_sentence
+24333 48666 lotion
+48666 72999 teach
+72999 97332 favorite
+97332 121665 reason
+121665 146000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/608.TXT.lab"
+0 24333 start_sentence
+24333 48666 philosophy
+48666 72999 invite
+72999 97332 hungry
+97332 121665 son
+121665 146000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/609.TXT.lab"
+0 26000 start_sentence
+26000 52000 grandfather
+52000 78000 shower
+78000 104000 wrong
+104000 130000 coffee
+130000 156000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/61.TXT.lab"
+0 28000 start_sentence
+28000 56000 english
+56000 84000 help
+84000 112000 smart
+112000 140000 face
+140000 168000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/610.TXT.lab"
+0 24333 start_sentence
+24333 48666 idiot
+48666 72999 forget
+72999 97332 bald
+97332 121665 face
+121665 146000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/611.TXT.lab"
+0 24333 start_sentence
+24333 48666 food
+48666 72999 teach
+72999 97332 smart
+97332 121665 philosophy
+121665 146000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/612.TXT.lab"
+0 21666 start_sentence
+21666 43332 expert
+43332 64998 tell
+64998 86664 brown
+86664 108330 twin
+108330 130000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/613.TXT.lab"
+0 24666 start_sentence
+24666 49332 language
+49332 73998 guess
+73998 98664 yellow
+98664 123330 son
+123330 148000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/614.TXT.lab"
+0 23666 start_sentence
+23666 47332 we
+47332 70998 create
+70998 94664 wrong
+94664 118330 vice_prez
+118330 142000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/615.TXT.lab"
+0 22333 start_sentence
+22333 44666 badge
+44666 66999 go
+66999 89332 good
+89332 111665 daughter
+111665 134000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/616.TXT.lab"
+0 23333 start_sentence
+23333 46666 scream
+46666 69999 throw
+69999 93332 deaf
+93332 116665 arch
+116665 140000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/617.TXT.lab"
+0 23666 start_sentence
+23666 47332 coffee
+47332 70998 meet
+70998 94664 black
+94664 118330 medic
+118330 142000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/618.TXT.lab"
+0 27000 start_sentence
+27000 54000 expert
+54000 81000 shower
+81000 108000 wrong
+108000 135000 committee
+135000 162000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/619.TXT.lab"
+0 25666 start_sentence
+25666 51332 name
+51332 76998 appreciate
+76998 102664 stupid
+102664 128330 nurse
+128330 154000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/62.TXT.lab"
+0 29333 start_sentence
+29333 58666 misundertanding
+58666 87999 look_at
+87999 117332 expert
+117332 146665 christmas
+146665 176000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/620.TXT.lab"
+0 23666 start_sentence
+23666 47332 english
+47332 70998 forget
+70998 94664 skinny
+94664 118330 woman
+118330 142000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/621.TXT.lab"
+0 27000 start_sentence
+27000 54000 grandfather
+54000 81000 appreciate
+81000 108000 good
+108000 135000 medic
+135000 162000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/622.TXT.lab"
+0 26333 start_sentence
+26333 52666 area
+52666 78999 start
+78999 105332 bald
+105332 131665 telephone
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/623.TXT.lab"
+0 24666 start_sentence
+24666 49332 girl
+49332 73998 go
+73998 98664 red
+98664 123330 firefighter
+123330 148000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/624.TXT.lab"
+0 27333 start_sentence
+27333 54666 man
+54666 81999 learn
+81999 109332 upset
+109332 136665 restaurant
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/625.TXT.lab"
+0 23000 start_sentence
+23000 46000 you
+46000 69000 meet
+69000 92000 sweet
+92000 115000 father
+115000 138000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/626.TXT.lab"
+0 30333 start_sentence
+30333 60666 firefighter
+60666 90999 shower
+90999 121332 nice
+121332 151665 language
+151665 182000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/627.TXT.lab"
+0 28666 start_sentence
+28666 57332 girl
+57332 85998 believe
+85998 114664 stupid
+114664 143330 son
+143330 172000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/628.TXT.lab"
+0 26333 start_sentence
+26333 52666 woman
+52666 78999 learn
+78999 105332 fine
+105332 131665 wife
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/629.TXT.lab"
+0 27333 start_sentence
+27333 54666 grandfather
+54666 81999 turn
+81999 109332 expert
+109332 136665 column
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/63.TXT.lab"
+0 26666 start_sentence
+26666 53332 nurse
+53332 79998 respect
+79998 106664 stupid
+106664 133330 girl
+133330 160000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/630.TXT.lab"
+0 28000 start_sentence
+28000 56000 daughter
+56000 84000 meet
+84000 112000 ugly
+112000 140000 menu
+140000 168000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/631.TXT.lab"
+0 26666 start_sentence
+26666 53332 god
+53332 79998 start
+79998 106664 english
+106664 133330 sky
+133330 160000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/632.TXT.lab"
+0 24666 start_sentence
+24666 49332 english
+49332 73998 understand
+73998 98664 impossible
+98664 123330 chief
+123330 148000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/633.TXT.lab"
+0 26000 start_sentence
+26000 52000 sky
+52000 78000 collect
+78000 104000 good
+104000 130000 emergency
+130000 156000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/634.TXT.lab"
+0 26333 start_sentence
+26333 52666 we
+52666 78999 collect
+78999 105332 expert
+105332 131665 mother
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/635.TXT.lab"
+0 30000 start_sentence
+30000 60000 they
+60000 90000 scream
+90000 120000 favorite
+120000 150000 sky
+150000 180000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/636.TXT.lab"
+0 24333 start_sentence
+24333 48666 vice_prez
+48666 72999 take
+72999 97332 false
+97332 121665 sister
+121665 146000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/637.TXT.lab"
+0 25000 start_sentence
+25000 50000 sister
+50000 75000 guess
+75000 100000 deaf
+100000 125000 brother
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/638.TXT.lab"
+0 23333 start_sentence
+23333 46666 water
+46666 69999 forget
+69999 93332 yellow
+93332 116665 arch
+116665 140000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/639.TXT.lab"
+0 25666 start_sentence
+25666 51332 america
+51332 76998 understand
+76998 102664 impossible
+102664 128330 god
+128330 154000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/64.TXT.lab"
+0 29333 start_sentence
+29333 58666 god
+58666 87999 respect
+87999 117332 proud
+117332 146665 committee
+146665 176000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/640.TXT.lab"
+0 26333 start_sentence
+26333 52666 medic
+52666 78999 suspect
+78999 105332 ugly
+105332 131665 daughter
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/641.TXT.lab"
+0 25000 start_sentence
+25000 50000 thing
+50000 75000 apologize
+75000 100000 stupid
+100000 125000 couple
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/642.TXT.lab"
+0 32000 start_sentence
+32000 64000 king
+64000 96000 suspect
+96000 128000 english
+128000 160000 man
+160000 192000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/643.TXT.lab"
+0 23666 start_sentence
+23666 47332 english
+47332 70998 pass_out
+70998 94664 ignorant
+94664 118330 medic
+118330 142000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/644.TXT.lab"
+0 27333 start_sentence
+27333 54666 committee
+54666 81999 believe
+81999 109332 favorite
+109332 136665 badge
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/645.TXT.lab"
+0 24666 start_sentence
+24666 49332 morning
+49332 73998 create
+73998 98664 hungry
+98664 123330 coffee
+123330 148000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/646.TXT.lab"
+0 24666 start_sentence
+24666 49332 christmas
+49332 73998 meet
+73998 98664 favorite
+98664 123330 america
+123330 148000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/647.TXT.lab"
+0 33666 start_sentence
+33666 67332 idea
+67332 100998 collect
+100998 134664 skinny
+134664 168330 daughter
+168330 202000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/648.TXT.lab"
+0 26000 start_sentence
+26000 52000 reason
+52000 78000 take
+78000 104000 puzzled
+104000 130000 nurse
+130000 156000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/649.TXT.lab"
+0 24333 start_sentence
+24333 48666 pill
+48666 72999 look_at
+72999 97332 favorite
+97332 121665 committee
+121665 146000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/65.TXT.lab"
+0 27333 start_sentence
+27333 54666 idea
+54666 81999 know
+81999 109332 english
+109332 136665 god
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/650.TXT.lab"
+0 28666 start_sentence
+28666 57332 governor
+57332 85998 guess
+85998 114664 bald
+114664 143330 sister
+143330 172000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/651.TXT.lab"
+0 22000 start_sentence
+22000 44000 firefighter
+44000 66000 tell
+66000 88000 stupid
+88000 110000 boy
+110000 132000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/652.TXT.lab"
+0 29666 start_sentence
+29666 59332 menu
+59332 88998 collect
+88998 118664 bald
+118664 148330 uncle
+148330 178000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/653.TXT.lab"
+0 25666 start_sentence
+25666 51332 french_fries
+51332 76998 apologize
+76998 102664 ugly
+102664 128330 invention
+128330 154000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/654.TXT.lab"
+0 22333 start_sentence
+22333 44666 philosophy
+44666 66999 memorize
+66999 89332 ugly
+89332 111665 hell
+111665 134000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/655.TXT.lab"
+0 25000 start_sentence
+25000 50000 firefighter
+50000 75000 suspect
+75000 100000 proud
+100000 125000 language
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/656.TXT.lab"
+0 25000 start_sentence
+25000 50000 senate
+50000 75000 create
+75000 100000 sick
+100000 125000 america
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/657.TXT.lab"
+0 23666 start_sentence
+23666 47332 restaurant
+47332 70998 create
+70998 94664 good
+94664 118330 king
+118330 142000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/658.TXT.lab"
+0 25666 start_sentence
+25666 51332 morning
+51332 76998 collect
+76998 102664 bald
+102664 128330 husband
+128330 154000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/659.TXT.lab"
+0 26666 start_sentence
+26666 53332 queen
+53332 79998 know
+79998 106664 ugly
+106664 133330 uncle
+133330 160000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/66.TXT.lab"
+0 31333 start_sentence
+31333 62666 turkey
+62666 93999 understand
+93999 125332 yellow
+125332 156665 hat
+156665 188000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/660.TXT.lab"
+0 25000 start_sentence
+25000 50000 he
+50000 75000 teach
+75000 100000 stupid
+100000 125000 woman
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/661.TXT.lab"
+0 25666 start_sentence
+25666 51332 emergency
+51332 76998 suspect
+76998 102664 sad
+102664 128330 dinner
+128330 154000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/662.TXT.lab"
+0 24666 start_sentence
+24666 49332 vice_prez
+49332 73998 apologize
+73998 98664 sick
+98664 123330 dinner
+123330 148000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/663.TXT.lab"
+0 25000 start_sentence
+25000 50000 water
+50000 75000 look_at
+75000 100000 brown
+100000 125000 cafeteria
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/664.TXT.lab"
+0 25000 start_sentence
+25000 50000 america
+50000 75000 know
+75000 100000 sick
+100000 125000 turkey
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/665.TXT.lab"
+0 28333 start_sentence
+28333 56666 thing
+56666 84999 use
+84999 113332 skinny
+113332 141665 daughter
+141665 170000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/67.TXT.lab"
+0 29000 start_sentence
+29000 58000 badge
+58000 87000 help
+87000 116000 good
+116000 145000 dinner
+145000 174000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/68.TXT.lab"
+0 27333 start_sentence
+27333 54666 father
+54666 81999 guess
+81999 109332 fine
+109332 136665 thing
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/69.TXT.lab"
+0 23666 start_sentence
+23666 47332 morning
+47332 70998 go
+70998 94664 ignorant
+94664 118330 idiot
+118330 142000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/7.TXT.lab"
+0 28000 start_sentence
+28000 56000 theory
+56000 84000 forget
+84000 112000 sweet
+112000 140000 water
+140000 168000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/70.TXT.lab"
+0 25333 start_sentence
+25333 50666 boy
+50666 75999 meet
+75999 101332 wrong
+101332 126665 son
+126665 152000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/71.TXT.lab"
+0 23666 start_sentence
+23666 47332 vegetable
+47332 70998 meet
+70998 94664 yellow
+94664 118330 cafeteria
+118330 142000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/72.TXT.lab"
+0 25666 start_sentence
+25666 51332 name
+51332 76998 guess
+76998 102664 smart
+102664 128330 committee
+128330 154000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/73.TXT.lab"
+0 24666 start_sentence
+24666 49332 cafeteria
+49332 73998 hear
+73998 98664 fair
+98664 123330 expert
+123330 148000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/74.TXT.lab"
+0 27333 start_sentence
+27333 54666 face
+54666 81999 guess
+81999 109332 brown
+109332 136665 senate
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/75.TXT.lab"
+0 25666 start_sentence
+25666 51332 hat
+51332 76998 know
+76998 102664 beautiful
+102664 128330 idiot
+128330 154000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/76.TXT.lab"
+0 27333 start_sentence
+27333 54666 reason
+54666 81999 pass_out
+81999 109332 sad
+109332 136665 boy
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/77.TXT.lab"
+0 27333 start_sentence
+27333 54666 he
+54666 81999 use
+81999 109332 bald
+109332 136665 misundertanding
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/78.TXT.lab"
+0 28000 start_sentence
+28000 56000 chief
+56000 84000 pass_out
+84000 112000 impossible
+112000 140000 telephone
+140000 168000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/79.TXT.lab"
+0 26000 start_sentence
+26000 52000 button
+52000 78000 learn
+78000 104000 ignorant
+104000 130000 woman
+130000 156000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/8.TXT.lab"
+0 27333 start_sentence
+27333 54666 firefighter
+54666 81999 collect
+81999 109332 puzzled
+109332 136665 language
+136665 164000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/80.TXT.lab"
+0 26333 start_sentence
+26333 52666 sky
+52666 78999 understand
+78999 105332 full
+105332 131665 restaurant
+131665 158000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/81.TXT.lab"
+0 25000 start_sentence
+25000 50000 language
+50000 75000 go
+75000 100000 stupid
+100000 125000 wife
+125000 150000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/82.TXT.lab"
+0 23333 start_sentence
+23333 46666 pill
+46666 69999 shower
+69999 93332 stupid
+93332 116665 adult
+116665 140000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/83.TXT.lab"
+0 22333 start_sentence
+22333 44666 rooster
+44666 66999 hear
+66999 89332 nice
+89332 111665 queen
+111665 134000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/84.TXT.lab"
+0 24666 start_sentence
+24666 49332 language
+49332 73998 recall
+73998 98664 dizzy
+98664 123330 theory
+123330 148000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/85.TXT.lab"
+0 21000 start_sentence
+21000 42000 i
+42000 63000 recall
+63000 84000 beautiful
+84000 105000 turkey
+105000 126000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/86.TXT.lab"
+0 24333 start_sentence
+24333 48666 god
+48666 72999 believe
+72999 97332 skinny
+97332 121665 telephone
+121665 146000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/87.TXT.lab"
+0 25333 start_sentence
+25333 50666 grandfather
+50666 75999 see
+75999 101332 proud
+101332 126665 daughter
+126665 152000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/88.TXT.lab"
+0 28666 start_sentence
+28666 57332 invention
+57332 85998 teach
+85998 114664 full
+114664 143330 daughter
+143330 172000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/89.TXT.lab"
+0 24666 start_sentence
+24666 49332 vegetable
+49332 73998 memorize
+73998 98664 red
+98664 123330 telephone
+123330 148000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/9.TXT.lab"
+0 26666 start_sentence
+26666 53332 face
+53332 79998 learn
+79998 106664 wrong
+106664 133330 language
+133330 160000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/90.TXT.lab"
+0 24666 start_sentence
+24666 49332 history
+49332 73998 guess
+73998 98664 deaf
+98664 123330 committee
+123330 148000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/91.TXT.lab"
+0 24333 start_sentence
+24333 48666 turkey
+48666 72999 teach
+72999 97332 yellow
+97332 121665 twin
+121665 146000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/92.TXT.lab"
+0 27000 start_sentence
+27000 54000 water
+54000 81000 create
+81000 108000 stupid
+108000 135000 dinner
+135000 162000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/93.TXT.lab"
+0 27000 start_sentence
+27000 54000 history
+54000 81000 invite
+81000 108000 puzzled
+108000 135000 toilet
+135000 162000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/94.TXT.lab"
+0 24000 start_sentence
+24000 48000 wine
+48000 72000 create
+72000 96000 proud
+96000 120000 pill
+120000 144000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/95.TXT.lab"
+0 25333 start_sentence
+25333 50666 mother
+50666 75999 throw
+75999 101332 good
+101332 126665 king
+126665 152000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/96.TXT.lab"
+0 25666 start_sentence
+25666 51332 chicken
+51332 76998 teach
+76998 102664 dizzy
+102664 128330 scream
+128330 154000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/97.TXT.lab"
+0 31000 start_sentence
+31000 62000 badge
+62000 93000 guess
+93000 124000 brown
+124000 155000 governor
+155000 186000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/98.TXT.lab"
+0 27666 start_sentence
+27666 55332 thing
+55332 82998 see
+82998 110664 black
+110664 138330 reason
+138330 166000 end_sentence
+.
+"/home/haileris/gt2k-stuff/gt2k-alpha/examples/acceleglove/ext/data/99.TXT.lab"
+0 24333 start_sentence
+24333 48666 lie
+48666 72999 invite
+72999 97332 expert
+97332 121665 misundertanding
+121665 146000 end_sentence
+.

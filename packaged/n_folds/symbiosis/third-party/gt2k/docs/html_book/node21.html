@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2K.1beta (1.48)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Data Collection and Annotation</TITLE>
+<META NAME="description" CONTENT="Data Collection and Annotation">
+<META NAME="keywords" CONTENT="main">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="main.css">
+
+<LINK REL="previous" HREF="node20.html">
+<LINK REL="up" HREF="node16.html">
+<LINK REL="next" HREF="node22.html">
+</HEAD>
+
+<BODY  bgcolor="#ffffff">
+<!--Navigation Panel-->
+<A NAME="tex2html372"
+  HREF="node22.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html366"
+  HREF="node16.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html362"
+  HREF="node20.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html368"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html370"
+  HREF="node27.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html373"
+  HREF="node22.html">Training and Recognition</A>
+<B> Up:</B> <A NAME="tex2html367"
+  HREF="node16.html">Data Preparation</A>
+<B> Previous:</B> <A NAME="tex2html363"
+  HREF="node20.html">Specifying a Grammar</A>
+ &nbsp <B>  <A NAME="tex2html369"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp <B>  <A NAME="tex2html371"
+  HREF="node27.html">Index</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION13130000000000000000">
+ Data Collection and Annotation</A>
+</H1>
+
+<P>
+In order to train and use an HMM with <B>GT<IMG
+ WIDTH="11" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.png"
+ ALT="$^{2}$">k </B>, data must be collected. 
+First, some data to be used for training the HMM should be gathered. 
+Later, <B>GT<IMG
+ WIDTH="11" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.png"
+ ALT="$^{2}$">k </B>can perform recognition on new data collected by the
+same methods.  Typical sources of data include sensors such video
+cameras, accelerometers, and microphones.
+
+<P>
+Before <B>GT<IMG
+ WIDTH="11" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.png"
+ ALT="$^{2}$">k </B>can use the collected data, salient features should be
+extracted from the data.  While <B>GT<IMG
+ WIDTH="11" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.png"
+ ALT="$^{2}$">k </B>can accept some forms of raw
+data (such as an entire frame of video), better performance is usually
+realized by computing features over the data.  A simple example of a
+feature would be the <IMG
+ WIDTH="41" HEIGHT="31" ALIGN="MIDDLE" BORDER="0"
+ SRC="img5.png"
+ ALT="$(x,y)$"> location of a ball being tracked in a
+frame of video.  The feature vector for each sample of data should be
+the same length; in the ball example, each frame of video would have a
+feature vector of length two.
+
+<P>
+Once features have been extracted from the data that will be used for
+training, they should be stored in files, with one feature vector per
+line.  The structure of the files is generally up to the user;
+however, it is often the case that the easiest structure to work with
+is one gesture per file.  Regardless of the data structure chosen, a
+Master Label File (MLF) must be created.  This file allows <B>GT<IMG
+ WIDTH="11" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.png"
+ ALT="$^{2}$">k </B>to
+associate the data for gestures with labels defining what gestures
+that data represents.  If data is stored with one gesture per file,
+the <TT>gen_mlf.sh</TT> script may be used to create the MLF.  This
+script is located in the <TT>examples/gestpan/scripts</TT> directory
+in the <B>GT<IMG
+ WIDTH="11" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.png"
+ ALT="$^{2}$">k </B>distribution. Otherwise, the MLF must be created by the
+user.  Unfortunately, the MLF format is quite complicated, but
+powerful.  For full details, please consult Section 6.3 of the HTK
+documentation and the tutorials found in the <TT>tutorials/</TT>
+directory of the <B>GT<IMG
+ WIDTH="11" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.png"
+ ALT="$^{2}$">k </B>distribution. There is also a customized
+<TT>gen_mlf.sh</TT> script in the <TT>examples/acceleglove/scripts</TT>
+directory that deals with a more complicated example.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html372"
+  HREF="node22.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html366"
+  HREF="node16.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html362"
+  HREF="node20.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html368"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html370"
+  HREF="node27.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html373"
+  HREF="node22.html">Training and Recognition</A>
+<B> Up:</B> <A NAME="tex2html367"
+  HREF="node16.html">Data Preparation</A>
+<B> Previous:</B> <A NAME="tex2html363"
+  HREF="node20.html">Specifying a Grammar</A>
+ &nbsp <B>  <A NAME="tex2html369"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp <B>  <A NAME="tex2html371"
+  HREF="node27.html">Index</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Debian User
+2003-12-13
+</ADDRESS>
+</BODY>
+</HTML>

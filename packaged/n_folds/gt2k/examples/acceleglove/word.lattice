@@ -1,0 +1,673 @@
+VERSION=1.0
+N=228  L=443  
+I=0    W=!NULL               
+I=1    W=!NULL               
+I=2    W=start_sentence      
+I=3    W=adult               
+I=4    W=!NULL               
+I=5    W=america             
+I=6    W=arch                
+I=7    W=area                
+I=8    W=badge               
+I=9    W=boy                 
+I=10   W=brother             
+I=11   W=button              
+I=12   W=cafeteria           
+I=13   W=chicken             
+I=14   W=chief               
+I=15   W=christmas           
+I=16   W=coffee              
+I=17   W=column              
+I=18   W=committee           
+I=19   W=couple              
+I=20   W=daughter            
+I=21   W=dinner              
+I=22   W=emergency           
+I=23   W=english             
+I=24   W=expert              
+I=25   W=face                
+I=26   W=father              
+I=27   W=firefighter         
+I=28   W=food                
+I=29   W=french_fries        
+I=30   W=girl                
+I=31   W=god                 
+I=32   W=government          
+I=33   W=governor            
+I=34   W=grandfather         
+I=35   W=guess               
+I=36   W=hat                 
+I=37   W=hell                
+I=38   W=history             
+I=39   W=husband             
+I=40   W=idea                
+I=41   W=idiot               
+I=42   W=invention           
+I=43   W=king                
+I=44   W=language            
+I=45   W=lie                 
+I=46   W=lotion              
+I=47   W=man                 
+I=48   W=medic               
+I=49   W=menu                
+I=50   W=misundertanding     
+I=51   W=morning             
+I=52   W=mother              
+I=53   W=name                
+I=54   W=nurse               
+I=55   W=philosophy          
+I=56   W=pill                
+I=57   W=queen               
+I=58   W=reason              
+I=59   W=restaurant          
+I=60   W=rooster             
+I=61   W=scream              
+I=62   W=senate              
+I=63   W=sister              
+I=64   W=sky                 
+I=65   W=son                 
+I=66   W=telephone           
+I=67   W=theory              
+I=68   W=thing               
+I=69   W=toilet              
+I=70   W=turkey              
+I=71   W=twin                
+I=72   W=uncle               
+I=73   W=vegetable           
+I=74   W=vice_prez           
+I=75   W=water               
+I=76   W=wife                
+I=77   W=wine                
+I=78   W=woman               
+I=79   W=he                  
+I=80   W=i                   
+I=81   W=they                
+I=82   W=we                  
+I=83   W=you                 
+I=84   W=apologize           
+I=85   W=!NULL               
+I=86   W=appreciate          
+I=87   W=believe             
+I=88   W=collect             
+I=89   W=create              
+I=90   W=drink               
+I=91   W=forget              
+I=92   W=go                  
+I=93   W=guess               
+I=94   W=hear                
+I=95   W=help                
+I=96   W=invite              
+I=97   W=know                
+I=98   W=learn               
+I=99   W=look_at             
+I=100  W=meet                
+I=101  W=memorize            
+I=102  W=pass_out            
+I=103  W=recall              
+I=104  W=respect             
+I=105  W=scream              
+I=106  W=see                 
+I=107  W=shower              
+I=108  W=start               
+I=109  W=suspect             
+I=110  W=swallow             
+I=111  W=take                
+I=112  W=teach               
+I=113  W=tell                
+I=114  W=throw               
+I=115  W=turn                
+I=116  W=understand          
+I=117  W=use                 
+I=118  W=bald                
+I=119  W=!NULL               
+I=120  W=black               
+I=121  W=brown               
+I=122  W=deaf                
+I=123  W=dizzy               
+I=124  W=english             
+I=125  W=expert              
+I=126  W=fair                
+I=127  W=false               
+I=128  W=favorite            
+I=129  W=fine                
+I=130  W=full                
+I=131  W=good                
+I=132  W=hungry              
+I=133  W=ignorant            
+I=134  W=impossible          
+I=135  W=nice                
+I=136  W=beautiful           
+I=137  W=proud               
+I=138  W=puzzled             
+I=139  W=red                 
+I=140  W=sad                 
+I=141  W=sick                
+I=142  W=skinny              
+I=143  W=smart               
+I=144  W=stupid              
+I=145  W=sweet               
+I=146  W=ugly                
+I=147  W=upset               
+I=148  W=virtual             
+I=149  W=wrong               
+I=150  W=yellow              
+I=151  W=adult               
+I=152  W=!NULL               
+I=153  W=america             
+I=154  W=arch                
+I=155  W=area                
+I=156  W=badge               
+I=157  W=boy                 
+I=158  W=brother             
+I=159  W=button              
+I=160  W=cafeteria           
+I=161  W=chicken             
+I=162  W=chief               
+I=163  W=christmas           
+I=164  W=coffee              
+I=165  W=column              
+I=166  W=committee           
+I=167  W=couple              
+I=168  W=daughter            
+I=169  W=dinner              
+I=170  W=emergency           
+I=171  W=english             
+I=172  W=expert              
+I=173  W=face                
+I=174  W=father              
+I=175  W=firefighter         
+I=176  W=food                
+I=177  W=french_fries        
+I=178  W=girl                
+I=179  W=god                 
+I=180  W=government          
+I=181  W=governor            
+I=182  W=grandfather         
+I=183  W=guess               
+I=184  W=hat                 
+I=185  W=hell                
+I=186  W=history             
+I=187  W=husband             
+I=188  W=idea                
+I=189  W=idiot               
+I=190  W=invention           
+I=191  W=king                
+I=192  W=language            
+I=193  W=lie                 
+I=194  W=lotion              
+I=195  W=man                 
+I=196  W=medic               
+I=197  W=menu                
+I=198  W=misundertanding     
+I=199  W=morning             
+I=200  W=mother              
+I=201  W=name                
+I=202  W=nurse               
+I=203  W=philosophy          
+I=204  W=pill                
+I=205  W=queen               
+I=206  W=reason              
+I=207  W=restaurant          
+I=208  W=rooster             
+I=209  W=scream              
+I=210  W=senate              
+I=211  W=sister              
+I=212  W=sky                 
+I=213  W=son                 
+I=214  W=telephone           
+I=215  W=theory              
+I=216  W=thing               
+I=217  W=toilet              
+I=218  W=turkey              
+I=219  W=twin                
+I=220  W=uncle               
+I=221  W=vegetable           
+I=222  W=vice_prez           
+I=223  W=water               
+I=224  W=wife                
+I=225  W=wine                
+I=226  W=woman               
+I=227  W=end_sentence        
+J=0     S=227  E=1    
+J=1     S=0    E=2    
+J=2     S=2    E=3    
+J=3     S=3    E=4    
+J=4     S=5    E=4    
+J=5     S=6    E=4    
+J=6     S=7    E=4    
+J=7     S=8    E=4    
+J=8     S=9    E=4    
+J=9     S=10   E=4    
+J=10    S=11   E=4    
+J=11    S=12   E=4    
+J=12    S=13   E=4    
+J=13    S=14   E=4    
+J=14    S=15   E=4    
+J=15    S=16   E=4    
+J=16    S=17   E=4    
+J=17    S=18   E=4    
+J=18    S=19   E=4    
+J=19    S=20   E=4    
+J=20    S=21   E=4    
+J=21    S=22   E=4    
+J=22    S=23   E=4    
+J=23    S=24   E=4    
+J=24    S=25   E=4    
+J=25    S=26   E=4    
+J=26    S=27   E=4    
+J=27    S=28   E=4    
+J=28    S=29   E=4    
+J=29    S=30   E=4    
+J=30    S=31   E=4    
+J=31    S=32   E=4    
+J=32    S=33   E=4    
+J=33    S=34   E=4    
+J=34    S=35   E=4    
+J=35    S=36   E=4    
+J=36    S=37   E=4    
+J=37    S=38   E=4    
+J=38    S=39   E=4    
+J=39    S=40   E=4    
+J=40    S=41   E=4    
+J=41    S=42   E=4    
+J=42    S=43   E=4    
+J=43    S=44   E=4    
+J=44    S=45   E=4    
+J=45    S=46   E=4    
+J=46    S=47   E=4    
+J=47    S=48   E=4    
+J=48    S=49   E=4    
+J=49    S=50   E=4    
+J=50    S=51   E=4    
+J=51    S=52   E=4    
+J=52    S=53   E=4    
+J=53    S=54   E=4    
+J=54    S=55   E=4    
+J=55    S=56   E=4    
+J=56    S=57   E=4    
+J=57    S=58   E=4    
+J=58    S=59   E=4    
+J=59    S=60   E=4    
+J=60    S=61   E=4    
+J=61    S=62   E=4    
+J=62    S=63   E=4    
+J=63    S=64   E=4    
+J=64    S=65   E=4    
+J=65    S=66   E=4    
+J=66    S=67   E=4    
+J=67    S=68   E=4    
+J=68    S=69   E=4    
+J=69    S=70   E=4    
+J=70    S=71   E=4    
+J=71    S=72   E=4    
+J=72    S=73   E=4    
+J=73    S=74   E=4    
+J=74    S=75   E=4    
+J=75    S=76   E=4    
+J=76    S=77   E=4    
+J=77    S=78   E=4    
+J=78    S=79   E=4    
+J=79    S=80   E=4    
+J=80    S=81   E=4    
+J=81    S=82   E=4    
+J=82    S=83   E=4    
+J=83    S=2    E=5    
+J=84    S=2    E=6    
+J=85    S=2    E=7    
+J=86    S=2    E=8    
+J=87    S=2    E=9    
+J=88    S=2    E=10   
+J=89    S=2    E=11   
+J=90    S=2    E=12   
+J=91    S=2    E=13   
+J=92    S=2    E=14   
+J=93    S=2    E=15   
+J=94    S=2    E=16   
+J=95    S=2    E=17   
+J=96    S=2    E=18   
+J=97    S=2    E=19   
+J=98    S=2    E=20   
+J=99    S=2    E=21   
+J=100   S=2    E=22   
+J=101   S=2    E=23   
+J=102   S=2    E=24   
+J=103   S=2    E=25   
+J=104   S=2    E=26   
+J=105   S=2    E=27   
+J=106   S=2    E=28   
+J=107   S=2    E=29   
+J=108   S=2    E=30   
+J=109   S=2    E=31   
+J=110   S=2    E=32   
+J=111   S=2    E=33   
+J=112   S=2    E=34   
+J=113   S=2    E=35   
+J=114   S=2    E=36   
+J=115   S=2    E=37   
+J=116   S=2    E=38   
+J=117   S=2    E=39   
+J=118   S=2    E=40   
+J=119   S=2    E=41   
+J=120   S=2    E=42   
+J=121   S=2    E=43   
+J=122   S=2    E=44   
+J=123   S=2    E=45   
+J=124   S=2    E=46   
+J=125   S=2    E=47   
+J=126   S=2    E=48   
+J=127   S=2    E=49   
+J=128   S=2    E=50   
+J=129   S=2    E=51   
+J=130   S=2    E=52   
+J=131   S=2    E=53   
+J=132   S=2    E=54   
+J=133   S=2    E=55   
+J=134   S=2    E=56   
+J=135   S=2    E=57   
+J=136   S=2    E=58   
+J=137   S=2    E=59   
+J=138   S=2    E=60   
+J=139   S=2    E=61   
+J=140   S=2    E=62   
+J=141   S=2    E=63   
+J=142   S=2    E=64   
+J=143   S=2    E=65   
+J=144   S=2    E=66   
+J=145   S=2    E=67   
+J=146   S=2    E=68   
+J=147   S=2    E=69   
+J=148   S=2    E=70   
+J=149   S=2    E=71   
+J=150   S=2    E=72   
+J=151   S=2    E=73   
+J=152   S=2    E=74   
+J=153   S=2    E=75   
+J=154   S=2    E=76   
+J=155   S=2    E=77   
+J=156   S=2    E=78   
+J=157   S=2    E=79   
+J=158   S=2    E=80   
+J=159   S=2    E=81   
+J=160   S=2    E=82   
+J=161   S=2    E=83   
+J=162   S=4    E=84   
+J=163   S=84   E=85   
+J=164   S=86   E=85   
+J=165   S=87   E=85   
+J=166   S=88   E=85   
+J=167   S=89   E=85   
+J=168   S=90   E=85   
+J=169   S=91   E=85   
+J=170   S=92   E=85   
+J=171   S=93   E=85   
+J=172   S=94   E=85   
+J=173   S=95   E=85   
+J=174   S=96   E=85   
+J=175   S=97   E=85   
+J=176   S=98   E=85   
+J=177   S=99   E=85   
+J=178   S=100  E=85   
+J=179   S=101  E=85   
+J=180   S=102  E=85   
+J=181   S=103  E=85   
+J=182   S=104  E=85   
+J=183   S=105  E=85   
+J=184   S=106  E=85   
+J=185   S=107  E=85   
+J=186   S=108  E=85   
+J=187   S=109  E=85   
+J=188   S=110  E=85   
+J=189   S=111  E=85   
+J=190   S=112  E=85   
+J=191   S=113  E=85   
+J=192   S=114  E=85   
+J=193   S=115  E=85   
+J=194   S=116  E=85   
+J=195   S=117  E=85   
+J=196   S=4    E=86   
+J=197   S=4    E=87   
+J=198   S=4    E=88   
+J=199   S=4    E=89   
+J=200   S=4    E=90   
+J=201   S=4    E=91   
+J=202   S=4    E=92   
+J=203   S=4    E=93   
+J=204   S=4    E=94   
+J=205   S=4    E=95   
+J=206   S=4    E=96   
+J=207   S=4    E=97   
+J=208   S=4    E=98   
+J=209   S=4    E=99   
+J=210   S=4    E=100  
+J=211   S=4    E=101  
+J=212   S=4    E=102  
+J=213   S=4    E=103  
+J=214   S=4    E=104  
+J=215   S=4    E=105  
+J=216   S=4    E=106  
+J=217   S=4    E=107  
+J=218   S=4    E=108  
+J=219   S=4    E=109  
+J=220   S=4    E=110  
+J=221   S=4    E=111  
+J=222   S=4    E=112  
+J=223   S=4    E=113  
+J=224   S=4    E=114  
+J=225   S=4    E=115  
+J=226   S=4    E=116  
+J=227   S=4    E=117  
+J=228   S=85   E=118  
+J=229   S=118  E=119  
+J=230   S=120  E=119  
+J=231   S=121  E=119  
+J=232   S=122  E=119  
+J=233   S=123  E=119  
+J=234   S=124  E=119  
+J=235   S=125  E=119  
+J=236   S=126  E=119  
+J=237   S=127  E=119  
+J=238   S=128  E=119  
+J=239   S=129  E=119  
+J=240   S=130  E=119  
+J=241   S=131  E=119  
+J=242   S=132  E=119  
+J=243   S=133  E=119  
+J=244   S=134  E=119  
+J=245   S=135  E=119  
+J=246   S=136  E=119  
+J=247   S=137  E=119  
+J=248   S=138  E=119  
+J=249   S=139  E=119  
+J=250   S=140  E=119  
+J=251   S=141  E=119  
+J=252   S=142  E=119  
+J=253   S=143  E=119  
+J=254   S=144  E=119  
+J=255   S=145  E=119  
+J=256   S=146  E=119  
+J=257   S=147  E=119  
+J=258   S=148  E=119  
+J=259   S=149  E=119  
+J=260   S=150  E=119  
+J=261   S=85   E=120  
+J=262   S=85   E=121  
+J=263   S=85   E=122  
+J=264   S=85   E=123  
+J=265   S=85   E=124  
+J=266   S=85   E=125  
+J=267   S=85   E=126  
+J=268   S=85   E=127  
+J=269   S=85   E=128  
+J=270   S=85   E=129  
+J=271   S=85   E=130  
+J=272   S=85   E=131  
+J=273   S=85   E=132  
+J=274   S=85   E=133  
+J=275   S=85   E=134  
+J=276   S=85   E=135  
+J=277   S=85   E=136  
+J=278   S=85   E=137  
+J=279   S=85   E=138  
+J=280   S=85   E=139  
+J=281   S=85   E=140  
+J=282   S=85   E=141  
+J=283   S=85   E=142  
+J=284   S=85   E=143  
+J=285   S=85   E=144  
+J=286   S=85   E=145  
+J=287   S=85   E=146  
+J=288   S=85   E=147  
+J=289   S=85   E=148  
+J=290   S=85   E=149  
+J=291   S=85   E=150  
+J=292   S=119  E=151  
+J=293   S=151  E=152  
+J=294   S=153  E=152  
+J=295   S=154  E=152  
+J=296   S=155  E=152  
+J=297   S=156  E=152  
+J=298   S=157  E=152  
+J=299   S=158  E=152  
+J=300   S=159  E=152  
+J=301   S=160  E=152  
+J=302   S=161  E=152  
+J=303   S=162  E=152  
+J=304   S=163  E=152  
+J=305   S=164  E=152  
+J=306   S=165  E=152  
+J=307   S=166  E=152  
+J=308   S=167  E=152  
+J=309   S=168  E=152  
+J=310   S=169  E=152  
+J=311   S=170  E=152  
+J=312   S=171  E=152  
+J=313   S=172  E=152  
+J=314   S=173  E=152  
+J=315   S=174  E=152  
+J=316   S=175  E=152  
+J=317   S=176  E=152  
+J=318   S=177  E=152  
+J=319   S=178  E=152  
+J=320   S=179  E=152  
+J=321   S=180  E=152  
+J=322   S=181  E=152  
+J=323   S=182  E=152  
+J=324   S=183  E=152  
+J=325   S=184  E=152  
+J=326   S=185  E=152  
+J=327   S=186  E=152  
+J=328   S=187  E=152  
+J=329   S=188  E=152  
+J=330   S=189  E=152  
+J=331   S=190  E=152  
+J=332   S=191  E=152  
+J=333   S=192  E=152  
+J=334   S=193  E=152  
+J=335   S=194  E=152  
+J=336   S=195  E=152  
+J=337   S=196  E=152  
+J=338   S=197  E=152  
+J=339   S=198  E=152  
+J=340   S=199  E=152  
+J=341   S=200  E=152  
+J=342   S=201  E=152  
+J=343   S=202  E=152  
+J=344   S=203  E=152  
+J=345   S=204  E=152  
+J=346   S=205  E=152  
+J=347   S=206  E=152  
+J=348   S=207  E=152  
+J=349   S=208  E=152  
+J=350   S=209  E=152  
+J=351   S=210  E=152  
+J=352   S=211  E=152  
+J=353   S=212  E=152  
+J=354   S=213  E=152  
+J=355   S=214  E=152  
+J=356   S=215  E=152  
+J=357   S=216  E=152  
+J=358   S=217  E=152  
+J=359   S=218  E=152  
+J=360   S=219  E=152  
+J=361   S=220  E=152  
+J=362   S=221  E=152  
+J=363   S=222  E=152  
+J=364   S=223  E=152  
+J=365   S=224  E=152  
+J=366   S=225  E=152  
+J=367   S=226  E=152  
+J=368   S=119  E=153  
+J=369   S=119  E=154  
+J=370   S=119  E=155  
+J=371   S=119  E=156  
+J=372   S=119  E=157  
+J=373   S=119  E=158  
+J=374   S=119  E=159  
+J=375   S=119  E=160  
+J=376   S=119  E=161  
+J=377   S=119  E=162  
+J=378   S=119  E=163  
+J=379   S=119  E=164  
+J=380   S=119  E=165  
+J=381   S=119  E=166  
+J=382   S=119  E=167  
+J=383   S=119  E=168  
+J=384   S=119  E=169  
+J=385   S=119  E=170  
+J=386   S=119  E=171  
+J=387   S=119  E=172  
+J=388   S=119  E=173  
+J=389   S=119  E=174  
+J=390   S=119  E=175  
+J=391   S=119  E=176  
+J=392   S=119  E=177  
+J=393   S=119  E=178  
+J=394   S=119  E=179  
+J=395   S=119  E=180  
+J=396   S=119  E=181  
+J=397   S=119  E=182  
+J=398   S=119  E=183  
+J=399   S=119  E=184  
+J=400   S=119  E=185  
+J=401   S=119  E=186  
+J=402   S=119  E=187  
+J=403   S=119  E=188  
+J=404   S=119  E=189  
+J=405   S=119  E=190  
+J=406   S=119  E=191  
+J=407   S=119  E=192  
+J=408   S=119  E=193  
+J=409   S=119  E=194  
+J=410   S=119  E=195  
+J=411   S=119  E=196  
+J=412   S=119  E=197  
+J=413   S=119  E=198  
+J=414   S=119  E=199  
+J=415   S=119  E=200  
+J=416   S=119  E=201  
+J=417   S=119  E=202  
+J=418   S=119  E=203  
+J=419   S=119  E=204  
+J=420   S=119  E=205  
+J=421   S=119  E=206  
+J=422   S=119  E=207  
+J=423   S=119  E=208  
+J=424   S=119  E=209  
+J=425   S=119  E=210  
+J=426   S=119  E=211  
+J=427   S=119  E=212  
+J=428   S=119  E=213  
+J=429   S=119  E=214  
+J=430   S=119  E=215  
+J=431   S=119  E=216  
+J=432   S=119  E=217  
+J=433   S=119  E=218  
+J=434   S=119  E=219  
+J=435   S=119  E=220  
+J=436   S=119  E=221  
+J=437   S=119  E=222  
+J=438   S=119  E=223  
+J=439   S=119  E=224  
+J=440   S=119  E=225  
+J=441   S=119  E=226  
+J=442   S=152  E=227  

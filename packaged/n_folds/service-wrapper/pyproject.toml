@@ -1,0 +1,29 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "service"
+version = "0.0.1"
+authors = [
+  { name="Nana", email="ananay@gatech.edu" },
+]
+description = "Wrap Existing python functions into a flask restful endpoint without boilerplate code"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+	"numpy",
+	"flask",
+	"flask-cors"
+	]
+
+[project.urls]
+Homepage = "https://github.com/"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/service"]

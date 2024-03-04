@@ -1,0 +1,41 @@
+Reducing insertion errors:
+
+HVite has the ability to mitigate insertion and deletion errors, using the
+-p flag.  This adds a probability bonus/detriment to insertion.  Giving
+negative numbers reduces the probability of insertions (but it might increase
+deletions).
+
+Example:
+
+HVite -A -T 1 -H models/hmm0.7/newMacros -w word.lattice \
+	-S testsets/testing-extfiles0 -I labels.mlf -i ins_out.mlf \
+	-p -215.0 -n 4 20 dict commands
+
+This will attempt to recognize all of the HTK-readable data files listed in
+"testsets/testing-extfiles0", using the trained model in 
+"models/hmm0.7/newMacros", and the grammar defined by "word.lattice" (created
+by the train.sh script), as well as the vocabulary listed in dict and commands,
+comparing against the labels.mlf file, and storing the top 4 results in 
+"ins_out.mlf".  
+
+Play with the values given to -p to try and balance insertions and deletions
+(See below description of HResults for how to check the results given by
+HVite)
+---------------------------------------
+We added the start_sentence and end_sentence "signs" to help avoid learning
+false motion to and from the neutral as parts of "real" signs.  To avoid
+counting these tags in the results, we need to set them to be ignored.  This
+can be done with the following tags
+
+-z tag to HResults - redefines the default ??? tag to whatever.
+	e.g.: -z null
+
+-e tag to HResults - redefines a tag to be another tag:
+	e.g.: -e null start_sentence -e null end_sentence
+
+HResults -A -T 1 -t -I labels.mlf -z null -e null start_sentence \
+	-e null end_sentence -p commands ins_out.mlf > ins_out.log
+
+This will test the results from HVite stored in ins_out.mlf and store the
+resulting statistics in ins_out.log, ignoring the start_sentence and
+end_sentence in the scoring.
