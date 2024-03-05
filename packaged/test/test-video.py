@@ -6,18 +6,15 @@ import sys
 import threading
 import concurrent.futures
 from ast import literal_eval
+import signal
+from multiprocessing import Process, Queue, Manager
 
 # docker run --rm --name extract_features -p 5000:5000 extract_features
 # docker run --rm --name preprocessing -p 5000:5001 preprocessing
 
-if __name__ == '__main__':
-    if len(sys.argv) < 2:
-        print("Usage: test-video.py <filename>")
-        exit()
+stop_flag = False
 
-    start = time.time()
-
-    cap = cv2.VideoCapture(sys.argv[1])
+def producer(cap, queue):
     fcount = 0
     features = []
 
@@ -27,9 +24,18 @@ if __name__ == '__main__':
         print("Frame ", fcount)
         ret, frame = cap.read()
         if not ret:
+            stop_flag = True
             break
         # Load image
-        image = frame
+        queue.put((fcount, frame))
+
+        fcount += 1
+
+def consumer(queue, results):
+    while True:
+        if queue.empty() and stop_flag:
+            break
+        fcount, image = queue.get()
         bytes = image.tobytes
         shape = ','.join([str(i) for i in image.shape])
         url = 'http://localhost:5000/feature-extractor'
@@ -44,16 +50,33 @@ if __name__ == '__main__':
         # cv2.imshow('Frame', frame)
         content = requests.post(url, files=files, data=payload, headers=headers)
 
-        fcount += 1
-
         if content.status_code == 200:
             id, feature, runtime = literal_eval(content.content.decode())
-            features.append(feature)
-        
-        # if cv2.waitKey(1) & 0xFF == ord('q'):
-        #     break
+            results.append(id, feature)
 
-    features = np.array(features)
+if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        print("Usage: test-video.py <filename>")
+        exit()
+
+    with Manager() as manager:
+        cap = cv2.VideoCapture(sys.argv[1])
+
+        results = manager.list()
+        queue = Queue()
+        producer_process = Process(target=producer, args=(cap,queue,))
+        consumer_process = Process(target=consumer, args=(queue,results))
+
+        producer_process.start()
+        consumer_process.start()
+
+        producer_process.join()
+        consumer_process.join()
+
+        features = list(results)
+        features = sorted(features, key=lambda x: x[0])
+        features = [f[1] for f in features]
+        features = np.array(features)
 
     shape = ','.join([str(i) for i in features.shape])
     url = 'http://localhost:5001/preprocessing'
@@ -72,9 +95,7 @@ if __name__ == '__main__':
         id, serialized, dtype, shape, runtime = literal_eval(content.content.decode())
         output = np.frombuffer(serialized, dtype=dtype).reshape(shape)
 
-    end = time.time()
     print(output.shape)
-    print(output, "\n", 'Response took', end-start, 'seconds.')
 
 print("END")
     
