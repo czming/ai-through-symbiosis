@@ -7,35 +7,20 @@ import threading
 import concurrent.futures
 from ast import literal_eval
 import signal
-from multiprocessing import Process, Queue, Manager
+import os
+from pathlib import Path
+import tempfile
+from multiprocessing import Process, Queue, Manager, Pool
 
 # docker run --rm --name extract_features -p 5000:5000 extract_features
 # docker run --rm --name preprocessing -p 5000:5001 preprocessing
 
 stop_flag = False
 
-def producer(cap, queue):
-    fcount = 0
-    features = []
 
+def consumer(fcount, image):
     while True:
-        if fcount > 5:
-            break
-        print("Frame ", fcount)
-        ret, frame = cap.read()
-        if not ret:
-            stop_flag = True
-            break
-        # Load image
-        queue.put((fcount, frame))
-
-        fcount += 1
-
-def consumer(queue, results):
-    while True:
-        if queue.empty() and stop_flag:
-            break
-        fcount, image = queue.get()
+        print("Consumer", fcount)
         bytes = image.tobytes
         shape = ','.join([str(i) for i in image.shape])
         url = 'http://localhost:5000/feature-extractor'
@@ -52,31 +37,39 @@ def consumer(queue, results):
 
         if content.status_code == 200:
             id, feature, runtime = literal_eval(content.content.decode())
-            results.append(id, feature)
+            return (id, feature)
+        else:
+            print("Error", content.status_code)
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
         print("Usage: test-video.py <filename>")
         exit()
 
-    with Manager() as manager:
-        cap = cv2.VideoCapture(sys.argv[1])
+    pool = Pool()
+    cap = cv2.VideoCapture(sys.argv[1])
 
-        results = manager.list()
-        queue = Queue()
-        producer_process = Process(target=producer, args=(cap,queue,))
-        consumer_process = Process(target=consumer, args=(queue,results))
+    fcount = 0
+    features = []
 
-        producer_process.start()
-        consumer_process.start()
+    while True:
+        print("Frame ", fcount)
+        ret, frame = cap.read()
+        if not ret:
+            stop_flag = True
+            break
+        # Load image
+        # features.append(consumer(fcount, frame))
+        pool.apply_async(consumer, args=(fcount, frame), callback=lambda x: features.append(x))
+        fcount += 1
+    
+    pool.close()
+    pool.join()
 
-        producer_process.join()
-        consumer_process.join()
-
-        features = list(results)
-        features = sorted(features, key=lambda x: x[0])
-        features = [f[1] for f in features]
-        features = np.array(features)
+    features = sorted(features, key=lambda x: x[0])
+    features = [f[1] for f in features]
+    # print(features)
+    features = np.array(features)
 
     shape = ','.join([str(i) for i in features.shape])
     url = 'http://localhost:5001/preprocessing'
@@ -91,11 +84,39 @@ if __name__ == '__main__':
     content = requests.post(url, files=files, data=payload, headers=headers)
 
     if content.status_code == 200:
-        print(content.content.decode())
+        # print(content.content.decode())
         id, serialized, dtype, shape, runtime = literal_eval(content.content.decode())
         output = np.frombuffer(serialized, dtype=dtype).reshape(shape)
 
     print(output.shape)
+
+    tmpdir = "../tmp"
+    Path.mkdir(Path("../tmp/data"), exist_ok=True, parents=True, mode=0o777)
+
+    np.savetxt(os.path.join(tmpdir, "data/output1"), output, delimiter=" ")
+    np.savetxt(os.path.join(tmpdir, "data/output2"), output, delimiter=" ")
+    np.savetxt(os.path.join(tmpdir, "data/output3"), output, delimiter=" ")
+
+    url = 'http://localhost:5002/htk'
+    payload = {
+        'id': str(0),
+        '_dir': "/tmp",
+        'num_folds': 1,
+        'split_ratio': 0.7
+    }
+    headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36'}
+    content = requests.post(url, files=files, data=payload, headers=headers)
+
+    if content.status_code == 200:
+        # print(content.content.decode())
+        errorcode = literal_eval(content.content.decode())
+        print(errorcode)
+
+
+
+
+    
+
 
 print("END")
     

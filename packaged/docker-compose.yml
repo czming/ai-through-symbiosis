@@ -23,3 +23,16 @@ services:
                 build:
                         context: ./preprocessing
                         dockerfile: ./Dockerfile
+        
+        htk:
+                image: htk
+                container_name: htk
+                ports:
+                        - 5002:5000
+                networks:
+                        - sym-ai
+                build:
+                        context: ./n_folds
+                        dockerfile: ./Dockerfile
+                volumes: 
+                        - ./tmp:/tmp

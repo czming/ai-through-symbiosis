@@ -1,7 +1,9 @@
+import os
 import subprocess
 from service import Service
+
 def run_htk_on_dirs(_dir, num_folds, split_ratio=0.7):
-    return subprocess.check_output(["/bin/bash", "./scripts/n_folds.sh", "-s", f"{split_ratio}", "-d", f"{_dir}/data", "-n", f"{num_folds}"])
+    return subprocess.check_output(["/bin/bash", "./scripts/n_fold.sh", "-s", f"{split_ratio}", "-d", f"{_dir}/data", "-n", f"{num_folds}"])
 
 service = Service(
     "htk",
