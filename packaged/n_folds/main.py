@@ -1,18 +1,21 @@
 import os
+import sys
 import subprocess
 from service import Service
 
 def run_htk_on_dirs(_dir, num_folds, split_ratio=0.7):
-    try:
-        x = subprocess.check_output(["/bin/bash", "./scripts/n_fold.sh", "-s", f"{split_ratio}", "-d", f"{_dir}/data", "-n", f"{num_folds}"])
+    try:        
+        x = subprocess.Popen(f"/bin/bash -c \"cd /app/symbiosis && ./scripts/n_fold.sh -s {split_ratio} -d all-data/ -n {num_folds}\"", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        # x = subprocess.Popen(["/bin/bash", "-c", f"\"cd /app/symbiosis && ./scripts/n_fold.sh -s {split_ratio} -d all-data/ -n {num_folds}\""], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        # x = subprocess.check_output(["/bin/bash", "./scripts/n_fold.sh", "-s", f"{split_ratio}", "-d", f"all_data/", "-n", f"{num_folds}"])
     except subprocess.CalledProcessError as e:
         print(e.output)
         x = -1
-    return x
+    return x.stdout.readlines() + x.stderr.readlines()
 
 service = Service(
     "htk",
-    lambda id, _dir, num_folds, split_ratio: str((id, subprocess.check_output(["/bin/bash", "./symbiosis/scripts/n_folds.sh", "-s", f"{split_ratio}", "-d", f"{_dir}/data", "-n", f"{num_folds}"]))),
+    lambda id, _dir, num_folds, split_ratio: str((id, run_htk_on_dirs(_dir, num_folds, split_ratio))),
     {
         'form': ['id', '_dir', 'num_folds', 'split_ratio'],
     }

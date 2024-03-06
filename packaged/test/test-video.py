@@ -18,84 +18,92 @@ from multiprocessing import Process, Queue, Manager, Pool
 stop_flag = False
 
 
-def consumer(fcount, image):
-    while True:
-        print("Consumer", fcount)
-        bytes = image.tobytes
-        shape = ','.join([str(i) for i in image.shape])
-        url = 'http://localhost:5000/feature-extractor'
-        files = {
-            'image': ('unnamed.png', image),
-        }
-        payload = {
-            'id': str(fcount),
-            'shape': shape
-        }
-        headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36'}
-        # cv2.imshow('Frame', frame)
-        content = requests.post(url, files=files, data=payload, headers=headers)
+# def consumer(fcount, image):
+#     while True:
+#         print("Consumer", fcount)
+#         bytes = image.tobytes
+#         shape = ','.join([str(i) for i in image.shape])
+#         url = 'http://localhost:5000/feature-extractor'
+#         files = {
+#             'image': ('unnamed.png', image),
+#         }
+#         payload = {
+#             'id': str(fcount),
+#             'shape': shape
+#         }
+#         headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36'}
+#         # cv2.imshow('Frame', frame)
+#         content = requests.post(url, files=files, data=payload, headers=headers)
 
-        if content.status_code == 200:
-            id, feature, runtime = literal_eval(content.content.decode())
-            return (id, feature)
-        else:
-            print("Error", content.status_code)
+#         if content.status_code == 200:
+#             id, feature, runtime = literal_eval(content.content.decode())
+#             return (id, feature)
+#         else:
+#             print("Error", content.status_code)
 
 if __name__ == '__main__':
-    if len(sys.argv) < 2:
-        print("Usage: test-video.py <filename>")
-        exit()
+#     if len(sys.argv) < 2:
+#         print("Usage: test-video.py <filename>")
+#         exit()
 
-    pool = Pool()
-    cap = cv2.VideoCapture(sys.argv[1])
+#     pool = Pool()
+#     cap = cv2.VideoCapture(sys.argv[1])
 
-    fcount = 0
-    features = []
+#     fcount = 0
+#     features = []
 
-    while True:
-        print("Frame ", fcount)
-        ret, frame = cap.read()
-        if not ret:
-            stop_flag = True
-            break
-        # Load image
-        # features.append(consumer(fcount, frame))
-        pool.apply_async(consumer, args=(fcount, frame), callback=lambda x: features.append(x))
-        fcount += 1
+#     while True:
+#         print("Frame ", fcount)
+#         ret, frame = cap.read()
+#         if not ret:
+#             stop_flag = True
+#             break
+#         # Load image
+#         # features.append(consumer(fcount, frame))
+#         pool.apply_async(consumer, args=(fcount, frame), callback=lambda x: features.append(x))
+#         fcount += 1
     
-    pool.close()
-    pool.join()
+#     pool.close()
+#     pool.join()
 
-    features = sorted(features, key=lambda x: x[0])
-    features = [f[1] for f in features]
-    # print(features)
-    features = np.array(features)
+#     features = sorted(features, key=lambda x: x[0])
+#     features = [f[1] for f in features]
+#     # print(features)
+#     features = np.array(features)
 
-    shape = ','.join([str(i) for i in features.shape])
-    url = 'http://localhost:5001/preprocessing'
-    files = {
-        'data': ('data.npy', features.tobytes())
-    }
-    payload = {
-        'id': str(0),
-        'shape': shape
-    }
-    headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36'}
-    content = requests.post(url, files=files, data=payload, headers=headers)
+#     shape = ','.join([str(i) for i in features.shape])
+#     url = 'http://localhost:5001/preprocessing'
+#     files = {
+#         'data': ('data.npy', features.tobytes())
+#     }
+#     payload = {
+#         'id': str(0),
+#         'shape': shape
+#     }
+#     headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36'}
+#     content = requests.post(url, files=files, data=payload, headers=headers)
 
-    if content.status_code == 200:
-        # print(content.content.decode())
-        id, serialized, dtype, shape, runtime = literal_eval(content.content.decode())
-        output = np.frombuffer(serialized, dtype=dtype).reshape(shape)
+#     if content.status_code == 200:
+#         # print(content.content.decode())
+#         id, serialized, dtype, shape, runtime = literal_eval(content.content.decode())
+#         output = np.frombuffer(serialized, dtype=dtype).reshape(shape)
 
-    print(output.shape)
+#     print(output.shape)
 
-    tmpdir = "../tmp"
-    Path.mkdir(Path("../tmp/data"), exist_ok=True, parents=True, mode=0o777)
+#     tmpdir = "../tmp"
+#     Path.mkdir(Path("../tmp/data"), exist_ok=True, parents=True, mode=0o777)
 
-    np.savetxt(os.path.join(tmpdir, "data/output1"), output, delimiter=" ")
-    np.savetxt(os.path.join(tmpdir, "data/output2"), output, delimiter=" ")
-    np.savetxt(os.path.join(tmpdir, "data/output3"), output, delimiter=" ")
+#     np.savetxt(os.path.join(tmpdir, "data/picklist_1"), output, delimiter=" ")
+#     np.savetxt(os.path.join(tmpdir, "data/picklist_2"), output, delimiter=" ")
+#     np.savetxt(os.path.join(tmpdir, "data/picklist_3"), output, delimiter=" ")
+
+#     Path.mkdir(Path("../tmp/label"), exist_ok=True, parents=True, mode=0o777)
+#     for pick_id in range(1, 4):
+#         with open(os.path.join(tmpdir, f"label/picklist_{pick_id}.lab"), "w") as f:
+#             f.write("sil\n")
+#             for pick_count in range(3):
+#                 f.write(f"a\ne\ni\nm\n")
+#             f.write("sil")
 
     url = 'http://localhost:5002/htk'
     payload = {
@@ -105,12 +113,14 @@ if __name__ == '__main__':
         'split_ratio': 0.7
     }
     headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36'}
-    content = requests.post(url, files=files, data=payload, headers=headers)
+    content = requests.post(url, data=payload, headers=headers)
 
     if content.status_code == 200:
         # print(content.content.decode())
-        errorcode = literal_eval(content.content.decode())
-        print(errorcode)
+        id, lines = literal_eval(content.content.decode())
+        print(print("".join(i.decode('utf-8') for i in lines)))
+    else:
+        print(content.status_code, content.text)
 
 
 

@@ -35,4 +35,9 @@ services:
                         context: ./n_folds
                         dockerfile: ./Dockerfile
                 volumes: 
-                        - ./tmp:/tmp
+                        - ./tmp/input/data:/app/symbiosis/all-data
+                        - ./tmp/input/label:/app/symbiosis/all-labels
+                        - ./tmp/output/data:/app/symbiosis/data
+                        - ./tmp/output/results:/app/symbiosis/results
+                        - ./tmp/model/mlf:/app/symbiosis/mlf
+                        - ./tmp/model/models:/app/symbiosis/models
