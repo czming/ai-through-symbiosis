@@ -1,12 +1,14 @@
-import utils
+# import utils
 import argparse
 import random
 import os
 import cv2
 # from mediapipe import HandTracker
-from utils.hand_tracker import HandTracker
+from .hand_tracker import HandTracker
 import numpy as np
 from pathlib import Path
+from .rms_error_utils import *
+from .image_utils import *
 
 #stolen from extract_hand
 PALM_MODEL_PATH = os.path.join(Path(__file__).parent, "models", "palm_detection_without_custom_op.tflite")
@@ -61,7 +63,7 @@ def get_midpoint_carry_item_frames(video_path: str, htk_output_path: str, show_f
 
 
     #find each carry item sequence - in the aeim grammar, it's 'e'
-    boundaries = utils.get_htk_boundaries(htk_output_path, fps = fps)
+    boundaries = get_htk_boundaries(htk_output_path, fps = fps)
 
     #[[start0, end0], [start1, end1], ...]
     carry_sequences_frames = [[int(boundaries['e'][i] * fps), int(boundaries['e'][i + 1] * fps)] for i in range(0, int(len(boundaries['e'])/2), 2)]
@@ -73,13 +75,13 @@ def get_midpoint_carry_item_frames(video_path: str, htk_output_path: str, show_f
     for start, end in carry_sequences_frames:
         #show the middle image (print time stamp)
         midpt = int((start + end) / 2)
-        image = utils.get_frame(cap, midpt)
+        image = get_frame(cap, midpt)
 
         hand_region_image = extract_hand_region_from_frame(image)
         hand_region_images.append(hand_region_image)
 
         if show_frames:
-            utils.show_frame(hand_region_image, [480, 480])
+            show_frame(hand_region_image, [480, 480])
 
     return hand_region_images
 

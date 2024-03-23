@@ -1,7 +1,7 @@
 import os
 import cv2
 import argparse
-from src.hand_tracker import HandTracker
+from scripts.utils.hand_tracker import HandTracker
 
 # USAGE: python extract_hand.py --3d [true/false]
 ap = argparse.ArgumentParser()
@@ -10,9 +10,9 @@ ap.add_argument("--3d", required=True,
 args = vars(ap.parse_args())
 
 WINDOW = "Hand Tracking"
-PALM_MODEL_PATH = "models/palm_detection_without_custom_op.tflite"
-LANDMARK_MODEL_PATH = "models/hand_landmark.tflite"
-ANCHORS_PATH = "models/anchors.csv"
+PALM_MODEL_PATH = "./scripts/utils/models/palm_detection_without_custom_op.tflite"
+LANDMARK_MODEL_PATH = "./scripts/utils/models/hand_landmark.tflite"
+ANCHORS_PATH = "./scripts/utils/models/anchors.csv"
 
 POINT_COLOR = (0, 255, 0)
 CONNECTION_COLOR = (255, 0, 0)
@@ -21,10 +21,13 @@ THICKNESS = 4
 cv2.namedWindow(WINDOW)
 #Use Camera
 #capture = cv2.VideoCapture(0)
-video_name = "picklist_17"
-dataset_path = '../2022Spring/dataset/'
+video_name = "picklist_275"
+dataset_path = '../thesis_dataset'
 
-capture = cv2.VideoCapture(dataset_path + video_name + '.MP4')
+video_path = os.path.join(dataset_path, video_name + ".mp4")
+out_path = os.path.join(dataset_path, video_name + "_results.mp4")
+print(video_path)
+capture = cv2.VideoCapture(video_path)
 #green2
 #Use Video
 fps = capture.get(cv2.CAP_PROP_FPS)      # OpenCV2 version 2 used "CV_CAP_PROP_FPS"
@@ -32,8 +35,13 @@ print(fps)
 frame_count = int(capture.get(cv2.CAP_PROP_FRAME_COUNT))
 print(frame_count)
 
+frame_width, frame_height = round(capture.get(cv2.CAP_PROP_FRAME_WIDTH)), round(capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
 duration = frame_count/fps
 print(duration*1000)
+
+#for linux
+out_writer = cv2.VideoWriter(out_path,cv2.VideoWriter_fourcc(*'mp4v'), fps, (frame_width,frame_height))
 
 if capture.isOpened():
     hasFrame, frame = capture.read()
@@ -72,9 +80,14 @@ detector = HandTracker(
     box_enlarge=1
 )
 count = 0
-path = os.path.join(dataset_path, video_name)
-if not os.path.exists(path):
-    os.mkdir(path)
+
+#why do it this way???
+if hand_3d == "True":
+    path = os.path.join(dataset_path, video_name)
+    if not os.path.exists(path):
+        os.mkdir(path)
+
+
 while hasFrame:
     image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     points, bbox = detector(image)
@@ -117,8 +130,11 @@ while hasFrame:
             cv2.line(frame, (int(bbox[3][0]), int(bbox[3][1])), (int(bbox[0][0]), int(bbox[0][1])), CONNECTION_COLOR, THICKNESS)
     count += 5  # i.e. at 30 fps, this advances one second
     capture.set(1, count)
+    out_writer.write(frame)
+
     hasFrame, frame = capture.read()
 
 
 capture.release()
+out_writer.release()
 cv2.destroyAllWindows()

@@ -1,7 +1,8 @@
 owner: calix # fill in your name here
 file_paths:
-  video_file_path: "/home/calix/Desktop/aits/videos" # directory containing videos
-  htk_input_file_path: "/home/calix/Desktop/aits/ai-through-symbiosis" # directory containing htk input vectors
-  label_file_path: "/home/calix/Desktop/aits/ai-through-symbiosis/Labels" # directory containing pick labels (order of labels, i.e. r1b1...)
-  htk_output_file_path: "/home/calix/Desktop/aits/ai-through-symbiosis" # directort containing results from HTK (i.e. HTK output folder)
+  video_file_path: "/home/calix/Desktop/aits/thesis_dataset" # directory containing videos
+  htk_input_file_path: "/home/calix/Desktop/aits/thesis_htk_input" # directory containing htk input vectors
+  label_file_path: "/home/calix/Desktop/aits/thesis_pick_labels" # directory containing pick labels (order of labels, i.e. r1b1...)
+  htk_output_file_path: "/home/calix/Desktop/aits/sim_labels" # directort containing results from HTK (i.e. HTK output folder)
   elan_annotated_file_path: "/home/calix/Desktop/aits/ai-through-symbiosis/elan_annotated" # directory containing ELAN annotated labels for videos
+  calix_score_file_path: "/home/calix/Desktop/aits/thesis_results"

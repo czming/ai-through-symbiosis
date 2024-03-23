@@ -183,6 +183,8 @@ if __name__ == "__main__":
     parser.add_argument("--video", "-v", type=str, help="Path to input video", required=True)
     # fill in for video output
     parser.add_argument("--outfile", "-o", type=str, default="", help="Path to video outfile to save to. If not provided, will not create video") # 'hand_detection_output.mp4'
+    parser.add_argument('--output_path', type=str, required=True)
+    parser.add_argument("--display", action='store_true')
 
     args = parser.parse_args()
 
@@ -239,9 +241,12 @@ if __name__ == "__main__":
     frames = 0
 
     # change this to visualize the detections in the image
-    DISPLAY_VISUAL = True
+    DISPLAY_VISUAL = False
+    DISPLAY_VISUAL = DISPLAY_VISUAL or args.display
 
-    OUTPUT_FILE = os.path.basename(args.video.split(".")[0] + ".txt")
+    
+    OUTPUT_FILE = os.path.basename(args.video[: args.video.rfind('.')] + ".txt")
+    OUTPUT_FILE = os.path.join(args.output_path, OUTPUT_FILE)
 
     print (OUTPUT_FILE)
 
