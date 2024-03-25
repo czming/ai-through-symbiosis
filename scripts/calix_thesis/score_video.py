@@ -92,9 +92,13 @@ def in_frame(frame_shape, points):
 #return one frame per carry sequence
 def get_frame_scores(video_folder_path, picklist_name, label_path, out_path):
     data = []
-    with open(os.path.join(label_path, picklist_name + ".txt"), "r") as infile:
-        data = infile.readlines()
-    data = [d.strip().split(' ') for d in data]
+    try:
+        with open(os.path.join(label_path, picklist_name + ".txt"), "r") as infile:
+            data = infile.readlines()
+        data = [d.strip().split(' ') for d in data]
+    except:
+        print("Picklist " + picklist_name + " label file not found. No frame scores calculated for picklist " + picklist_name)
+        return
 
     #get all carry sequences
     carry_seq = np.array([d[1 : ] for d in data if d[0] == 'carry_item']).astype(int)
@@ -358,7 +362,7 @@ def sweep_video_mp(video_folder_path, picklist_name, out_path, carry_sequence, s
 if __name__ == '__main__':
     landmarker = HandLandmarker.create_from_options(options) 
     start_time = time.perf_counter()
-    for i in range(297, 355):
+    for i in range(136, 234):
         print(i)
         get_frame_scores('../../../thesis_dataset', 'picklist_{}'.format(i), '../../../sim_labels', '../../../thesis_results')
     end_time = time.perf_counter()
