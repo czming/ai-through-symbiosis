@@ -42,7 +42,7 @@ score_folder = configs["file_paths"]["calix_score_file_path"]
 
 # picklists that we are looking at
 # PICKLISTS = list(range(136, 224)) + list(range(225, 230)) + list(range(231, 235))
-PICKLISTS = list(range(136, 137)) # list(range(136, 235)
+PICKLISTS = list(range(136, 140)) # list(range(136, 235)
 
 # controls the number of bins that we are looking at (180 looks at all 180 hue bins, 280 looks at 180 hue bins +
 # 100 saturation bins)
@@ -119,7 +119,7 @@ for picklist_no in PICKLISTS:
     pick_label = "carry_item"
 
     for i in range(len(frame_boundaries[pick_label])):
-        score_matrix = np.load(os.path.join(score_folder, 'picklist_{}'.format(picklist_no), 'picklist_{}_{}.npy'.format(picklist_no, i)))
+        score_matrix = np.load(os.path.join(score_folder, 'picklist_{}'.format(picklist_no), 'picklist_{}_{}_carry_item.npy'.format(picklist_no, i)))
         sorted_scores = np.argsort(score_matrix[:, -1], axis = 0)
         #best 20 frames
         pick_frames.append(score_matrix[sorted_scores[-20:]][:, 0].astype(int))
@@ -133,11 +133,10 @@ for picklist_no in PICKLISTS:
     #         raise Exception("pick timings are overlapping, check data")
 
     # avg hsv bins for each pick
-    # num_hand_detections = [get_avg_hsv_bin_frames(htk_inputs, start_frame + 10, end_frame - 10)[1] for (start_frame, end_frame) \
-    #                        in pick_frames]
-    # if 0 in num_hand_detections:
-    #     print("skipping bad boundaries")
-    #     continue
+    num_hand_detections = [get_avg_hsv_bin_frames_frame_list(htk_inputs, frame_list)[1] for frame_list in pick_frames]
+    if 0 in num_hand_detections:
+        print("skipping bad boundaries")
+        continue
 
     empty_hand_label = "carry_empty"
 
@@ -152,14 +151,13 @@ for picklist_no in PICKLISTS:
     # empty_hand_frames = frame_boundaries[empty_hand_label]
 
     for i in range(len(frame_boundaries[empty_hand_label])):
-        score_matrix = np.load(os.path.join(score_folder, 'picklist_{}'.format(picklist_no), 'picklist_{}_{}.npy'.format(picklist_no, i)))
+        score_matrix = np.load(os.path.join(score_folder, 'picklist_{}'.format(picklist_no), 'picklist_{}_{}_carry_empty.npy'.format(picklist_no, i)))
         sorted_scores = np.argsort(score_matrix[:, -1], axis = 0)
         #best 20 frames
-        pick_frames.append(score_matrix[sorted_scores[-20:]][:, 0].astype(int))
+        empty_hand_frames.append(score_matrix[sorted_scores[-20:]][:, 0].astype(int))
 
     # avg hsv bins for each pick
-    num_hand_detections = [get_avg_hsv_bin_frames(htk_inputs, start_frame + 10, end_frame - 10)[1] for (start_frame, end_frame) \
-                           in empty_hand_frames]
+    num_hand_detections = [get_avg_hsv_bin_frames_frame_list(htk_inputs, frame_list)[1] for frame_list in empty_hand_frames]
     if 0 in num_hand_detections:
         print("skipping bad boundaries")
         continue
@@ -168,8 +166,8 @@ for picklist_no in PICKLISTS:
     sum_empty_hand_hsv = np.zeros(num_bins)
     empty_hand_frame_count = 0
 
-    for (start_frame, end_frame) in empty_hand_frames:
-        curr_avg_empty_hand_hsv, frame_count = get_avg_hsv_bin_frames(htk_inputs, start_frame + 5, end_frame - 5)
+    for frame_list in empty_hand_frames:
+        curr_avg_empty_hand_hsv, frame_count = get_avg_hsv_bin_frames_frame_list(htk_inputs, frame_list)
         sum_empty_hand_hsv += (curr_avg_empty_hand_hsv * frame_count)
         empty_hand_frame_count += frame_count
 
@@ -179,13 +177,11 @@ for picklist_no in PICKLISTS:
     # plt.bar(range(20), avg_empty_hand_hsv)
     # plt.show()
 
-    avg_hsv_picks = [get_avg_hsv_bin_frames(htk_inputs, start_frame + 5, end_frame - 5)[0] - avg_empty_hand_hsv for
-                     (start_frame, end_frame) \
-                     in pick_frames]
+    avg_hsv_picks = [get_avg_hsv_bin_frames_frame_list(htk_inputs, frame_list)[0] - avg_empty_hand_hsv for frame_list in pick_frames]
 
 
-
-    with open(f"{pick_label_folder}/picklist_{picklist_no}_raw.txt") as infile:
+    with open(os.path.join(pick_label_folder, 'picklist_{}_raw.txt'.format(picklist_no)), 'r') as infile:
+    # with open(f"{pick_label_folder}/picklist_{picklist_no}_raw.txt") as infile:
         pick_labels = [i for i in infile.read().replace("\n", "")[::2]]
 
     combined_pick_labels.extend(pick_labels)
