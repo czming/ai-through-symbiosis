@@ -5,7 +5,7 @@ when there is no pair which would reduce the intracluster distance
 
 """
 
-from utils import *
+# from utils import *
 import argparse
 import math
 import matplotlib.pyplot as plt
@@ -19,6 +19,7 @@ import sys
 sys.path.append("..")
 from utils import *
 sys.path.append("./calix_thesis")
+from util import parse_action_label_file
 
 np.random.seed(42)
 
@@ -26,7 +27,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--config_file", "-c", type=str, default="configs/zm.yaml",
+parser.add_argument("--config_file", "-c", type=str, default="../configs/calix.yaml",
                     help="Path to experiment config (scripts/configs)")
 args = parser.parse_args()
 
@@ -36,16 +37,16 @@ elan_label_folder = configs["file_paths"]["elan_annotated_file_path"]
 htk_input_folder = configs["file_paths"]["htk_input_file_path"]
 video_folder = configs["file_paths"]["video_file_path"]
 pick_label_folder = configs["file_paths"]["label_file_path"]
-
 htk_output_folder = configs["file_paths"]["htk_output_file_path"]
+score_folder = configs["file_paths"]["calix_score_file_path"]
 
 # picklists that we are looking at
 # PICKLISTS = list(range(136, 224)) + list(range(225, 230)) + list(range(231, 235))
-PICKLISTS = list(range(136, 235)) # list(range(136, 235)
+PICKLISTS = list(range(136, 137)) # list(range(136, 235)
 
 # controls the number of bins that we are looking at (180 looks at all 180 hue bins, 280 looks at 180 hue bins +
 # 100 saturation bins)
-num_bins = 180
+num_bins = 180 #don't we use 280...
 
 actual_picklists = {}
 predicted_picklists = {}
@@ -81,12 +82,12 @@ for picklist_no in PICKLISTS:
     #     continue
     try:
         # htk_results_file = f"{htk_output_folder}/results-" + str(picklist_no)
-        translated_htk_results_file = f"{htk_output_folder}/results_" + str(picklist_no) + ".txt"
+        translated_htk_results_file = f"{htk_output_folder}/picklist_" + str(picklist_no) + ".txt"
         # htk_boundaries = get_htk_boundaries(htk_results_file)
         frame_boundaries = parse_action_label_file(translated_htk_results_file)
 
         # print(htk_boundaries)
-    except:
+    except Exception as e:
         # no labels yet
         print("Skipping picklist: No htk boundaries")
         continue
@@ -114,40 +115,33 @@ for picklist_no in PICKLISTS:
 
     pick_frames = []
 
-    # htk label for pick
+    # htk label for pick's best 20% or 20 frames
     pick_label = "carry_item"
-    # using (predicted) htk boundaries instead of elan boundaries
-    # elan_boundaries = frame_boundaries
 
-    # for pick_label in pick_labels:
-    #     # look through each color
-    #     for i in range(0, len(elan_boundaries[pick_label]), 2):
-    #         # collect the red frames
-    #         start_frame = math.ceil(float(elan_boundaries[pick_label][i]) * 29.97)
-    #         end_frame = math.ceil(float(elan_boundaries[pick_label][i + 1]) * 29.97)
-    #         pick_frames.append([start_frame, end_frame])
+    for i in range(len(frame_boundaries[pick_label])):
+        score_matrix = np.load(os.path.join(score_folder, 'picklist_{}'.format(picklist_no), 'picklist_{}_{}.npy'.format(picklist_no, i)))
+        sorted_scores = np.argsort(score_matrix[:, -1], axis = 0)
+        #best 20 frames
+        pick_frames.append(score_matrix[sorted_scores[-20:]][:, 0].astype(int))
 
-    # # sort based on start
-    # pick_frames = sorted(pick_frames, key=lambda x: x[0])
-    pick_frames = sorted(frame_boundaries[pick_label], key = lambda x: x[0])
+    # pick_frames = sorted(frame_boundaries[pick_label], key = lambda x: x[0])
+    # logging.debug(len(pick_frames))
 
-    logging.debug(len(pick_frames))
-
-    for i in range(len(pick_frames) - 1):
-        if pick_frames[i + 1][0] <= pick_frames[i][1]:
-            # start frame of subsequent pick is at or before the end of the current pick (there's an issue)
-            raise Exception("pick timings are overlapping, check data")
+    # for i in range(len(pick_frames) - 1):
+    #     if pick_frames[i + 1][0] <= pick_frames[i][1]:
+    #         # start frame of subsequent pick is at or before the end of the current pick (there's an issue)
+    #         raise Exception("pick timings are overlapping, check data")
 
     # avg hsv bins for each pick
-    num_hand_detections = [get_avg_hsv_bin_frames(htk_inputs, start_frame + 10, end_frame - 10)[1] for (start_frame, end_frame) \
-                           in pick_frames]
-    if 0 in num_hand_detections:
-        print("skipping bad boundaries")
-        continue
+    # num_hand_detections = [get_avg_hsv_bin_frames(htk_inputs, start_frame + 10, end_frame - 10)[1] for (start_frame, end_frame) \
+    #                        in pick_frames]
+    # if 0 in num_hand_detections:
+    #     print("skipping bad boundaries")
+    #     continue
 
     empty_hand_label = "carry_empty"
 
-    # empty_hand_frames = []
+    empty_hand_frames = []
 
     # for i in range(0, len(elan_boundaries[empty_hand_label]), 2):
     #     # collect the red frames
@@ -155,7 +149,13 @@ for picklist_no in PICKLISTS:
     #     end_frame = math.ceil(float(elan_boundaries[empty_hand_label][i + 1]) * 29.97)
     #     empty_hand_frames.append([start_frame, end_frame])
 
-    empty_hand_frames = frame_boundaries[empty_hand_label]
+    # empty_hand_frames = frame_boundaries[empty_hand_label]
+
+    for i in range(len(frame_boundaries[empty_hand_label])):
+        score_matrix = np.load(os.path.join(score_folder, 'picklist_{}'.format(picklist_no), 'picklist_{}_{}.npy'.format(picklist_no, i)))
+        sorted_scores = np.argsort(score_matrix[:, -1], axis = 0)
+        #best 20 frames
+        pick_frames.append(score_matrix[sorted_scores[-20:]][:, 0].astype(int))
 
     # avg hsv bins for each pick
     num_hand_detections = [get_avg_hsv_bin_frames(htk_inputs, start_frame + 10, end_frame - 10)[1] for (start_frame, end_frame) \

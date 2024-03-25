@@ -104,9 +104,15 @@ def get_frame_scores(video_folder_path, picklist_name, label_path, out_path):
     carry_seq = np.array([d[1 : ] for d in data if d[0] == 'carry_item']).astype(int)
 
     for i in range(carry_seq.shape[0]):
-        sweep_video_mp(video_folder_path, picklist_name, out_path, carry_seq[i], seq_num = i)
+        sweep_video_mp(video_folder_path, picklist_name, out_path, carry_seq[i], seq_num = i, type = 'carry_item')
 
-def sweep_video_mp(video_folder_path, picklist_name, out_path, carry_sequence, seq_num = None, handedness = None):
+     #get all carry empty sequences
+    carry_seq = np.array([d[1 : ] for d in data if d[0] == 'carry_empty']).astype(int)
+
+    for i in range(carry_seq.shape[0]):
+        sweep_video_mp(video_folder_path, picklist_name, out_path, carry_seq[i], seq_num = i, type = 'carry_empty')
+
+def sweep_video_mp(video_folder_path, picklist_name, out_path, carry_sequence, seq_num = None, handedness = None, type = 'carry_item'):
     [start_frame, end_frame] = carry_sequence
     # vid_out_name = picklist_name + "_" + str(start_frame) + "_" + str(end_frame)
     video_path = os.path.join(video_folder_path, picklist_name + ".mp4")
@@ -339,8 +345,8 @@ def sweep_video_mp(video_folder_path, picklist_name, out_path, carry_sequence, s
     # cv2.imwrite(os.path.join(res_out_path, picklist_name + "_worst_michelson_{}.jpg".format(worst_michelson_frame_num)), worst_michelson_frame)
     # cv2.imwrite(os.path.join(res_out_path, picklist_name + "_best_rms_{}.jpg".format(best_rms_frame_num)), best_rms_frame)
     # cv2.imwrite(os.path.join(res_out_path, picklist_name + "_worst_rms_{}.jpg".format(worst_rms_frame_num)), worst_rms_frame)
-    cv2.imwrite(os.path.join(res_out_path, picklist_name + "_best_frame_{}.jpg".format(best_frame_num)), best_frame)
-    cv2.imwrite(os.path.join(res_out_path, picklist_name + "_worst_frame_{}.jpg".format(worst_frame_num)), worst_frame)
+    cv2.imwrite(os.path.join(res_out_path, picklist_name + "_" + type + "_best_frame_{}.jpg".format(best_frame_num)), best_frame)
+    cv2.imwrite(os.path.join(res_out_path, picklist_name + "_" + type + "_worst_frame_{}.jpg".format(worst_frame_num)), worst_frame)
     
     # cv2.imshow('best frame', best_frame)
     # if cv2.waitKey(-1) & 0xFF == ord('q'):
@@ -349,7 +355,7 @@ def sweep_video_mp(video_folder_path, picklist_name, out_path, carry_sequence, s
     # if cv2.waitKey(-1) & 0xFF == ord('q'):
     #     pass
 
-    np.save(os.path.join(res_out_path, picklist_name), score_metrics)
+    np.save(os.path.join(res_out_path, picklist_name + '_' + type), score_metrics)
 
 
     # cap.release()
@@ -362,7 +368,7 @@ def sweep_video_mp(video_folder_path, picklist_name, out_path, carry_sequence, s
 if __name__ == '__main__':
     landmarker = HandLandmarker.create_from_options(options) 
     start_time = time.perf_counter()
-    for i in range(136, 234):
+    for i in range(136, 140):
         print(i)
         get_frame_scores('../../../thesis_dataset', 'picklist_{}'.format(i), '../../../sim_labels', '../../../thesis_results')
     end_time = time.perf_counter()
