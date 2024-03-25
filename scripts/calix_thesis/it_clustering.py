@@ -121,8 +121,9 @@ for picklist_no in PICKLISTS:
     for i in range(len(frame_boundaries[pick_label])):
         score_matrix = np.load(os.path.join(score_folder, 'picklist_{}'.format(picklist_no), 'picklist_{}_{}_carry_item.npy'.format(picklist_no, i)))
         sorted_scores = np.argsort(score_matrix[:, -1], axis = 0)
-        #best 20 frames
-        pick_frames.append(score_matrix[sorted_scores[-20:]][:, 0].astype(int))
+        if sorted_scores[-20][0] != float('-inf'): #do not add bad sequences
+            #best 20 frames
+            pick_frames.append(score_matrix[sorted_scores[-20:]][:, 0].astype(int))
 
     # pick_frames = sorted(frame_boundaries[pick_label], key = lambda x: x[0])
     # logging.debug(len(pick_frames))
@@ -153,8 +154,9 @@ for picklist_no in PICKLISTS:
     for i in range(len(frame_boundaries[empty_hand_label])):
         score_matrix = np.load(os.path.join(score_folder, 'picklist_{}'.format(picklist_no), 'picklist_{}_{}_carry_empty.npy'.format(picklist_no, i)))
         sorted_scores = np.argsort(score_matrix[:, -1], axis = 0)
-        #best 20 frames
-        empty_hand_frames.append(score_matrix[sorted_scores[-20:]][:, 0].astype(int))
+        if sorted_scores[-20][0] != float('-inf'): #do not add bad sequences
+            #best 20 frames
+            empty_hand_frames.append(score_matrix[sorted_scores[-20:]][:, 0].astype(int))
 
     # avg hsv bins for each pick
     num_hand_detections = [get_avg_hsv_bin_frames_frame_list(htk_inputs, frame_list)[1] for frame_list in empty_hand_frames]
