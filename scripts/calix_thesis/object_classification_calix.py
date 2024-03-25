@@ -228,7 +228,7 @@ def object_classification_carry_item_filtering(config_file, picklist_start, pick
     htk_output_folder = configs["file_paths"]["htk_output_file_path"]
     score_folder = configs["file_paths"]["calix_score_file_path"]
 
-    with open("object_type_hsv_bins_copy.pkl", "rb") as infile:
+    with open("hsv_bin_classification_frame_filtered.pkl", "rb") as infile:
         objects_type_hsv_bins = pickle.load(infile)
 
 
@@ -275,6 +275,7 @@ def object_classification_carry_item_filtering(config_file, picklist_start, pick
         
         #number of carry item sequenecs
         picks = len(frame_boundaries['carry_item'])
+        empty_picks = len(frame_boundaries['carry_empty'])
 
         empty_hand_frames = frame_boundaries['carry_empty']
         # getting the sum, multiply average by counts
@@ -288,26 +289,29 @@ def object_classification_carry_item_filtering(config_file, picklist_start, pick
         #     print("skipping bad boundaries")
         #     continue
 
-        for (start_frame, end_frame) in empty_hand_frames:
-            if end_frame - start_frame < 10:
-                continue
-            # print (start_frame, end_frame) #in my data there are none
-            # print (len(htk_inputs))
-            # cut out 5 frames if 30fps and 10 frames if 60fps
-            curr_avg_empty_hand_hsv, frame_count = get_avg_hsv_bin_frames(htk_inputs, start_frame, end_frame)
-            sum_empty_hand_hsv += (curr_avg_empty_hand_hsv * frame_count)
-            empty_hand_frame_count += frame_count
-
-        avg_empty_hand_hsv = sum_empty_hand_hsv / np.sum(sum_empty_hand_hsv)
-
+        num_frames_filtered = 20
 
         best_frames = []
+        best_empty_hand_frames = []
+
         for pick_no in range(picks):
-            score_matrix = np.load(os.path.join(score_folder, 'picklist_{}'.format(picklist_no), 'picklist_{}_{}.npy'.format(picklist_no, pick_no)))
+            score_matrix = np.load(os.path.join(score_folder, 'picklist_{}'.format(picklist_no), 'picklist_{}_{}_carry_item.npy'.format(picklist_no, pick_no)))
             sorted_scores = np.argsort(score_matrix[:, -1], axis = 0)
             #best 20 frames
-            best_frames.append(score_matrix[sorted_scores[-20:]][:, 0].astype(int))
-        #list of 20 best frames for each pick
+            n_f = min(num_frames_filtered, sorted_scores.shape[0])
+            if sorted_scores[-n_f] != float('-inf'): #do not add bad sequences
+                best_frames.append(score_matrix[sorted_scores[-n_f:]][:, 0].astype(int))
+
+        for pick_no in range(empty_picks):
+            score_matrix = np.load(os.path.join(score_folder, 'picklist_{}'.format(picklist_no), 'picklist_{}_{}_carry_empty.npy'.format(picklist_no, pick_no)))
+            sorted_scores = np.argsort(score_matrix[:, -1], axis = 0)
+            #best 20 frames
+            n_f = min(num_frames_filtered, sorted_scores.shape[0])
+            if sorted_scores[-n_f] != float('-inf'): #do not add bad sequences
+                best_empty_hand_frames.extend(score_matrix[sorted_scores[-n_f:]][:, 0].astype(int))
+                
+        #no need for summation used in previous versions since this should weight each frame equally
+        avg_empty_hand_hsv = get_avg_hsv_bin_frames_frame_list(htk_inputs, best_empty_hand_frames)[0]
         avg_hsv_picks = [get_avg_hsv_bin_frames_frame_list(htk_inputs, frame_list)[0] - avg_empty_hand_hsv for frame_list in best_frames]
 
         # cap = cv2.VideoCapture(os.path.join(video_folder, 'picklist_{}.mp4'.format(picklist_no)))
@@ -405,6 +409,6 @@ if __name__ == '__main__':
 
     # object_classification_no_filtering(args.config, 275, 355)
 
-    object_classification_carry_item_filtering(args.config, 275, 355)
+    object_classification_carry_item_filtering(args.config, 275, 354)
     # object_classification_carry_empty_filtering(args.config)
     # object_classification_full_filtering(args.config)

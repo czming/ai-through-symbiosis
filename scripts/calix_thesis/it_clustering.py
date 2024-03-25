@@ -42,7 +42,8 @@ score_folder = configs["file_paths"]["calix_score_file_path"]
 
 # picklists that we are looking at
 # PICKLISTS = list(range(136, 224)) + list(range(225, 230)) + list(range(231, 235))
-PICKLISTS = list(range(136, 140)) # list(range(136, 235)
+PICKLISTS = list(range(136, 235)) # list(range(136, 235)
+# PICKLISTS = [223]
 
 # controls the number of bins that we are looking at (180 looks at all 180 hue bins, 280 looks at 180 hue bins +
 # 100 saturation bins)
@@ -115,15 +116,21 @@ for picklist_no in PICKLISTS:
 
     pick_frames = []
 
+    num_frames_filtered = 20
+
     # htk label for pick's best 20% or 20 frames
     pick_label = "carry_item"
 
     for i in range(len(frame_boundaries[pick_label])):
         score_matrix = np.load(os.path.join(score_folder, 'picklist_{}'.format(picklist_no), 'picklist_{}_{}_carry_item.npy'.format(picklist_no, i)))
         sorted_scores = np.argsort(score_matrix[:, -1], axis = 0)
-        if sorted_scores[-20][0] != float('-inf'): #do not add bad sequences
+        n_f = min(num_frames_filtered, sorted_scores.shape[0])
+        if sorted_scores[-n_f] != float('-inf'): #do not add bad sequences
             #best 20 frames
-            pick_frames.append(score_matrix[sorted_scores[-20:]][:, 0].astype(int))
+            pick_frames.append(score_matrix[sorted_scores[-n_f:]][:, 0].astype(int))
+        else:
+            print("skipping bad carry item sequence")
+            continue
 
     # pick_frames = sorted(frame_boundaries[pick_label], key = lambda x: x[0])
     # logging.debug(len(pick_frames))
@@ -134,10 +141,10 @@ for picklist_no in PICKLISTS:
     #         raise Exception("pick timings are overlapping, check data")
 
     # avg hsv bins for each pick
-    num_hand_detections = [get_avg_hsv_bin_frames_frame_list(htk_inputs, frame_list)[1] for frame_list in pick_frames]
-    if 0 in num_hand_detections:
-        print("skipping bad boundaries")
-        continue
+    # num_hand_detections = [get_avg_hsv_bin_frames_frame_list(htk_inputs, frame_list)[1] for frame_list in pick_frames]
+    # if 0 in num_hand_detections:
+    #     print("skipping bad boundaries")
+    #     continue
 
     empty_hand_label = "carry_empty"
 
@@ -154,27 +161,34 @@ for picklist_no in PICKLISTS:
     for i in range(len(frame_boundaries[empty_hand_label])):
         score_matrix = np.load(os.path.join(score_folder, 'picklist_{}'.format(picklist_no), 'picklist_{}_{}_carry_empty.npy'.format(picklist_no, i)))
         sorted_scores = np.argsort(score_matrix[:, -1], axis = 0)
-        if sorted_scores[-20][0] != float('-inf'): #do not add bad sequences
+        n_f = min(num_frames_filtered, sorted_scores.shape[0])
+        if sorted_scores[-n_f] != float('-inf'): #do not add bad sequences
             #best 20 frames
-            empty_hand_frames.append(score_matrix[sorted_scores[-20:]][:, 0].astype(int))
+            empty_hand_frames.extend(score_matrix[sorted_scores[-n_f:]][:, 0].astype(int))
+        else:
+            print("skipping bad carry empty sequence")
+            continue
 
     # avg hsv bins for each pick
-    num_hand_detections = [get_avg_hsv_bin_frames_frame_list(htk_inputs, frame_list)[1] for frame_list in empty_hand_frames]
-    if 0 in num_hand_detections:
-        print("skipping bad boundaries")
-        continue
+    # num_hand_detections = [get_avg_hsv_bin_frames_frame_list(htk_inputs, frame_list)[1] for frame_list in empty_hand_frames]
+    # if 0 in num_hand_detections:
+    #     print("skipping bad boundaries")
+    #     continue
 
     # getting the sum, multiply average by counts
-    sum_empty_hand_hsv = np.zeros(num_bins)
-    empty_hand_frame_count = 0
+    # sum_empty_hand_hsv = np.zeros(num_bins)
+    # empty_hand_frame_count = 0
 
-    for frame_list in empty_hand_frames:
-        curr_avg_empty_hand_hsv, frame_count = get_avg_hsv_bin_frames_frame_list(htk_inputs, frame_list)
-        sum_empty_hand_hsv += (curr_avg_empty_hand_hsv * frame_count)
-        empty_hand_frame_count += frame_count
+    # for frame_list in empty_hand_frames:
+    #     curr_avg_empty_hand_hsv, frame_count = get_avg_hsv_bin_frames_frame_list(htk_inputs, frame_list)
+    #     sum_empty_hand_hsv += (curr_avg_empty_hand_hsv * frame_count)
+    #     empty_hand_frame_count += frame_count
 
-    # normalize so it's 1
-    avg_empty_hand_hsv = sum_empty_hand_hsv / np.sum(sum_empty_hand_hsv)
+    # # normalize so it's 1
+    # avg_empty_hand_hsv = sum_empty_hand_hsv / np.sum(sum_empty_hand_hsv)
+    
+    # print(pick_frames, empty_hand_frames)
+    avg_empty_hand_hsv = get_avg_hsv_bin_frames_frame_list(htk_inputs, empty_hand_frames)[0]
 
     # plt.bar(range(20), avg_empty_hand_hsv)
     # plt.show()
@@ -218,6 +232,7 @@ color_mapping = {
     't': '#777777',
     'u': '#E1C16E'
 }
+print(len(objects_avg_hsv_bins), len(combined_pick_labels))
 
 ax.scatter([i[0] for i in objects_avg_hsv_bins], [i[len(objects_avg_hsv_bins[0]) // 3] for i in objects_avg_hsv_bins], \
            [i[2 * len(objects_avg_hsv_bins[0]) // 3] for i in objects_avg_hsv_bins], \
@@ -436,8 +451,8 @@ for picklist_no, objects_in_picklist in picklist_objects.items():
     picklist_gt = [combined_pick_labels[i] for i in objects_in_picklist]
 
 
-    with open(f"pick_labels/picklist_{picklist_no}.csv", "w") as outfile:
-        outfile.write(f"{picklist_no}, {''.join(picklist_pred)}, {''.join(picklist_gt)}")
+    # with open(f"pick_labels/picklist_{picklist_no}.csv", "w") as outfile:
+    #     outfile.write(f"{picklist_no}, {''.join(picklist_pred)}, {''.join(picklist_gt)}")
 
     print (f"Actual labels:    {picklist_gt}")
 

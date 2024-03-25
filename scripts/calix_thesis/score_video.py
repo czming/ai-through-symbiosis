@@ -123,8 +123,7 @@ def sweep_video_mp(video_folder_path, picklist_name, out_path, carry_sequence, s
     
     if seq_num is not None:
         picklist_name = picklist_name + "_" + str(seq_num)
-    
-    
+
     cap = cv2.VideoCapture(video_path)
     cap.set(1, start_frame)
     fps = cap.get(cv2.CAP_PROP_FPS)
@@ -164,7 +163,7 @@ def sweep_video_mp(video_folder_path, picklist_name, out_path, carry_sequence, s
     # worst_rms, worst_rms_frame, worst_rms_frame_num = float('inf'), None, -1
 
     #only calculate on eligible frames
-    best_score, best_frame_num, best_frame = 0, -1, None
+    best_score, best_frame_num, best_frame = float('-inf'), -1, None
     worst_score, worst_frame_num, worst_frame = float('inf'), -1, None
 
     while hasFrame and frame_counter <= end_frame:
@@ -345,9 +344,14 @@ def sweep_video_mp(video_folder_path, picklist_name, out_path, carry_sequence, s
     # cv2.imwrite(os.path.join(res_out_path, picklist_name + "_worst_michelson_{}.jpg".format(worst_michelson_frame_num)), worst_michelson_frame)
     # cv2.imwrite(os.path.join(res_out_path, picklist_name + "_best_rms_{}.jpg".format(best_rms_frame_num)), best_rms_frame)
     # cv2.imwrite(os.path.join(res_out_path, picklist_name + "_worst_rms_{}.jpg".format(worst_rms_frame_num)), worst_rms_frame)
-    cv2.imwrite(os.path.join(res_out_path, picklist_name + "_" + type + "_best_frame_{}.jpg".format(best_frame_num)), best_frame)
-    cv2.imwrite(os.path.join(res_out_path, picklist_name + "_" + type + "_worst_frame_{}.jpg".format(worst_frame_num)), worst_frame)
-    
+    if best_frame_num != -1:
+        cv2.imwrite(os.path.join(res_out_path, picklist_name + "_" + type + "_best_frame_{}.jpg".format(best_frame_num)), best_frame)
+    else:
+        print('no best frame found')
+    if worst_frame_num != -1:
+        cv2.imwrite(os.path.join(res_out_path, picklist_name + "_" + type + "_worst_frame_{}.jpg".format(worst_frame_num)), worst_frame)
+    else:
+        print('no worst frame found')
     # cv2.imshow('best frame', best_frame)
     # if cv2.waitKey(-1) & 0xFF == ord('q'):
     #     pass
@@ -368,7 +372,7 @@ def sweep_video_mp(video_folder_path, picklist_name, out_path, carry_sequence, s
 if __name__ == '__main__':
     landmarker = HandLandmarker.create_from_options(options) 
     start_time = time.perf_counter()
-    for i in range(136, 140):
+    for i in range(275, 355):
         print(i)
         get_frame_scores('../../../thesis_dataset', 'picklist_{}'.format(i), '../../../sim_labels', '../../../thesis_results')
     end_time = time.perf_counter()

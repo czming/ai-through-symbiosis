@@ -47,7 +47,6 @@ def get_avg_hsv_bin_frames_frame_list(hsv_inputs, frame_list):
 
 
     # print (start_frame, end_frame, len(hsv_inputs))
-
     for frame in frame_list:
         # see whether the hand was detected (if hand was not detected, all bins would be 0)
         hand_detected = False
