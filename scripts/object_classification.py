@@ -25,7 +25,7 @@ def find_closest_in_set(vector, vector_dict, pick_labels=None):
     return min(pick_labels, key=lambda x: vector_distances[x]), vector_distances
 
 
-def perform_classification(pick_labels, htk_inputs, htk_boundaries):
+def perform_classification(htk_inputs, htk_boundaries, pick_labels=None):
     pick_frames = []
 
     # looking through the various picks
@@ -141,7 +141,7 @@ if __name__ == "__main__":
         action_count += count
         rmse_errors.append((se / count) ** 0.5)
 
-        pred_labels= perform_classification(pick_labels, htk_inputs, htk_boundaries)
+        pred_labels= perform_classification(htk_inputs, htk_boundaries)
         predicted_picklists.extend(pred_labels)
         actual_picklists.extend(pick_labels)
 
