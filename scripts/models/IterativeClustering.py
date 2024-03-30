@@ -342,8 +342,8 @@ class IterativeClusteringModel(Model):
             label = labels[i]
 
             # update using EWMA
-            self.class_hsv_bins_mean[label] = beta * self.class_hsv_bins_mean[labels] + \
-                                              (1 - beta) * avg_hsv_bins[i]
+            self.class_hsv_bins_mean[label] = beta * self.class_hsv_bins_mean[label] + \
+                                              (1 - beta) * np.array(avg_hsv_bins[i])
 
         # return the bin means, the std, and the predicted labels that were derived for this picklist
         return self.class_hsv_bins_mean, self.class_hsv_bins_std, labels

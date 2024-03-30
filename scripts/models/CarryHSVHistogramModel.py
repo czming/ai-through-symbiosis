@@ -20,7 +20,6 @@ class CarryHSVHistogramModel(Model):
 
     def load_hsv_vectors(self, picklist_nos, htk_input_folder, htk_output_folder, fps=29.97, train=False):
         """
-
         load hsv bin data from the htk_inputs and preprocess to get the avg hsv vectors from the video and
         subtract away hand, then ready to train/fit on the vector obtained
 
