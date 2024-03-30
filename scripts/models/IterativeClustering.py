@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 import math
 import numpy as np
 from collections import defaultdict
+import itertools
 
 class IterativeClusteringModel(Model):
     # takes in some embedding vectors and set labels for the embedding vectors and find matches between them
@@ -285,7 +286,67 @@ class IterativeClusteringModel(Model):
         return self.class_hsv_bins_mean, self.class_hsv_bins_std, objects_pred_grouped_picklist
 
 
-    # need a method to fit just a single new example (get the ones closest and add that to the mean
+    # need a method to fit just a single new example (get the ones closest and add that to the mean)
+    def fit_iterative(self, avg_hsv_bins, pick_labels, beta):
+        """
+        fits just a single example by checking different permutation of pick labels and finding
+        the permutation with the smallest weighted (weighted by std) distance betweem avg_hsv_bins
+        and matched clusters
+
+        :param avg_hsv_bins (list(list(float)): 2D list where each element in axis 0 contains the hsv bins
+        of a particular pick
+        :param pick_labels (list): multiset of pick labels (the order doesn't matter, so can be in
+        the incorrect order
+        :param beta: beta in the exponential weighted moving average, which is used as the weight to put on
+        the previous value (conversely, 1 - beta weight is put on the new reading)
+        :return: self.class_hsv_bins_mean, self.class_hsv_bins_std, pred_objects (pred_objects is the
+        predicted object order that was used in the training)
+        """
+
+        # store the vector distances across all of the picks to compute the total distance later on
+        vector_distances_all_picks = []
+
+        classes = set(pick_labels)
+
+        for hsv_bin_vector in avg_hsv_bins:
+            vector_distances = {
+                key: np.linalg.norm((self.class_hsv_bins_mean[key] - hsv_bin_vector) / self.class_hsv_bins_std[key]) \
+                for key in classes
+                }
+
+            vector_distances_all_picks.append(vector_distances)
+
+        # get all of the distinct permutations of the pick_labels for comparison
+        permutations = set(itertools.permutations(pick_labels))
+
+        # find the permutation with the smallest distance and use that as the labels for updating the bins later on
+        # (permutation, sum of weighted distance for permutation)
+        smallest_distance = ([], float('inf'))
+
+        for permutation in permutations:
+            total_distance = 0.
+
+            for i in range(len(permutation)):
+                # get the distance given the current label
+                total_distance += vector_distances_all_picks[i][permutation[i]]
+
+            if total_distance < smallest_distance[1]:
+                smallest_distance = (permutation, total_distance)
+
+
+        # we just update the mean since we don't store all of the previous points so can't compute std
+        labels = smallest_distance[0]
+
+        for i in range(len(labels)):
+            # update the mean bins for the one with the current label
+            label = labels[i]
+
+            # update using EWMA
+            self.class_hsv_bins_mean[label] = beta * self.class_hsv_bins_mean[labels] + \
+                                              (1 - beta) * avg_hsv_bins[i]
+
+        # return the bin means, the std, and the predicted labels that were derived for this picklist
+        return self.class_hsv_bins_mean, self.class_hsv_bins_std, labels
 
 
     def predict(self, input_vector, constrained_classes=None):

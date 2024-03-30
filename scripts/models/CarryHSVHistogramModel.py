@@ -421,6 +421,26 @@ class CarryHSVHistogramModel(Model):
         return objects_pred_grouped_picklist
 
 
+    def fit_iterative(self, avg_hsv_bins, pick_labels, beta):
+        """
+        fits just a single example by checking different permutation of pick labels and finding
+        the permutation with the smallest weighted (weighted by std) distance betweem avg_hsv_bins
+        and matched clusters
+
+        calls fit_iterative in the iterative clustering model
+
+        :param avg_hsv_bins (list(list(float)): 2D list where each element in axis 0 contains the hsv bins
+        of a particular pick
+        :param pick_labels (list): multiset of pick labels (the order doesn't matter, so can be in
+        the incorrect order
+        :param beta: beta in the exponential weighted moving average
+        :return: self.class_hsv_bins_mean, self.class_hsv_bins_std, pred_objects (pred_objects is the
+        predicted object order that was used in the training)
+        """
+
+        self.iterative_clustering_model.fit_iterative(avg_hsv_bins, pick_labels, beta)
+
+
     def predict(self, picklist_nos, htk_input_folder, htk_output_folder, fps=29.97, constrained_classes=None):
         # hsv_inputs: list[int[280]], 180 bins for hue, 100 bins for saturation
         # action_boundaries: dict[str, int] --> contains the timestamps of the different action start and end times
@@ -437,7 +457,6 @@ class CarryHSVHistogramModel(Model):
         for picklist_no in objects_avg_hsv_bins_grouped_picklist:
 
             print (f"Picklist no. {picklist_no}")
-
             curr_hsv_bins = objects_avg_hsv_bins_grouped_picklist[picklist_no]
             curr = []
             # For each vector per action boundary (pick)
