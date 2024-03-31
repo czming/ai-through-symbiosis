@@ -253,7 +253,7 @@ class CarryHSVHistogramModel(Model):
         objects_avg_hsv_bins, objects_avg_hsv_bins_grouped_picklist = \
             self.load_hsv_vectors(picklist_nos, htk_input_folder, htk_output_folder, fps=fps, train=True)
 
-        return self.fit_to_data(combined_pick_labels, pick_labels_grouped_picklist, picklist_nos, objects_avg_hsv_bins, objects_avg_hsv_bins_grouped_picklist,
+        return self.fit_to_data(pick_labels_grouped_picklist, picklist_nos, objects_avg_hsv_bins, objects_avg_hsv_bins_grouped_picklist,
                                 visualize, write_predicted_labels)
 
     def fit_to_data(self, pick_labels_grouped_picklist, picklist_nos, objects_avg_hsv_bins, objects_avg_hsv_bins_grouped_picklist,
