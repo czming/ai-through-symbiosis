@@ -361,7 +361,7 @@ class CarryHSVHistogramModel(Model):
         print(f"num picklists: {len(objects_avg_hsv_bins_grouped_picklist)}")
         output = {}
 
-        for picklist_no in objects_avg_hsv_bins_grouped_picklist:
+        for picklist_no in objects_avg_hsv_bins_grouped_picklist.keys():
 
             print(f"Picklist no. {picklist_no}")
             curr_hsv_bins = objects_avg_hsv_bins_grouped_picklist[picklist_no]
