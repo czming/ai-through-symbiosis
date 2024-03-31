@@ -242,6 +242,9 @@ class CarryHSVHistogramModel(Model):
                 logging.debug(f"no labels for picklist number {picklist_no}")
                 continue
 
+            combined_pick_labels.extend(pick_labels)
+            pick_labels_grouped_picklist[picklist_no] = pick_labels
+
             # # randomly assign pick labels for now
             # pred_labels = np.random.choice(pick_labels, replace=False, size=len(pick_labels))
 
@@ -250,10 +253,10 @@ class CarryHSVHistogramModel(Model):
         objects_avg_hsv_bins, objects_avg_hsv_bins_grouped_picklist = \
             self.load_hsv_vectors(picklist_nos, htk_input_folder, htk_output_folder, fps=fps, train=True)
 
-        return self.fit_to_data(pick_labels, picklist_nos, objects_avg_hsv_bins, objects_avg_hsv_bins_grouped_picklist,
+        return self.fit_to_data(combined_pick_labels, pick_labels_grouped_picklist, picklist_nos, objects_avg_hsv_bins, objects_avg_hsv_bins_grouped_picklist,
                                 visualize, write_predicted_labels)
 
-    def fit_to_data(self, pick_labels, picklist_nos, objects_avg_hsv_bins, objects_avg_hsv_bins_grouped_picklist,
+    def fit_to_data(self, pick_labels_grouped_picklist, picklist_nos, objects_avg_hsv_bins, objects_avg_hsv_bins_grouped_picklist,
                     visualize, write_predicted_labels):
         """
 
@@ -270,12 +273,12 @@ class CarryHSVHistogramModel(Model):
         # picklists_w_symmetric_counts = set()
         #
         # avg_hsv_bins_combined = {}
-
-        # list of labels (corresponding to each
-        combined_pick_labels = []
-
-        # set of pick_labels
-        pick_labels_grouped_picklist = {}
+        #
+        # # list of labels (corresponding to each
+        # combined_pick_labels = []
+        #
+        # # set of pick_labels
+        # pick_labels_grouped_picklist = {}
 
         # iterating through all of the different picklists
         for picklist_no in picklist_nos:
@@ -290,8 +293,7 @@ class CarryHSVHistogramModel(Model):
             #     logging.debug(f"no labels for picklist number {picklist_no}")
             #     continue
 
-            combined_pick_labels.extend(pick_labels)
-            pick_labels_grouped_picklist[picklist_no] = pick_labels
+
 
             # # randomly assign pick labels for now
             # pred_labels = np.random.choice(pick_labels, replace=False, size=len(pick_labels))
