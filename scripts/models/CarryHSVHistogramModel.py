@@ -253,10 +253,10 @@ class CarryHSVHistogramModel(Model):
         objects_avg_hsv_bins, objects_avg_hsv_bins_grouped_picklist = \
             self.load_hsv_vectors(picklist_nos, htk_input_folder, htk_output_folder, fps=fps, train=True)
 
-        return self.fit_to_data(pick_labels_grouped_picklist, picklist_nos, objects_avg_hsv_bins, objects_avg_hsv_bins_grouped_picklist,
+        return self.fit_to_data(pick_labels_grouped_picklist, objects_avg_hsv_bins, objects_avg_hsv_bins_grouped_picklist,
                                 visualize, write_predicted_labels)
 
-    def fit_to_data(self, pick_labels_grouped_picklist, picklist_nos, objects_avg_hsv_bins, objects_avg_hsv_bins_grouped_picklist,
+    def fit_to_data(self, pick_labels_grouped_picklist, objects_avg_hsv_bins, objects_avg_hsv_bins_grouped_picklist,
                     visualize, write_predicted_labels):
         """
 
@@ -281,8 +281,8 @@ class CarryHSVHistogramModel(Model):
         # pick_labels_grouped_picklist = {}
 
         # iterating through all of the different picklists
-        for picklist_no in picklist_nos:
-            logging.debug(f"Picklist number {picklist_no}")
+        # for picklist_no in picklist_nos:
+        #     logging.debug(f"Picklist number {picklist_no}")
 
             # try:
             #     with open(f"{pick_label_folder}/picklist_{picklist_no}_raw.txt") as infile:
