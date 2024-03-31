@@ -1,4 +1,6 @@
 import sys
+from collections import defaultdict
+
 sys.path.append("..")
 
 from .base_model import Model
@@ -11,6 +13,7 @@ from sklearn.utils.multiclass import unique_labels
 import pickle
 import math
 import numpy as np
+
 
 class CarryHSVHistogramModel(Model):
     # takes in some embedding vector and
@@ -68,13 +71,12 @@ class CarryHSVHistogramModel(Model):
             try:
                 # get the htk_input to load the hsv bins from the relevant lines
                 htk_inputs_file = f"{htk_input_folder}/picklist_{picklist_no}.txt"
-                print (htk_inputs_file)
+                print(htk_inputs_file)
                 with open(htk_inputs_file) as infile:
                     htk_inputs = [i.split() for i in infile.readlines()]
             except Exception as e:
-                print ("Skipping picklist: No htk input boundaries")
+                print("Skipping picklist: No htk input boundaries")
                 continue
-
 
             # get the average hsv bins for each carry action sequence (might want to incorporate information from pick since
             # that should give some idea about what the object is as well)
@@ -129,9 +131,9 @@ class CarryHSVHistogramModel(Model):
                                    (start_frame, end_frame) \
                                    in pick_frames]
 
-            print (f"pick_frames: {pick_frames}")
+            print(f"pick_frames: {pick_frames}")
 
-            print (len(htk_inputs))
+            print(len(htk_inputs))
 
             if 0 in num_hand_detections:
                 print("skipping bad boundaries")
@@ -160,7 +162,6 @@ class CarryHSVHistogramModel(Model):
 
                 continue
                 # for empty hand, we can skip those where the results were bad
-
 
             # getting the sum, multiply average by counts
             sum_empty_hand_hsv = np.zeros(num_bins)
@@ -193,11 +194,9 @@ class CarryHSVHistogramModel(Model):
                              (start_frame, end_frame) \
                              in pick_frames]
 
-
             # collapse the avg_hsv_picks into more discrete bins for training
             avg_hsv_picks = [collapse_hue_bins(i, [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165], 15) \
                              for i in avg_hsv_picks]
-
 
             objects_avg_hsv_bins.extend(avg_hsv_picks)
             objects_avg_hsv_bins_grouped_picklist[picklist_no] = avg_hsv_picks
@@ -206,8 +205,8 @@ class CarryHSVHistogramModel(Model):
 
         return objects_avg_hsv_bins, objects_avg_hsv_bins_grouped_picklist
 
-
-    def fit(self, picklist_nos, htk_input_folder, htk_output_folder, pick_label_folder, fps=29.97, visualize=False, write_predicted_labels=False):
+    def fit(self, picklist_nos, htk_input_folder, htk_output_folder, pick_label_folder, fps=29.97, visualize=False,
+            write_predicted_labels=False):
         """
 
         :param picklist_nos: picklist numbers that we want to train on
@@ -243,10 +242,6 @@ class CarryHSVHistogramModel(Model):
                 logging.debug(f"no labels for picklist number {picklist_no}")
                 continue
 
-            combined_pick_labels.extend(pick_labels)
-            pick_labels_grouped_picklist[picklist_no] = pick_labels
-
-
             # # randomly assign pick labels for now
             # pred_labels = np.random.choice(pick_labels, replace=False, size=len(pick_labels))
 
@@ -255,17 +250,130 @@ class CarryHSVHistogramModel(Model):
         objects_avg_hsv_bins, objects_avg_hsv_bins_grouped_picklist = \
             self.load_hsv_vectors(picklist_nos, htk_input_folder, htk_output_folder, fps=fps, train=True)
 
+        return self.fit_to_data(pick_labels, picklist_nos, objects_avg_hsv_bins, objects_avg_hsv_bins_grouped_picklist,
+                                visualize, write_predicted_labels)
+
+    def fit_to_data(self, pick_labels, picklist_nos, objects_avg_hsv_bins, objects_avg_hsv_bins_grouped_picklist,
+                    visualize, write_predicted_labels):
+        """
+
+        :param picklist_nos: picklist numbers that we want to train on
+        :param htk_input_folder: folder containing the htk_inputs (used to read hsv bin data from)
+        :param htk_output_folder: folder containing the htk boundary predictions
+        :param pick_label_folder: folder containing the pick labels for the different picklists
+        :param visualize: flag to visualize outputs from the result of the model
+        :return:
+        """
+
+        # actual_picklists = {}
+        # predicted_picklists = {}
+        # picklists_w_symmetric_counts = set()
+        #
+        # avg_hsv_bins_combined = {}
+
+        # list of labels (corresponding to each
+        combined_pick_labels = []
+
+        # set of pick_labels
+        pick_labels_grouped_picklist = {}
+
+        # iterating through all of the different picklists
+        for picklist_no in picklist_nos:
+            logging.debug(f"Picklist number {picklist_no}")
+
+            # try:
+            #     with open(f"{pick_label_folder}/picklist_{picklist_no}_raw.txt") as infile:
+            #
+            #         pick_labels = [i for i in infile.read().replace("\n", "")[::2]]
+            #
+            # except:
+            #     logging.debug(f"no labels for picklist number {picklist_no}")
+            #     continue
+
+            combined_pick_labels.extend(pick_labels)
+            pick_labels_grouped_picklist[picklist_no] = pick_labels
+
+            # # randomly assign pick labels for now
+            # pred_labels = np.random.choice(pick_labels, replace=False, size=len(pick_labels))
+
+            # logging.info(f"ground_truth: {pick_labels}, pred_labels: {pred_labels}")
+
+        # objects_avg_hsv_bins, objects_avg_hsv_bins_grouped_picklist = \
+        #     self.load_hsv_vectors(picklist_nos, htk_input_folder, htk_output_folder, fps=fps, train=True)
+
         self.iterative_clustering_model = IterativeClusteringModel()
 
         object_class_hsv_bins, object_class_hsv_bins_std, objects_pred_grouped_picklist = \
             self.iterative_clustering_model.fit(train_samples=objects_avg_hsv_bins_grouped_picklist,
-                                           train_labels=pick_labels_grouped_picklist, \
-                                           num_epochs=500, display_visual=visualize)
+                                                train_labels=pick_labels_grouped_picklist, \
+                                                num_epochs=500, display_visual=visualize)
 
-        if not visualize:
+        if visualize:
             # the rest is just basically visualization of the code
-            return objects_pred_grouped_picklist
+            self.visualize(object_class_hsv_bins, objects_pred_grouped_picklist, write_predicted_labels,
+                           pick_labels_grouped_picklist, objects_avg_hsv_bins)
 
+        return objects_pred_grouped_picklist
+
+    def fit_iterative(self, avg_hsv_bins, pick_labels, beta):
+        """
+        fits just a single example by checking different permutation of pick labels and finding
+        the permutation with the smallest weighted (weighted by std) distance betweem avg_hsv_bins
+        and matched clusters
+
+        calls fit_iterative in the iterative clustering model
+
+        :param avg_hsv_bins (list(list(float)): 2D list where each element in axis 0 contains the hsv bins
+        of a particular pick
+        :param pick_labels (list): multiset of pick labels (the order doesn't matter, so can be in
+        the incorrect order
+        :param beta: beta in the exponential weighted moving average
+        :return: self.class_hsv_bins_mean, self.class_hsv_bins_std, pred_objects (pred_objects is the
+        predicted object order that was used in the training)
+        """
+
+        self.iterative_clustering_model.fit_iterative(avg_hsv_bins, pick_labels, beta)
+
+    def predict(self, picklist_nos, htk_input_folder, htk_output_folder, fps=29.97, constrained_classes=None):
+        # hsv_inputs: list[int[280]], 180 bins for hue, 100 bins for saturation
+        # action_boundaries: dict[str, int] --> contains the timestamps of the different action start and end times
+        # e.g. {'a': [start1, end1]}
+        if not self.iterative_clustering_model:
+            raise Exception("Model not trained")
+
+        _, objects_avg_hsv_bins_grouped_picklist = self.load_hsv_vectors(picklist_nos, htk_input_folder,
+                                                                         htk_output_folder, fps)
+
+        return self.predict_from_hsv_bins(objects_avg_hsv_bins_grouped_picklist, constrained_classes)
+
+    def predict_from_hsv_bins(self, objects_avg_hsv_bins_grouped_picklist, constrained_classes):
+        # hsv_inputs: list[int[280]], 180 bins for hue, 100 bins for saturation
+        # action_boundaries: dict[str, int] --> contains the timestamps of the different action start and end times
+        # e.g. {'a': [start1, end1]}
+        if not self.iterative_clustering_model:
+            raise Exception("Model not trained")
+
+        # _, objects_avg_hsv_bins_grouped_picklist = self.load_hsv_vectors(picklist_nos, htk_input_folder,
+        #                                            htk_output_folder, fps)
+
+        print(f"num picklists: {len(objects_avg_hsv_bins_grouped_picklist)}")
+        output = {}
+
+        for picklist_no in objects_avg_hsv_bins_grouped_picklist:
+
+            print(f"Picklist no. {picklist_no}")
+            curr_hsv_bins = objects_avg_hsv_bins_grouped_picklist[picklist_no]
+            curr = []
+            # For each vector per action boundary (pick)
+            for hsv_vector in curr_hsv_bins:
+                curr.append(self.iterative_clustering_model.predict(hsv_vector, \
+                                                                    constrained_classes=constrained_classes)[0])
+            output[picklist_no] = curr
+
+        return output
+
+    def visualize(self, object_class_hsv_bins, objects_pred_grouped_picklist, write_predicted_labels,
+                  pick_labels_grouped_picklist, objects_avg_hsv_bins):
         plt_display_index = 0
         fig, axs = plt.subplots(2, len(object_class_hsv_bins) // 2)
 
@@ -361,7 +469,7 @@ class CarryHSVHistogramModel(Model):
 
         # flatten arrays
         actual_picklists = [i for j in sorted(objects_pred_grouped_picklist.keys()) for i in
-                               pick_labels_grouped_picklist[j]]
+                            pick_labels_grouped_picklist[j]]
         # actual_picklists = combined_pick_labels
         predicted_picklists = [i for j in sorted(objects_pred_grouped_picklist.keys()) for i in
                                objects_pred_grouped_picklist[j]]
@@ -416,52 +524,3 @@ class CarryHSVHistogramModel(Model):
         plt.tight_layout()
 
         plt.show()
-
-        return objects_pred_grouped_picklist
-
-
-    def fit_iterative(self, avg_hsv_bins, pick_labels, beta):
-        """
-        fits just a single example by checking different permutation of pick labels and finding
-        the permutation with the smallest weighted (weighted by std) distance betweem avg_hsv_bins
-        and matched clusters
-
-        calls fit_iterative in the iterative clustering model
-
-        :param avg_hsv_bins (list(list(float)): 2D list where each element in axis 0 contains the hsv bins
-        of a particular pick
-        :param pick_labels (list): multiset of pick labels (the order doesn't matter, so can be in
-        the incorrect order
-        :param beta: beta in the exponential weighted moving average
-        :return: self.class_hsv_bins_mean, self.class_hsv_bins_std, pred_objects (pred_objects is the
-        predicted object order that was used in the training)
-        """
-
-        self.iterative_clustering_model.fit_iterative(avg_hsv_bins, pick_labels, beta)
-
-
-    def predict(self, picklist_nos, htk_input_folder, htk_output_folder, fps=29.97, constrained_classes=None):
-        # hsv_inputs: list[int[280]], 180 bins for hue, 100 bins for saturation
-        # action_boundaries: dict[str, int] --> contains the timestamps of the different action start and end times
-        # e.g. {'a': [start1, end1]}
-        if not self.iterative_clustering_model:
-            raise Exception("Model not trained")
-
-        _, objects_avg_hsv_bins_grouped_picklist = self.load_hsv_vectors(picklist_nos, htk_input_folder,
-                                                   htk_output_folder, fps)
-
-        print(f"num picklists: {len(objects_avg_hsv_bins_grouped_picklist)}")
-        output = {}
-
-        for picklist_no in objects_avg_hsv_bins_grouped_picklist:
-
-            print (f"Picklist no. {picklist_no}")
-            curr_hsv_bins = objects_avg_hsv_bins_grouped_picklist[picklist_no]
-            curr = []
-            # For each vector per action boundary (pick)
-            for hsv_vector in curr_hsv_bins:
-                curr.append(self.iterative_clustering_model.predict(hsv_vector,\
-                                                                    constrained_classes=constrained_classes)[0])
-            output[picklist_no] = curr
-
-        return output
