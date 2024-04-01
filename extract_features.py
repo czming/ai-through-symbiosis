@@ -384,7 +384,6 @@ if __name__ == "__main__":
         # image = cv2.undistort(image, initial_intrinsic, initial_distortion, None)
 
 
-
         output_image = np.copy(image)
 
         aruco_vectors = aruco_detector.getCorners(image)

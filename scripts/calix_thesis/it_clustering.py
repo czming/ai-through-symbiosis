@@ -14,12 +14,13 @@ import copy
 import logging
 from sklearn.utils.multiclass import unique_labels
 import pickle
+import json
 
 import sys
 sys.path.append("..")
 from utils import *
 sys.path.append("./calix_thesis")
-from util import parse_action_label_file
+from util import parse_action_label_file, get_avg_hsv_bins_video
 
 np.random.seed(42)
 
@@ -29,6 +30,8 @@ logging.basicConfig(level=logging.DEBUG)
 parser = argparse.ArgumentParser()
 parser.add_argument("--config_file", "-c", type=str, default="../configs/calix.yaml",
                     help="Path to experiment config (scripts/configs)")
+parser.add_argument("--percent_frames", type=float, default = 1)
+parser.add_argument("--display", action = "store_true")
 args = parser.parse_args()
 
 configs = load_yaml_config(args.config_file)
@@ -43,7 +46,8 @@ score_folder = configs["file_paths"]["calix_score_file_path"]
 # picklists that we are looking at
 # PICKLISTS = list(range(136, 224)) + list(range(225, 230)) + list(range(231, 235))
 PICKLISTS = list(range(136, 235)) # list(range(136, 235)
-# PICKLISTS = [223]
+# PICKLISTS.extend(list(range(275,355)))
+# PICKLISTS = [136]
 
 # controls the number of bins that we are looking at (180 looks at all 180 hue bins, 280 looks at 180 hue bins +
 # 100 saturation bins)
@@ -68,6 +72,9 @@ pred_objects = defaultdict(lambda: set())
 objects_pred = {}
 
 combined_pick_labels = []
+
+pct_frames = args.percent_frames
+
 
 # initialization (randomly assign colors)
 for picklist_no in PICKLISTS:
@@ -116,21 +123,24 @@ for picklist_no in PICKLISTS:
 
     pick_frames = []
 
-    num_frames_filtered = 20
+    # num_frames_filtered = 20
+    # frame_filter_pct = 50
 
-    # htk label for pick's best 20% or 20 frames
     pick_label = "carry_item"
 
     for i in range(len(frame_boundaries[pick_label])):
         score_matrix = np.load(os.path.join(score_folder, 'picklist_{}'.format(picklist_no), 'picklist_{}_{}_carry_item.npy'.format(picklist_no, i)))
         sorted_scores = np.argsort(score_matrix[:, -1], axis = 0)
-        n_f = min(num_frames_filtered, sorted_scores.shape[0])
-        if sorted_scores[-n_f] != float('-inf'): #do not add bad sequences
+        # n_f = min(num_frames_filtered, sorted_scores.shape[0])
+        n = sorted_scores.shape[0]
+        #sub -n // 2 with -n_f
+        # if sorted_scores[-(int)(n * pct_frames)] != float('-inf'): #do not add bad sequences
             #best 20 frames
-            pick_frames.append(score_matrix[sorted_scores[-n_f:]][:, 0].astype(int))
-        else:
-            print("skipping bad carry item sequence")
-            continue
+        #unconditionally use top n% frames
+        pick_frames.append(score_matrix[sorted_scores[-(int)(n * pct_frames):]][:, 0].astype(int))
+        # else:
+        #     print("skipping bad carry item sequence")
+        #     continue
 
     # pick_frames = sorted(frame_boundaries[pick_label], key = lambda x: x[0])
     # logging.debug(len(pick_frames))
@@ -161,13 +171,16 @@ for picklist_no in PICKLISTS:
     for i in range(len(frame_boundaries[empty_hand_label])):
         score_matrix = np.load(os.path.join(score_folder, 'picklist_{}'.format(picklist_no), 'picklist_{}_{}_carry_empty.npy'.format(picklist_no, i)))
         sorted_scores = np.argsort(score_matrix[:, -1], axis = 0)
-        n_f = min(num_frames_filtered, sorted_scores.shape[0])
-        if sorted_scores[-n_f] != float('-inf'): #do not add bad sequences
+        # n_f = min(num_frames_filtered, sorted_scores.shape[0])
+        n = sorted_scores.shape[0]
+
+        # if sorted_scores[-(int)(n * pct_frames)] != float('-inf'): #do not add bad sequences
             #best 20 frames
-            empty_hand_frames.extend(score_matrix[sorted_scores[-n_f:]][:, 0].astype(int))
-        else:
-            print("skipping bad carry empty sequence")
-            continue
+        #unconditionally use top n% frames
+        empty_hand_frames.extend(score_matrix[sorted_scores[-(int)(n * pct_frames):]][:, 0].astype(int))
+        # else:
+        #     print("skipping bad carry empty sequence")
+        #     continue
 
     # avg hsv bins for each pick
     # num_hand_detections = [get_avg_hsv_bin_frames_frame_list(htk_inputs, frame_list)[1] for frame_list in empty_hand_frames]
@@ -189,6 +202,7 @@ for picklist_no in PICKLISTS:
     
     # print(pick_frames, empty_hand_frames)
     avg_empty_hand_hsv = get_avg_hsv_bin_frames_frame_list(htk_inputs, empty_hand_frames)[0]
+    # avg_empty_hand_hsv = get_avg_hsv_bins_video(os.path.join(video_folder, 'picklist_{}.mp4'.format(picklist_no)), empty_hand_frames)
 
     # plt.bar(range(20), avg_empty_hand_hsv)
     # plt.show()
@@ -205,7 +219,7 @@ for picklist_no in PICKLISTS:
     # randomly assign pick labels for now
     pred_labels = np.random.choice(pick_labels, replace=False, size=len(pick_labels))
 
-    logging.info(f"ground_truth: {pick_labels}, pred_labels: {pred_labels}")
+    # logging.info(f"ground_truth: {pick_labels}, pred_labels: {pred_labels}")
 
     for i in range(len(avg_hsv_picks)):
         object_id = len(objects_avg_hsv_bins)
@@ -232,13 +246,14 @@ color_mapping = {
     't': '#777777',
     'u': '#E1C16E'
 }
-print(len(objects_avg_hsv_bins), len(combined_pick_labels))
+# print(len(objects_avg_hsv_bins), len(combined_pick_labels))
 
 ax.scatter([i[0] for i in objects_avg_hsv_bins], [i[len(objects_avg_hsv_bins[0]) // 3] for i in objects_avg_hsv_bins], \
            [i[2 * len(objects_avg_hsv_bins[0]) // 3] for i in objects_avg_hsv_bins], \
            c = [color_mapping[i] for i in combined_pick_labels])
 
-plt.show()
+if args.display:
+    plt.show()
 
 epochs = 0
 num_epochs = 500
@@ -247,7 +262,8 @@ cluster_fig = plt.figure()
 
 cluster_ax = cluster_fig.add_subplot(projection="3d")
 
-plt.show(block=False)
+if args.display:
+    plt.show(block=False)
 
 while epochs < num_epochs:
     print (f"Starting epoch {epochs}...")
@@ -386,8 +402,8 @@ for object, predicted_objects in pred_objects.items():
         axs[1, plt_display_index - len(pred_objects) // 2].set_title(object)
     plt_display_index += 1
 
-
-plt.show()
+if args.display:
+    plt.show()
 
 letter_to_name = {
     'r': 'red',
@@ -439,14 +455,15 @@ for object, predicted_objects in pred_objects.items():
     axs[0, 0].set_yticks([-0.15, -0.1, -0.05, 0, 0.05, 0.1, 0.15])
     axs[1, 0].set_yticks([-0.15, -0.1, -0.05, 0, 0.05, 0.1, 0.15])
 
-plt.show()
+if args.display:
+    plt.show()
 
 
 # print the results on a per picklist level
 for picklist_no, objects_in_picklist in picklist_objects.items():
-    print (f"Picklist no. {picklist_no}")
+    # print (f"Picklist no. {picklist_no}")
     picklist_pred = [objects_pred[i] for i in objects_in_picklist]
-    print (f"Predicted labels: {picklist_pred}")
+    # print (f"Predicted labels: {picklist_pred}")
     # use the same mapping for combined_pick_labels as object ids
     picklist_gt = [combined_pick_labels[i] for i in objects_in_picklist]
 
@@ -454,7 +471,7 @@ for picklist_no, objects_in_picklist in picklist_objects.items():
     # with open(f"pick_labels/picklist_{picklist_no}.csv", "w") as outfile:
     #     outfile.write(f"{picklist_no}, {''.join(picklist_pred)}, {''.join(picklist_gt)}")
 
-    print (f"Actual labels:    {picklist_gt}")
+    # print (f"Actual labels:    {picklist_gt}")
 
 
 # flatten arrays
@@ -467,7 +484,8 @@ ax.scatter([i[0] for i in objects_avg_hsv_bins], [i[len(objects_avg_hsv_bins[0])
            [i[2 * len(objects_avg_hsv_bins[0]) // 3] for i in objects_avg_hsv_bins], \
            c = [color_mapping[i] for i in predicted_picklists])
 
-plt.show()
+if args.display:
+    plt.show()
 
 confusions = defaultdict(int)
 label_counts = defaultdict(int)
@@ -475,12 +493,14 @@ for pred, label in zip(predicted_picklists, actual_picklists):
     if pred != label:
         confusions[pred + label] += 1
 
-logging.debug(confusions)
+# logging.debug(confusions)
+
+print (sum([1 if predicted_picklists[i] == actual_picklists[i] else 0 for i in range(len(predicted_picklists))]) / len(predicted_picklists))
 
 confusion_matrix = metrics.confusion_matrix(actual_picklists, predicted_picklists)
 
-logging.debug(actual_picklists)
-logging.debug(predicted_picklists)
+# logging.debug(actual_picklists)
+# logging.debug(predicted_picklists)
 
 names = ['red', 'green', 'blue', 'darkblue', 'darkgreen', 'orange', 'alligatorclip', 'yellow', 'clear', 'candle']
 
@@ -508,7 +528,8 @@ plt.xticks(rotation=90)
 
 plt.tight_layout()
 
-plt.show()
+if args.display:
+    plt.show()
 
 objects_pred_hsv_bins = defaultdict(lambda: [])
 
@@ -523,7 +544,7 @@ for object_type, object_hsv_bins in objects_pred_hsv_bins.items():
     # store the standard deviation as well of the different axes
     objects_pred_avg_hsv_bins[object_type] = [np.array(object_hsv_bins).mean(axis=0), np.array(object_hsv_bins).std(axis=0, ddof=1)]
 
-with open("hsv_bin_classification_frame_filtered.pkl", "wb") as outfile:
+with open(f"hsv_bin_classification_frame_filtered_{int(pct_frames * 100)}_percent_frames_unconditional.pkl", "wb") as outfile:
     # without removing the hand
     pickle.dump(objects_pred_avg_hsv_bins, outfile)
 

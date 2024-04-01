@@ -7,6 +7,7 @@ from sklearn import metrics
 import logging
 from sklearn.utils.multiclass import unique_labels
 from util import parse_action_label_file
+import json
 
 import sys
 sys.path.append("..")
@@ -215,7 +216,7 @@ def object_classification_no_filtering(config_file, picklist_start, picklist_end
 
     print (rmse_errors) 
 
-def object_classification_carry_item_filtering(config_file, picklist_start, picklist_end):
+def object_classification_carry_item_filtering(config_file, picklist_start, picklist_end, pct_frames = 1, display = False):
     # change depending on configs
     PICKLISTS = range(picklist_start, picklist_end) #range(41, 91)
 
@@ -228,7 +229,7 @@ def object_classification_carry_item_filtering(config_file, picklist_start, pick
     htk_output_folder = configs["file_paths"]["htk_output_file_path"]
     score_folder = configs["file_paths"]["calix_score_file_path"]
 
-    with open("hsv_bin_classification_frame_filtered.pkl", "rb") as infile:
+    with open(f"hsv_bin_classification_frame_filtered_{(int)(pct_frames * 100)}_percent_frames_unconditional.pkl", "rb") as infile:
         objects_type_hsv_bins = pickle.load(infile)
 
 
@@ -298,17 +299,31 @@ def object_classification_carry_item_filtering(config_file, picklist_start, pick
             score_matrix = np.load(os.path.join(score_folder, 'picklist_{}'.format(picklist_no), 'picklist_{}_{}_carry_item.npy'.format(picklist_no, pick_no)))
             sorted_scores = np.argsort(score_matrix[:, -1], axis = 0)
             #best 20 frames
-            n_f = min(num_frames_filtered, sorted_scores.shape[0])
-            if sorted_scores[-n_f] != float('-inf'): #do not add bad sequences
-                best_frames.append(score_matrix[sorted_scores[-n_f:]][:, 0].astype(int))
+            # n_f = min(num_frames_filtered, sorted_scores.shape[0])
+
+            #best 50% of frames
+            n = sorted_scores.shape[0]
+            # print(n, n // 2)
+
+            # if sorted_scores[-(int)(n * pct_frames)] != float('-inf'): #do not add bad sequences
+                # print(score_matrix[sorted_scores[-n // 2: ]][:, 0].astype(int))
+            
+            #unconditionally add top n% frames
+            best_frames.append(score_matrix[sorted_scores[-(int)(n * pct_frames) :]][:, 0].astype(int))
 
         for pick_no in range(empty_picks):
             score_matrix = np.load(os.path.join(score_folder, 'picklist_{}'.format(picklist_no), 'picklist_{}_{}_carry_empty.npy'.format(picklist_no, pick_no)))
             sorted_scores = np.argsort(score_matrix[:, -1], axis = 0)
             #best 20 frames
-            n_f = min(num_frames_filtered, sorted_scores.shape[0])
-            if sorted_scores[-n_f] != float('-inf'): #do not add bad sequences
-                best_empty_hand_frames.extend(score_matrix[sorted_scores[-n_f:]][:, 0].astype(int))
+            # n_f = min(num_frames_filtered, sorted_scores.shape[0])
+            
+             #best 50% of frames
+            n = sorted_scores.shape[0]
+
+            #sub -n // 2 with -n_f
+            # if sorted_scores[-(int)(n * pct_frames)] != float('-inf'): #do not add bad sequences
+            #unconditionally add top n% frames
+            best_empty_hand_frames.extend(score_matrix[sorted_scores[-(int)(n * pct_frames) :]][:, 0].astype(int))
                 
         #no need for summation used in previous versions since this should weight each frame equally
         avg_empty_hand_hsv = get_avg_hsv_bin_frames_frame_list(htk_inputs, best_empty_hand_frames)[0]
@@ -390,14 +405,24 @@ def object_classification_carry_item_filtering(config_file, picklist_start, pick
     plt.tight_layout()
     fig1 = plt.gcf()
 
-    plt.show()
+    if display:
+        plt.show()
 
-    fig1.savefig("object_classification_carry_item_filtering.jpg")
+    fig1.savefig(f"object_classification_carry_item_filtering_top_{(int)(pct_frames * 100)}_percent_unconditional.jpg")
 
     # print (sum_squared_error, action_count)
 
-    print (sum([1 if predicted_picklists[i] == actual_picklists[i] else 0 for i in range(len(predicted_picklists))]) / len(predicted_picklists))
+    final_acc = sum([1 if predicted_picklists[i] == actual_picklists[i] else 0 for i in range(len(predicted_picklists))]) / len(predicted_picklists)
+    
+    data = {}
+    with open("results_unconditional.txt", "r") as infile:
+        data = json.load(infile)
+    res = data['top_n_pct_frame_acc']
+    res[f"{(int)(pct_frames * 100)}"] = final_acc
+    data['top_n_pct_frame_acc'] = res
 
+    with open("results_unconditional.txt", "w") as outfile:
+        json.dump(data, outfile, indent=2)
     # print (rmse_errors) 
     
 
@@ -405,10 +430,12 @@ def object_classification_carry_item_filtering(config_file, picklist_start, pick
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", "-c", type=str, help="Path to experiment config (scripts/configs)", default = '../configs/calix.yaml')
+    parser.add_argument("--percent_frames", type=float, default = 1)
+    parser.add_argument("--display", action = "store_true")
     args = parser.parse_args()
 
     # object_classification_no_filtering(args.config, 275, 355)
 
-    object_classification_carry_item_filtering(args.config, 275, 354)
+    object_classification_carry_item_filtering(args.config, 275, 355, pct_frames = args.percent_frames, display = args.display)
     # object_classification_carry_empty_filtering(args.config)
     # object_classification_full_filtering(args.config)

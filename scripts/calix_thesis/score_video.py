@@ -15,18 +15,18 @@ import time
 
 """native MP impl stuff"""
 
-BaseOptions = mp.tasks.BaseOptions
-HandLandmarker = mp.tasks.vision.HandLandmarker
-HandLandmarkerOptions = mp.tasks.vision.HandLandmarkerOptions
-VisionRunningMode = mp.tasks.vision.RunningMode
-
 # Create a hand landmarker instance with the video mode:
 # options = HandLandmarkerOptions(
 #     base_options=BaseOptions(model_asset_path='./models/hand_landmarker.task'),
 #     running_mode=VisionRunningMode.VIDEO,
 #     min_tracking_confidence = 0.3,
 #     min_hand_detection_confidence = 0.3,
-#     min_hand_presence_confidence = 0.2)
+
+
+BaseOptions = mp.tasks.BaseOptions
+HandLandmarker = mp.tasks.vision.HandLandmarker
+HandLandmarkerOptions = mp.tasks.vision.HandLandmarkerOptions
+VisionRunningMode = mp.tasks.vision.RunningMode
 
 options = HandLandmarkerOptions(
     base_options=BaseOptions(model_asset_path='./models/hand_landmarker.task'),
