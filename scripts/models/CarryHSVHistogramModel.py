@@ -317,7 +317,23 @@ class CarryHSVHistogramModel(Model):
 
         return objects_pred_grouped_picklist
 
-    def fit_iterative(self, avg_hsv_bins, pick_labels, beta):
+    def fit_iterative(self, picklist_no:int, htk_input_folder, htk_output_folder, pick_label_folder, beta, fps=29.97):
+        # takes in a single picklist_no and does the processing for that
+        try:
+            with open(f"{pick_label_folder}/picklist_{picklist_no}_raw.txt") as infile:
+
+                pick_labels = [i for i in infile.read().replace("\n", "")[::2]]
+
+        except:
+            logging.debug(f"no labels for picklist number {picklist_no}")
+            raise Exception(f"no labels for picklist number {picklist_no}")
+
+        objects_avg_hsv_bins, objects_avg_hsv_bins_grouped_picklist = \
+            self.load_hsv_vectors([picklist_no], htk_input_folder, htk_output_folder, fps=fps, train=True)
+
+        self.fit_iterative_to_data(objects_avg_hsv_bins[0], beta)
+
+    def fit_iterative_to_data(self, avg_hsv_bins, pick_labels, beta):
         """
         fits just a single example by checking different permutation of pick labels and finding
         the permutation with the smallest weighted (weighted by std) distance betweem avg_hsv_bins
