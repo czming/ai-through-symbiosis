@@ -3,7 +3,7 @@ import logging
 import argparse
 import os 
 
-
+import shutil
 
 import sys
 sys.path.append("..")
@@ -32,7 +32,7 @@ def translate_htk(file_name):
 
     return htk_boundaries
 if __name__ == "__main__":
-    quit()
+    # quit()
 
     logging.basicConfig(level=logging.DEBUG)
 
@@ -44,9 +44,12 @@ if __name__ == "__main__":
     configs = load_yaml_config(args.config)
     htk_output_folder = configs["file_paths"]["htk_output_file_path"]
 
+    
+    htk_output_folder = os.path.join(htk_output_folder, 'tmp')
+
     # picklists that we are looking at
     # PICKLISTS = list(range(136, 224)) + list(range(225, 230)) + list(range(231, 235))
-    PICKLISTS = list(range(137, 234)) # list(range(136, 235)
+    PICKLISTS = list(range(41, 91)) # list(range(136, 235)
     # PICKLISTS = [136, 137, 138]
 
 
@@ -55,9 +58,12 @@ if __name__ == "__main__":
     for picklist_no in PICKLISTS:
         logging.debug(f"Picklist number {picklist_no}")
         htk_results_file = "{}/picklist_{}.txt".format(htk_output_folder, picklist_no)
+
+        shutil.move(os.path.join(htk_output_folder, f"results-{picklist_no}"), os.path.join(htk_output_folder, f"picklist_{picklist_no}.txt"))
         frame_boundaries = translate_htk(htk_results_file)
         write_data = "\n".join([' '.join([str(x) for x in line]) for line in frame_boundaries])
 
+        
         with open(htk_results_file, 'w+') as outfile:
             outfile.write(write_data)
         # print(frame_boundaries)
