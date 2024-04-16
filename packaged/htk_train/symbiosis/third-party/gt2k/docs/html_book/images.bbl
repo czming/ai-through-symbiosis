@@ -1,0 +1,19 @@
+\begin{thebibliography}{1}
+
+\bibitem{htk}
+{HTK} {H}idden {M}arkov {M}odel {T}oolkit home page.
+\newblock http://htk.eng.cam.ac.uk/.
+
+\bibitem{Rabiner89}
+L.~Rabiner.
+\newblock A tutorial on hidden markov models and selected applications in
+  speech recognition.
+\newblock {\em Proceedings of the IEEE}, 77(2):257--286, Feb 1989.
+
+\bibitem{HTK93}
+S.~Young.
+\newblock {\em HTK: Hidden {M}arkov Model Toolkit V1.5}.
+\newblock Cambridge Univ. Eng. Dept. Speech Group and Entropic Research Lab.
+  Inc., Washington DC, 1993.
+
+\end{thebibliography}

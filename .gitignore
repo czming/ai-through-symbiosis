@@ -14,4 +14,3 @@ symbiosis/data
 *.txt
 !requirements.txt
 .DS_Store
-ambient_experiments/**
