@@ -1,0 +1,755 @@
+\batchmode
+\documentclass{book}
+\RequirePackage{ifthen}
+
+    
+\usepackage[dvipdfm,bookmarks=true,bookmarkstype=toc]{hyperref}             
+\usepackage{tocbibind} 
+\usepackage{html}
+\usepackage{graphicx}
+
+\hypersetup{ 
+	pdfauthor={Westeyn and Brashear}, 
+	pdftitle={GTGTK}, 
+	bookmarksopen={true},
+	pdfpagemode={UseOutlines}
+}
+
+
+\usepackage[dvips]{epsfig}
+\usepackage{html}
+\usepackage{color}
+\usepackage{supertabular}
+
+%
+\providecommand{\iftex}[1]{    }%% Dont do tex%
+\providecommand{\ifhtml}[1]{ #1 }%% Do HTML
+
+\pagecolor{white}
+%
+\providecommand{\ifoddpage}[3]{ 
+  \ifthenelse{\isodd{\pageref{f:#1}} } {#2} {#3} 
+}%
+\providecommand{\ifevenpage}[3]{ 
+  \ifthenelse{\isodd{\pageref{f:#1}} } {#3} {#2} 
+}
+%
+\providecommand{\htmlparbox}[2]{
+    \parbox{#1} {#2}  
+}
+%
+\providecommand{\figDir}{images/}
+%
+\providecommand{\href}[1]{\ref{#}}
+%
+\providecommand{\hequation}[2]{
+\begin{equation} #1 \label{e:#2}
+\end{equation}
+}
+\newcounter{tabctr}[chapter]\newcounter{figctr}[chapter]
+%
+\providecommand{\mychaptitle}{}%
+\providecommand{\mysecttitle}{}
+%
+\providecommand{\mychap}[2]{
+  \newpage
+  \chapter{#1}\label{c:#2}
+      
+}
+%
+\providecommand{\mysect}[2]{
+  \section{#1}\label{s:#2}
+      
+}
+%
+\providecommand{\mysubsect}[2]{
+  \subsection{#1}\label{s:#2}
+}
+%
+\providecommand{\htool}[1]{\textsc{#1}}%
+\providecommand{\ttitem}[1]{\item[{\tt #1}]}%
+\providecommand{\fwitem}[2]{\item[{\makebox[#1][l]{\tt #2}}]}%
+\providecommand{\mathitem}[1]{\item[$ #1 $]}%
+\providecommand{\incop}{\mbox{$ \:+\!\!=\; $}}%
+\providecommand{\bm}[1]{{\mbox{\boldmath $#1$}}}
+%
+\newenvironment{optlist}{
+  \begin{list}{??}{
+  }
+}{
+  \end{list}
+}
+%
+\newenvironment{varlist}{
+  \begin{list}{??}{
+  }
+}{
+  \end{list}
+}
+%
+\newenvironment{program}{
+  \ttfamily
+  \begin{tabbing}
+    +++ \= ++ \= ++ \= ++ \= ++ \= ++ \= ++ \= ++ \= ++ \= ++ \= ++ \= ++ \= \kill
+}{
+  \end{tabbing}
+}
+%
+\providecommand{\tabcap}[2]{
+  \refstepcounter{tabctr}
+  \label{t:#1}
+  \mbox{ \rule{0cm}{0.6cm} 
+           \textbf{ Table. \thechapter.\arabic{tabctr}\ \ #2} }
+}
+%
+\providecommand{\dofig}[4]{
+
+
+\begin{center}\parbox{#2mm} { \begin{center}
+      \setlength{\epsfxsize}{#2mm}
+      \epsfbox{images//#1.eps}  %%  DIRECTORY OPTION
+      \refstepcounter{figctr}
+      \begin{center}
+        \textbf{ Fig. \thechapter.\arabic{figctr}\ \  #3}   
+      \end{center}     \label{f:#1} \end{center} } \end{center}
+
+
+}
+%
+\providecommand{\putfig}[3]{
+   
+
+ 
+\begin{center}\parbox{#2mm} { \begin{center}
+      \setlength{\epsfxsize}{#2mm}
+      \epsfbox{images//#1.eps}  \refstepcounter{figctr}
+      \begin{center}
+        \textbf{ Fig. \thechapter.\arabic{figctr}\ \  #3}   
+      \end{center}     \label{f:#1} \end{center} } \end{center}
+
+ 
+
+}
+%
+\providecommand{\centrefig}[3]{
+   
+
+ 
+\begin{center}\parbox{#2mm} { \begin{center}
+      \setlength{\epsfxsize}{#2mm}
+      \epsfbox{images//#1.eps}  \refstepcounter{figctr}
+      \begin{center}
+        \textbf{ Fig. \thechapter.\arabic{figctr}\ \  #3}   
+      \end{center}     \label{f:#1} \end{center} } \end{center}
+
+ 
+
+}
+%
+\providecommand{\sidefig}[5]{
+  
+
+ 
+\begin{center}\parbox{#2mm} { \begin{center}
+      \setlength{\epsfxsize}{#2mm}
+      \epsfbox{images//#1.eps}  \refstepcounter{figctr}
+      \begin{center}
+        \textbf{ Fig. \thechapter.\arabic{figctr}\ \  #3}   
+      \end{center}     \label{f:#1} \end{center} } \end{center}
+
+ 
+
+  #5
+}
+%
+\providecommand{\sidepic}[3]{
+
+
+\begin{center}\parbox{#2mm} { \begin{center}
+    \setlength{\epsfxsize}{#2mm}
+    \epsfbox{images//#1.eps}  %%  DIRECTORY OPTION 
+    \label{f:#1} \end{center} }\end{center}
+
+
+{#3}
+}
+%
+\providecommand{\doprog}[4]{
+
+
+\begin{center} \parbox{#2mm} {\noindent
+    \fbox{ \parbox{#2mm}{ \hspace{#2mm}
+       
+  \ttfamily
+  \begin{tabbing}
+    +++ \= ++ \= ++ \= ++ \= ++ \= ++ \= ++ \= ++ \= ++ \= ++ \= ++ \= ++ \= \kill 
+#4
+  \end{tabbing}
+    } }
+
+
+\refstepcounter{figctr}
+    \label{f:#1}
+
+
+\begin{center}
+      \textbf{ Fig. \thechapter.\arabic{figctr}\ \ #3}   
+    \end{center}   
+    } \end{center} 
+
+
+}
+%
+\providecommand{\sideprog}[5]{
+  
+
+ 
+\begin{center} \parbox{#2mm} {\noindent
+    \fbox{ \parbox{#2mm}{ \hspace{#2mm}
+       \begin{program}#4\end{program}
+    } }
+
+ 
+\refstepcounter{figctr}
+    \label{f:#1}
+
+ 
+\begin{center}
+      \textbf{ Fig. \thechapter.\arabic{figctr}\ \ #3}   
+    \end{center}   
+    } \end{center} 
+
+ 
+ 
+   #5
+}
+%
+\providecommand{\progbyprog}[7]{
+  
+
+ 
+\begin{center} \parbox{#1mm} {\noindent
+    \fbox{ \parbox{#1mm}{ \hspace{#1mm}
+       \begin{program}#6\end{program}
+    } }
+
+ 
+\refstepcounter{figctr}
+    \label{f:#2}
+
+ 
+\begin{center}
+      \textbf{ Fig. \thechapter.\arabic{figctr}\ \ #4}   
+    \end{center}   
+    } \end{center} 
+
+ 
+
+  
+
+ 
+\begin{center} \parbox{#1mm} {\noindent
+    \fbox{ \parbox{#1mm}{ \hspace{#1mm}
+       \begin{program}#7\end{program}
+    } }
+
+ 
+\refstepcounter{figctr}
+    \label{f:#3}
+
+ 
+\begin{center}
+      \textbf{ Fig. \thechapter.\arabic{figctr}\ \ #5}   
+    \end{center}   
+    } \end{center} 
+
+ 
+
+  \vspace{0.3cm}
+}
+%
+\providecommand{\putprog}[4]{
+
+
+\begin{center} \begin{figure}
+    \vspace{5mm}
+    \begin{center}
+      \framebox[#2mm]{
+      \begin{minipage}{#2mm}
+           
+  \ttfamily
+  \begin{tabbing}
+    +++ \= ++ \= ++ \= ++ \= ++ \= ++ \= ++ \= ++ \= ++ \= ++ \= ++ \= ++ \= \kill 
+#4
+  \end{tabbing}
+       \end{minipage} }
+
+
+\refstepcounter{figctr}
+       \label{f:#1}
+       \vspace{0.4cm}
+         \mbox{ \textbf{ Fig. \thechapter.\arabic{figctr}\ \ #3} }
+    \end{center}
+  \end{figure} \end{center}
+
+
+}
+%
+\providecommand{\HTK}{HTK}%
+\providecommand{\version}{3.1}%
+\providecommand{\inthisversion}{In HTK\ 3.1,\ }%
+\providecommand{\HTKFF}{HTK}%
+\providecommand{\HTKBook}{\textit{HTK Book}}%
+\providecommand{\ESPSwaves}{\textit{ESPS/waves+}}%
+\providecommand{\erno}[1]{\item[{\makebox[2.0cm][l]{\tt \ \ \ $#1$}}]}%
+\providecommand{\module}[1]{\item[#1]{\ ~}}%
+\providecommand{\refpart}{Reference Section}
+%
+\providecommand{\hmkw}[1]{\mbox{$<$\textsf{#1}$>$}}
+%
+\providecommand{\hmmc}[2]{\mbox{$\sim$\textsf{#1 ``#2''}}}
+%
+\providecommand{\hmmt}[1]{\mbox{$\sim$\textsf{#1}}}
+%
+\providecommand{\HAPI}{{HAPI}}%
+\providecommand{\NULL}{{\tt NULL}}%
+\providecommand{\findex}[1]{\index{#1@{\bf #1}}}%
+\providecommand{\pindex}[1]{\index{configuration parameters!#1}}%
+\providecommand{\java}{{\sc Java}}%
+\providecommand{\jhapi}{{\sc Jhapi}}
+%
+\providecommand{\grapHvite}{\textbf{\textit {grapHvite}}}%
+\providecommand{\GNB}{\textbf{\textit {grapHvite}}\ Netbuilder}%
+\providecommand{\grapHviteOverview}{{\it \textbf{\textit {grapHvite}}\ Overview}}%
+\providecommand{\seeSec}[1]{see section {\bf \ref{s:#1}}}%
+\providecommand{\seeSub}[1]{see {section \bf \ref{s:#1}}}%
+\providecommand{\seeFig}[1]{see Fig {\bf \ref{#}}}%
+\providecommand{\fig}   [1]{figure {\ref{#}}}%
+\providecommand{\seeApp}[1]{see Appendix {\bf \ref{c:#1}}}%
+\providecommand{\app}[1]{Appendix {\bf \ref{c:#1}}}%
+\providecommand{\sub}[1]{section {\bf \ref{s:#1}}}%
+\providecommand{\sect}[1]{section {\bf \ref{s:#1}}}
+%
+\providecommand{\facility}[1]{{\it #1}}%
+\providecommand{\key}[1]{{\sl #1}}%
+\providecommand{\ul}[1]{\underline{#1}}%
+\providecommand{\gTerm}[1]{{\bf #1}}%
+\providecommand{\network}[1]{{\it #1}}%
+\providecommand{\config}[1]{{\it #1}}%
+\providecommand{\bb}[1]{{\bf #1}}
+%
+\providecommand{\button}[1]{\colorbox[gray]{0.83}{{\small{\textsf{#1}}}}}%
+\providecommand{\menu}[1]{\colorbox[gray]{0.83}{{\small \textbf{#1}}}}%
+\providecommand{\menuItem}[1]{\colorbox[gray]{0.83}{{\small{ #1}}}}%
+\providecommand{\gLabel}[1]{{\colorbox[gray] {0.83} {\small{\textsf {#1}}}}}
+%
+\providecommand{\moptitem}[1]{ \optitem{\colorbox[gray]{0.83}{{\small{ #1}}}}}%
+\newenvironment{mylist}[1]{
+  \begin{list}{}{
+     \settowidth{\labelwidth} {#1} 
+     \setlength{\leftmargin}{\labelwidth}
+     \addtolength{\leftmargin}{\labelsep}
+     \setlength{\parsep}{0.5ex plus0.2ex minus 0.2ex} 
+     \setlength{\itemsep}{0.3ex}
+     \renewcommand{\makelabel}[1]{##1\hfill}
+} } {
+ \end{list}
+}
+%
+\newenvironment{widelist}{
+   \begin{list}{??}{
+       \setlength{\itemindent}{0cm}
+       \setlength{\rightmargin}{0.5cm}
+       \setlength{\leftmargin}{2.5cm}
+       \setlength{\listparindent}{0cm}
+       \setlength{\labelwidth}{\textwidth}
+       \setlength{\labelsep}{0.5cm} }
+}{
+   \end{list}
+}
+%
+\providecommand{\doMenu}[1]{
+  \setlength{\epsfysize} {5cm}
+  \raisebox{-5cm}
+  {\epsfbox{#1menu.eps}}  %%  DIRECTORY OPTION
+}
+%
+\providecommand{\mysubsub}[2]{
+   \subsubsection{#1}\label{s:#2}
+}
+\usepackage{makeidx}                                                            
+
+\makeindex                                                                      
+
+
+\usepackage[]{inputenc}
+
+
+
+\makeatletter
+\AtBeginDocument{\makeatletter
+\input /archive/gt2k_cvs/gt2k/docs/main.aux
+\makeatother
+}
+\AtBeginDocument{\makeatletter
+\input /archive/gt2k_cvs/gt2k/docs/titlepage.aux
+\makeatother
+}
+\AtBeginDocument{\makeatletter
+\input /archive/gt2k_cvs/gt2k/docs/introduction.aux
+\makeatother
+}
+\AtBeginDocument{\makeatletter
+\input /archive/gt2k_cvs/gt2k/docs/quickstart.aux
+\makeatother
+}
+\AtBeginDocument{\makeatletter
+\input /archive/gt2k_cvs/gt2k/docs/overview.aux
+\makeatother
+}
+\AtBeginDocument{\makeatletter
+\input /archive/gt2k_cvs/gt2k/docs/data_preparation.aux
+\makeatother
+}
+\AtBeginDocument{\makeatletter
+\input /archive/gt2k_cvs/gt2k/docs/training_and_recognition.aux
+\makeatother
+}
+
+\makeatletter
+\count@=\the\catcode`\_ \catcode`\_=8 
+\newenvironment{tex2html_wrap}{}{}%
+\catcode`\<=12\catcode`\_=\count@
+\newcommand{\providedcommand}[1]{\expandafter\providecommand\csname #1\endcsname}%
+\newcommand{\renewedcommand}[1]{\expandafter\providecommand\csname #1\endcsname{}%
+  \expandafter\renewcommand\csname #1\endcsname}%
+\newcommand{\newedenvironment}[1]{\newenvironment{#1}{}{}\renewenvironment{#1}}%
+\let\newedcommand\renewedcommand
+\let\renewedenvironment\newedenvironment
+\makeatother
+\let\mathon=$
+\let\mathoff=$
+\ifx\AtBeginDocument\undefined \newcommand{\AtBeginDocument}[1]{}\fi
+\newbox\sizebox
+\setlength{\hoffset}{0pt}\setlength{\voffset}{0pt}
+\addtolength{\textheight}{\footskip}\setlength{\footskip}{0pt}
+\addtolength{\textheight}{\topmargin}\setlength{\topmargin}{0pt}
+\addtolength{\textheight}{\headheight}\setlength{\headheight}{0pt}
+\addtolength{\textheight}{\headsep}\setlength{\headsep}{0pt}
+\setlength{\textwidth}{349pt}
+\newwrite\lthtmlwrite
+\makeatletter
+\let\realnormalsize=\normalsize
+\global\topskip=2sp
+\def\preveqno{}\let\real@float=\@float \let\realend@float=\end@float
+\def\@float{\let\@savefreelist\@freelist\real@float}
+\def\liih@math{\ifmmode$\else\bad@math\fi}
+\def\end@float{\realend@float\global\let\@freelist\@savefreelist}
+\let\real@dbflt=\@dbflt \let\end@dblfloat=\end@float
+\let\@largefloatcheck=\relax
+\let\if@boxedmulticols=\iftrue
+\def\@dbflt{\let\@savefreelist\@freelist\real@dbflt}
+\def\adjustnormalsize{\def\normalsize{\mathsurround=0pt \realnormalsize
+ \parindent=0pt\abovedisplayskip=0pt\belowdisplayskip=0pt}%
+ \def\phantompar{\csname par\endcsname}\normalsize}%
+\def\lthtmltypeout#1{{\let\protect\string \immediate\write\lthtmlwrite{#1}}}%
+\newcommand\lthtmlhboxmathA{\adjustnormalsize\setbox\sizebox=\hbox\bgroup\kern.05em }%
+\newcommand\lthtmlhboxmathB{\adjustnormalsize\setbox\sizebox=\hbox to\hsize\bgroup\hfill }%
+\newcommand\lthtmlvboxmathA{\adjustnormalsize\setbox\sizebox=\vbox\bgroup %
+ \let\ifinner=\iffalse \let\)\liih@math }%
+\newcommand\lthtmlboxmathZ{\@next\next\@currlist{}{\def\next{\voidb@x}}%
+ \expandafter\box\next\egroup}%
+\newcommand\lthtmlmathtype[1]{\gdef\lthtmlmathenv{#1}}%
+\newcommand\lthtmllogmath{\lthtmltypeout{l2hSize %
+:\lthtmlmathenv:\the\ht\sizebox::\the\dp\sizebox::\the\wd\sizebox.\preveqno}}%
+\newcommand\lthtmlfigureA[1]{\let\@savefreelist\@freelist
+       \lthtmlmathtype{#1}\lthtmlvboxmathA}%
+\newcommand\lthtmlpictureA{\bgroup\catcode`\_=8 \lthtmlpictureB}%
+\newcommand\lthtmlpictureB[1]{\lthtmlmathtype{#1}\egroup
+       \let\@savefreelist\@freelist \lthtmlhboxmathB}%
+\newcommand\lthtmlpictureZ[1]{\hfill\lthtmlfigureZ}%
+\newcommand\lthtmlfigureZ{\lthtmlboxmathZ\lthtmllogmath\copy\sizebox
+       \global\let\@freelist\@savefreelist}%
+\newcommand\lthtmldisplayA{\bgroup\catcode`\_=8 \lthtmldisplayAi}%
+\newcommand\lthtmldisplayAi[1]{\lthtmlmathtype{#1}\egroup\lthtmlvboxmathA}%
+\newcommand\lthtmldisplayB[1]{\edef\preveqno{(\theequation)}%
+  \lthtmldisplayA{#1}\let\@eqnnum\relax}%
+\newcommand\lthtmldisplayZ{\lthtmlboxmathZ\lthtmllogmath\lthtmlsetmath}%
+\newcommand\lthtmlinlinemathA{\bgroup\catcode`\_=8 \lthtmlinlinemathB}
+\newcommand\lthtmlinlinemathB[1]{\lthtmlmathtype{#1}\egroup\lthtmlhboxmathA
+  \vrule height1.5ex width0pt }%
+\newcommand\lthtmlinlineA{\bgroup\catcode`\_=8 \lthtmlinlineB}%
+\newcommand\lthtmlinlineB[1]{\lthtmlmathtype{#1}\egroup\lthtmlhboxmathA}%
+\newcommand\lthtmlinlineZ{\egroup\expandafter\ifdim\dp\sizebox>0pt %
+  \expandafter\centerinlinemath\fi\lthtmllogmath\lthtmlsetinline}
+\newcommand\lthtmlinlinemathZ{\egroup\expandafter\ifdim\dp\sizebox>0pt %
+  \expandafter\centerinlinemath\fi\lthtmllogmath\lthtmlsetmath}
+\newcommand\lthtmlindisplaymathZ{\egroup %
+  \centerinlinemath\lthtmllogmath\lthtmlsetmath}
+\def\lthtmlsetinline{\hbox{\vrule width.1em \vtop{\vbox{%
+  \kern.1em\copy\sizebox}\ifdim\dp\sizebox>0pt\kern.1em\else\kern.3pt\fi
+  \ifdim\hsize>\wd\sizebox \hrule depth1pt\fi}}}
+\def\lthtmlsetmath{\hbox{\vrule width.1em\kern-.05em\vtop{\vbox{%
+  \kern.1em\kern0.8 pt\hbox{\hglue.17em\copy\sizebox\hglue0.8 pt}}\kern.3pt%
+  \ifdim\dp\sizebox>0pt\kern.1em\fi \kern0.8 pt%
+  \ifdim\hsize>\wd\sizebox \hrule depth1pt\fi}}}
+\def\centerinlinemath{%
+  \dimen1=\ifdim\ht\sizebox<\dp\sizebox \dp\sizebox\else\ht\sizebox\fi
+  \advance\dimen1by.5pt \vrule width0pt height\dimen1 depth\dimen1 
+ \dp\sizebox=\dimen1\ht\sizebox=\dimen1\relax}
+
+\def\lthtmlcheckvsize{\ifdim\ht\sizebox<\vsize 
+  \ifdim\wd\sizebox<\hsize\expandafter\hfill\fi \expandafter\vfill
+  \else\expandafter\vss\fi}%
+\providecommand{\selectlanguage}[1]{}%
+\makeatletter \tracingstats = 1 
+
+
+\begin{document}
+\pagestyle{empty}\thispagestyle{empty}\lthtmltypeout{}%
+\lthtmltypeout{latex2htmlLength hsize=\the\hsize}\lthtmltypeout{}%
+\lthtmltypeout{latex2htmlLength vsize=\the\vsize}\lthtmltypeout{}%
+\lthtmltypeout{latex2htmlLength hoffset=\the\hoffset}\lthtmltypeout{}%
+\lthtmltypeout{latex2htmlLength voffset=\the\voffset}\lthtmltypeout{}%
+\lthtmltypeout{latex2htmlLength topmargin=\the\topmargin}\lthtmltypeout{}%
+\lthtmltypeout{latex2htmlLength topskip=\the\topskip}\lthtmltypeout{}%
+\lthtmltypeout{latex2htmlLength headheight=\the\headheight}\lthtmltypeout{}%
+\lthtmltypeout{latex2htmlLength headsep=\the\headsep}\lthtmltypeout{}%
+\lthtmltypeout{latex2htmlLength parskip=\the\parskip}\lthtmltypeout{}%
+\lthtmltypeout{latex2htmlLength oddsidemargin=\the\oddsidemargin}\lthtmltypeout{}%
+\makeatletter
+\if@twoside\lthtmltypeout{latex2htmlLength evensidemargin=\the\evensidemargin}%
+\else\lthtmltypeout{latex2htmlLength evensidemargin=\the\oddsidemargin}\fi%
+\lthtmltypeout{}%
+\makeatother
+\setcounter{page}{1}
+\onecolumn
+
+% !!! IMAGES START HERE !!!
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline2578}%
+$^{2}$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlfigureA{figure2893}%
+\begin{figure}\vbox{\include{titlepage}
+}\end{figure}%
+\lthtmlfigureZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{part}
+\stepcounter{chapter}
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline2901}%
+% latex2html id marker 2901
+$\textstyle \parbox{120mm}{ \begin{center}      \setlength{\epsfxsize}{120mm}
+      \epsfbox{images//gt2k_component.eps}  \refstepcounter{figctr}
+      \begin{center}        \textbf{ Fig. \thechapter.\arabic{figctr}\ \  {\bf{GT$^{2}$k\ }}interaction with application components.}   
+      \end{center}
+\end{center} }$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline1067}%
+$n$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{chapter}
+\stepcounter{chapter}
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline1268}%
+$(x,y)$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline1280}%
+$66.6\%$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline1282}%
+$33.3\%$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline1286}%
+$S$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline1288}%
+$I$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline1290}%
+$D$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline1292}%
+$N$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmldisplayA{displaymath1250}%
+\begin{displaymath}Accuracy\ =\ \frac{N-\ S\ -\ D\ -\ I}{ N}.\end{displaymath}%
+\lthtmldisplayZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{part}
+\stepcounter{chapter}
+\stepcounter{section}
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline1678}%
+$<$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline1680}%
+$>$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline2973}%
+% latex2html id marker 2973
+$\textstyle \parbox{120mm}{\noindent
+    \fbox{ \parbox{120mm}{ \hspace{120mm}
+       \begin{program}
+  \texttt{gen\_hmmdef.pl -n5 -v4 -s1}
+\end{program}
+    } }
+\par 
+\refstepcounter{figctr}
+\par 
+\begin{center}      \textbf{ Fig. \thechapter.\arabic{figctr}\ \ Example usage of \texttt{gen\_hmmdef} }   
+    \end{center}   
+    }$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline2974}%
+% latex2html id marker 2974
+$\textstyle \parbox{120mm}{\noindent
+    \fbox{ \parbox{120mm}{ \hspace{120mm}
+       \begin{program}
+\mbox{$<$\textsf{BeginHMM}$>$} \\
+\> \mbox{$<$\textsf{VecSize}$>$} 4 \\
+\> \mbox{$<$\textsf{NumStates}$>$} 5 \mbox{$<$\textsf{nullD}$>$}\mbox{$<$\textsf{USER}$>$} \\
+\> \mbox{$<$\textsf{State}$>$} 2 \mbox{$<$\textsf{NumMixes}$>$} 1\\
+\>\>    \mbox{$<$\textsf{Mixture}$>$} 1 1.0 \\
+\>\>    \mbox{$<$\textsf{Mean}$>$} 4 \\
+\>\>\>       0.0 0.0 0.0 0.0  \\
+\>\>    \mbox{$<$\textsf{Variance}$>$} 4 \\
+\>\>\>       1.0 1.0 1.0 1.0  \\
+\> \mbox{$<$\textsf{State}$>$} 3 \mbox{$<$\textsf{NumMixes}$>$} 1\\
+\>\>    \mbox{$<$\textsf{Mixture}$>$} 1 1.0 \\
+\>\>    \mbox{$<$\textsf{Mean}$>$} 4 \\
+\>\>\>       0.0 0.0 0.0 0.0  \\
+\>\>    \mbox{$<$\textsf{Variance}$>$} 4 \\
+\>\>\>       1.0 1.0 1.0 1.0  \\
+\> \mbox{$<$\textsf{State}$>$} 3 \mbox{$<$\textsf{NumMixes}$>$} 1\\
+\>\>    \mbox{$<$\textsf{Mixture}$>$} 1 1.0 \\
+\>\>    \mbox{$<$\textsf{Mean}$>$} 4 \\
+\>\>\>       0.0 0.0 0.0 0.0  \\
+\>\>    \mbox{$<$\textsf{Variance}$>$} 4 \\
+\>\>\>       1.0 1.0 1.0 1.0  \\
+\> \mbox{$<$\textsf{TransP}$>$} 5 \\
+\>\>  0.000e+00  1.000e+00  0.000e+00  0.000e+00  0.000e+00 \\
+\>\>  0.000e+00  3.333e-01  3.333e-01  3.333e-01  0.000e+00 \\
+\>\>  0.000e+00  0.000e+00  3.333e-01  3.333e-01  3.333e-01 \\
+\>\>  0.000e+00  0.000e+00  0.000e+00  5.000e-01  5.000e-01 \\
+\>\>  0.000e+00  0.000e+00  0.000e+00  0.000e+00  0.000e+00 \\
+\mbox{$<$\textsf{EndHMM}$>$}                                                                   
+\end{program}
+    } }
+\par 
+\refstepcounter{figctr}
+\par 
+\begin{center}      \textbf{ Fig. \thechapter.\arabic{figctr}\ \ Example HMM Definition file}   
+    \end{center}   
+    }$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{subsection}
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline2984}%
+% latex2html id marker 2984
+$\textstyle \parbox{120mm}{ \begin{center}      \setlength{\epsfxsize}{120mm}
+      \epsfbox{images//hmm1viz.eps}  \refstepcounter{figctr}
+      \begin{center}        \textbf{ Fig. \thechapter.\arabic{figctr}\ \  Visualization of Fig \ref{f:hmm1def}}   
+      \end{center}
+\end{center} }$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{section}
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline1776}%
+$|$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+{\newpage\clearpage
+\lthtmlinlinemathA{tex2html_wrap_inline2992}%
+% latex2html id marker 2992
+$\textstyle \parbox{120mm}{\noindent
+    \fbox{ \parbox{120mm}{ \hspace{120mm}
+       \begin{program}
+  \begin{tabular}{lcl}
+    \$noun      &=& adult $|$\  america $|$\  arch $|$\  area $|$\  badge $|$\  boy $|$\  $\ldots$\  ; \\
+    \$pronoun   &=& he $|$\  i $|$\  they $|$\  we $|$\  you ; \\
+    \$verb      &=& apologize $|$\  appreciate $|$\  believe $|$\  collect $|$\  $\ldots$\  ; \\
+    \$adjective &=& bald $|$\  black $|$\  brown $|$\  deaf $|$\  dizzy $|$\  english $\ldots$\  ; \\
+    \$anynoun   &=& \$noun $|$\  \$pronoun ;  \\
+    \\
+    \multicolumn{3}{l}{( start\_sentence \$anynoun \$verb \$adjective \$noun end\_sentence)} \\
+  \end{tabular}
+\end{program}
+    } }
+\par 
+\refstepcounter{figctr}
+\par 
+\begin{center}      \textbf{ Fig. \thechapter.\arabic{figctr}\ \ Sample grammar specification for continuous
+recognition}   
+    \end{center}   
+    }$%
+\lthtmlinlinemathZ
+\lthtmlcheckvsize\clearpage}
+
+\stepcounter{section}
+
+%
+\providecommand{\ttb}[1]{\texttt{\textbf{#1}}}%
+
+
+%
+\providecommand{\yes}{\texttt{yes}}%
+
+
+%
+\providecommand{\no}{\texttt{no}}%
+
+\stepcounter{chapter}
+\stepcounter{subsection}
+\stepcounter{subsubsection}
+\stepcounter{subsubsection}
+
+\end{document}

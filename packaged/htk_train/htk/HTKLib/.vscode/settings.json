@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "malloc.h": "c",
+        "esignal.h": "c",
+        "strarr.h": "c"
+    }
+}

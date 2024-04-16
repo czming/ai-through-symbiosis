@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2K.1beta (1.48)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Training</TITLE>
+<META NAME="description" CONTENT="Training">
+<META NAME="keywords" CONTENT="main">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="main.css">
+
+<LINK REL="previous" HREF="node22.html">
+<LINK REL="up" HREF="node22.html">
+<LINK REL="next" HREF="node24.html">
+</HEAD>
+
+<BODY  bgcolor="#ffffff">
+<!--Navigation Panel-->
+<A NAME="tex2html399"
+  HREF="node24.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html393"
+  HREF="node22.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html389"
+  HREF="node22.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html395"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html397"
+  HREF="node27.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html400"
+  HREF="node24.html">Training Options</A>
+<B> Up:</B> <A NAME="tex2html394"
+  HREF="node22.html">Training and Recognition</A>
+<B> Previous:</B> <A NAME="tex2html390"
+  HREF="node22.html">Training and Recognition</A>
+ &nbsp <B>  <A NAME="tex2html396"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp <B>  <A NAME="tex2html398"
+  HREF="node27.html">Index</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION13201000000000000000"></A>
+<A NAME="1943"></A>
+<BR>
+Training
+</H2>
+
+<P>
+The training process is initiated using the <TT>train.sh</TT> script. 
+This script was copied into the <TT>scripts/</TT> directory of your
+projects directory by the <TT>new_project.sh</TT> script. 
+<TT>train.sh</TT> is invoked with one argument, which is the options
+file <TT>scripts/options.sh</TT>.  After training completes, a
+confusion matrix will be printed describing the model's performance
+using the specified validation method.  The files describing the
+models will be left in a set of directories under <TT>models/</TT>. 
+Each directory will have a name of the form <TT>hmm?.?</TT>.  For
+cross-validation, the final model will be stored in
+<TT>hmm0.3/newMacros</TT>.  When using leave-one-out validation, the
+first numeral in the directory name will represent the sample that was
+left out.  In order to decide which model to use, look at the various
+results.mlf files and find one that classified correctly.  Then use
+the model file (<TT>newMacros</TT>) from the corresponding directory
+ending in <TT>.3</TT>.  This will not be necessary in future releases.
+
+<P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL>
+<LI><A NAME="tex2html401"
+  HREF="node24.html">Training Options</A>
+<LI><A NAME="tex2html402"
+  HREF="node25.html">Recognition</A>
+</UL>
+<!--End of Table of Child-Links-->
+<BR><HR>
+<ADDRESS>
+Debian User
+2003-12-13
+</ADDRESS>
+</BODY>
+</HTML>

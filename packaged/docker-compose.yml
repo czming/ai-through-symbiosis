@@ -7,7 +7,7 @@ services:
                 image: extract_features
                 container_name: ef
                 ports:
-                        - 5000:5000
+                        - 127.0.0.1:5000:5000
                 networks:
                         - sym-ai
                 build:
@@ -17,27 +17,92 @@ services:
                 image: preprocessing
                 container_name: preprocessing
                 ports:
-                        - 5001:5000
+                        - 127.0.0.1:5001:5000
                 networks:
                         - sym-ai
                 build:
                         context: ./preprocessing
                         dockerfile: ./Dockerfile
         
+        # htk:
+        #         image: htk
+        #         container_name: htk
+        #         ports:
+        #                 - 5002:5000
+        #         networks:
+        #                 - sym-ai
+        #         build:
+        #                 context: ./n_folds
+        #                 dockerfile: ./Dockerfile
+        #         volumes: 
+        #                 - ./tmp/input/data:/app/symbiosis/all-data
+        #                 - ./tmp/input/label:/app/symbiosis/all-labels
+        #                 - ./tmp/output/data:/app/symbiosis/data
+        #                 - ./tmp/output/results:/app/symbiosis/results
+        #                 - ./tmp/model/mlf:/app/symbiosis/mlf
+        #                 - ./tmp/model/models:/app/symbiosis/models
+
         htk:
-                image: htk
-                container_name: htk
+                image: htk_train
+                container_name: htk_train
                 ports:
-                        - 5002:5000
+                        - 127.0.0.1:5002:5000
                 networks:
                         - sym-ai
                 build:
-                        context: ./n_folds
+                        context: ./htk_train
                         dockerfile: ./Dockerfile
                 volumes: 
-                        - ./tmp/input/data:/app/symbiosis/all-data
-                        - ./tmp/input/label:/app/symbiosis/all-labels
-                        - ./tmp/output/data:/app/symbiosis/data
-                        - ./tmp/output/results:/app/symbiosis/results
-                        - ./tmp/model/mlf:/app/symbiosis/mlf
-                        - ./tmp/model/models:/app/symbiosis/models
+                        - type: bind
+                          source: ./shared
+                          target: /shared
+                          read_only: true
+
+        hsv_train:
+                image: hsv_train
+                container_name: hsv_train
+                ports:
+                        - 127.0.0.1:5003:5000
+                networks:
+                        - sym-ai
+                build:
+                        context: ./hsv_train
+                        dockerfile: ./Dockerfile
+                volumes: 
+                        - type: bind
+                          source: ./shared
+                          target: /shared
+                          read_only: true
+
+        hsv_test:
+                image: hsv_test
+                container_name: hsv_test
+                ports:
+                        - 127.0.0.1:5004:5000
+                networks:
+                        - sym-ai
+                build:
+                        context: ./hsv_test
+                        dockerfile: ./Dockerfile
+                volumes: 
+                        - type: bind
+                          source: ./shared
+                          target: /shared
+                          read_only: true
+
+        hsv_train_iterative:
+                image: hsv_train_iterative
+                container_name: hsv_train_iterative
+                ports:
+                        - 127.0.0.1:5005:5000
+                networks:
+                        - sym-ai
+                build:
+                        context: ./hsv_train_iterative
+                        dockerfile: ./Dockerfile
+                volumes: 
+                        - type: bind
+                          source: ./shared
+                          target: /shared
+                          read_only: true
+

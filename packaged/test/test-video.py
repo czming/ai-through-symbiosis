@@ -1,16 +1,16 @@
 import requests
-import cv2
-import time
-import numpy as np
-import sys
-import threading
-import concurrent.futures
+# import cv2
+# import time
+# import numpy as np
+# import sys
+# import threading
+# import concurrent.futures
 from ast import literal_eval
-import signal
-import os
-from pathlib import Path
-import tempfile
-from multiprocessing import Process, Queue, Manager, Pool
+# import signal
+# import os
+# from pathlib import Path
+# import tempfile
+# from multiprocessing import Process, Queue, Manager, Pool
 
 # docker run --rm --name extract_features -p 5000:5000 extract_features
 # docker run --rm --name preprocessing -p 5000:5001 preprocessing
@@ -106,19 +106,26 @@ if __name__ == '__main__':
 #             f.write("sil")
 
     url = 'http://localhost:5002/htk'
+    # payload = {
+    #     'id': str(0),
+    #     '_dir': "/tmp",
+    #     "data": "all-data-1-40",
+    #     "label": "all-labels-1-40",
+    #     'num_folds': 1,
+    #     'split_ratio': 0.7
+    # }
     payload = {
-        'id': str(0),
-        '_dir': "/tmp",
-        'num_folds': 1,
-        'split_ratio': 0.7
+        'id': 'test',
+        'picklists': ','.join(str(i) for i in list(range(1,35)))
     }
+    print(payload)
     headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36'}
     content = requests.post(url, data=payload, headers=headers)
 
     if content.status_code == 200:
         # print(content.content.decode())
-        id, lines = literal_eval(content.content.decode())
-        print(print("".join(i.decode('utf-8') for i in lines)))
+        id, ignored = literal_eval(content.content.decode())
+        print(ignored)
     else:
         print(content.status_code, content.text)
 

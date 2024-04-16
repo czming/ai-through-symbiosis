@@ -1,0 +1,13 @@
+numpy
+# opencv-python
+# aruco
+# ./service-wrapper
+# mediapipe
+protobuf
+matplotlib
+# scikit-image
+scikit-learn
+# mlsocket
+python-dotenv
+gunicorn
+pyyaml
