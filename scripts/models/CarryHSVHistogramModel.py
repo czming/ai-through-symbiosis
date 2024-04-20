@@ -355,6 +355,9 @@ class CarryHSVHistogramModel(Model):
                 with open(f"pick_labels/picklist_{picklist_no}.csv", "w") as outfile:
                     outfile.write(f"{picklist_no}, {''.join(picklist_pred)}, {''.join(picklist_gt)}")
 
+                with open(f"data/pick_labels/picklist_{picklist_no}.txt", 'w') as outfile:
+                    outfile.write(f"{picklist_no}, {''.join(picklist_pred)}")
+
             print(f"Actual labels:    {picklist_gt}")
 
         # flatten arrays
@@ -383,6 +386,8 @@ class CarryHSVHistogramModel(Model):
 
         confusion_matrix = metrics.confusion_matrix(actual_picklists, predicted_picklists)
 
+        print(confusion_matrix)
+
         logging.debug(actual_picklists)
         logging.debug(predicted_picklists)
 
@@ -402,6 +407,7 @@ class CarryHSVHistogramModel(Model):
             # print(index)
             predicted_picklists_names.append(letter_to_name[letter])
         confusion_matrix = metrics.confusion_matrix(actual_picklists_names, predicted_picklists_names)
+        print(confusion_matrix)
         conf_mat_norm = (confusion_matrix.astype('float') / confusion_matrix.sum(axis=1)[:, np.newaxis])
 
         unique_names = unique_labels(actual_picklists_names, predicted_picklists_names)
