@@ -63,7 +63,7 @@ class EgoObjectClassificationDataset(Dataset):
     def __getitem__(self, idx):
         if self.test:
             image = read_image(
-                'data/extracted_frames_test/' + self.picklist[idx] + '/' + str(self.frames[idx]) + '.png')
+                '../data/extracted_frames_test/' + self.picklist[idx] + '/' + str(self.frames[idx]) + '.png')
         else:
             image = read_image('data/extracted_frames_new/' + self.picklist[idx] + '/' + str(self.frames[idx]) + '.png')
         label = self.labels[idx]

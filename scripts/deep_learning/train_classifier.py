@@ -6,7 +6,7 @@ import os
 from torchsummary import summary
 from torch.optim import SGD, Adam
 from EgoObjectDataset import EgoObjectClassificationDataset
-from scripts.models.resnet import Resnet18Classifier, Resnet34Classifier, Resnet9Classifier
+from models.resnet import Resnet18Classifier, Resnet34Classifier, Resnet9Classifier
 from torch.utils.data import Dataset, DataLoader
 import torch.optim as optim
 from torch.optim.lr_scheduler import StepLR
@@ -22,7 +22,7 @@ import matplotlib.pyplot as plt
 # from losses import TripletLoss, Accuracy
 
 def get_model(pretrained=False, num_classes=10):
-    model = Resnet9Classifier(
+    model = Resnet34Classifier(
         num_classes=num_classes,
         pretrained=pretrained
     )
@@ -61,8 +61,8 @@ def train():
     batch_size = 64
     dataset = EgoObjectClassificationDataset('data/labeled_objects_new.csv', transform=image_transforms)
     train_dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
-    model_architecture = 'resnet9'
-    model = get_model()
+    model_architecture = 'resnet34'
+    model = get_model(pretrained=True)
     print(model)
     model = model.cuda()
     model.train()
@@ -240,5 +240,5 @@ def test():
 
 
 if __name__ == '__main__':
-    # train()
-    test()
+    train()
+    # test()
