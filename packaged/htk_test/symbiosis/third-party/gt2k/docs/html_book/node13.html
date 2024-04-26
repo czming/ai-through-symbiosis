@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2K.1beta (1.48)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Validation and System Performance</TITLE>
+<META NAME="description" CONTENT="Validation and System Performance">
+<META NAME="keywords" CONTENT="main">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2K.1beta">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="main.css">
+
+<LINK REL="next" HREF="node14.html">
+<LINK REL="previous" HREF="node12.html">
+<LINK REL="up" HREF="node7.html">
+<LINK REL="next" HREF="node14.html">
+</HEAD>
+
+<BODY  bgcolor="#ffffff">
+<!--Navigation Panel-->
+<A NAME="tex2html249"
+  HREF="node14.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html243"
+  HREF="node7.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html237"
+  HREF="node12.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html245"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html247"
+  HREF="node27.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html250"
+  HREF="node14.html">Recognition Application</A>
+<B> Up:</B> <A NAME="tex2html244"
+  HREF="node7.html">Overview</A>
+<B> Previous:</B> <A NAME="tex2html238"
+  HREF="node12.html">Training</A>
+ &nbsp <B>  <A NAME="tex2html246"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp <B>  <A NAME="tex2html248"
+  HREF="node27.html">Index</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION12303000000000000000">
+Validation and System Performance</A>
+</H2>
+
+<P>
+The training/validation methods provide a quantitative measure of the system's
+performance based on the accuracy of recognition. The <B>GT<IMG
+ WIDTH="11" HEIGHT="17" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.png"
+ ALT="$^{2}$">k </B>metric for
+accuracy is the standard definition that incorporates substitution, insertion,
+and deletion errors. Substitution errors occur when the system incorrectly
+classifies a gesture. Insertion errors occur when the system hallucinates the
+occurrence of a gesture.  Deletion errors arise when the system fails to
+recognize the occurrence of a gesture within a sequence of gestures.  If we let
+<IMG
+ WIDTH="15" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="img8.png"
+ ALT="$S$"> represent substitutions errors, <IMG
+ WIDTH="12" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img9.png"
+ ALT="$I$"> represent insertion errors, <IMG
+ WIDTH="18" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img10.png"
+ ALT="$D$">
+represent deletion errors, and <IMG
+ WIDTH="19" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img11.png"
+ ALT="$N$"> represent the total number of examples, then
+accuracy is defined as: <BR><P></P>
+<DIV ALIGN="CENTER">
+<!-- MATH
+ \begin{displaymath}
+Accuracy\ =\ \frac{N-\ S\ -\ D\ -\ I}{ N}.
+\end{displaymath}
+ -->
+
+<IMG
+ WIDTH="237" HEIGHT="39" BORDER="0"
+ SRC="img12.png"
+ ALT="\begin{displaymath}Accuracy\ =\ \frac{N-\ S\ -\ D\ -\ I}{ N}.\end{displaymath}">
+</DIV>
+<BR CLEAR="ALL">
+<P></P>
+It
+should be noted that insertion and deletion errors can only occur during
+continuous recognition. When recognizing gestures in isolation, the values for
+<IMG
+ WIDTH="18" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img10.png"
+ ALT="$D$"> and <IMG
+ WIDTH="12" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img9.png"
+ ALT="$I$"> will always equal zero.
+
+<P>
+System performance is reported in the form of a confusion matrix.  The
+matrix reports the ground-truth gesture versus the gesture as classified by the
+system. 
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html249"
+  HREF="node14.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="/usr/share/latex2html/icons/next.png"></A> 
+<A NAME="tex2html243"
+  HREF="node7.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="/usr/share/latex2html/icons/up.png"></A> 
+<A NAME="tex2html237"
+  HREF="node12.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="/usr/share/latex2html/icons/prev.png"></A> 
+<A NAME="tex2html245"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="/usr/share/latex2html/icons/contents.png"></A> 
+<A NAME="tex2html247"
+  HREF="node27.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index"
+ SRC="/usr/share/latex2html/icons/index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html250"
+  HREF="node14.html">Recognition Application</A>
+<B> Up:</B> <A NAME="tex2html244"
+  HREF="node7.html">Overview</A>
+<B> Previous:</B> <A NAME="tex2html238"
+  HREF="node12.html">Training</A>
+ &nbsp <B>  <A NAME="tex2html246"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp <B>  <A NAME="tex2html248"
+  HREF="node27.html">Index</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Debian User
+2003-12-13
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,24 @@
+This is the README from the template GT2k project directory,
+gt2k/template. It is copied by the gt2k/utils/new_project.sh script
+when creating a new GT2K project. DO NOT MODIFY THE gt2k/template
+DIRECTORY (unless you want the changes to propagate to all future
+projects).
+
+The template directory provides general setup common to all GT2K
+projects.  However, there are some project specific aspects that the
+user must specify:
+ 
+1) 	The location and hierarchy of the data to recognize.
+
+2) 	Methods for annotating (labeling) the data.
+
+3) 	The HMM topologies/parameters used to model the data.
+
+4) 	A list of the gestures to recognize (often referred to as the
+	commands, tokens, or  vocabulary). 
+
+5) 	A grammar specifying a semantic interpretation of the data.
+
+Please see the tutorial projects in the gt2k/tutorials directory for
+guidance and hints on how to create (and tailor) this information to
+suit your project.

@@ -203,6 +203,8 @@ class CarryHSVHistogramModel(Model):
 
             picklist_index += 1
 
+        print (f"objects_avg_hsv_bins: {objects_avg_hsv_bins}")
+
         return objects_avg_hsv_bins, objects_avg_hsv_bins_grouped_picklist
 
     def fit(self, picklist_nos, htk_input_folder, htk_output_folder, pick_label_folder, fps=29.97, visualize=False,

@@ -1,0 +1,443 @@
+This is TeX, Version 3.14159 (Web2C 7.4.5) (format=latex 2003.12.8)  13 DEC 2003 23:20
+**./images.tex
+(./images.tex
+LaTeX2e <2001/06/01>
+Babel <v3.7h> and hyphenation patterns for american, french, ngerman, nohyphena
+tion, loaded.
+
+(/usr/share/texmf/tex/latex/base/book.cls
+Document Class: book 2001/04/21 v1.4e Standard LaTeX document class
+(/usr/share/texmf/tex/latex/base/bk10.clo
+File: bk10.clo 2001/04/21 v1.4e Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@chapter=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+) (/usr/share/texmf/tex/latex/base/ifthen.sty
+Package: ifthen 2001/05/26 v1.1c Standard LaTeX ifthen package (DPC)
+) (/usr/share/texmf/tex/latex/hyperref/hyperref.sty
+Package: hyperref 2001/11/12 v6.71v Hypertext links for LaTeX
+(/usr/share/texmf/tex/latex/graphics/keyval.sty
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks14
+)
+\@linkdim=\dimen103
+\Hy@linkcounter=\count88
+\Hy@pagecounter=\count89
+(/usr/share/texmf/tex/latex/hyperref/pd1enc.def
+File: pd1enc.def 2001/11/12 v6.71v Hyperref: PDFDocEncoding definition (HO)
+) (/usr/share/texmf/tex/latex/config/hyperref.cfg
+File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive and teTeX
+)
+Package hyperref Info: Option `bookmarks' set `true' on input line 1654.
+Package hyperref Info: Bookmarks ON on input line 1712.
+Package hyperref Info: Hyper figures OFF on input line 1731.
+Package hyperref Info: Link nesting OFF on input line 1736.
+Package hyperref Info: Hyper index ON on input line 1739.
+Package hyperref Info: Plain pages ON on input line 1744.
+Package hyperref Info: Backreferencing OFF on input line 1751.
+Implicit mode ON; LaTeX internals redefined
+(/usr/share/texmf/tex/latex/latex2html/url.sty
+Package: url 1999/03/02  ver 1.4  Verb mode for urls, email addresses, and file
+ names
+)
+LaTeX Info: Redefining \url on input line 1961.
+\Fld@menulength=\count90
+\Field@Width=\dimen104
+\Fld@charsize=\dimen105
+\Choice@toks=\toks15
+\Field@toks=\toks16
+Package hyperref Info: Hyper figures OFF on input line 2407.
+Package hyperref Info: Link nesting OFF on input line 2412.
+Package hyperref Info: Hyper index ON on input line 2415.
+Package hyperref Info: backreferencing OFF on input line 2422.
+Package hyperref Info: Link coloring OFF on input line 2427.
+\c@Item=\count91
+\c@Hfootnote=\count92
+)
+*hyperref using driver hdvipdfm*
+(/usr/share/texmf/tex/latex/hyperref/hdvipdfm.def
+File: hdvipdfm.def 2001/11/12 v6.71v Hyperref driver for dvipdfm
+\pdfm@box=\box26
+\Fld@listcount=\count93
+\@outlinefile=\write3
+) (/usr/share/texmf/tex/latex/misc/tocbibind.sty
+Package: tocbibind 2001/11/10 v1.5b extra ToC listings
+
+Package tocbibind Note: The document has chapter divisions.
+
+
+Package tocbibind Note: Using chapter style headings.
+
+) (/usr/share/texmf/tex/latex/latex2html/html.sty
+Package: html 1999/07/19 v1.38 hypertext commands for latex2html (nd, hws, rrm)
+
+\c@lpart=\count94
+\c@lchapter=\count95
+\c@lsection=\count96
+\c@lsubsection=\count97
+\c@lsubsubsection=\count98
+\c@lparagraph=\count99
+\c@lsubparagraph=\count100
+\c@lsubsubparagraph=\count101
+\ptrfile=\write4
+) (/usr/share/texmf/tex/latex/graphics/graphicx.sty
+Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+(/usr/share/texmf/tex/latex/graphics/graphics.sty
+Package: graphics 2001/07/07 v1.0n Standard LaTeX Graphics (DPC,SPQR)
+(/usr/share/texmf/tex/latex/graphics/trig.sty
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+) (/usr/share/texmf/tex/latex/config/graphics.cfg
+File: graphics.cfg 2001/08/31 v1.1 graphics configuration of teTeX/TeXLive
+)
+Package graphics Info: Driver file: dvips.def on input line 80.
+(/usr/share/texmf/tex/latex/graphics/dvips.def
+File: dvips.def 1999/02/16 v3.0i Driver-dependant file (DPC,SPQR)
+))
+\Gin@req@height=\dimen106
+\Gin@req@width=\dimen107
+)
+Package hyperref Info: Option `bookmarksopen' set `true' on input line 16.
+(/usr/share/texmf/tex/latex/graphics/epsfig.sty
+Package: epsfig 1999/02/16 v1.7a (e)psfig emulation (SPQR)
+\epsfxsize=\dimen108
+\epsfysize=\dimen109
+) (/usr/share/texmf/tex/latex/graphics/color.sty
+Package: color 1999/02/16 v1.0i Standard LaTeX Color (DPC)
+(/usr/share/texmf/tex/latex/config/color.cfg
+File: color.cfg 2001/08/31 v1.1 color configuration of teTeX/TeXLive
+)
+Package color Info: Driver file: dvips.def on input line 125.
+(/usr/share/texmf/tex/latex/graphics/dvipsnam.def
+File: dvipsnam.def 1999/02/16 v3.0i Driver-dependant file (DPC,SPQR)
+)) (/usr/share/texmf/tex/latex/misc/supertabular.sty
+Package: supertabular 1999/08/07 v4.1d the supertabular environment
+\c@tracingst=\count102
+\ST@wd=\dimen110
+\ST@rightskip=\skip43
+\ST@leftskip=\skip44
+\ST@parfillskip=\skip45
+\ST@pageleft=\dimen111
+\ST@headht=\dimen112
+\ST@tailht=\dimen113
+\ST@pagesofar=\dimen114
+\ST@pboxht=\dimen115
+\ST@lineht=\dimen116
+\ST@stretchht=\dimen117
+\ST@prevht=\dimen118
+\ST@toadd=\dimen119
+\ST@dimen=\dimen120
+\ST@pbox=\box27
+)
+! Illegal parameter number in definition of \reserved@a.
+<to be read again> 
+                   }
+l.43 \providecommand{\href}[1]{\ref{#}}
+                                       
+You meant to type ## instead of #, right?
+Or maybe a } was forgotten somewhere earlier, and things
+are all screwed up? I'm going to assume that you meant ##.
+
+\c@tabctr=\count103
+\c@figctr=\count104
+! Illegal parameter number in definition of \seeFig.
+<to be read again> 
+                   }
+l.326 ...ommand{\seeFig}[1]{see Fig {\bf \ref{#}}}
+                                                  %
+You meant to type ## instead of #, right?
+Or maybe a } was forgotten somewhere earlier, and things
+are all screwed up? I'm going to assume that you meant ##.
+
+! Illegal parameter number in definition of \fig.
+<to be read again> 
+                   }
+l.327 ...videcommand{\fig}   [1]{figure {\ref{#}}}
+                                                  %
+You meant to type ## instead of #, right?
+Or maybe a } was forgotten somewhere earlier, and things
+are all screwed up? I'm going to assume that you meant ##.
+
+(/usr/share/texmf/tex/latex/base/makeidx.sty
+Package: makeidx 2000/03/29 v1.0m Standard LaTeX package
+)
+\@indexfile=\write5
+\openout5 = `images.idx'.
+
+Writing index file images.idx
+(/usr/share/texmf/tex/latex/base/inputenc.sty
+Package: inputenc 2001/07/10 v0.99a Input encoding file 
+)
+\sizebox=\box28
+\lthtmlwrite=\write6
+(./images.aux (/archive/gt2k_cvs/gt2k/docs/titlepage.aux) (/archive/gt2k_cvs/gt
+2k/docs/introduction.aux) (/archive/gt2k_cvs/gt2k/docs/quickstart.aux) (/archiv
+e/gt2k_cvs/gt2k/docs/overview.aux) (/archive/gt2k_cvs/gt2k/docs/data_preparatio
+n.aux) (/archive/gt2k_cvs/gt2k/docs/training_and_recognition.aux))
+\openout1 = `images.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 508.
+LaTeX Font Info:    ... okay on input line 508.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 508.
+LaTeX Font Info:    ... okay on input line 508.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 508.
+LaTeX Font Info:    ... okay on input line 508.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 508.
+LaTeX Font Info:    ... okay on input line 508.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 508.
+LaTeX Font Info:    ... okay on input line 508.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 508.
+LaTeX Font Info:    ... okay on input line 508.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 508.
+LaTeX Font Info:    ... okay on input line 508.
+Package hyperref Info: Link coloring OFF on input line 508.
+(/usr/share/texmf/tex/latex/hyperref/nameref.sty
+Package: nameref 2001/01/27 v2.19 Cross-referencing by name of section
+\c@section@level=\count105
+)
+LaTeX Info: Redefining \ref on input line 508.
+LaTeX Info: Redefining \pageref on input line 508.
+\openout3 = `images.out'.
+
+(/archive/gt2k_cvs/gt2k/docs/main.aux (/archive/gt2k_cvs/gt2k/docs/titlepage.au
+x) (/archive/gt2k_cvs/gt2k/docs/introduction.aux
+
+LaTeX Warning: Label `f:gt2k_component' multiply defined.
+
+) (/archive/gt2k_cvs/gt2k/docs/quickstart.aux) (/archive/gt2k_cvs/gt2k/docs/ove
+rview.aux) (/archive/gt2k_cvs/gt2k/docs/data_preparation.aux
+
+LaTeX Warning: Label `f:hmm1input' multiply defined.
+
+
+LaTeX Warning: Label `f:hmm1def' multiply defined.
+
+
+LaTeX Warning: Label `f:hmm1viz' multiply defined.
+
+
+LaTeX Warning: Label `f:grammar' multiply defined.
+
+) (/archive/gt2k_cvs/gt2k/docs/training_and_recognition.aux)
+
+LaTeX Warning: Label `htk' multiply defined.
+
+
+LaTeX Warning: Label `Rabiner89' multiply defined.
+
+
+LaTeX Warning: Label `HTK93' multiply defined.
+
+) (/archive/gt2k_cvs/gt2k/docs/titlepage.aux) (/archive/gt2k_cvs/gt2k/docs/intr
+oduction.aux
+
+LaTeX Warning: Label `f:gt2k_component' multiply defined.
+
+) (/archive/gt2k_cvs/gt2k/docs/quickstart.aux) (/archive/gt2k_cvs/gt2k/docs/ove
+rview.aux) (/archive/gt2k_cvs/gt2k/docs/data_preparation.aux
+
+LaTeX Warning: Label `f:hmm1input' multiply defined.
+
+
+LaTeX Warning: Label `f:hmm1def' multiply defined.
+
+
+LaTeX Warning: Label `f:hmm1viz' multiply defined.
+
+
+LaTeX Warning: Label `f:grammar' multiply defined.
+
+) (/archive/gt2k_cvs/gt2k/docs/training_and_recognition.aux)
+
+latex2htmlLength hsize=349.0pt
+
+latex2htmlLength vsize=627.36243pt
+
+latex2htmlLength hoffset=0.0pt
+
+latex2htmlLength voffset=0.0pt
+
+latex2htmlLength topmargin=0.0pt
+
+latex2htmlLength topskip=0.00003pt
+
+latex2htmlLength headheight=0.0pt
+
+latex2htmlLength headsep=0.0pt
+
+latex2htmlLength parskip=0.0pt plus 1.0pt
+
+latex2htmlLength oddsidemargin=35.0pt
+
+latex2htmlLength evensidemargin=89.0pt
+
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 532.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 532.
+l2hSize :tex2html_wrap_inline2578:8.14003pt::0.0pt::4.98616pt.
+[1
+
+
+
+]
+\openout2 = `titlepage.aux'.
+
+(/archive/gt2k_cvs/gt2k/docs/titlepage.tex
+! Undefined control sequence.
+<recently read> \gtgtk 
+                       
+l.4 \maketitle
+              
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 4.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 4.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 4.
+
+Overfull \hbox (4.08675pt too wide) in paragraph at lines 4--4
+ [][] 
+ []
+
+)
+l2hSize :figure2893:225.00006pt::0.0pt::349.0pt.
+[1
+
+
+
+
+
+]
+File: images//gt2k_component.eps Graphic file (type eps)
+<images//gt2k_component.eps>
+l2hSize :tex2html_wrap_inline2901:58.86317pt::58.86317pt::341.93309pt.
+[2
+
+
+]
+l2hSize :tex2html_wrap_inline1067:6.45831pt::0.0pt::6.50238pt.
+[3
+
+
+]
+l2hSize :tex2html_wrap_inline1268:8.0pt::8.0pt::23.69911pt.
+[4
+
+
+]
+l2hSize :tex2html_wrap_inline1280:8.0pt::8.0pt::26.61122pt.
+[5
+
+
+]
+l2hSize :tex2html_wrap_inline1282:8.0pt::8.0pt::26.61122pt.
+[6
+
+
+]
+l2hSize :tex2html_wrap_inline1286:6.83331pt::0.0pt::7.20834pt.
+[7
+
+
+]
+l2hSize :tex2html_wrap_inline1288:6.83331pt::0.0pt::5.68057pt.
+[8
+
+
+]
+l2hSize :tex2html_wrap_inline1290:6.83331pt::0.0pt::9.05698pt.
+[9
+
+
+]
+l2hSize :tex2html_wrap_inline1292:6.83331pt::0.0pt::9.625pt.
+[10
+
+
+]
+l2hSize :displaymath1250:21.4579pt::0.0pt::349.0pt.
+[11
+
+
+]
+l2hSize :tex2html_wrap_inline1678:6.95831pt::6.95831pt::8.27783pt.
+[12
+
+
+]
+l2hSize :tex2html_wrap_inline1680:6.95831pt::6.95831pt::8.27783pt.
+[13
+
+
+]
+Overfull \hbox (13.46664pt too wide) in paragraph at lines 642--642
+[] 
+ []
+
+LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <10> not available
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 642.
+l2hSize :tex2html_wrap_inline2973:37.28336pt::37.28336pt::341.93309pt.
+[14
+
+
+]
+Overfull \hbox (13.46664pt too wide) in paragraph at lines 687--687
+[] 
+ []
+
+l2hSize :tex2html_wrap_inline2974:199.14445pt::199.14445pt::341.93309pt.
+[15
+
+
+]
+File: images//hmm1viz.eps Graphic file (type eps)
+<images//hmm1viz.eps>
+l2hSize :tex2html_wrap_inline2984:66.85344pt::66.85344pt::341.93309pt.
+[16
+
+
+]
+l2hSize :tex2html_wrap_inline1776:8.0pt::8.0pt::3.27782pt.
+[17
+
+
+]
+Overfull \hbox (22.33664pt too wide) in paragraph at lines 733--733
+[] 
+ []
+
+l2hSize :tex2html_wrap_inline2992:71.34444pt::71.34444pt::341.93309pt.
+[18
+
+
+] (./images.aux (./titlepage.aux))
+
+LaTeX Warning: There were multiply-defined labels.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 2966 strings out of 95854
+ 40341 string characters out of 1196101
+ 94056 words of memory out of 1000001
+ 5844 multiletter control sequences out of 10000+50000
+ 7456 words of font info for 27 fonts, out of 500000 for 1000
+ 14 hyphenation exceptions out of 1000
+ 25i,14n,27p,187b,474s stack positions out of 1500i,500n,5000p,200000b,5000s
+
+Output written on images.dvi (19 pages, 10864 bytes).

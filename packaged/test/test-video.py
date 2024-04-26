@@ -6,6 +6,7 @@ import requests
 # import threading
 # import concurrent.futures
 from ast import literal_eval
+from requests_toolbelt import MultipartDecoder
 # import signal
 # import os
 # from pathlib import Path
@@ -105,7 +106,7 @@ if __name__ == '__main__':
 #                 f.write(f"a\ne\ni\nm\n")
 #             f.write("sil")
 
-    url = 'http://localhost:5002/htk'
+    url = 'http://htk_train:5000/htk_train'
     # payload = {
     #     'id': str(0),
     #     '_dir': "/tmp",
@@ -116,7 +117,7 @@ if __name__ == '__main__':
     # }
     payload = {
         'id': 'test',
-        'picklists': ','.join(str(i) for i in list(range(1,35)))
+        'picklists': ','.join(str(i) for i in list(range(1,40)))
     }
     print(payload)
     headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36'}
@@ -124,8 +125,10 @@ if __name__ == '__main__':
 
     if content.status_code == 200:
         # print(content.content.decode())
-        id, ignored = literal_eval(content.content.decode())
-        print(ignored)
+        data = MultipartDecoder.from_response(content)
+        for part in data.parts:
+            print(part)
+            print(part.content)
     else:
         print(content.status_code, content.text)
 

@@ -1,0 +1,168 @@
+***********************************************
+* Gesture Panel Example Walkthrough
+* 11 Dec 2003 - Robert McGuire
+***********************************************
+
+This example uses data from the Gesture Panel, a panel of 72 LEDs
+arranged in a 9x8 grid.  For more information on the Gesture Panel, 
+please see the provided: 
+
+	gt2k/docs/westeyn_gt2k_ICMI_2003.pdf 
+		
+	and 
+
+	http://www.cc.gatech.edu/ccg/people/tracy/
+	http://www.cc.gatech.edu/ccg/projects/gesturepanel/
+
+
+---------
+First, you'll need to create a summary of what's in the data/
+directory, so that scripts know what to look for and where.
+
+The data/ directory hierarchy contains a separate directory for each
+gesture we have training data for.  This is text vector data generated
+elsewhere, and put in our main data directory in the directory
+corresponding to what gesture was performed.
+
+You'll need a list of these directories for scripts to read.  You can
+generate it from within gt2k/gestpan like so:
+
+  find data/* -type d > datadirs
+
+This should produce a list of directories relative to the base of the
+project that contains only directories with data we care about.  If
+you keep data outside of the project directory, please use a full
+path, for example:
+
+  find /home/username/gestpan/data/* -type d > datadirs
+
+DO NOT USE PATHS WITH "../" ANYWHERE!
+
+---------------
+Next, you need a list of data files for consideration.  As all gesture
+panel data comes out as .dat, we can build this list similarly:
+
+  find data/* -type f > datafiles
+
+or 
+
+  find /home/haileris/gestpan/data/* -type f > datafiles
+
+This will give a list of files under consideration for training and
+testing.
+
+---------------
+Next, you will need a list of commands (gestures) that you want to
+recognize.  The easiest way of doing this is to run the
+"gen_commands.sh" script in the scripts/ directory, like so:
+
+  scripts/gen_commands.sh datadirs > commands
+
+This will give a list of commands based on the name of the first file
+in each of the data directories.  If you do not like the command names
+it has chosen, be sure to edit the scripts/extract_label.sh script, as
+it is used to make sure commands and data match up, later!
+
+For the gesture panel's extract_label.sh script, commands are taken to
+be the first part of the filename before the first underscore.  For
+example, the data file:
+
+  data/up/up1_1
+
+Will be assumed to be command "up1"
+
+---------------
+Usually you will need to create an HMM model for HTK to start from. 
+There is a sample model provided with this tutorial in the hmmdefs/
+directory, but we will show you how to recreate it as well.
+
+The provided model is one with 8 states, a feature vector length of
+72, and no skip states.  To duplicate this model, or create a
+different one, use the gen_hmmdef.pl program located in the
+tools/hmm_generator directory of your GT2K directory (such as
+/usr/local/gt2k/tools/hmm_generator).  To create a model equivalent to
+the provided one, invoke:
+
+	gen_hmmdef.pl -n8 -v72 -s0 my_model
+
+---------------
+Last, you will need to generate a list of labels, tying each data file
+to its respective command.  The labels.mlf file is used to tie the
+binary data files used by HTK (to be made later) to their respective
+"labels", which are the commands returned on recognition.
+
+For the Gesture Panel, there is a script in scripts/gen_mlf.sh:
+
+  scripts/gen_mlf.sh datafiles ext > labels.mlf
+
+Where ext is the path to the directory where you wish the binary HTK
+data files to be stored.  To avoid odd naming collisions, the ext/
+data dir mirrors the same hierarchy as the data/ tree that you provide
+in the datadirs file.  The ext directory can be relative to the
+project directory or a full path.  It needs to exist before running
+gen_mlf.sh, but the subdirectories will be created automatically.
+
+-----------------
+Now you're almost ready, just edit the scripts/options.sh file to
+reflect your project's options.
+
+Set PRJ to match the path to your main project directory.
+Set UTIL_DIR to match the path to the gt2k/utils/ directory.
+
+VECTOR_LENGTH should be 72 for gesture panel data (8x9 panel of LEDs)
+
+HMM_LOCATION should be set to $HMM_TOPOLOGY_DIR/<your hmmdef's name>
+
+Set TRAIN_TEST_VALIDATION to whichever method you want.
+
+If you used any filenames other than "datafiles", "commands",
+"labels.mlf", make sure you indicate that in this file.
+
+Once you have run the trainer once, you don't have to create the ext
+data files again, so you can set GEN_EXT_FILES to "no" if they already
+exist.
+
+Also, if you're using a more complicated grammar than the one
+auto-created, set GEN_GRAMMAR to "no" and make it yourself.  The file
+is "grammar" by default.
+
+Setting these options should be sufficient, but you may wish to
+familiarize yourself with the other options available.
+-------------------------
+Now the model is ready to be traied. Do this by invoking
+
+  scripts/train.sh scripts/options.sh
+
+This will start up the training/testing script, giving it options
+through options.sh.
+
+You can save the output to a file like so:
+
+  ../utils/train.sh scripts/options.sh 2>&1 > out.log
+
+If you'd like to watch the output as it goes, try something like
+
+  ../utils/train.sh scripts/options.sh 2>&1 > out.log & tail -f out.log
+
+After much crunching, a confusion matrix will appear, indicating that
+you are done, successfully.  Other things usually mean failure
+somewhere.
+
+The resulting HMMs for each gesture will be in one of the
+models/hmm?.?  directories directory (e.g.  hmm0.3 for cross training)
+in the file "newMacros".  The models can be used with calls to HVite,
+which is described in the documentation for HTK.
+
+-------------------------
+Recognition is possible through the 
+
+  scripts/recognize.sh
+
+script.  Please check it for usage and for how it works, to make your own
+recognizer.
+
+------------------------
+Please direct any questions to either Robert McGuire (haileris@cc.gatech.edu)
+or Tracy Westeyn (turtle@cc.gatech.edu).
+
+

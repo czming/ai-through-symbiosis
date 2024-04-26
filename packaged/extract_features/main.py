@@ -188,9 +188,9 @@ def extract_features(image):
 			aruco_tvecs[i.get_id()] = i.tvec[:, 0]
 
 			__valid_shelf_markers_dict = {
-				val: key for key, val in enumerate(
+				val: key for key, val in enumerate(sorted(
 					set(os.environ.get("VALID_BIN_MARKERS", {110, 120, 130, 210, 220, 230, 310, 320, 330, 410, 420, 430, 510, 520, 530, 610, 620, 630})) \
-			  		| set(os.environ.get("VALID_LOCALIZATION_MARKERS", {111, 121, 131, 211, 221, 231, 311, 321, 331, 411, 421, 431, 511, 521, 531, 611, 621, 631})))
+			  		| set(os.environ.get("VALID_LOCALIZATION_MARKERS", {111, 121, 131, 211, 221, 231, 311, 321, 331, 411, 421, 431, 511, 521, 531, 611, 621, 631}))))
 			}
 
 			# assign x, y
@@ -234,7 +234,7 @@ def extract_features(image):
 		# find current location of hand, (x, y)
 		curr_hand_loc = hand_pos(first_hand_points, image)
 
-		htk_output_vector[os.environ.get("s", 354)] = curr_hand_loc[0]
+		htk_output_vector[os.environ.get("HAND_POS_HTK_OFFSET", 354)] = curr_hand_loc[0]
 		htk_output_vector[os.environ.get("HAND_POS_HTK_OFFSET", 354) + 1] = curr_hand_loc[1]
 
 		# ---------------------------------PROCESSING COLOR MODEL---------------------------------------------------

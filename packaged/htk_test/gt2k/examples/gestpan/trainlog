@@ -1,0 +1,84 @@
+data vector has size 72
+Reading HMM definition from /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/hmmdefs/8state-noskip-72vec
+Reading labels from master label file /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf
+Writing results to the file /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/ext/result.mlf
+Utilities located in directory: /usr/local/gt2k/utils
+Trace Level is set at 1
+HTK executables located: /usr/local/bin/HERest /usr/local/bin/HParse /usr/local/bin/HCompV /usr/local/bin/HResults
+Using data files listed in /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/datafiles
+Using /usr/local/gt2k/utils/prepare to prepare data for HTK
+bunny
+circleleft5
+circleright5
+down1
+down2
+downleft1
+downright1
+left1
+right1
+up1
+upleft1
+upright1
+Generating training/test sets, could take a while
+
+*****************************************************
+Building Models
+*****************************************************
+HCompV -A -T 1 -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -l bunny -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf -o bunny -m -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.0 /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/hmmdefs/8state-noskip-72vec 
+HInit -A -T 1 -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.1 -l bunny -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf -o bunny /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.0/bunny 
+HRest -A -m 1 -T 1 -t -i 30 -v 0.001 -l bunny -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.2/ -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.1/bunny 
+HCompV -A -T 1 -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -l circleleft5 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf -o circleleft5 -m -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.0 /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/hmmdefs/8state-noskip-72vec 
+HInit -A -T 1 -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.1 -l circleleft5 -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf -o circleleft5 /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.0/circleleft5 
+HRest -A -m 1 -T 1 -t -i 30 -v 0.001 -l circleleft5 -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.2/ -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.1/circleleft5 
+HCompV -A -T 1 -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -l circleright5 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf -o circleright5 -m -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.0 /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/hmmdefs/8state-noskip-72vec 
+HInit -A -T 1 -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.1 -l circleright5 -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf -o circleright5 /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.0/circleright5 
+HRest -A -m 1 -T 1 -t -i 30 -v 0.001 -l circleright5 -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.2/ -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.1/circleright5 
+HCompV -A -T 1 -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -l down1 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf -o down1 -m -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.0 /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/hmmdefs/8state-noskip-72vec 
+HInit -A -T 1 -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.1 -l down1 -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf -o down1 /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.0/down1 
+HRest -A -m 1 -T 1 -t -i 30 -v 0.001 -l down1 -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.2/ -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.1/down1 
+HCompV -A -T 1 -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -l down2 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf -o down2 -m -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.0 /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/hmmdefs/8state-noskip-72vec 
+HInit -A -T 1 -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.1 -l down2 -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf -o down2 /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.0/down2 
+HRest -A -m 1 -T 1 -t -i 30 -v 0.001 -l down2 -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.2/ -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.1/down2 
+HCompV -A -T 1 -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -l downleft1 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf -o downleft1 -m -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.0 /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/hmmdefs/8state-noskip-72vec 
+HInit -A -T 1 -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.1 -l downleft1 -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf -o downleft1 /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.0/downleft1 
+HRest -A -m 1 -T 1 -t -i 30 -v 0.001 -l downleft1 -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.2/ -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.1/downleft1 
+HCompV -A -T 1 -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -l downright1 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf -o downright1 -m -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.0 /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/hmmdefs/8state-noskip-72vec 
+HInit -A -T 1 -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.1 -l downright1 -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf -o downright1 /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.0/downright1 
+HRest -A -m 1 -T 1 -t -i 30 -v 0.001 -l downright1 -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.2/ -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.1/downright1 
+HCompV -A -T 1 -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -l left1 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf -o left1 -m -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.0 /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/hmmdefs/8state-noskip-72vec 
+HInit -A -T 1 -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.1 -l left1 -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf -o left1 /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.0/left1 
+HRest -A -m 1 -T 1 -t -i 30 -v 0.001 -l left1 -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.2/ -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.1/left1 
+HCompV -A -T 1 -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -l right1 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf -o right1 -m -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.0 /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/hmmdefs/8state-noskip-72vec 
+HInit -A -T 1 -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.1 -l right1 -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf -o right1 /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.0/right1 
+HRest -A -m 1 -T 1 -t -i 30 -v 0.001 -l right1 -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.2/ -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.1/right1 
+HCompV -A -T 1 -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -l up1 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf -o up1 -m -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.0 /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/hmmdefs/8state-noskip-72vec 
+HInit -A -T 1 -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.1 -l up1 -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf -o up1 /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.0/up1 
+HRest -A -m 1 -T 1 -t -i 30 -v 0.001 -l up1 -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.2/ -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.1/up1 
+HCompV -A -T 1 -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -l upleft1 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf -o upleft1 -m -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.0 /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/hmmdefs/8state-noskip-72vec 
+HInit -A -T 1 -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.1 -l upleft1 -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf -o upleft1 /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.0/upleft1 
+HRest -A -m 1 -T 1 -t -i 30 -v 0.001 -l upleft1 -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.2/ -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.1/upleft1 
+HCompV -A -T 1 -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -l upright1 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf -o upright1 -m -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.0 /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/hmmdefs/8state-noskip-72vec 
+HInit -A -T 1 -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.1 -l upright1 -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf -o upright1 /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.0/upright1 
+HRest -A -m 1 -T 1 -t -i 30 -v 0.001 -l upright1 -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.2/ -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.1/upright1 
+
+*****************************************************
+Training Models
+*****************************************************
+HERest -v 0.001 -A -T 1 -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -d /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.2/ -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.3 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/commands 
+
+HERest -v 0.001 -A -T 1 -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -H /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.3/newMacros -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.4 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/commands 
+
+HERest -v 0.001 -A -T 1 -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -H /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.4/newMacros -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.5 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/commands 
+
+HERest -v 0.001 -A -T 1 -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -H /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.5/newMacros -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.6 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/commands 
+
+HERest -v 0.001 -A -T 1 -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/trainsets/training-extfiles0 -H /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.6/newMacros -M /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.7 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/commands 
+
+*****************************************************
+Checking our Models
+*****************************************************
+HVite -A -T 1 -H /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/models/hmm0.7/newMacros -w word.lattice -S /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/testsets/testing-extfiles0 -I /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/labels.mlf -i /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/ext/result.mlf0 -n 4 20 dict /home/tgemici/SilentSpeech/gt2k-0.1a/examples/gestpan/commands 
+
+*****************************************************
+Testing Models
+*****************************************************
