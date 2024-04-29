@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pickle
 
-def plot_hsv_hist(input_dict):
+def get_hsv_hist_fig(input_dict):
     letter_to_name = {
         'r': 'red',
         'g': 'green',
@@ -35,16 +35,16 @@ def plot_hsv_hist(input_dict):
 
     for object, predicted_objects in input_dict.items():
 
-        hsv_bins = predicted_objects[0] + predicted_objects[1] / 2
+        print (predicted_objects)
         if plt_display_index < len(input_dict) // 2:
-            axs[0, plt_display_index].bar(range(len(hsv_bins)), hsv_bins, color=colors[object])
+            axs[0, plt_display_index].bar(range(len(predicted_objects)), predicted_objects, color=colors[object])
             axs[0, plt_display_index].set_title(letter_to_name[object])
             axs[0, plt_display_index].set_ylim([-0.15, 0.15])
             axs[0, plt_display_index].set_yticks([])
             axs[0, plt_display_index].set_xticks([])
 
         else:
-            axs[1, plt_display_index - len(input_dict) // 2].bar(range(len(hsv_bins)), hsv_bins, color=colors[object])
+            axs[1, plt_display_index - len(input_dict) // 2].bar(range(len(predicted_objects)), predicted_objects, color=colors[object])
             axs[1, plt_display_index - len(input_dict) // 2].set_title(letter_to_name[object])
             axs[1, plt_display_index - len(input_dict) // 2].set_ylim([-0.15, 0.15])
             axs[1, plt_display_index - len(input_dict) // 2].set_yticks([])
@@ -54,9 +54,14 @@ def plot_hsv_hist(input_dict):
         axs[0, 0].set_yticks([-0.15, -0.1, -0.05, 0, 0.05, 0.1, 0.15])
         axs[1, 0].set_yticks([-0.15, -0.1, -0.05, 0, 0.05, 0.1, 0.15])
 
-    plt.show()
+    return fig
 
-# Comment this out later, function call for testing purposes
-with open('object_type_hsv_bins_copy.pkl', 'rb') as f:
-    input = pickle.load(f)
-plot_hsv_hist(input)
+if __name__ == "__main__":
+    # Comment this out later, function call for testing purposes
+    with open('object_type_hsv_bins_copy.pkl', 'rb') as f:
+        input = pickle.load(f)
+    fig = get_hsv_hist_fig(input)
+
+    fig.show()
+    plt.savefig("object_type_hsv_bins_visualization.png")
+    plt.show()
