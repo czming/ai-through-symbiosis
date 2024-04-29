@@ -27,8 +27,10 @@ class ParallelBufferManager:
         raise NotImplementedError("Have not implemented response processing")
 
     def flush(self, callback):
+        print("Flushing in", self.name)
         self.pool.shutdown(wait=True)
         self.pool = concurrent.futures.ThreadPoolExecutor(max_workers=self.workers)
+        print("(flush) rebuilt pool in", self.name)
         if callback and 0 < len(self.lookup_map.keys()):
             callback(self.lookup_map)
         self.lookup_map = dict()
@@ -196,10 +198,10 @@ class HSVManager:
             print("Triggering Train HSV")
             self.train()
         picklist = str(picklist)
-        # if picklist not in self.inters:
-        #     print("Training HSV Iterative:", picklist)
-        #     self.train_iterative(picklist)
-        # model = self.inters[int(picklist)]
+        if picklist not in self.inters:
+            print("Training HSV Iterative:", picklist)
+            self.train_iterative(picklist)
+        model = self.inters[int(picklist)]
         model = self.model
         url = 'http://hsv_test:5000/hsv_test'
         payload = dict(id=picklist, picklist_nos=str([picklist]), hsv_avg_mean=json.dumps(model['hsv_avg_mean']), hsv_avg_std=json.dumps(model['hsv_avg_std']))
@@ -276,8 +278,9 @@ if __name__ == '__main__':
             if ret and frame is not None:
                 feature_manager.push(frame)
             else: # TODO: confirm there is no better way to do this - what if RTMP dropped frame in a picklist?
+                break
 
-                feature_manager.flush(lambda x: preprocess(preprocessor_manager, x, htk_manager))
+        feature_manager.flush(lambda x: preprocess(preprocessor_manager, x, htk_manager))
         print("Disconnected")
         cap.release()
 

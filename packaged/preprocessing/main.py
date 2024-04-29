@@ -10,9 +10,6 @@ import traceback
 
 import cv2
 import numpy as np
-import skimage.color
-from google.protobuf.json_format import MessageToDict
-import mediapipe as mp
 
 from service import Service
 from utils.forward_fill import perform_forward_fill

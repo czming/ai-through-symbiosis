@@ -6,6 +6,7 @@ import time
 import logging
 import traceback
 import ast
+import matplotlib.pyplot as plt
 
 # import cv2
 # import numpy as np
@@ -22,11 +23,72 @@ htk_input_folder = "/shared/htk_inputs/"
 htk_output_folder = "/shared/htk_outputs/"
 pick_label_folder = "/shared/raw_labels/"
 
+
+output_hist_file = "./hist.png"
+
+def get_hsv_hist_fig(input_dict):
+    letter_to_name = {
+        'r': 'red',
+        'g': 'green',
+        'b': 'blue',
+        'p': 'darkblue',
+        'q': 'darkgreen',
+        'o': 'orange',
+        's': 'alligatorclip',
+        'a': 'yellow',
+        't': 'clear',
+        'u': 'candle'
+    }
+
+    colors = {
+        'g': 'green',
+        'a': 'yellow',
+        'u': 'tan',
+        'b': 'blue',
+        'q': 'darkgreen',
+        'r': 'red',
+        'o': 'orange',
+        'p': 'darkblue',
+        't': 'grey',
+        's': 'black'
+    }
+    
+    plt_display_index = 0
+    fig, axs = plt.subplots(2, len(input_dict) // 2)
+
+    for object, predicted_objects in input_dict.items():
+
+        if plt_display_index < len(input_dict) // 2:
+            axs[0, plt_display_index].bar(range(len(predicted_objects)), predicted_objects, color=colors[object])
+            axs[0, plt_display_index].set_title(letter_to_name[object])
+            axs[0, plt_display_index].set_ylim([-0.15, 0.15])
+            axs[0, plt_display_index].set_yticks([])
+            axs[0, plt_display_index].set_xticks([])
+
+        else:
+            axs[1, plt_display_index - len(input_dict) // 2].bar(range(len(predicted_objects)), predicted_objects, color=colors[object])
+            axs[1, plt_display_index - len(input_dict) // 2].set_title(letter_to_name[object])
+            axs[1, plt_display_index - len(input_dict) // 2].set_ylim([-0.15, 0.15])
+            axs[1, plt_display_index - len(input_dict) // 2].set_yticks([])
+            axs[1, plt_display_index - len(input_dict) // 2].set_xticks([])
+        plt_display_index += 1
+
+        axs[0, 0].set_yticks([-0.15, -0.1, -0.05, 0, 0.05, 0.1, 0.15])
+        axs[1, 0].set_yticks([-0.15, -0.1, -0.05, 0, 0.05, 0.1, 0.15])
+
+    return fig
+
 def main(id, picklist_nos):
 
 	picklist_nos = ast.literal_eval(picklist_nos)
+
+	hsv_avg_mean, hsv_avg_std = model.fit(picklist_nos, htk_input_folder, htk_output_folder, pick_label_folder)
+
+	hsv_hist_fig = get_hsv_hist_fig(hsv_avg_mean)
+
+	plt.savefig(output_hist_file)
 	
-	return str((id, *model.fit(picklist_nos, htk_input_folder, htk_output_folder, pick_label_folder)))
+	return str((id, hsv_avg_mean, hsv_avg_std))
 
 
 service = Service(

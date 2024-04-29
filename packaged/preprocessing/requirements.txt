@@ -1,12 +1,13 @@
 # numpy
-tensorflow[and-cuda]
-opencv-python
+# tensorflow[and-cuda]
+# opencv-python
 # aruco
 # ./service-wrapper
-mediapipe
+# mediapipe
 protobuf
 matplotlib
 scikit-image
-mlsocket
+# mlsocket
 python-dotenv
-gunicorn
+# gunicorn
+numpy

@@ -151,17 +151,17 @@ class CarryHSVHistogramModel(Model):
                 empty_hand_frames.append([start_frame, end_frame])
 
             # avg hsv bins for each pick
-            num_hand_detections = [get_avg_hsv_bin_frames(htk_inputs, start_frame + 10, end_frame - 10)[1] for
+            num_hand_detections = [get_avg_hsv_bin_frames(htk_inputs, start_frame + 5, end_frame - 5)[1] for
                                    (start_frame, end_frame) \
                                    in empty_hand_frames]
 
             print(f"empty_hand_frames: {empty_hand_frames}")
 
-            if 0 in num_hand_detections and train:
+            if sum(num_hand_detections) == 0:
+                # no frames at all
                 print("no empty hand, skipping bad boundaries")
 
                 continue
-                # for empty hand, we can skip those where the results were bad
 
             # getting the sum, multiply average by counts
             sum_empty_hand_hsv = np.zeros(num_bins)

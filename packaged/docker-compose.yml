@@ -5,11 +5,16 @@ networks:
                 external: true
 
 services:
+        common:
+                image: aits-common
+                build:
+                        context: ./common
+                        dockerfile: ./Dockerfile
+                command: echo "Done"
         ef:
+                depends_on: 
+                        - common
                 image: extract_features
-                # container_name: ef
-                # ports:
-                # - 127.0.0.1:5000:5000
                 networks:
                         - sym-ai
                 build:
@@ -27,6 +32,8 @@ services:
                                         cpus: '1.00'
                                         memory: 500M
         preprocessing:
+                depends_on: 
+                        - common
                 image: preprocessing
                 #container_name: preprocessing
                 #ports:
@@ -48,6 +55,8 @@ services:
                                         cpus: '1.00'
                                         memory: 1G
         htk_train:
+                depends_on: 
+                        - common
                 image: htk_train
                 #container_name: htk_train
                 # ports:
@@ -74,6 +83,8 @@ services:
                                         cpus: '10.00'
                                         memory: 10G
         htk_test:
+                depends_on: 
+                        - common
                 image: htk_test
                 #container_name: htk_test
                 # ports:
@@ -100,6 +111,8 @@ services:
                                         cpus: '10.00'
                                         memory: 10G
         hsv_train:
+                depends_on: 
+                        - common
                 image: hsv_train
                 container_name: hsv_train
                 ports:
@@ -116,6 +129,8 @@ services:
                           read_only: true
 
         hsv_test:
+                depends_on: 
+                        - common
                 image: hsv_test
                 container_name: hsv_test
                 ports:
@@ -132,6 +147,8 @@ services:
                           read_only: true
 
         hsv_train_iterative:
+                depends_on: 
+                        - common
                 image: hsv_train_iterative
                 container_name: hsv_train_iterative
                 ports:
@@ -147,7 +164,26 @@ services:
                           target: /shared
                           read_only: true
 
+        ui:
+                depends_on: 
+                        - common
+                image: aits-ui
+                container_name: aits-ui
+                build:
+                        context: ./ui
+                        dockerfile: ./Dockerfile
+                ports:
+                        - 11225:5000
+                networks:
+                        - sym-ai
+                volumes: 
+                        - type: bind
+                          source: ./shared
+                          target: /shared
+
         main:
+                depends_on: 
+                        - common
                 image: aits-main
                 container_name: aits-main
                 build:
@@ -160,7 +196,6 @@ services:
                         - type: bind
                           source: ./shared
                           target: /shared
-
                           #        main_other:
                           #                image: aits-main_other
                           #                container_name: aits-main_other
