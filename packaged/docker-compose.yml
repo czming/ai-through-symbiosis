@@ -127,6 +127,9 @@ services:
                           source: ./shared
                           target: /shared
                           read_only: true
+                        - type: bind
+                          source: ./shared/viz
+                          target: /viz
 
         hsv_test:
                 depends_on: 
@@ -163,6 +166,9 @@ services:
                           source: ./shared
                           target: /shared
                           read_only: true
+                        - type: bind
+                          source: ./shared/viz
+                          target: /viz
 
         ui:
                 depends_on: 
@@ -180,6 +186,9 @@ services:
                         - type: bind
                           source: ./shared
                           target: /shared
+                        - type: bind
+                          source: ./shared/viz
+                          target: /app/static
 
         main:
                 depends_on: 

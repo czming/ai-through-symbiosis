@@ -24,7 +24,7 @@ htk_output_folder = "/shared/htk_outputs/"
 pick_label_folder = "/shared/raw_labels/"
 
 
-output_hist_file = "./hist.png"
+output_hist_file = "/viz/hist-real.png"
 
 def get_hsv_hist_fig(input_dict):
     letter_to_name = {

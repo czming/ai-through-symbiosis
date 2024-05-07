@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 from google.protobuf.json_format import MessageToDict
 # import mediapipe as mp
 from models import CarryHSVHistogramModel,IterativeClusteringModel
+import ast
 
 from service import Service
 
@@ -25,7 +26,7 @@ htk_input_folder = "/shared/htk_inputs/"
 htk_output_folder = "/shared/htk_outputs/"
 pick_label_folder = "/shared/raw_labels/"
 
-output_hist_file = "./hist.png"
+output_hist_file = "/viz/hist-iter.png"
 
 def get_hsv_hist_fig(input_dict):
     letter_to_name = {
@@ -79,41 +80,45 @@ def get_hsv_hist_fig(input_dict):
 
     return fig
 
-def main(id, picklist_no, hsv_avg_mean, hsv_avg_std):
-	# load from json 
-	hsv_avg_mean = json.loads(hsv_avg_mean)
-	hsv_avg_std = json.loads(hsv_avg_std)
+def main(id, picklist_no, hsv_avg_mean, hsv_avg_std, predicted_labels):
+    print (f"predicted labels: {predicted_labels}")
+    predicted_labels = json.loads(predicted_labels)[picklist_no] # predicted_labels is {picklist_no: labels}
+    hsv_avg_mean = json.loads(hsv_avg_mean)
+    hsv_avg_std = json.loads(hsv_avg_std)
+    
 
-	# instantiate iterative clustering model and do fit iterative on HSVCarry model with that
-	iterative_clustering_model = IterativeClusteringModel()
+    # instantiate iterative clustering model and do fit iterative on HSVCarry model with that
+    iterative_clustering_model = IterativeClusteringModel()
 
-	iterative_clustering_model.class_hsv_bins_mean = {key: np.array(value) for key, value in hsv_avg_mean.items()}
-	iterative_clustering_model.class_hsv_bins_std = {key: np.array(value) for key, value in hsv_avg_std.items()}
+    iterative_clustering_model.class_hsv_bins_mean = {key: np.array(value) for key, value in hsv_avg_mean.items()}
+    iterative_clustering_model.class_hsv_bins_std = {key: np.array(value) for key, value in hsv_avg_std.items()}
 
-	model.iterative_clustering_model = iterative_clustering_model
+    model.iterative_clustering_model = iterative_clustering_model
 
-	hsv_avg_mean, hsv_avg_std = model.fit_iterative(int(picklist_no), htk_input_folder, htk_output_folder, pick_label_folder, beta=0.9)[:2]
+    print (f"predicted labels: {predicted_labels}")
 
-	# convert from np array to lists
-	hsv_avg_mean = {key:list(value) for key, value in hsv_avg_mean.items()}
-	hsv_avg_std = {key:list(value) for key, value in hsv_avg_std.items()}
+    hsv_avg_mean, hsv_avg_std = model.fit_iterative(int(picklist_no), htk_input_folder, htk_output_folder, predicted_labels, beta=0.9)[:2]
 
-	hsv_hist_fig = get_hsv_hist_fig(hsv_avg_mean)
+    # convert from np array to lists
+    hsv_avg_mean = {key:list(value) for key, value in hsv_avg_mean.items()}
+    hsv_avg_std = {key:list(value) for key, value in hsv_avg_std.items()}
 
-	plt.savefig(output_hist_file)
+    hsv_hist_fig = get_hsv_hist_fig(hsv_avg_mean)
 
-	output = str((id, hsv_avg_mean, hsv_avg_std))
+    plt.savefig(output_hist_file)
+
+    output = str((id, hsv_avg_mean, hsv_avg_std))
 	
-	print (output)
+    print (output)
 
-	# only want hsv avg mean and std, don't want the labels from the fit iterative output
-	return output
+    # only want hsv avg mean and std, don't want the labels from the fit iterative output
+    return output
 
 service = Service(
 		"hsv_train_iterative",
-		lambda id, picklist_no, hsv_avg_mean, hsv_avg_std: main(id, picklist_no, hsv_avg_mean, hsv_avg_std),
+		lambda id, picklist_no, hsv_avg_mean, hsv_avg_std, predicted_labels: main(id, picklist_no, hsv_avg_mean, hsv_avg_std, predicted_labels),
 		{	# take in a specific picklist_no
-      		'form': ['id', 'picklist_no', 'hsv_avg_mean', 'hsv_avg_std'], # form is a dictionary, then passing in a list of keys
+      		'form': ['id', 'picklist_no', 'hsv_avg_mean', 'hsv_avg_std', 'predicted_labels'], # form is a dictionary, then passing in a list of keys
 		}
 	).create_service(init_cors=True)
 	

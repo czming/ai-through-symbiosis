@@ -325,16 +325,8 @@ class CarryHSVHistogramModel(Model):
         return object_class_hsv_bins, object_class_hsv_bins_std
         
 
-    def fit_iterative(self, picklist_no:int, htk_input_folder, htk_output_folder, pick_label_folder, beta, fps=29.97):
+    def fit_iterative(self, picklist_no:int, htk_input_folder, htk_output_folder, pick_labels, beta, fps=29.97):
         # takes in a single picklist_no and does the processing for that
-        try:
-            with open(f"{pick_label_folder}/picklist_{picklist_no}_raw.txt") as infile:
-
-                pick_labels = [i for i in infile.read().replace("\n", "")[::2]]
-
-        except:
-            logging.debug(f"no labels for picklist number {picklist_no}")
-            raise Exception(f"no labels for picklist number {picklist_no}")
 
         objects_avg_hsv_bins, objects_avg_hsv_bins_grouped_picklist = \
             self.load_hsv_vectors([picklist_no], htk_input_folder, htk_output_folder, fps=fps, train=True)

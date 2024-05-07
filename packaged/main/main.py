@@ -170,7 +170,7 @@ class HSVManager:
         on_hsv_train(requests.post(url, data=payload))
         #self.pool.submit(lambda: requests.post(url, data=payload)).add_done_callback(lambda future: on_hsv_train(future.result()))
 
-    def train_iterative(self, picklist):
+    def train_iterative(self, picklist, predicted_labels):
         print("HSV Train Iterative Started")
         if len(self.model.keys()) == 0:
             print("HSV Model needs to be trained first, before training iterative")
@@ -180,7 +180,8 @@ class HSVManager:
             id=picklist,
             picklist_no=picklist,
             hsv_avg_mean=json.dumps(self.model['hsv_avg_mean']),
-            hsv_avg_std=json.dumps(self.model['hsv_avg_std'])
+            hsv_avg_std=json.dumps(self.model['hsv_avg_std']),
+            predicted_labels=predicted_labels
         )
         def on_hsv_train_iterative(result):
             if result.status_code != 200:
@@ -198,10 +199,6 @@ class HSVManager:
             print("Triggering Train HSV")
             self.train()
         picklist = str(picklist)
-        if picklist not in self.inters:
-            print("Training HSV Iterative:", picklist)
-            self.train_iterative(picklist)
-        model = self.inters[int(picklist)]
         model = self.model
         url = 'http://hsv_test:5000/hsv_test'
         payload = dict(id=picklist, picklist_nos=str([picklist]), hsv_avg_mean=json.dumps(model['hsv_avg_mean']), hsv_avg_std=json.dumps(model['hsv_avg_std']))
@@ -211,6 +208,12 @@ class HSVManager:
                 return
             print(result.content)
             print("HSV Test Complete")
+            if picklist not in self.inters:
+                # train hsv iterative after prediction
+                print("Training HSV Iterative:", picklist)
+                print(literal_eval(result.content.decode()))
+                self.train_iterative(picklist, json.dumps(literal_eval(result.content.decode())[1])) # get the dictionary of predicted labels
+            model = self.inters[int(picklist)]
         self.pool.submit(lambda: requests.post(url, data=payload)).add_done_callback(lambda future: on_hsv_inference(future.result()))
         self.counter += 1
 
