@@ -3,7 +3,7 @@ sys.path.append("..")
 
 from .base_model import Model
 import logging
-from utils import *
+from ..utils import *
 from . import IterativeClusteringModel
 import matplotlib.pyplot as plt
 from sklearn import metrics

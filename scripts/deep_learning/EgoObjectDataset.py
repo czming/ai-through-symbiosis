@@ -30,8 +30,10 @@ class EgoObjectDataset(Dataset):
 
 
 class EgoObjectClassificationDataset(Dataset):
-    def __init__(self, dataset_path, transform, test=False):
+    def __init__(self, dataset_path, data_folder, transform, test=False, numbers=False, picklists=None):
         self.data = pd.read_csv(dataset_path)
+        self.numbers = numbers
+        self.data_folder = data_folder
 
         def letter_to_name(val):
             dic = {
@@ -49,13 +51,35 @@ class EgoObjectClassificationDataset(Dataset):
             return dic[val]
 
         # self.onehot_encoder = OneHotEncoder()
-        self.picklist = self.data['picklist'].values
-        self.frames = self.data['frame'].values
-        self.labels = self.data['label'].apply(letter_to_name).values
-        self.test = test
-        # print(self.labels)
-        # self.onehot_encoded_labels = self.onehot_encoder.fit_transform(self.labels)
-        self.transform = transform
+        if picklists is None:
+            self.picklist = self.data['picklist'].values
+            self.frames = self.data['frame'].values
+            self.labels = self.data['label'].apply(letter_to_name).values
+            self.test = test
+            # print(self.labels)
+            # self.onehot_encoded_labels = self.onehot_encoder.fit_transform(self.labels)
+            self.transform = transform
+        else:
+            # unique_picklists = sorted(list(set(self.data['picklist'].values)))
+            # print("LENGTH")
+            # print(len(unique_picklists))
+            # kept_picklists = [unique_picklists[i] for i in inds]
+            picklists = [f'picklist_{no}' for no in picklists]
+            self.data = self.data[self.data['picklist'].isin(picklists)]
+
+            print(self.data.groupby('label')['label'].count())
+            print(self.data.groupby('picklist')['picklist'].count())
+            self.picklist = self.data['picklist'].values
+            self.frames = self.data['frame'].values
+            self.labels = self.data['label'].apply(letter_to_name).values
+            self.test = test
+            # print(self.labels)
+            # self.onehot_encoded_labels = self.onehot_encoder.fit_transform(self.labels)
+            self.transform = transform
+            
+        # print("PICKLIST: ")
+        # from collections import Counter
+        # print(Counter(self.picklist))
 
     def __len__(self):
         return self.data.shape[0]
@@ -63,9 +87,12 @@ class EgoObjectClassificationDataset(Dataset):
     def __getitem__(self, idx):
         if self.test:
             image = read_image(
-                '../data/extracted_frames_test/' + self.picklist[idx] + '/' + str(self.frames[idx]) + '.png')
+                f'{self.data_folder}/extracted_frames_test/' + self.picklist[idx] + '/' + str(self.frames[idx]) + '.png')
         else:
-            image = read_image('data/extracted_frames_new/' + self.picklist[idx] + '/' + str(self.frames[idx]) + '.png')
+            image = read_image(f'{self.data_folder}/extracted_frames_new/' + self.picklist[idx] + '/' + str(self.frames[idx]) + '.png')
         label = self.labels[idx]
         image = self.transform(image)
-        return image, label
+        if not self.numbers:
+            return image, label
+        else:
+            return (image, self.frames[idx], self.picklist[idx]), label
