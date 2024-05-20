@@ -42,7 +42,7 @@ mpDraw = mp.solutions.drawing_utils
 
 def get_list_colors_new():
     picklist_label_dict = {}
-    pick_label_path = 'deep_learning/data/pick_labels/'
+    pick_label_path = 'data/pick_labels/'
     for fil in os.listdir(pick_label_path):
         with open(pick_label_path+fil, 'r') as f:
             data = f.read()
@@ -159,12 +159,12 @@ if __name__ == '__main__':
     frame_ids = []
     labels = []
     elan_files = []
-    videos = sorted(os.listdir('deep_learning/data/Videos'))
+    videos = sorted(os.listdir('data/Videos'))
     for fil in videos:
         # print(fil)
         fil_name = fil.split('.')[0]
 
-        if fil_name in test_picklists:
+        if fil_name in test_picklists:# or fil_name in val_picklists:
             # skip picklists used for testing
             continue
 
@@ -177,17 +177,18 @@ if __name__ == '__main__':
         htk_file = '../htk_outputs/icassp_train_folds/avgFold/results-' + pick_id
         if not os.path.exists(htk_file):
             os.makedirs(htk_file)
+            continue
         print(picklist_label_dict.keys())
         if int(pick_id) not in picklist_label_dict.keys():
             print('Not found:', pick_id)
             # print(type(pick_id))
             continue
-        if not os.path.exists('deep_learning/data/extracted_frames_new/'+fil_name):
-            os.makedirs('deep_learning/data/extracted_frames_new/'+fil_name)
+        if not os.path.exists('data/extracted_frames_new/'+fil_name):
+            os.makedirs('data/extracted_frames_new/'+fil_name)
         boundaries = get_htk_boundaries(htk_file)
         carry_times = boundaries['e']
         # print(carry_times)
-        vid_fil = 'deep_learning/data/Videos/' + fil
+        vid_fil = 'data/Videos/' + fil
         vidcap = cv2.VideoCapture(vid_fil)
         fps = vidcap.get(cv2.CAP_PROP_FPS)
         # print(fps)
@@ -211,7 +212,7 @@ if __name__ == '__main__':
                         picklists.append(fil_name)
                         frame_ids.append(count)
                         labels.append(cur_label)
-                        cv2.imwrite('deep_learning/data/extracted_frames_new/'+fil_name+'/'+str(count)+'.png', hand)
+                        cv2.imwrite('data/extracted_frames_new/'+fil_name+'/'+str(count)+'.png', hand)
                         # plt.imsave('data/extracted_frames/'+fil_name+'/'+str(count)+'.png', hand)
                         print("time stamp current frame:",count/fps)
             elif cur_time > carry_times[time_idx+1]:
@@ -241,7 +242,7 @@ if __name__ == '__main__':
     df['picklist'] = picklists
     df['frame'] = frame_ids
     df['label'] = labels
-    df.to_csv('deep_learning/data/labeled_objects_new.csv')
+    df.to_csv('data/labeled_objects_new.csv')
 
         
 

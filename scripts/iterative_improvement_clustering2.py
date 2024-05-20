@@ -119,8 +119,8 @@ for picklist_no in PICKLISTS:
         # look through each color
         for i in range(0, len(elan_boundaries[pick_label]), 2):
             # collect the red frames
-            start_frame = math.ceil(float(elan_boundaries[pick_label][i]) * 29.97)
-            end_frame = math.ceil(float(elan_boundaries[pick_label][i + 1]) * 29.97)
+            start_frame = math.ceil(float(elan_boundaries[pick_label][i]) * 59.94)
+            end_frame = math.ceil(float(elan_boundaries[pick_label][i + 1]) * 59.94)
             pick_frames.append([start_frame, end_frame])
 
     # sort based on start
@@ -146,8 +146,8 @@ for picklist_no in PICKLISTS:
 
     for i in range(0, len(elan_boundaries[empty_hand_label]), 2):
         # collect the red frames
-        start_frame = math.ceil(float(elan_boundaries[empty_hand_label][i]) * 29.97)
-        end_frame = math.ceil(float(elan_boundaries[empty_hand_label][i + 1]) * 29.97)
+        start_frame = math.ceil(float(elan_boundaries[empty_hand_label][i]) * 59.94)
+        end_frame = math.ceil(float(elan_boundaries[empty_hand_label][i + 1]) * 59.94)
         empty_hand_frames.append([start_frame, end_frame])
 
     # avg hsv bins for each pick
