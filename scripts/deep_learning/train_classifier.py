@@ -1,12 +1,21 @@
+import argparse
+
 import torch
 import torch.nn as nn
 import time
+import random
 from torchvision import transforms
 import os
 from torchsummary import summary
 from torch.optim import SGD, Adam
-from EgoObjectDataset import EgoObjectClassificationDataset
-from scripts.models.resnet import Resnet18Classifier, Resnet34Classifier, Resnet9Classifier
+
+from scripts.utils import load_yaml_config
+from .EgoObjectDataset import EgoObjectClassificationDataset
+# from ..deep_learning import *
+# from .. import models
+# print(__all__)
+# from scripts.models.resnet import Resnet18Classifier
+from ..models.resnet import Resnet18Classifier, Resnet34Classifier, Resnet9Classifier
 from torch.utils.data import Dataset, DataLoader
 import torch.optim as optim
 from torch.optim.lr_scheduler import StepLR
@@ -15,6 +24,7 @@ from torch.nn.modules.distance import PairwiseDistance
 import numpy as np
 from sklearn import metrics
 import matplotlib.pyplot as plt
+
 
 # torch.backends.cudnn.enabled = False
 
@@ -43,114 +53,117 @@ def forward_pass(imgs, model, batch_size):
     return anc_embeddings, pos_embeddings, neg_embeddings, model
 
 
-def train():
-    image_transforms = transforms.Compose([
-        transforms.ToPILImage(),
-        # transforms.RandomApply([transforms.RandomResizedCrop((256,256))], p = 0.2),
-        transforms.Resize((64, 64)),
-        transforms.RandomRotation(45),
-        transforms.RandomHorizontalFlip(0.3),
-        transforms.RandomVerticalFlip(0.3),
-        transforms.ToTensor(),
-        transforms.Normalize(
-            mean=[0.6071, 0.4609, 0.3944],
-            std=[0.2457, 0.2175, 0.2129]
+def train(data_folder, model_checkpoint_folder):
+    for lr in [1e-3]:
+        image_transforms = transforms.Compose([
+            transforms.ToPILImage(),
+            # transforms.RandomApply([transforms.RandomResizedCrop((256,256))], p = 0.2),
+            transforms.Resize((64, 64)),
+            transforms.RandomRotation(45),
+            transforms.RandomHorizontalFlip(0.3),
+            transforms.RandomVerticalFlip(0.3),
+            transforms.ToTensor(),
+            transforms.Normalize(
+                mean=[0.6071, 0.4609, 0.3944],
+                std=[0.2457, 0.2175, 0.2129]
+            )
+        ])
+        learning_rate = lr
+        batch_size = 64
+        dataset = EgoObjectClassificationDataset(f'{data_folder}/labeled_objects_new.csv', data_folder, transform=image_transforms)
+        train_dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
+        model_architecture = 'resnet9'
+        model = get_model(pretrained=False)
+        print(model)
+        model = model.cuda()
+        model.train()
+        # margin = 0.2
+        # l2_distance = PairwiseDistance(p=2)
+        # progress_bar = enumerate(tqdm(train_dataloader))
+        optimizer_model = optim.Adam(
+            params=model.parameters(),
+            lr=learning_rate,
+            # momentum=0.9,
+            # dampening=0,
+            # nesterov=False,
+            # weight_decay=1e-5
         )
-    ])
-    learning_rate = 0.0001
-    batch_size = 64
-    dataset = EgoObjectClassificationDataset('data/labeled_objects_new.csv', transform=image_transforms)
-    train_dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
-    model_architecture = 'resnet9'
-    model = get_model()
-    print(model)
-    model = model.cuda()
-    model.train()
-    # margin = 0.2
-    # l2_distance = PairwiseDistance(p=2)
-    # progress_bar = enumerate(tqdm(train_dataloader))
-    optimizer_model = optim.Adam(
-        params=model.parameters(),
-        lr=learning_rate,
-        # momentum=0.9,
-        # dampening=0,
-        # nesterov=False,
-        # weight_decay=1e-5
-    )
 
-    lr_scheduler = StepLR(optimizer_model, step_size=20, gamma=0.5)
+        lr_scheduler = StepLR(optimizer_model, step_size=20, gamma=0.5)
 
-    criterion = torch.nn.CrossEntropyLoss()
-    # criterion = torch.nn.NLLLoss()
-    total_epochs = 60
-    cur_epoch = 0
-    # print(len(train_dataloader))
-    # exit()
-    while cur_epoch < total_epochs:
+        criterion = torch.nn.CrossEntropyLoss()
+        # criterion = torch.nn.NLLLoss()
+        total_epochs = 30
+        cur_epoch = 0
+        # print(len(train_dataloader))
+        # exit()
+        while cur_epoch < total_epochs:
 
-        print (f"lr: {lr_scheduler.get_last_lr()}")
+            print(f"lr: {lr_scheduler.get_last_lr()}")
 
-        time_now = time.time()
-        total_loss = 0
-        num_valid_training_triplets = 0
-        total = 0
-        correct = 0
-        cur_epoch += 1
-        epoch_loss = 0
-        for batch_idx, (batch_sample) in enumerate(train_dataloader):
-            # Forward pass - compute embeddings
-            imgs = batch_sample[0].cuda()
-            # print(batch_sample[1])
-            labels = torch.tensor(batch_sample[1]).cuda()
-            preds = model(imgs)
-            # print (preds, labels)
-            _, predicted = torch.max(preds.data, 1)
-            total += labels.size(0)
-            correct += (predicted == labels).sum().item()
-            # print(anc_embeddings.shape,pos_embeddings.shape, neg_embeddings.shape )
-            loss = criterion(preds, labels)
-            optimizer_model.zero_grad()
-            loss.backward()
-            optimizer_model.step()
-            epoch_loss += loss.item()
-            if batch_idx % (len(train_dataloader) // 10) == 0:
-                # only want to see like 10 batches per epoch
-                print('Epoch {} Batch {}/{}:\tLoss: {}'.format(
+            time_now = time.time()
+            total_loss = 0
+            num_valid_training_triplets = 0
+            total = 0
+            correct = 0
+            cur_epoch += 1
+            epoch_loss = 0
+            for batch_idx, (batch_sample) in enumerate(train_dataloader):
+                # Forward pass - compute embeddings
+                imgs = batch_sample[0].cuda()
+                # print(batch_sample[1])
+                labels = torch.tensor(batch_sample[1]).cuda()
+                preds = model(imgs)
+                # print (preds, labels)
+                _, predicted = torch.max(preds.data, 1)
+                total += labels.size(0)
+                correct += (predicted == labels).sum().item()
+                # print(anc_embeddings.shape,pos_embeddings.shape, neg_embeddings.shape )
+                loss = criterion(preds, labels)
+                optimizer_model.zero_grad()
+                loss.backward()
+                optimizer_model.step()
+                epoch_loss += loss.item()
+                if batch_idx % (len(train_dataloader) // 10) == 0:
+                    # only want to see like 10 batches per epoch
+                    print('Epoch {} Batch {}/{}:\tLoss: {}'.format(
+                        cur_epoch,
+                        batch_idx,
+                        len(train_dataloader),
+                        loss.item()
+                    )
+                    )
+            total_acc = correct / total
+            print('###############################')
+            print('Epoch {}:\tEpoch Loss: {}\tEpoch Accuracy: {}'.format(
+                cur_epoch,
+                epoch_loss,
+                total_acc
+            )
+            )
+            print('###############################')
+
+            # step for lr_scheduler after one epoch
+            lr_scheduler.step()
+
+            state = {
+                'epoch': cur_epoch,
+                'batch_size_training': batch_size,
+                'model_state_dict': model.state_dict(),
+                'model_architecture': model_architecture,
+                'optimizer_model_state_dict': optimizer_model.state_dict(),
+            }
+            if cur_epoch % 1 == 0:
+                torch.save(state, '{}/model_training_checkpoints/model_{}_classifier_epoch_{}_lr_{}.pt'.format(
+                    model_checkpoint_folder,
+                    model_architecture,
                     cur_epoch,
-                    batch_idx,
-                    len(train_dataloader),
-                    loss.item()
+                    learning_rate
                 )
-                )
-        total_acc = correct / total
-        print('###############################')
-        print('Epoch {}:\tEpoch Loss: {}\tEpoch Accuracy: {}'.format(
-            cur_epoch,
-            epoch_loss,
-            total_acc
-        )
-        )
-        print('###############################')
-
-        # step for lr_scheduler after one epoch
-        lr_scheduler.step()
-
-        state = {
-            'epoch': cur_epoch,
-            'batch_size_training': batch_size,
-            'model_state_dict': model.state_dict(),
-            'model_architecture': model_architecture,
-            'optimizer_model_state_dict': optimizer_model.state_dict(),
-        }
-        if cur_epoch % 5 == 0:
-            torch.save(state, 'model_training_checkpoints/model_{}_classifier_epoch_{}.pt'.format(
-                model_architecture,
-                cur_epoch
-            )
-            )
+                           )
 
 
-def test():
+def test(data_folder, model_checkpoint_folder):
     image_transforms = transforms.Compose([
         transforms.ToPILImage(),
         # transforms.RandomApply([transforms.RandomResizedCrop((256,256))], p = 0.2),
@@ -165,11 +178,11 @@ def test():
         )
     ])
     learning_rate = 0.075
-    model_path = 'model_training_checkpoints/resnet9_1/model_resnet9_classifier_epoch_20.pt'
+    model_path = f'{model_checkpoint_folder}/model_resnet34_classifier_epoch_30_lr_0.0001.pt'
     batch_size = 512
-    dataset = EgoObjectClassificationDataset('data/labeled_objects_test.csv', test=True, transform=image_transforms)
+    dataset = EgoObjectClassificationDataset(f'{data_folder}/labeled_objects_test.csv', data_folder, test=True, transform=image_transforms)
     train_dataloader = DataLoader(dataset, batch_size=batch_size)
-    model_architecture = 'resnet9'
+    model_architecture = 'resnet34'
     model = get_model()
     model.load_state_dict(torch.load(model_path)['model_state_dict'])
     print(model)
@@ -239,6 +252,288 @@ def test():
     plt.savefig('results_test_classifier.png')
 
 
+def train_cv(data_folder, model_checkpoint_folder):
+    model_scores = []
+
+    all_picklists = list(range(136, 156)) + list(range(176, 234))
+
+    num_picklists = len(all_picklists)
+    val_inds = random.sample(list(range(num_picklists)), num_picklists // 5)
+    val_set = set(val_inds)
+
+    train_inds = [all_picklists[i] for i in range(num_picklists) if i not in val_set]
+    val_inds = [all_picklists[i] for i in val_inds]
+    print("NUM VAL: ", len(val_inds))
+    for lr in [1e-5, 5e-5, 1e-4, 5e-4, 1e-3]:
+        image_transforms = transforms.Compose([
+            transforms.ToPILImage(),
+            # transforms.RandomApply([transforms.RandomResizedCrop((256,256))], p = 0.2),
+            transforms.Resize((64, 64)),
+            transforms.RandomRotation(45),
+            transforms.RandomHorizontalFlip(0.3),
+            transforms.RandomVerticalFlip(0.3),
+            transforms.ToTensor(),
+            transforms.Normalize(
+                mean=[0.6071, 0.4609, 0.3944],
+                std=[0.2457, 0.2175, 0.2129]
+            )
+        ])
+        learning_rate = lr
+        batch_size = 64
+
+        # train_dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
+
+        # len_dataset = len(dataset)
+        # train_inds = []
+        # val_inds = []
+        # fraction = len(dataset) / num_folds
+
+        # for i in range(num_folds):
+        #     if i==k:
+        #         val_inds += list(range(int(i*fraction), int((i+1)*fraction)))
+        #     else:
+        #         train_inds += list(range(int(i*fraction), int((i+1)*fraction)))
+
+        train_dataset = EgoObjectClassificationDataset(f'{data_folder}/labeled_objects_new.csv', data_folder, transform=image_transforms,
+                                                       picklists=train_inds)
+        val_dataset = EgoObjectClassificationDataset(f'{data_folder}/labeled_objects_new_gt.csv', data_folder, transform=image_transforms,
+                                                     picklists=val_inds)
+
+        val_dataloader = DataLoader(val_dataset, batch_size=batch_size, shuffle=True)
+        train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+
+        model_architecture = 'resnet34'
+        model = get_model(pretrained=False)
+        print(model)
+        model = model.cuda()
+        model.train()
+        # margin = 0.2
+        # l2_distance = PairwiseDistance(p=2)
+        # progress_bar = enumerate(tqdm(train_dataloader))
+        optimizer_model = optim.Adam(
+            params=model.parameters(),
+            lr=learning_rate,
+            # momentum=0.9,
+            # dampening=0,
+            # nesterov=False,
+            # weight_decay=1e-5
+        )
+
+        lr_scheduler = StepLR(optimizer_model, step_size=20, gamma=0.5)
+
+        criterion = torch.nn.CrossEntropyLoss()
+        # criterion = torch.nn.NLLLoss()
+        total_epochs = 30
+        cur_epoch = 0
+        # print(len(train_dataloader))
+        # exit()
+        while cur_epoch < total_epochs:
+
+            print(f"lr: {lr_scheduler.get_last_lr()}")
+
+            time_now = time.time()
+            total_loss = 0
+            num_valid_training_triplets = 0
+            total = 0
+            correct = 0
+            cur_epoch += 1
+            epoch_loss = 0
+            for batch_idx, (batch_sample) in enumerate(train_dataloader):
+                # Forward pass - compute embeddings
+                imgs = batch_sample[0].cuda()
+                # print(batch_sample[1])
+                labels = torch.tensor(batch_sample[1]).cuda()
+                preds = model(imgs)
+                # print (preds, labels)
+                _, predicted = torch.max(preds.data, 1)
+                total += labels.size(0)
+                correct += (predicted == labels).sum().item()
+                # print(anc_embeddings.shape,pos_embeddings.shape, neg_embeddings.shape )
+                loss = criterion(preds, labels)
+                optimizer_model.zero_grad()
+                loss.backward()
+                optimizer_model.step()
+                epoch_loss += loss.item()
+                if batch_idx % (len(train_dataloader) // 10) == 0:
+                    # only want to see like 10 batches per epoch
+                    print('Epoch {} Batch {}/{}:\tLoss: {}'.format(
+                        cur_epoch,
+                        batch_idx,
+                        len(train_dataloader),
+                        loss.item()
+                    )
+                    )
+            total_acc = correct / total
+            print('###############################')
+            print('Epoch {}:\tEpoch Loss: {}\tEpoch Accuracy: {}'.format(
+                cur_epoch,
+                epoch_loss,
+                total_acc
+            )
+            )
+            print('###############################')
+
+            # validate
+            print("VALIDATION")
+            model.eval()
+
+            total = 0
+            correct = 0
+
+            preds_list = []
+            gt_list = []
+            for batch_idx, (batch_sample) in enumerate(val_dataloader):
+                imgs = batch_sample[0].cuda()
+                # print(batch_sample[1])
+                labels = torch.tensor(batch_sample[1]).cuda()
+                preds = model(imgs)
+                # print (preds, labels)
+                _, predicted = torch.max(preds.data, 1)
+                total += labels.size(0)
+                correct += (predicted == labels).sum().item()
+                epoch_loss += loss.item()
+
+                preds_list.extend(list(predicted.detach().cpu().numpy()))
+                gt_list.extend(batch_sample[1])
+            total_acc = correct / total
+
+            confusion_matrix = metrics.confusion_matrix(gt_list, preds_list)
+            conf_mat_norm = (confusion_matrix.astype('float') / confusion_matrix.sum(axis=1)[:, np.newaxis])
+            conf_mat_norm = np.around(conf_mat_norm, decimals=2)
+            # print(conf_mat_norm)
+            # print(np.diag(conf_mat_norm))
+            per_class_acc = np.diag(conf_mat_norm).mean()
+            print('###############################')
+            print('Epoch {}:\tEpoch Loss: {}\tEpoch Accuracy: {}\tPer Class Accuracy: {}'.format(
+                cur_epoch,
+                epoch_loss,
+                total_acc,
+                per_class_acc
+            )
+            )
+
+            if cur_epoch % 5 == 0:
+                model_scores.append((lr, cur_epoch, total_acc, per_class_acc))
+                print(model_scores)
+                with open(f'lr_{lr}_epoch_{cur_epoch}.txt', 'w') as file:
+                    file.write(str(total_acc))
+                    file.write(str(per_class_acc))
+
+            print("END VALIDATION")
+            print('###############################')
+
+            model.train()
+
+            # step for lr_scheduler after one epoch
+            lr_scheduler.step()
+
+            state = {
+                'epoch': cur_epoch,
+                'batch_size_training': batch_size,
+                'model_state_dict': model.state_dict(),
+                'model_architecture': model_architecture,
+                'optimizer_model_state_dict': optimizer_model.state_dict(),
+            }
+            if cur_epoch % 5 == 0:
+                torch.save(state, '{}/model_{}_classifier_epoch_{}_lr_{}.pt'.format(
+                    model_checkpoint_folder,
+                    model_architecture,
+                    cur_epoch,
+                    learning_rate
+                )
+                           )
+    final_scores = {}
+    for lr, epoch, total_acc, per_class_acc in model_scores:
+        if (lr, epoch) in final_scores:
+            final_scores[(lr, epoch)] = (per_class_acc, total_acc)
+        else:
+            final_scores[(lr, epoch)] = (per_class_acc, total_acc)
+    score_list = [(model, acc) for model, acc in final_scores.items()]
+    score_list = sorted(score_list, key=lambda x: x[1][0], reverse=True)
+    print(score_list)
+
+
+def validate(data_folder, model_checkpoint_folder):
+    all_picklists = list(range(136, 156)) + list(range(176, 234))
+
+    num_picklists = len(all_picklists)
+    val_inds = random.sample(list(range(num_picklists)), num_picklists // 5)
+    val_inds = [all_picklists[i] for i in val_inds]
+    for learning_rate in [1e-5, 5e-5, 1e-4, 5e-4, 1e-3]:
+        image_transforms = transforms.Compose([
+            transforms.ToPILImage(),
+            # transforms.RandomApply([transforms.RandomResizedCrop((256,256))], p = 0.2),
+            transforms.Resize((64, 64)),
+            # transforms.RandomRotation(45),
+            # transforms.RandomHorizontalFlip(0.3),
+            # transforms.RandomVerticalFlip(0.3),
+            transforms.ToTensor(),
+            transforms.Normalize(
+                mean=[0.6071, 0.4609, 0.3944],
+                std=[0.2457, 0.2175, 0.2129]
+            )
+        ])
+        model_path = f'{model_checkpoint_folder}/model_resnet9_classifier_epoch_30_lr_{learning_rate}.pt'
+        batch_size = 512
+        model_architecture = 'resnet34'
+        model = get_model()
+        model.load_state_dict(torch.load(model_path)['model_state_dict'])
+        print(model)
+        model = model.cuda()
+        model.eval()
+
+        val_dataset = EgoObjectClassificationDataset(f'{data_folder}/labeled_objects_new_gt.csv', data_folder, transform=image_transforms,
+                                                     picklists=val_inds)
+
+        val_dataloader = DataLoader(val_dataset, batch_size=batch_size, shuffle=True)
+
+        model.eval()
+
+        total = 0
+        correct = 0
+
+        preds_list = []
+        gt_list = []
+        for batch_idx, (batch_sample) in enumerate(val_dataloader):
+            imgs = batch_sample[0].cuda()
+            # print(batch_sample[1])
+            labels = torch.tensor(batch_sample[1]).cuda()
+            preds = model(imgs)
+            # print (preds, labels)
+            _, predicted = torch.max(preds.data, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+
+            preds_list.extend(list(predicted.detach().cpu().numpy()))
+            gt_list.extend(batch_sample[1])
+            total_acc = correct / total
+
+        confusion_matrix = metrics.confusion_matrix(gt_list, preds_list)
+        conf_mat_norm = (confusion_matrix.astype('float') / confusion_matrix.sum(axis=1)[:, np.newaxis])
+        conf_mat_norm = np.around(conf_mat_norm, decimals=2)
+        # print(conf_mat_norm)
+        # print(np.diag(conf_mat_norm))
+        per_class_acc = np.diag(conf_mat_norm).mean()
+        print('###############################')
+        print('LR: {}\tOverall Accuracy: {}\tPer Class Accuracy: {}'.format(
+            learning_rate,
+            total_acc,
+            per_class_acc
+        )
+        )
+
+
 if __name__ == '__main__':
-    # train()
-    test()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--config_file", "-c", type=str, default="configs/zm.yaml",
+                        help="Path to experiment config (scripts/configs)")
+    args = parser.parse_args()
+
+    configs = load_yaml_config(args.config_file)
+
+    data_folder = configs['file_paths']['data_path']
+    model_checkpoint_folder = configs['file_paths']['model_checkpoint_path']
+    # validate()
+    train(data_folder, model_checkpoint_folder)
+    # test()
+    # train_cv()
