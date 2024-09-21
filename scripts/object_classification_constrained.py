@@ -79,7 +79,7 @@ htk_output_folder = configs["file_paths"]["htk_output_file_path"]
 # with open("objects_hsv_bin_accumulator.pkl", "rb") as infile:
 #     objects_hsv_bin_accumulator = pickle.load(infile)
 
-with open("object_type_hsv_bins.pkl", "rb") as infile:
+with open("object_type_hsv_bins_copy.pkl", "rb") as infile:
     objects_type_hsv_bins = pickle.load(infile)
 
 # object_hsv_representation = {key: value[0] / value[1] for key, value in objects_hsv_bin_accumulator.items()}

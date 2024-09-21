@@ -1,0 +1,21 @@
+============================================================================
+
+README
+distro/tools
+
+29 Nov 2002
+maintained by: brashear@cc.gatech.edu, turtle@cc.gatech.edu
+
+============================================================================
+
+Contains directories:
+
+hv: visualization tool for your HTK HMMs
+
+data_generator: generates fake data for testing HTK setup
+
+hmm_generator: generates HTK HMM description files
+
+mlf_from_lab: generates a MLF file from a set of HTK lab files
+
+============================================================================

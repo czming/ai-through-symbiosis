@@ -1,0 +1,7 @@
+numpy
+protobuf
+matplotlib
+scikit-learn
+python-dotenv
+gunicorn
+pyyaml

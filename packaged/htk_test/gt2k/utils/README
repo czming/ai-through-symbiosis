@@ -1,0 +1,14 @@
+============================================================================
+
+README
+distro/utils
+
+29 Nov 2002
+maintained by: brashear@cc.gatech.edu, turtle@cc.gatech.edu
+
+============================================================================
+
+contains utilities 
+
+"make" should create everything
+"make clean" should clean it up

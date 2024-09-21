@@ -1,0 +1,38 @@
+============================================================================
+
+README
+distro/tools/generators
+
+29 Nov 2002
+Maintained by: brashear@cc.gatech.edu, turtle@cc.gatech.edu
+
+============================================================================
+
+gen_data : for generating fake data to test your setup
+
+Run "make" to make the programs and "make clean" to clean the directory.
+
+============================================================================
+
+GEN_DATA 
+
+This program generates fake data for testing your HMMs.  It creates a 3 word
+vocabulary.  The data is perturbed by a gaussian with mean=0, variance=0.5.
+
+The C files contains several #defines which will alter the parameters of the
+program:
+-------
+#define NUM 4 : sets the data vector size to 4
+#define NUM_SAMPLES : sets 5 word samples per data file  
+#define NUM_OUTPUT 100 : sets the number of data files to output
+#define OUTPUT_MLF "bob.mlf" : sets the name of the output MLF file
+#define OUTPUT_DATA_NAME "out" : sets the base name for the data files
+#define OUTPUT_DATA_EXT "dat" : sets the extension for the data files name
+
+so the default behavior would be to write output
+- data vector size 4
+- 5 words per data file
+- data files named "out_0000.dat", "out_0001.dat", ... "out_0099.dat"
+- labels for the data files stored in "bob.mlf"
+
+============================================================================

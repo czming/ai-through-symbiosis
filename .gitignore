@@ -12,3 +12,9 @@ symbiosis/hresults.log_letter
 symbiosis/data
 *.pyc
 *.txt
+!requirements.txt
+.DS_Store
+*.mp4
+*.MP4
+*.lab
+packaged/shared/

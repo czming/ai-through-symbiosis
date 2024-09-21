@@ -48,16 +48,7 @@ def gaussian_kernel1D(length, sigma):
 def average_kernel1D(length):
     return [1/length] * length
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--config_file", "-c", type=str, default="../configs/zm.yaml",
-                    help="Path to experiment config (scripts/configs)")
-args = parser.parse_args()
 
-configs = load_yaml_config(args.config_file)
-
-htk_input_folder = configs["file_paths"]["htk_input_file_path"]
-
-logging.getLogger().setLevel("INFO")
 
 # choose odd number of elements so there's a center element, otherwise we'll use the left
 # element as the center element for the convolutions
@@ -67,26 +58,12 @@ sigma = 3
 convolution_filter = gaussian_kernel1D(length, sigma)
 #convolution_filter = average_kernel1D(length)
 # choose the index of the columns that we want to visualize
-VISUALIZED_COLUMNS = [0, 1, 2,3,4,5]
+VISUALIZED_COLUMNS = [0, 1, 2, 3, 4, 5]
 
 # columns that we want to apply the filter to
 FILTER_COLUMNS = [0]
 
-
-for index in range(135, 235):
-
-    file_name = f"""{htk_input_folder}/picklist_{str(index)}_forward_filled_30.txt"""
-
-    try:
-        open(file_name)
-
-    except:
-        print("Skipping picklist" + str(index))
-        continue
-
-    data = np.genfromtxt(file_name, delimiter=" ")
-
-    # make a copy
+def perform_gaussian_convolution(data: np.ndarray):
     convolved_data = np.array(data)
 
     convolved_data[:, FILTER_COLUMNS] = reflect_convolve(data[:, FILTER_COLUMNS], convolution_filter)
@@ -94,33 +71,62 @@ for index in range(135, 235):
     # make sure the lengths are the same
     assert len(data) == len(convolved_data)
 
-    print(file_name + f"_gaussian_filter_{length}_{sigma}.txt")
-    # np.savetxt(file_name + f"_gaussian_filter_{length}_{sigma}.txt", convolved_data,
-    #            delimiter=" ")
 
-# show visualization of data
-fig, axs = plt.subplots(len(VISUALIZED_COLUMNS), 2)
+    return convolved_data
 
-if len(VISUALIZED_COLUMNS) == 1:
-    # axs loses that dimension if only one element in that dimension
-    old_data = data[:, VISUALIZED_COLUMNS[0]]
-    axs[0].plot(range(len(data)), old_data)
-    filtered_data = convolved_data[:, VISUALIZED_COLUMNS[0]]
-    axs[1].plot(range(len(data)), filtered_data)
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--config_file", "-c", type=str, default="../configs/zm.yaml",
+                        help="Path to experiment config (scripts/configs)")
+    args = parser.parse_args()
 
-    axs[0].set_title("Original data")
-    axs[1].set_title("Filtered data")
+    configs = load_yaml_config(args.config_file)
 
-else:
-    for i, column in enumerate(VISUALIZED_COLUMNS):
-        old_data = data[:, column]
-        axs[i, 0].plot(range(len(data)), old_data)
-        filtered_data = convolved_data[:, column]
-        axs[i, 1].plot(range(len(data)), filtered_data)
+    htk_input_folder = configs["file_paths"]["htk_input_file_path"]
 
-    axs[0, 0].set_title("Original data")
-    axs[0, 1].set_title("Filtered data")
+    logging.getLogger().setLevel("INFO")
+    for index in range(136, 235):
 
-fig.show()
-fig.waitforbuttonpress()
-plt.close()
+        file_name = f"""{htk_input_folder}/picklist_{str(index)}_forward_filled_30.txt"""
+
+        try:
+            open(file_name)
+
+        except:
+            print("Skipping picklist" + str(index))
+            continue
+
+        data = np.genfromtxt(file_name, delimiter=" ")
+
+        # make a copy
+        convolved_data = perform_gaussian_convolution(data)
+        print(file_name.replace(".txt", f"_gaussian_filter_{length}_{sigma}.txt"))
+        np.savetxt(file_name.replace(".txt", f"_gaussian_filter_{length}_{sigma}.txt"), convolved_data,
+                   delimiter=" ")
+
+    # show visualization of data
+    fig, axs = plt.subplots(len(VISUALIZED_COLUMNS), 2)
+
+    if len(VISUALIZED_COLUMNS) == 1:
+        # axs loses that dimension if only one element in that dimension
+        old_data = data[:, VISUALIZED_COLUMNS[0]]
+        axs[0].plot(range(len(data)), old_data)
+        filtered_data = convolved_data[:, VISUALIZED_COLUMNS[0]]
+        axs[1].plot(range(len(data)), filtered_data)
+
+        axs[0].set_title("Original data")
+        axs[1].set_title("Filtered data")
+
+    else:
+        for i, column in enumerate(VISUALIZED_COLUMNS):
+            old_data = data[:, column]
+            axs[i, 0].plot(range(len(data)), old_data)
+            filtered_data = convolved_data[:, column]
+            axs[i, 1].plot(range(len(data)), filtered_data)
+
+        axs[0, 0].set_title("Original data")
+        axs[0, 1].set_title("Filtered data")
+
+    fig.show()
+    fig.waitforbuttonpress()
+    plt.close()
