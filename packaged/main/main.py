@@ -12,6 +12,22 @@ import json
 stop_flag = False
 Global_Headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36'}
 
+class Recorder:
+    def _time(self):
+        import time
+        return str(int(time.time() * 1000.0))
+    def __init__(self):
+        self.id = self._time()
+        self.fd = open(f"/shared/logs/{self.id}.log", "a")
+    
+    def record(self, event):
+        self.fd.write(f"{self._time()}: {event}\n")
+        self.fd.flush()
+    def end(self):
+        self.fd.close()
+
+gl_rec = Recorder()
+
 class ParallelBufferManager:
     def __init__(self, workers, name="Parallel Buffer Manager"):
         self.lookup_map = dict()
@@ -39,7 +55,7 @@ class ParallelBufferManager:
     def push(self, data):
         print("Pushing in", self.name)
         self.pool.submit(
-                lambda: self.construct_request(data)
+                lambda: self.construct_request(data, self.counter)
         ).add_done_callback(
                 lambda future: self.process_response(future.result())
         )
@@ -50,16 +66,19 @@ class FrameFeatureManager(ParallelBufferManager):
     def __init__(self):
         super().__init__(100, "Frame Feature Manager")
     
-    def construct_request(self, data):
+    def construct_request(self, data, counter):
         url = "http://ef:5000/feature-extractor"
         files = {
             'image': ('unnamed.png', data)
         }
         payload = {
-            'id': str(self.counter),
+            'id': str(counter),
             'shape': ','.join(str(i) for i in data.shape)
         }
-        return requests.post(url, files=files, data=payload, headers=Global_Headers)
+        gl_rec.record(f"Start Frame Feature {counter} {data.shape}")
+        ret = requests.post(url, files=files, data=payload, headers=Global_Headers)
+        gl_rec.record(f"End Frame Feature {counter}")
+        return ret
 
     def process_response(self, result):
         if result.status_code != 200:
@@ -72,16 +91,19 @@ class PreprocessorManager(ParallelBufferManager):
     def __init__(self):
         super().__init__(3, "Preprocessor Manager")
 
-    def construct_request(self, feature_vector):
+    def construct_request(self, feature_vector, counter):
         url = 'http://preprocessing:5000/preprocessing'
         files = {
             'data': ('data.npy', feature_vector.tobytes())
         }
         payload = {
-            'id': str(self.counter),
+            'id': str(counter),
             'shape': ','.join(str(i) for i in feature_vector.shape)
         }
-        return requests.post(url, files=files, data=payload, headers=Global_Headers)
+        gl_rec.record(f"Start Preprocess {counter}")
+        ret = requests.post(url, files=files, data=payload, headers=Global_Headers)
+        gl_rec.record(f"End Preprocess {counter}")
+        return ret
 
     def process_response(self, result):
         if result.status_code != 200:
@@ -90,7 +112,7 @@ class PreprocessorManager(ParallelBufferManager):
         _id, serialized, dtype, shape, runtime = literal_eval(result.content.decode())
         self.lookup_map[_id] = np.frombuffer(serialized, dtype=dtype).reshape(shape)
 
-def htk_inferencer(pool, picklist, hsv):
+def htk_inferencer(pool, picklist, hsv, counter):
     global curr_htk_model
     print("HTK Inference Started")
     if curr_htk_model == dict():
@@ -109,6 +131,7 @@ def htk_inferencer(pool, picklist, hsv):
         if result.status_code != 200:
             print("HTK Inference Errored")
             return
+        gl_rec.record(f"End HTK Inference {counter}")
         data = MultipartDecoder.from_response(result)
         _id = None
         result = None
@@ -121,6 +144,7 @@ def htk_inferencer(pool, picklist, hsv):
                 f.write(result)
         hsv.test(_id)
         print("HTK Inference Complete")
+    gl_rec.record(f"Start HTK Inference {counter}")
     pool.submit(
         lambda: requests.post(url, data=payload, headers=headers, files=files)
     ).add_done_callback(
@@ -135,11 +159,13 @@ class HTKManager:
     def add_picklist(self, picklist_data):
         print("Preproecssing Done")
         init_counter = self.picklist_counter
+        counter = 0
         for i in picklist_data:
             data = picklist_data[i][:, 0]
             with open(f"/shared/data/picklist_{self.picklist_counter}", "w") as f:
                 f.write("\n".join(str(i) for i in data))
-                htk_inferencer(self.pool, self.picklist_counter, self.hsv)
+                htk_inferencer(self.pool, self.picklist_counter, self.hsv, counter)
+                counter += 1
                 self.picklist_counter += 1
         print("HTK Data Written. Wrote", self.picklist_counter - init_counter, "picklists")
 
@@ -167,7 +193,9 @@ class HSVManager:
             print (f"self.model={self.model}")
             self.inters = dict()
             print("HSV Train Complete")
+        gl_rec.record("Start HSV Train")
         on_hsv_train(requests.post(url, data=payload))
+        gl_rec.record("End HSV Train")
         #self.pool.submit(lambda: requests.post(url, data=payload)).add_done_callback(lambda future: on_hsv_train(future.result()))
 
     def train_iterative(self, picklist, predicted_labels):
@@ -188,12 +216,15 @@ class HSVManager:
                 print("HSV Train Iterative Errored")
                 return
             picklist, m, s = literal_eval(result.content.decode())
-            self.inters[int(picklist)] = dict(hsv_avg_mean=m, hsv_avg_std=s)
+            self.inters[picklist] = dict(hsv_avg_mean=m, hsv_avg_std=s)
             print("HSV Train Iterative Complete")
+        gl_rec.record("Start HSV Iterative Train")
         on_hsv_train_iterative(requests.post(url, data=payload))
+        gl_rec.record("End HSV Iterative Train")
         #self.pool.submit(lambda: requests.post(url, data=payload)).add_done_callback(lambda future: on_hsv_train_iterative(future.result()))
 
     def test(self, picklist):
+        global gl_rec
         print("HSV Test Started")
         if self.counter % 5 == 0:
             print("Triggering Train HSV")
@@ -203,9 +234,13 @@ class HSVManager:
         url = 'http://hsv_test:5000/hsv_test'
         payload = dict(id=picklist, picklist_nos=str([picklist]), hsv_avg_mean=json.dumps(model['hsv_avg_mean']), hsv_avg_std=json.dumps(model['hsv_avg_std']))
         def on_hsv_inference(result):
+            global gl_rec
             if result.status_code != 200:
                 print("HSV Test Errored")
                 return
+            gl_rec.record("End HSV Test")
+            gl_rec.end()
+            gl_rec = Recorder()
             print(result.content)
             print("HSV Test Complete")
             if picklist not in self.inters:
@@ -214,6 +249,7 @@ class HSVManager:
                 print(literal_eval(result.content.decode()))
                 self.train_iterative(picklist, json.dumps(literal_eval(result.content.decode())[1])) # get the dictionary of predicted labels
             model = self.inters[int(picklist)]
+        gl_rec.record("Start HSV Test")
         self.pool.submit(lambda: requests.post(url, data=payload)).add_done_callback(lambda future: on_hsv_inference(future.result()))
         self.counter += 1
 
@@ -241,10 +277,13 @@ def htk_trainer(htk_mgr):
         if result.status_code != 200:
             print("HTK Train Errored")
             return
+        gl_rec.record("End HTK Train")
         data = MultipartDecoder.from_response(result)
         for part in data.parts:
             curr_htk_model[part.headers[b'Content-Id'].decode()] = part.content
         print("HTK Processed")
+
+    gl_rec.record("Start HTK Train")
 
     htk_train_pool.submit(
             lambda: requests.post(url, data=payload, headers=headers)
@@ -275,6 +314,7 @@ if __name__ == '__main__':
         # use nginx to redirect :)
         cap.open("rtmp://nginx-rtmp/live/test")
         print("Connected")
+        gl_rec = Recorder()
         while cap.isOpened():
             ret, frame = cap.read()
             htk_trainer(htk_manager)
